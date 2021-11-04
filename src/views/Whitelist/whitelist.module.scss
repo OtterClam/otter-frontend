@@ -1,0 +1,80 @@
+@import 'styles/_colors.scss';
+
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 40px;
+}
+
+.title {
+  color: $otter-dark;
+  text-align: center;
+  margin: 0;
+  margin-top: 20px;
+  font-size: 48px;
+
+  @media screen and (max-width: 596px) {
+    font-size: 36px;
+  }
+
+  img {
+    width: 32px;
+    height: 32px;
+  }
+
+  span {
+    margin: 0 8px;
+  }
+}
+
+.cover {
+  img {
+    width: 420px;
+    height: 350px;
+  }
+}
+
+.button {
+  height: 57;
+  margin-top: 40px;
+}
+
+.communityIcons {
+  display: flex;
+  gap: 20px;
+  margin-top: 40px;
+}
+
+.desc {
+  color: $otter-dark;
+  font-size: 24px;
+  margin-top: 20px;
+  text-align: center;
+  span {
+    color: $otter-blue;
+  }
+
+  @media screen and (max-width: 596px) {
+    font-size: 18px;
+  }
+}
+
+.footerLogo {
+  margin-top: 20px;
+}
+
+.whitelistedTitle {
+  display: flex;
+  align-items: center;
+  color: $otter-dark;
+  @media screen and (max-width: 596px) {
+    font-size: 36px;
+  }
+
+
+  img {
+    width: 32px;
+    height: 32px;
+  }
+}

@@ -1,0 +1,94 @@
+@import 'styles/_colors.scss';
+
+#hades {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  background-color: #55555555;
+
+  .ohm-popover {
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+
+    background: $light-gray100;
+    backdrop-filter: blur(100px);
+
+    h3 {
+      align-self: center;
+      justify-self: center;
+      width: 75%;
+      text-align: center;
+    }
+    label {
+      margin: 20px 10px 4px 10px;
+    }
+    .help-text {
+      margin: 10px;
+    }
+  }
+  .mobile .ohm-popover {
+    max-width: 400px;
+  }
+
+  .hades-title {
+    font-weight: 600;
+    font-size: 32px;
+    text-align: center;
+  }
+
+  .cross-wrap {
+    display: flex;
+  }
+
+  .card-content {
+    margin: 0 30px;
+    width: auto;
+
+    .input-label {
+      font-weight: 500;
+      font-size: 16px;
+    }
+
+    .percent {
+      font-weight: 600;
+      font-size: 18px;
+    }
+
+    .help-text {
+      margin: 5px 0;
+
+      .text-bond-desc {
+        font-weight: 300;
+        font-size: 12px;
+      }
+    }
+  }
+
+  .bond-input {
+    background: $light-gray100;
+    border: 1px solid $light-gray300;
+    border-radius: 10px;
+    outline: none;
+
+    .MuiOutlinedInput-input {
+      font-size: 16px;
+    }
+
+    .MuiOutlinedInput-notchedOutline {
+      border-color: rgba(255, 255, 255, 0.2) !important;
+    }
+
+    .stake-input-btn {
+      cursor: pointer;
+
+      p {
+        font-weight: 600;
+        font-size: 18px;
+      }
+    }
+  }
+}

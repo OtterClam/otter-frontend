@@ -1,0 +1,28 @@
+
+.logos {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+  gap: 30px;
+
+  img:nth-child(1) {
+    height: 40px;
+  }
+
+  img:nth-child(3) {
+    height: 32px;
+  }
+
+  @media screen and (max-width: 596px) {
+    gap: 15px;
+
+    img:nth-child(1) {
+      height: 35px;
+    }
+
+    img:nth-child(3) {
+      height: 28px;
+    }
+  }
+}

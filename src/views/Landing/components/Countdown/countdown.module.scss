@@ -1,0 +1,62 @@
+@import 'styles/_colors.scss';
+
+.main {
+  width: 100%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.container {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 20px;
+  &:last-child {
+    margin-right: 0;
+  }
+
+  @media screen and (max-width: 596px) {
+    margin-right: 12px;
+  }
+}
+
+.desc {
+  color: #fff;
+  font-weight: 500;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.days,
+.hours,
+.minutes,
+.seconds {
+  display: inline-flex;
+}
+
+.day,
+.hour,
+.minute,
+.second {
+  &:first-child {
+    margin-right: 10px;
+
+    @media screen and (max-width: 596px) {
+      margin-right: 6px;
+    }
+  }
+  border-radius: 8px;
+  background: $otter-blue;
+  color: white;
+  height: 48px;
+  width: 36px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 24px;
+  line-height: 48px;
+  font-family: 'Gilroy';
+  font-weight: 700;
+}

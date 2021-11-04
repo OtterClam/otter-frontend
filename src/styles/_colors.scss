@@ -1,0 +1,21 @@
+
+$otter-dark: #1d2654;
+$otter-blue: #3B4BD8;
+$otter-blue-hover: #303FC7;
+$light-gray100: #F7F9FB;
+$light-gray200: #E9F0F3;
+$light-gray300: #DBE6EC;
+$clam-pink: #FF6854;
+$dark-grey: #434E77;
+$dark-gray300: #434E77;
+
+:export {
+  otterDark: $otter-dark;
+  otterBlue: $otter-blue;
+  lightGray100: $light-gray100;
+  lightGray200: $light-gray200;
+  lightGray300: $light-gray300;
+  clamPink: $clam-pink;
+  darkGrey: $dark-grey;
+  darkGray300: $dark-gray300;
+}

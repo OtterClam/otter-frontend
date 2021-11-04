@@ -1,0 +1,482 @@
+@import '../../styles/_colors.scss';
+
+.body {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  background-color: #f7f9fb;
+  background-image: url(images/wave.svg);
+  background-repeat: repeat-x;
+  background-position: bottom;
+  z-index: 100;
+  padding-bottom: 100px;
+  color: #1d2654;
+
+  @media screen and (max-width: 596px) {
+    padding: 0 1.5em 100px 1.5em;
+  }
+}
+
+.hero_section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  .title {
+    margin-top: 140px;
+    margin-bottom: 10px;
+    font-size: 48px;
+    color: $otter-dark;
+  }
+
+  .desc {
+    font-size: 24px;
+    max-width: 730px;
+    text-align: center;
+    margin-top: 20px;
+  }
+}
+
+.mainBox {
+  display: inline-flex;
+  align-items: normal;
+  max-width: 730px;
+  width: 730px;
+  margin-top: 40px;
+
+  @media screen and (max-width: 596px) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.happyOtterBox {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  min-height: 0;
+  .happyOtter {
+    height: 160px;
+    align-content: center;
+  }
+}
+
+.currentMaiBox {
+  flex: 2;
+  width: 450px;
+  height: 160px;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 20px;
+  .polygon {
+    position: relative;
+    left: -133px;
+    top: 35px;
+  }
+  h1 {
+    font-size: 24px;
+    font-family: 'Gilroy';
+    font-weight: 700;
+    color: $otter-dark;
+    margin: 0;
+  }
+  h2 {
+    font-size: 48px;
+    font-family: 'Gilroy';
+    font-weight: 700;
+    color: $clam-pink;
+    margin: 0;
+  }
+
+  @media screen and (max-width: 596px) {
+    width: 90vw;
+    flex: 1;
+    max-width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    h1 {
+      font-size: 20px;
+      font-family: 'Gilroy';
+      font-weight: 700;
+      color: $otter-dark;
+      margin: 10px 0;
+    }
+    h2 {
+      font-size: 30px;
+      font-family: 'Gilroy';
+      font-weight: 700;
+      color: $clam-pink;
+      margin: 0 0 10px 0;
+    }
+    .polygon {
+      display: none;
+    }
+  }
+}
+
+.claimClamBox {
+  width: 730px;
+  background-color: white;
+  display: flex;
+  border-radius: 20px;
+  padding: 25px;
+  flex-direction: column;
+  margin-top: 20px;
+  @media screen and (max-width: 596px) {
+    width: 90vw;
+  }
+}
+
+.notConnectedBox {
+  margin: 40px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  .title {
+    font-size: 16px;
+    font-family: 'Gilroy';
+    font-weight: 700;
+    color: $otter-dark;
+    margin: 0;
+  }
+}
+
+.connectedBox {
+  .row {
+    display: inline-flex;
+  }
+  .column {
+    flex: 1;
+  }
+  .presale_header {
+    display: flex;
+    align-items: center;
+    .title {
+      font-size: 18px;
+      font-family: 'Gilroy';
+      font-weight: 700;
+      color: $otter-dark;
+      margin: 0;
+      flex: 4;
+    }
+  }
+
+  .presale_content {
+    display: flex;
+    flex-direction: column;
+    .depositFieldArea {
+      flex: 1;
+      margin-top: 20px;
+      .depositField {
+        height: 72px;
+        border-radius: 4px;
+        width: 100%;
+        min-width: 100%;
+        background-color: $light-gray100;
+        border: 1px solid $light-gray300;
+        font-size: 24px;
+        font-family: 'Gilroy';
+        font-weight: 700;
+        color: $otter-dark;
+        padding-left: 20px;
+      }
+      .maiIcon {
+        position: relative;
+        top: -50px;
+        left: 580px;
+        width: 30px;
+        height: 30px;
+      }
+      .maiIconTitle {
+        position: relative;
+        top: -60px;
+        left: 590px;
+      }
+    }
+    .balanceAmountArea {
+      display: flex;
+      flex-direction: column;
+      justify-content: left;
+      .title {
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+        font-family: 'Gilroy';
+        font-weight: 500;
+      }
+      .subTitle {
+        justify-content: center;
+        align-items: center;
+        font-weight: 300;
+        margin-top: 5px;
+      }
+      .maiIcon {
+        width: 16px;
+        height: 16px;
+        margin-left: 5px;
+      }
+    }
+
+    .claimClamTokenArea {
+      margin-top: 40px;
+      display: flex;
+      justify-content: left;
+      .title {
+        font-size: 18px;
+        font-family: 'Gilroy';
+        font-weight: 700;
+        color: $otter-dark;
+      }
+    }
+
+    .youWillClaimArea {
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .tokenIcon {
+        width: 36px;
+        height: 36px;
+      }
+      .tokenAmount {
+        margin-left: 14px;
+        font-size: 36px;
+        font-family: 'Gilroy';
+        font-weight: 700;
+        color: $otter-dark;
+      }
+      .tokenTitle {
+        font-size: 18px;
+        font-family: 'Gilroy';
+        font-weight: 700;
+        color: $clam-pink;
+      }
+      .tokenConversion {
+        flex: 1;
+        font-size: 14px;
+        font-family: 'Gilroy';
+        font-weight: 400;
+        color: $otter-dark;
+        display: flex;
+        justify-content: right;
+      }
+    }
+
+    .terms {
+      display: flex;
+      justify-content: center;
+      text-align: left;
+      align-items: center;
+      margin-top: 20px;
+      .checkboxArea {
+        flex: 1;
+      }
+      .termsDescription {
+        flex: 8;
+        font-size: 14px;
+        font-family: 'Gilroy';
+        font-weight: 400;
+        color: $dark-grey;
+      }
+    }
+  }
+}
+
+.countdownBox {
+  background-color: $otter-dark;
+  border-radius: 20px;
+  width: 730px;
+  border-right: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 0 60px 0;
+  margin-top: 20px;
+  .title {
+    font-size: 16px;
+    font-family: 'Gilroy';
+    font-weight: 700;
+    color: white;
+  }
+}
+
+.claimButton {
+  display: flex;
+  flex-direction: column;
+  margin-top: 16px;
+  p {
+    margin-top: 8px;
+  }
+}
+
+.learnMoreArea {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.learnMore {
+  margin-top: 40px;
+  a {
+    color: $otter-blue;
+    font-size: 18px;
+    text-decoration: none;
+  }
+}
+
+.highlight {
+  color: $clam-pink !important;
+}
+
+.countdownTitle {
+  font-size: 18px;
+  color: #fff;
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.presale_header {
+  display: inline-flex;
+  justify-content: revert;
+  align-items: revert;
+
+  .title {
+    flex: 4;
+  }
+
+  .percentage {
+    flex: 1;
+  }
+}
+
+.error {
+  margin-top: 12px;
+}
+
+.presale_header_success {
+  display: flex;
+  flex-direction: column;
+  .successTitle {
+    font-size: 36px;
+    color: $otter-dark;
+    text-align: center;
+    margin-bottom: 0;
+  }
+  .successSubTitle {
+    font-size: 36px;
+    color: $otter-dark;
+    text-align: center;
+    margin: 0;
+  }
+}
+.presale_success_content {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  margin-top: 60px;
+  margin-bottom: 20px;
+  align-items: center;
+  @media screen and (max-width: 596px) {
+    flex-direction: column;
+  }
+  .balance_icon {
+    display: flex;
+    flex-direction: column;
+    flex: 2;
+    align-items: center;
+    .tokenIcon {
+      width: 40px;
+      height: 60px;
+    }
+  }
+  .balance_stats {
+    display: flex;
+    flex-direction: column;
+    flex: 4;
+    .tokenAmounts {
+      display: inline-flex;
+      .tokenAmount {
+        font-size: 36px;
+        color: $otter-dark;
+        font-weight: 700;
+        text-align: center;
+        margin: 0;
+        display: flex;
+        align-items: baseline;
+      }
+      .tokenTitle {
+        font-size: 18px;
+        color: $clam-pink;
+        font-weight: 700;
+        margin: 0;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+      }
+    }
+  }
+  .contribution {
+    display: flex;
+    flex-direction: column;
+    flex: 6;
+    @media screen and (max-width: 596px) {
+      align-items: center;
+    }
+    .tokenAmounts {
+      display: inline-flex;
+      .tokenAmount {
+        font-size: 36px;
+        color: $otter-dark;
+        font-weight: 700;
+        text-align: center;
+        margin: 0;
+        display: flex;
+        align-items: baseline;
+      }
+      .tokenTitle {
+        font-size: 18px;
+        color: $otter-dark;
+        font-weight: 700;
+        margin: 0;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+      }
+      .tokenSubTitle {
+        font-size: 14px;
+        color: $dark-grey;
+        font-weight: 400;
+        margin: 0;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        margin-left: 10px;
+
+        @media screen and (max-width: 596px) {
+          display: none;
+        }
+      }
+    }
+  }
+}
+.soldOut {
+  text-align: center;
+  font-size: 48px;
+}
