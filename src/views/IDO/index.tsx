@@ -273,7 +273,7 @@ export default function IDO() {
         <div className={styles.currentMaiBox}>
           {/* <img src={polygon} className={styles.polygon} /> */}
           <h1>Total Raised (MAI)</h1>
-          <h2>${Intl.NumberFormat('en').format(Number(state.idoMAIAmount || '0'))}</h2>
+          <h2>${Intl.NumberFormat('en').format(1001140)}</h2>
         </div>
       </div>
 
