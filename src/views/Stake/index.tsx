@@ -180,7 +180,7 @@ function Stake() {
                     <div className="stake-index">
                       <p className="single-stake-subtitle">Current Index</p>
                       <p className="single-stake-subtitle-value">
-                        {currentIndex ? <>{trim(Number(currentIndex), 1)} sCLAM</> : <Skeleton width="150px" />}
+                        {currentIndex ? <>{trim(Number(currentIndex), 3)} sCLAM</> : <Skeleton width="150px" />}
                       </p>
                     </div>
                   </Grid>
