@@ -45,7 +45,7 @@ export default function Footer({ backgroundColor }: Props) {
         <img src={PolygonLogo} alt="logo" />
       </div>
       <div className="contact-us">
-        <Link href="mailto:dang@otterclam.finance">Contact Us</Link>
+        <Link href="mailto:dev@otterclam.finance">Contact Us</Link>
       </div>
     </footer>
   );
