@@ -285,7 +285,14 @@ export default function IDO() {
             ) : state.loading ? (
               <p className={styles.soldOut}>Loading...</p>
             ) : (
-              <p className={styles.soldOut}>We are sold out!</p>
+              <div className={styles.soldOutContainer}>
+                <p className={styles.soldOut}>Sold Out!</p>
+                <a style={{ textDecoration: 'none' }} href="https://app.otterclam.finance">
+                  <Button variant="contained" color="primary" size="large" disableElevation>
+                    Open App
+                  </Button>
+                </a>
+              </div>
             )}
           </div>
         ) : (
