@@ -4,7 +4,7 @@
       "inputs": [
         {
           "internalType": "address",
-          "name": "_OHM",
+          "name": "_CLAM",
           "type": "address"
         },
         {
@@ -183,7 +183,7 @@
     },
     {
       "inputs": [],
-      "name": "DAO",
+      "name": "CLAM",
       "outputs": [
         {
           "internalType": "address",
@@ -196,7 +196,7 @@
     },
     {
       "inputs": [],
-      "name": "OHM",
+      "name": "DAO",
       "outputs": [
         {
           "internalType": "address",
@@ -233,7 +233,7 @@
         },
         {
           "internalType": "uint256",
-          "name": "lastBlock",
+          "name": "lastTimestamp",
           "type": "uint256"
         }
       ],
@@ -275,7 +275,7 @@
         },
         {
           "internalType": "uint256",
-          "name": "lastBlock",
+          "name": "lastTimestamp",
           "type": "uint256"
         },
         {
@@ -464,6 +464,19 @@
       "type": "function"
     },
     {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
       "inputs": [
         {
           "internalType": "uint256",
@@ -515,19 +528,6 @@
           "internalType": "uint256",
           "name": "percentVested_",
           "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "policy",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
         }
       ],
       "stateMutability": "view",
@@ -647,7 +647,7 @@
     {
       "inputs": [
         {
-          "internalType": "enum MockOlympusBondDepository.PARAMETER",
+          "internalType": "enum OtterBondDepository.PARAMETER",
           "name": "_parameter",
           "type": "uint8"
         },

@@ -1,5 +1,4 @@
-export { abi as MimBondContract } from './bonds/MimContract.json';
-export { abi as MimTimeBondContract } from './bonds/MimTimeContract.json';
+export { abi as OtterBond } from './OtterBondDepository.json';
 
 export { abi as MimReserveContract } from './reserves/MimContract.json';
 export { abi as MimTimeReserveContract } from './reserves/MimTimeContract.json';
