@@ -57,7 +57,7 @@ function ClamMenu() {
         id="ohm-menu-button-hover"
       >
         <div className="ohm-button">
-          <p>CLAM</p>
+          <p>BUY CLAM</p>
         </div>
 
         <Popper id={id} open={open} anchorEl={anchorEl} transition>
