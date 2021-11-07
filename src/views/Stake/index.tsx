@@ -12,6 +12,7 @@ import {
   Tabs,
   TabsActions,
   Zoom,
+  makeStyles,
 } from '@material-ui/core';
 import RebaseTimer from '../../components/RebaseTimer/RebaseTimer';
 import TabPanel from '../../components/TabPanel';
@@ -22,6 +23,25 @@ import { useWeb3Context } from '../../hooks';
 import { IPendingTxn, isPendingTxn, txnButtonText } from '../../store/slices/pending-txns-slice';
 import { Skeleton } from '@material-ui/lab';
 import { IReduxState } from '../../store/slices/state.interface';
+import { JsonRpcProvider } from '@ethersproject/providers';
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    '& .MuiOutlinedInput-root': {
+      borderColor: 'transparent',
+      backgroundColor: theme.palette.background.default,
+    },
+    '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+      borderColor: theme.palette.mode.lightGray300,
+    },
+    '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+      borderColor: theme.palette.mode.lightGray300,
+    },
+    '& .MuiOutlinedInput-notchedOutline': {
+      borderColor: theme.palette.mode.lightGray300,
+    },
+  },
+}));
 
 function a11yProps(index: number) {
   return {
@@ -31,8 +51,15 @@ function a11yProps(index: number) {
 }
 
 function Stake() {
+  const styles = useStyles();
   const dispatch = useDispatch();
-  const { provider, address, connect, chainID } = useWeb3Context();
+  // const { provider, address, connect, chainID } = useWeb3Context();
+  const { provider, address, connect, chainID } = {
+    provider: {} as JsonRpcProvider,
+    address: 'xzvasdfwefoaijsdofijaosdf',
+    connect: () => Promise.resolve(),
+    chainID: 12345,
+  };
   const tabsActions = useRef<TabsActions>(null);
 
   const [view, setView] = useState(0);
@@ -130,7 +157,7 @@ function Stake() {
   }, [tabsActions]);
 
   return (
-    <div id="stake-view">
+    <div id="stake-view" className={styles.root}>
       <Zoom in={true}>
         <Paper className="ohm-card">
           <Grid container direction="column" spacing={2}>
@@ -149,7 +176,7 @@ function Stake() {
                   <Grid item xs={12} sm={4} md={4} lg={4}>
                     <div className="stake-apy">
                       <p className="single-stake-subtitle">APY</p>
-                      <p className="single-stake-subtitle-value">
+                      <Box component="p" color="text.secondary" className="single-stake-subtitle-value">
                         {stakingAPY ? (
                           new Intl.NumberFormat('en-US', {
                             style: 'percent',
@@ -157,14 +184,14 @@ function Stake() {
                         ) : (
                           <Skeleton width="150px" />
                         )}
-                      </p>
+                      </Box>
                     </div>
                   </Grid>
 
                   <Grid item xs={12} sm={4} md={4} lg={4}>
                     <div className="stake-tvl">
                       <p className="single-stake-subtitle">TVL</p>
-                      <p className="single-stake-subtitle-value">
+                      <Box component="p" color="text.secondary" className="single-stake-subtitle-value">
                         {stakingTVL ? (
                           new Intl.NumberFormat('en-US', {
                             style: 'currency',
@@ -175,16 +202,16 @@ function Stake() {
                         ) : (
                           <Skeleton width="150px" />
                         )}
-                      </p>
+                      </Box>
                     </div>
                   </Grid>
 
                   <Grid item xs={12} sm={4} md={4} lg={4}>
                     <div className="stake-index">
                       <p className="single-stake-subtitle">Current Index</p>
-                      <p className="single-stake-subtitle-value">
+                      <Box component="p" color="text.secondary" className="single-stake-subtitle-value">
                         {currentIndex ? <>{trim(Number(currentIndex), 3)} sCLAM</> : <Skeleton width="150px" />}
-                      </p>
+                      </Box>
                     </div>
                   </Grid>
                 </Grid>
@@ -195,9 +222,9 @@ function Stake() {
               {!address ? (
                 <div className="stake-wallet-notification">
                   <div className="wallet-menu" id="wallet-menu">
-                    <div className="app-otter-button" onClick={connect}>
+                    <Box bgcolor="otter.clamBlue" className="app-otter-button" onClick={connect}>
                       <p>Connect Wallet</p>
-                    </div>
+                    </Box>
                   </div>
                   <p className="desc-text">Connect your wallet to stake CLAM tokens!</p>
                 </div>
@@ -208,7 +235,6 @@ function Stake() {
                       action={tabsActions}
                       centered
                       value={view}
-                      textColor="primary"
                       indicatorColor="primary"
                       className="stake-tab-buttons"
                       onChange={changeView}
@@ -242,61 +268,66 @@ function Stake() {
                       <TabPanel value={view} index={0} className="stake-tab-panel">
                         <div className="stake-tab-buttons-group">
                           {address && hasAllowance('CLAM') ? (
-                            <div
+                            <Box
                               className="stake-tab-panel-btn"
+                              bgcolor="otter.clamBlue"
                               onClick={() => {
                                 if (isPendingTxn(pendingTransactions, 'staking')) return;
                                 onChangeStake('stake');
                               }}
                             >
                               <p>{txnButtonText(pendingTransactions, 'staking', 'Stake')}</p>
-                            </div>
+                            </Box>
                           ) : (
-                            <div
+                            <Box
                               className="stake-tab-panel-btn"
+                              bgcolor="otter.clamBlue"
                               onClick={() => {
                                 if (isPendingTxn(pendingTransactions, 'approve_staking')) return;
                                 onSeekApproval('CLAM');
                               }}
                             >
                               <p>{txnButtonText(pendingTransactions, 'approve_staking', 'Approve')}</p>
-                            </div>
+                            </Box>
                           )}
                           {canClaimWarmup && (
-                            <div
+                            <Box
                               className="stake-tab-panel-btn"
+                              bgcolor="otter.clamBlue"
                               onClick={() => {
                                 if (isPendingTxn(pendingTransactions, 'claimWarmup')) return;
                                 onClaimWarmup();
                               }}
                             >
                               <p>{txnButtonText(pendingTransactions, 'claimWarmup', 'Claim Warmup')}</p>
-                            </div>
+                            </Box>
                           )}
                         </div>
                       </TabPanel>
 
                       <TabPanel value={view} index={1} className="stake-tab-panel">
                         {address && hasAllowance('sCLAM') ? (
-                          <div
+                          <Box
                             className="stake-tab-panel-btn"
+                            bgcolor="otter.clamBlue"
                             onClick={() => {
                               if (isPendingTxn(pendingTransactions, 'unstaking')) return;
                               onChangeStake('unstake');
                             }}
                           >
                             <p>{txnButtonText(pendingTransactions, 'unstaking', 'Unstake CLAM')}</p>
-                          </div>
+                          </Box>
                         ) : (
-                          <div
+                          <Box
                             className="stake-tab-panel-btn"
+                            bgcolor="otter.clamBlue"
                             onClick={() => {
                               if (isPendingTxn(pendingTransactions, 'approve_unstaking')) return;
                               onSeekApproval('sCLAM');
                             }}
                           >
                             <p>{txnButtonText(pendingTransactions, 'approve_unstaking', 'Approve')}</p>
-                          </div>
+                          </Box>
                         )}
                       </TabPanel>
                     </Box>
