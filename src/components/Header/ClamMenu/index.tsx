@@ -56,9 +56,9 @@ function ClamMenu() {
         onMouseLeave={e => handleClick(e)}
         id="ohm-menu-button-hover"
       >
-        <div className="ohm-button">
+        <Box color="text.primary" borderColor="text.primary" className="ohm-button">
           <p>BUY CLAM</p>
-        </div>
+        </Box>
 
         <Popper id={id} open={open} anchorEl={anchorEl} transition>
           {({ TransitionProps }) => {

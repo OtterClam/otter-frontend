@@ -56,8 +56,10 @@ function ConnectMenu() {
 
   return (
     <div className="wallet-menu" id="wallet-menu">
-      <div
+      <Box
         className="connect-button"
+        bgcolor="otter.clamBlue"
+        color="otter.white"
         onMouseOver={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
         onClick={clickFunc}
@@ -68,7 +70,7 @@ function ConnectMenu() {
             <SvgIcon className="caret-down" component={CaretDownIcon} htmlColor={primaryColor} />
           </Slide>
         )}
-      </div>
+      </Box>
 
       <Popper id={id} open={open} anchorEl={anchorEl} placement="bottom-end">
         <Paper className="ohm-menu" elevation={1}>

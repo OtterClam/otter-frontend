@@ -96,7 +96,7 @@ p {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: $otter-blue;
+  // background: $otter-blue;
   color: white;
   padding: 15px 30px;
   border-radius: 10px;
@@ -104,9 +104,9 @@ p {
   font-weight: 600;
   font-size: 18px;
 
-  &:hover {
-    background: $otter-blue-hover;
-  }
+  // &:hover {
+  //   background: $otter-blue-hover;
+  // }
 }
 
 .web3modal-modal-lightbox {
