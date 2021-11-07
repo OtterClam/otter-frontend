@@ -3,22 +3,25 @@ import { ReactComponent as MAI } from '../assets/tokens/MAI.svg';
 import { ReactComponent as CLAM } from '../assets/tokens/CLAM.svg';
 import { ReactComponent as StakedClam } from '../assets/tokens/sCLAM.svg';
 
-function getMAITokenImage() {
-  return <SvgIcon component={MAI} viewBox="0 0 32 32" style={{ height: '32px', width: '32px' }} />;
+function getMAITokenImage(size: number = 32) {
+  const style = { height: size, width: size };
+  return <SvgIcon component={MAI} viewBox="0 0 32 32" style={style} />;
 }
 
-function getCLAMTokenImage() {
-  return <SvgIcon component={CLAM} viewBox="0 0 32 32" style={{ height: '32px', width: '32px' }} />;
+function getCLAMTokenImage(size: number = 32) {
+  const style = { height: size, width: size };
+  return <SvgIcon component={CLAM} viewBox="0 0 32 32" style={style} />;
 }
 
-function getStakedCLAMTokenImage() {
-  return <SvgIcon component={StakedClam} viewBox="0 0 32 32" style={{ height: '32px', width: '32px' }} />;
+function getStakedCLAMTokenImage(size: number = 32) {
+  const style = { height: size, width: size };
+  return <SvgIcon component={StakedClam} viewBox="0 0 32 32" style={style} />;
 }
 
-export function getTokenImage(name: 'clam' | 'mai' | 'sclam'): JSX.Element {
-  if (name === 'mai') return getMAITokenImage();
-  if (name === 'clam') return getCLAMTokenImage();
-  if (name === 'sclam') return getStakedCLAMTokenImage();
+export function getTokenImage(name: 'clam' | 'mai' | 'sclam', size?: number): JSX.Element {
+  if (name === 'mai') return getMAITokenImage(size);
+  if (name === 'clam') return getCLAMTokenImage(size);
+  if (name === 'sclam') return getStakedCLAMTokenImage(size);
 
   throw Error(`Token image doesn't support: ${name}`);
 }
