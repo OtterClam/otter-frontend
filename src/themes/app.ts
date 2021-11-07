@@ -5,8 +5,8 @@ const colorPalette = {
   common: {
     clamPink: '#FF6854',
     clamPinkHover: '#F5523C',
-    clamBlue: '#3B4BD8',
-    clamBlueHover: '#303FC7',
+    otterBlue: '#3B4BD8',
+    otterBlueHover: '#303FC7',
     white: '#FFFFFF',
   },
   light: {

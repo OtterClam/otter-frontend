@@ -128,7 +128,7 @@ function NavContent() {
             <Grid item>
               <Box
                 component="button"
-                bgcolor="otter.clamBlue"
+                bgcolor="otter.otterBlue"
                 display="flex"
                 justifyContent="center"
                 alignItems="center"

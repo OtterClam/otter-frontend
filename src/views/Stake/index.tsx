@@ -215,7 +215,7 @@ function Stake() {
               {!address ? (
                 <div className="stake-wallet-notification">
                   <div className="wallet-menu" id="wallet-menu">
-                    <Box bgcolor="otter.clamBlue" className="app-otter-button" onClick={connect}>
+                    <Box bgcolor="otter.otterBlue" className="app-otter-button" onClick={connect}>
                       <p>Connect Wallet</p>
                     </Box>
                   </div>
@@ -263,7 +263,7 @@ function Stake() {
                           {address && hasAllowance('CLAM') ? (
                             <Box
                               className="stake-tab-panel-btn"
-                              bgcolor="otter.clamBlue"
+                              bgcolor="otter.otterBlue"
                               onClick={() => {
                                 if (isPendingTxn(pendingTransactions, 'staking')) return;
                                 onChangeStake('stake');
@@ -274,7 +274,7 @@ function Stake() {
                           ) : (
                             <Box
                               className="stake-tab-panel-btn"
-                              bgcolor="otter.clamBlue"
+                              bgcolor="otter.otterBlue"
                               onClick={() => {
                                 if (isPendingTxn(pendingTransactions, 'approve_staking')) return;
                                 onSeekApproval('CLAM');
@@ -286,7 +286,7 @@ function Stake() {
                           {canClaimWarmup && (
                             <Box
                               className="stake-tab-panel-btn"
-                              bgcolor="otter.clamBlue"
+                              bgcolor="otter.otterBlue"
                               onClick={() => {
                                 if (isPendingTxn(pendingTransactions, 'claimWarmup')) return;
                                 onClaimWarmup();
@@ -302,7 +302,7 @@ function Stake() {
                         {address && hasAllowance('sCLAM') ? (
                           <Box
                             className="stake-tab-panel-btn"
-                            bgcolor="otter.clamBlue"
+                            bgcolor="otter.otterBlue"
                             onClick={() => {
                               if (isPendingTxn(pendingTransactions, 'unstaking')) return;
                               onChangeStake('unstake');
@@ -313,7 +313,7 @@ function Stake() {
                         ) : (
                           <Box
                             className="stake-tab-panel-btn"
-                            bgcolor="otter.clamBlue"
+                            bgcolor="otter.otterBlue"
                             onClick={() => {
                               if (isPendingTxn(pendingTransactions, 'approve_unstaking')) return;
                               onSeekApproval('sCLAM');

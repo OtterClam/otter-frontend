@@ -58,7 +58,7 @@ function ConnectMenu() {
     <div className="wallet-menu" id="wallet-menu">
       <Box
         className="connect-button"
-        bgcolor="otter.clamBlue"
+        bgcolor="otter.otterBlue"
         color="otter.white"
         onMouseOver={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
