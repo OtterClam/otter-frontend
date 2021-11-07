@@ -4,8 +4,7 @@ import BondLogo from '../../components/BondLogo';
 import AdvancedSettings from './AdvancedSettings';
 import { bondName } from '../../helpers';
 import { IconButton, SvgIcon, Link } from '@material-ui/core';
-// import { ReactComponent as SettingsIcon } from '../../assets/icons/icon_settings.svg';
-import SettingsIcon from '../../assets/icons/icon_settings.png';
+import SettingsIcon from './SettingsIcon';
 import { ReactComponent as XIcon } from '../../assets/icons/icon_close.svg';
 import { useEscape } from '../../hooks';
 
@@ -56,8 +55,7 @@ function BondHeader({
 
       <div className="bond-settings">
         <IconButton onClick={handleOpen}>
-          <img src={SettingsIcon} style={{ width: 24, height: 24 }} />
-          {/* <SvgIcon color="inherit" component={SettingsIcon} /> */}
+          <SettingsIcon />
         </IconButton>
         <AdvancedSettings
           open={open}
