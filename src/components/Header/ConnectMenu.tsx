@@ -41,7 +41,7 @@ function ConnectMenu() {
     'pending-txn-container' + (isHovering && pendingTransactions.length > 0 ? ' hovered-button' : '');
 
   const getEtherscanUrl = (txnHash: string) => {
-    return chainID === 4 ? 'https://rinkeby.etherscan.io/tx/' + txnHash : 'https://etherscan.io/tx/' + txnHash;
+    return chainID === 4 ? 'https://rinkeby.etherscan.io/tx/' + txnHash : 'https://polygonscan.com/tx/' + txnHash;
   };
 
   useEffect(() => {
