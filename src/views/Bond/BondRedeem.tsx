@@ -66,24 +66,28 @@ function BondRedeem({ bond }: IBondRedeem) {
   return (
     <Box display="flex" flexDirection="column">
       <Box display="flex" justifyContent="space-around" flexWrap="wrap">
-        <div
+        <Box
           className="transaction-button app-otter-button"
+          bgcolor="otter.otterBlue"
+          color="otter.white"
           onClick={() => {
             if (isPendingTxn(pendingTransactions, 'redeem_bond_' + bond)) return;
             onRedeem(false);
           }}
         >
           <p>{txnButtonText(pendingTransactions, 'redeem_bond_' + bond, 'Claim')}</p>
-        </div>
-        <div
+        </Box>
+        <Box
           className="transaction-button app-otter-button"
+          bgcolor="otter.otterBlue"
+          color="otter.white"
           onClick={() => {
             if (isPendingTxn(pendingTransactions, 'redeem_bond_' + bond + '_autostake')) return;
             onRedeem(true);
           }}
         >
           <p>{txnButtonText(pendingTransactions, 'redeem_bond_' + bond + '_autostake', 'Claim and Autostake')}</p>
-        </div>
+        </Box>
       </Box>
 
       <Slide direction="right" in={true} mountOnEnter unmountOnExit {...{ timeout: 533 }}>

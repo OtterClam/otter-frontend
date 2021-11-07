@@ -81,13 +81,13 @@
 
   .bond-price-data {
     .bond-price-data-title {
-      font-weight: 500;
-      font-size: 20px;
+      font-weight: 700;
+      font-size: 16px;
       line-height: 24px;
     }
 
     .bond-price-data-value {
-      color: $clam-pink;
+      // color: $clam-pink;
       font-weight: 800;
       font-size: 24px;
       line-height: 36px;
@@ -151,13 +151,13 @@
 }
 
 .bond-modal {
-  background-color: $light-gray100 !important;
+  // background-color: $light-gray100 !important;
   backdrop-filter: blur(100px) !important;
 }
 
 .bond-one-table {
   .MuiTabs-indicator {
-    background-color: $otter-dark;
+    // background-color: $otter-dark;
     height: 3px;
   }
 
@@ -169,8 +169,8 @@
 }
 
 .bond-input {
-  background: $light-gray100;
-  border: 1px solid $light-gray300;
+  // background: $light-gray100;
+  // border: 1px solid $light-gray300;
   border-radius: 10px;
   outline: none;
 
@@ -179,7 +179,7 @@
   }
 
   .MuiOutlinedInput-notchedOutline {
-    border-color: rgba(255, 255, 255, 0.2) !important;
+    // border-color: rgba(255, 255, 255, 0.2) !important;
   }
 
   .stake-input-btn {
