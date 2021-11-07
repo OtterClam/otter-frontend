@@ -23,7 +23,6 @@ import { useWeb3Context } from '../../hooks';
 import { IPendingTxn, isPendingTxn, txnButtonText } from '../../store/slices/pending-txns-slice';
 import { Skeleton } from '@material-ui/lab';
 import { IReduxState } from '../../store/slices/state.interface';
-import { JsonRpcProvider } from '@ethersproject/providers';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -53,13 +52,7 @@ function a11yProps(index: number) {
 function Stake() {
   const styles = useStyles();
   const dispatch = useDispatch();
-  // const { provider, address, connect, chainID } = useWeb3Context();
-  const { provider, address, connect, chainID } = {
-    provider: {} as JsonRpcProvider,
-    address: 'xzvasdfwefoaijsdofijaosdf',
-    connect: () => Promise.resolve(),
-    chainID: 12345,
-  };
+  const { provider, address, connect, chainID } = useWeb3Context();
   const tabsActions = useRef<TabsActions>(null);
 
   const [view, setView] = useState(0);
