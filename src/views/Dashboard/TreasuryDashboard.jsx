@@ -198,7 +198,7 @@ function TreasuryDashboard() {
                   />
                 </Typography>
                 <Typography variant="h4">
-                  {currentIndex ? trim(currentIndex, 2) + ' sOHM' : <Skeleton type="text" />}
+                  {currentIndex ? trim(currentIndex, 2) + ' sCLAM' : <Skeleton type="text" />}
                 </Typography>
               </Box>
             </Box>
