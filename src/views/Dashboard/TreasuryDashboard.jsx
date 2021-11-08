@@ -59,7 +59,7 @@ function TreasuryDashboard() {
     //   metrics = metrics.filter(pm => pm.treasuryMarketValue > 0);
     //   setData(metrics);
     //   let staked = r.data.protocolMetrics.map(entry => ({
-    //     staked: (parseFloat(entry.sOhmCirculatingSupply) / parseFloat(entry.ohmCirculatingSupply)) * 100,
+    //     staked: (parseFloat(entry.sCLAMCirculatingSupply) / parseFloat(entry.ohmCirculatingSupply)) * 100,
     //     timestamp: entry.timestamp,
     //   }));
     //   staked = staked.filter(pm => pm.staked < 100);
@@ -83,7 +83,7 @@ function TreasuryDashboard() {
         <div>
           <p>Wen (3,3) becomes (🦦,🦦)</p>
           <h1>Welcome to Otter Kingdom</h1>
-          <h3>The Decentralized Reserved Memecoin</h3>
+          <h3>The Decentralized Reserve Memecoin</h3>
         </div>
         <img src={OtterKing} />
       </div>
@@ -129,16 +129,16 @@ function TreasuryDashboard() {
 
               {/* <Box className="metric wsoprice">
                 <Typography variant="h6" color="textSecondary">
-                  wsOHM Price
+                  wsCLAM Price
                   <InfoTooltip
                     message={
-                      'wsOHM = sOHM * index\n\nThe price of wsOHM is equal to the price of OHM multiplied by the current index'
+                      'wsCLAM = sCLAM * index\n\nThe price of wsCLAM is equal to the price of OHM multiplied by the current index'
                     }
                   />
                 </Typography>
 
                 <Typography variant="h4">
-                  {wsOhmPrice ? formatCurrency(wsOhmPrice, 2) : <Skeleton type="text" />}
+                  {wsCLAMPrice ? formatCurrency(wsCLAMPrice, 2) : <Skeleton type="text" />}
                 </Typography>
               </Box> */}
               <Box className="metric circ">
@@ -193,7 +193,7 @@ function TreasuryDashboard() {
                   Current Index
                   <InfoTooltip
                     message={
-                      'The current index tracks the amount of sOHM accumulated since the beginning of staking. Basically, how much sOHM one would have if they staked and held a single OHM from day 1.'
+                      'The current index tracks the amount of sCLAM accumulated since the beginning of staking. Basically, how much sCLAM one would have if they staked and held a single OHM from day 1.'
                     }
                   />
                 </Typography>
