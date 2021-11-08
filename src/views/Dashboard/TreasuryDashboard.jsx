@@ -83,7 +83,7 @@ function TreasuryDashboard() {
         <div>
           <p>Wen (3,3) becomes (🦦,🦦)</p>
           <h1>Welcome to Otter Kingdom</h1>
-          <h3>The Decentralized Reversed Memecoin</h3>
+          <h3>The Decentralized Reserved Memecoin</h3>
         </div>
         <img src={OtterKing} />
       </div>
