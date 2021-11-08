@@ -19,6 +19,7 @@ import { BONDS } from '../constants';
 import './style.scss';
 import { IReduxState } from '../store/slices/state.interface';
 import Loading from '../components/Loader';
+import Dashboard from 'src/views/Dashboard/TreasuryDashboard';
 
 const drawerWidth = 280;
 const transitionDuration = 969;
@@ -168,6 +169,10 @@ function App() {
           <Switch>
             <Route exact path="/">
               <Redirect to="/stake" />
+            </Route>
+
+            <Route path="/dashboard">
+              <Dashboard />
             </Route>
 
             <Route path="/stake">

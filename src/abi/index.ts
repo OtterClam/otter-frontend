@@ -13,3 +13,5 @@ export { abi as StakingHelperContract } from './StakingHelperContract.json';
 export { abi as TreasuryContract } from './TreasuryContract.json';
 
 export { abi as IDOContract } from './OtterClamIDO.json';
+
+export { abi as ClamCirculatingSupply } from './ClamCirculatingSupply.json';

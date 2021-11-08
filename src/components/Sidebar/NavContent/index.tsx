@@ -43,6 +43,21 @@ function NavContent() {
             <div className="dapp-nav" id="navbarNav">
               <Link
                 component={NavLink}
+                id="dashboard-nav"
+                to="/dashboard"
+                isActive={(match: any, location: any) => {
+                  return checkPage(location, 'dashboard');
+                }}
+                className={`button-dapp-menu ${isActive ? 'active' : ''}`}
+              >
+                <div className="dapp-menu-item">
+                  <img src={checkPage(location, 'dashboard') ? ActiveMenuIcon : InactiveMenuIcon} />
+                  <p>Dashboard</p>
+                </div>
+              </Link>
+
+              <Link
+                component={NavLink}
                 id="stake-nav"
                 to="/"
                 isActive={(match: any, location: any) => {

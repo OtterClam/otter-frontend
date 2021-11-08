@@ -145,7 +145,7 @@ export const calcBondDetails = createAsyncThunk(
       bondQuote = await bondContract.payoutFor(amountInWei);
       bondQuote = bondQuote / Math.pow(10, 18);
       // @dev: fix for non-lp bond
-      debtRatio = standardizedDebtRatio;
+      debtRatio = standardizedDebtRatio.toNumber();
     }
 
     // Display error if user tries to exceed maximum.

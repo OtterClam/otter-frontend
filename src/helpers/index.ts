@@ -14,3 +14,12 @@ export * from './get-pair-image';
 export * from './set-all';
 export * from './price-units';
 export * from './token-price';
+
+export function formatCurrency(c: number, precision = 0) {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: precision,
+    minimumFractionDigits: precision,
+  }).format(c);
+}

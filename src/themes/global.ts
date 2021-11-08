@@ -18,19 +18,24 @@ const commonSettings = {
       fontSize: '2.25rem',
       fontWeight: 600,
       letterSpacing: '1.3px',
+      fontFamily: 'Gilroy',
     },
     h3: {
       fontSize: '1.75rem',
+      fontFamily: 'Gilroy',
     },
     h4: {
       fontSize: '1.5rem',
+      fontFamily: 'Gilroy',
     },
     h5: {
       fontSize: '1.25rem',
       letterSpacing: '0.4px',
+      fontFamily: 'Gilroy',
     },
     h6: {
       fontSize: '1rem',
+      fontFamily: 'Gilroy',
     },
     body1: {
       fontSize: '0.875rem',

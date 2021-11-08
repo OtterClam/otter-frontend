@@ -62,7 +62,7 @@ export const light = responsiveFontSizes(
         },
         text: {
           primary: lightTheme.color,
-          secondary: lightTheme.gray,
+          secondary: colors.darkGray200,
         },
       },
       props: {

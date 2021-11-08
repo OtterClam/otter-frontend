@@ -1,0 +1,141 @@
+@import 'styles/_colors.scss';
+
+#treasury-dashboard-view {
+  overflow-y: hidden;
+  overflow-x: hidden;
+  height: 100%;
+  // width: 100%;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  overflow-y: auto;
+  -ms-overflow-style: none !important; /* IE and Edge */
+  scrollbar-width: none !important; /* Firefox */
+  &::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .ohm-card {
+    max-width: unset !important;
+    width: 100%;
+    margin: auto;
+    max-height: 355px;
+    .card-header {
+      margin-bottom: 1rem;
+    }
+    &.ohm-chart-card {
+      .chart-card-header {
+        padding: 0px 20px !important;
+        min-width: 300px;
+      }
+      height: 355px;
+    }
+  }
+  .hero-metrics {
+    width: 100%;
+    margin-bottom: 23px;
+    text-align: start;
+    .ohm-card {
+      background-color: $light-gray100;
+      max-width: unset !important;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
+
+      h4 {
+        font-weight: 700;
+      }
+      h6 {
+        font-weight: 700;
+      }
+      div.metric {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        background-color: #fff;
+        padding: 20px;
+        height: 100px;
+        margin: 15px;
+        min-width: 120px;
+        width: 28%;
+      }
+    }
+  }
+  .data-grid {
+    overflow: hidden;
+  }
+}
+
+.smaller {
+  .ohm-card {
+    width: 97%;
+  }
+  .hero-metrics .ohm-card {
+    > .MuiBox-root {
+      flex-direction: column;
+      align-items: center;
+      // flex-wrap: wrap;
+    }
+    div.metric {
+      width: 100% !important;
+      margin: 15px 0 !important;
+      min-width: unset !important;
+      text-align: center !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+  }
+}
+
+.mobile {
+  div.metric {
+    white-space: nowrap;
+    min-width: 30% !important;
+    // max-width: 80%;
+    text-align: left !important;
+    &.market,
+    &.price,
+    &.wsoprice,
+    &.circ,
+    &.bpo,
+    &.index {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+}
+
+.very-small {
+  .hero-metrics .ohm-card {
+    > .MuiBox-root {
+      flex-direction: column;
+      justify-content: center;
+    }
+  }
+}
+
+.hero {
+  display: flex;
+  flex-direction: row;
+  color: $otter-dark;
+  gap: 8px;
+
+  p {
+    font-size: 24px;
+  }
+
+  @media screen and (max-width: 596px) {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  img {
+    width: 226px;
+    height: 226px;
+  }
+
+}
