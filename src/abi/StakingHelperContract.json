@@ -9,7 +9,7 @@
         },
         {
           "internalType": "address",
-          "name": "_OHM",
+          "name": "_CLAM",
           "type": "address"
         }
       ],
@@ -18,7 +18,7 @@
     },
     {
       "inputs": [],
-      "name": "OHM",
+      "name": "CLAM",
       "outputs": [
         {
           "internalType": "address",
@@ -35,6 +35,11 @@
           "internalType": "uint256",
           "name": "_amount",
           "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "_recipient",
+          "type": "address"
         }
       ],
       "name": "stake",

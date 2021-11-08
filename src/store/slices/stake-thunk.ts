@@ -90,7 +90,7 @@ export const changeStake = createAsyncThunk(
     try {
       if (action === 'stake') {
         const number = ethers.utils.parseUnits(value, 'gwei');
-        stakeTx = await stakingHelper.stake(number);
+        stakeTx = await stakingHelper.stake(number, address);
       } else {
         stakeTx = await staking.unstake(ethers.utils.parseUnits(value, 'gwei'), true);
       }
