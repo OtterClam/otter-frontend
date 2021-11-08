@@ -64,7 +64,7 @@ export const loadAppDetails = createAsyncThunk(
     const stakingContract = new ethers.Contract(addresses.STAKING_ADDRESS, StakingContract, provider);
 
     let token = contractForReserve(BONDS.mai, networkID, provider);
-    const maiAmount = await token.balanceOf(addresses.TREASURY_ADDRESS);
+    const maiAmount = (await token.balanceOf(addresses.TREASURY_ADDRESS)) / 1e18;
 
     token = contractForReserve(BONDS.mai_clam, networkID, provider);
     const maiClamAmount = await token.balanceOf(addresses.TREASURY_ADDRESS);
@@ -73,8 +73,8 @@ export const loadAppDetails = createAsyncThunk(
     const maiClamUSD = (valuation / 1e9) * (markdown / 1e18);
     const [rfvLPValue, pol] = await getDiscountedPairUSD(maiClamAmount, networkID, provider);
 
-    const treasuryBalance = maiAmount / 1e18 + maiClamUSD;
-    const treasuryRiskFreeValue = maiAmount / 1e18 + rfvLPValue;
+    const treasuryBalance = maiAmount + maiClamUSD;
+    const treasuryRiskFreeValue = maiAmount + rfvLPValue;
 
     const stakingBalance = await stakingContract.contractBalance();
     const circSupply = (await clamCirculatingSupply.CLAMCirculatingSupply()) / 1e9;
@@ -86,7 +86,7 @@ export const loadAppDetails = createAsyncThunk(
     const fiveDayRate = Math.pow(1 + stakingRebase, 5 * 3) - 1;
     const stakingAPY = Math.pow(1 + stakingRebase, 365 * 3) - 1;
     const stakingRatio = sClamCirc / circSupply;
-    const backingPerClam = treasuryBalance / circSupply;
+    const backingPerClam = treasuryRiskFreeValue / circSupply;
 
     const currentIndex = await stakingContract.index();
     const nextRebase = epoch.endTime.toNumber();
@@ -129,13 +129,13 @@ async function getDiscountedPairUSD(
   const pair = contractForReserve(BONDS.mai_clam, networkID, provider);
   const total_lp = await pair.totalSupply();
   const reserves = await pair.getReserves();
-  const lp_token_1 = reserves[0] / 1e9;
+  // const lp_token_1 = reserves[0] / 1e9;
   const lp_token_2 = reserves[1] / 1e18;
-  const kLast = lp_token_1 * lp_token_2;
+  // const kLast = lp_token_1 * lp_token_2;
 
   const pol = lpAmount.mul(100).div(total_lp).toNumber() / 100;
-  const part2 = Math.sqrt(kLast) * 2;
-  return [pol * part2, pol];
+  // const part2 = Math.sqrt(kLast) * 2;
+  return [pol * lp_token_2, pol];
 }
 
 const appSlice = createSlice({

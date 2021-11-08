@@ -175,7 +175,7 @@ function TreasuryDashboard() {
                 </Typography>
               </Box>
 
-              {/* <Box className="metric circ">
+              <Box className="metric circ">
                 <Typography variant="h6" color="textSecondary">
                   Runway
                 </Typography>
@@ -186,9 +186,9 @@ function TreasuryDashboard() {
                     <Skeleton type="text" />
                   )}
                 </Typography>
-              </Box> */}
+              </Box>
 
-              {/* <Box className="metric index">
+              <Box className="metric index">
                 <Typography variant="h6" color="textSecondary">
                   Current Index
                   <InfoTooltip
@@ -200,7 +200,7 @@ function TreasuryDashboard() {
                 <Typography variant="h4">
                   {currentIndex ? trim(currentIndex, 2) + ' sOHM' : <Skeleton type="text" />}
                 </Typography>
-              </Box> */}
+              </Box>
             </Box>
           </Paper>
         </Box>
