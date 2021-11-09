@@ -120,6 +120,7 @@ function TreasuryDashboard() {
               <Box className="metric wsoprice">
                 <Typography variant="h6" color="textSecondary">
                   Staking TVL
+                  <InfoTooltip message={tooltipInfoMessages.tvl} />
                 </Typography>
 
                 <Typography variant="h4">
@@ -144,6 +145,7 @@ function TreasuryDashboard() {
               <Box className="metric circ">
                 <Typography variant="h6" color="textSecondary">
                   Staking APY
+                  <InfoTooltip message={tooltipInfoMessages.apy} />
                 </Typography>
                 <Typography variant="h4">
                   {stakingAPY ? percentFormatter.format(stakingAPY) : <Skeleton type="text" />}
@@ -153,6 +155,7 @@ function TreasuryDashboard() {
               <Box className="metric circ">
                 <Typography variant="h6" color="textSecondary">
                   Staking Ratio
+                  <InfoTooltip message={tooltipInfoMessages.staked} />
                 </Typography>
                 <Typography variant="h4">
                   {stakingRatio ? percentFormatter.format(stakingRatio) : <Skeleton type="text" />}
@@ -162,6 +165,7 @@ function TreasuryDashboard() {
               <Box className="metric circ">
                 <Typography variant="h6" color="textSecondary">
                   Protocol Own Liquidity
+                  <InfoTooltip message={tooltipInfoMessages.pol} />
                 </Typography>
                 <Typography variant="h4">{pol ? percentFormatter.format(pol) : <Skeleton type="text" />}</Typography>
               </Box>
@@ -178,6 +182,7 @@ function TreasuryDashboard() {
               <Box className="metric circ">
                 <Typography variant="h6" color="textSecondary">
                   Runway
+                  <InfoTooltip message={tooltipInfoMessages.runway} />
                 </Typography>
                 <Typography variant="h4">
                   {treasuryRunway ? (

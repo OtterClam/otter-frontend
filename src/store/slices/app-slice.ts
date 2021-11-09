@@ -120,7 +120,7 @@ export const loadAppDetails = createAsyncThunk(
   },
 );
 
-//(slp_treasury/slp_supply)*(2*sqrt(lp_dai * lp_ohm))
+//(slp_treasury/slp_supply)*(2*sqrt(lp_dai * lp_clam))
 async function getDiscountedPairUSD(
   lpAmount: BigNumber,
   networkID: number,
