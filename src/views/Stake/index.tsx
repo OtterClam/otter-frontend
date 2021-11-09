@@ -118,7 +118,10 @@ function Stake() {
 
   const trimmedSClamBalance = trim(Number(sClamBalance), 4);
   const stakingRebasePercentage = trim(stakingRebase * 100, 4);
-  const nextRewardValue = trim((Number(stakingRebasePercentage) / 100) * Number(trimmedSClamBalance), 4);
+  const nextRewardValue = trim(
+    (Number(stakingRebasePercentage) / 100) * (Number(trimmedSClamBalance) + Number(warmupBalance)),
+    4,
+  );
 
   useEffect(() => {
     if (tabsActions.current) {
