@@ -8,6 +8,11 @@ export const contractForBond = (
   provider: ethers.Signer | ethers.providers.Provider,
 ): ethers.Contract => {
   const addresses = getAddresses(networkID);
-  const contractAddress = bond === BONDS.mai ? addresses.BONDS.MAI : addresses.BONDS.MAI_CLAM;
+  const mapping = {
+    [BONDS.mai]: addresses.BONDS.MAI,
+    [BONDS.mai_clam]: addresses.BONDS.MAI_CLAM,
+    [BONDS.mai_clam_v2]: addresses.BONDS.MAI_CLAM_V2,
+  };
+  const contractAddress = mapping[bond];
   return new ethers.Contract(contractAddress, OtterBond, provider);
 };

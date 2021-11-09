@@ -56,6 +56,9 @@ export const changeApproval = createAsyncThunk(
       if (bond === BONDS.mai_clam) {
         approveTx = await reserveContract.approve(addresses.BONDS.MAI_CLAM, constants.MaxUint256);
       }
+      if (bond === BONDS.mai_clam_v2) {
+        approveTx = await reserveContract.approve(addresses.BONDS.MAI_CLAM_V2, constants.MaxUint256);
+      }
       dispatch(
         fetchPendingTxns({ txnHash: approveTx.hash, text: 'Approving ' + bondName(bond), type: 'approve_' + bond }),
       );
@@ -79,6 +82,12 @@ export const changeApproval = createAsyncThunk(
 
     if (bond === BONDS.mai_clam) {
       allowance = await reserveContract.allowance(address, addresses.BONDS.MAI_CLAM);
+      balance = await reserveContract.balanceOf(address);
+      balance = ethers.utils.formatUnits(balance, 'ether');
+    }
+
+    if (bond === BONDS.mai_clam_v2) {
+      allowance = await reserveContract.allowance(address, addresses.BONDS.MAI_CLAM_V2);
       balance = await reserveContract.balanceOf(address);
       balance = ethers.utils.formatUnits(balance, 'ether');
     }
@@ -137,7 +146,7 @@ export const calcBondDetails = createAsyncThunk(
       console.log('error getting bondPriceInUSD', e);
     }
 
-    if (bond === BONDS.mai_clam) {
+    if (bond === BONDS.mai_clam || bond === BONDS.mai_clam_v2) {
       valuation = await bondCalcContract.valuation(addresses.RESERVES.MAI_CLAM, amountInWei);
       bondQuote = await bondContract.payoutFor(valuation);
       bondQuote = bondQuote / Math.pow(10, 9);
@@ -149,10 +158,10 @@ export const calcBondDetails = createAsyncThunk(
     }
 
     // Display error if user tries to exceed maximum.
-    if (!!value && bondQuote > maxBondPrice / Math.pow(10, 9)) {
+    if (!!value && bondQuote > maxBondPrice / 1e9) {
       alert(
         "You're trying to bond more than the maximum payout available! The maximum bond payout is " +
-          (maxBondPrice / Math.pow(10, 9)).toFixed(2).toString() +
+          (maxBondPrice / 1e9).toFixed(2).toString() +
           ' CLAM.',
       );
     }

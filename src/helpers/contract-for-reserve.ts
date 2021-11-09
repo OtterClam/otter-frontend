@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
 import { getAddresses, BONDS } from 'src/constants';
-import { MimReserveContract, MimTimeReserveContract } from '../abi';
+import { MaiReserveContract, ClamMaiReserveContract } from '../abi';
 
 export const contractForReserve = (
   bond: string,
@@ -9,11 +9,11 @@ export const contractForReserve = (
 ) => {
   const addresses = getAddresses(networkID);
   if (bond === BONDS.mai) {
-    return new ethers.Contract(addresses.RESERVES.MAI, MimReserveContract, provider);
+    return new ethers.Contract(addresses.RESERVES.MAI, MaiReserveContract, provider);
   }
 
-  if (bond === BONDS.mai_clam) {
-    return new ethers.Contract(addresses.RESERVES.MAI_CLAM, MimTimeReserveContract, provider);
+  if (bond === BONDS.mai_clam || bond === BONDS.mai_clam_v2) {
+    return new ethers.Contract(addresses.RESERVES.MAI_CLAM, ClamMaiReserveContract, provider);
   }
 
   throw Error(`Contract for reserve doesn't support: ${bond}`);
