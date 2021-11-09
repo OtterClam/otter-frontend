@@ -80,6 +80,9 @@ export const loadAccountDetails = createAsyncThunk(
       stakingContract.epoch(),
     ]);
 
+    const gons = warmup[1];
+    const warmupBalance = await sClamContract.balanceForGons(gons);
+
     return {
       balances: {
         sClam: ethers.utils.formatUnits(sClamBalance, 'gwei'),
@@ -89,7 +92,7 @@ export const loadAccountDetails = createAsyncThunk(
       staking: {
         clamStake: +stakeAllowance,
         sClamUnstake: +unstakeAllowance,
-        warmup: ethers.utils.formatUnits(warmup[0], 9),
+        warmup: ethers.utils.formatUnits(warmupBalance, 9),
         canClaimWarmup: warmup[0].gt(0) && epoch[1].gte(warmup[2]),
       },
     };
