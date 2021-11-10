@@ -8,21 +8,28 @@ declare global {
   }
 }
 
+const THEME_PREFERENCE_KEY = 'otter:prefers-color-scheme';
+
 export const AppThemeContext = createContext({ name: 'light', theme: light });
 
 export function AppThemeProvider({ children }: PropsWithChildren<{}>) {
+  const themePreference = window.localStorage.getItem(THEME_PREFERENCE_KEY);
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-  const [themeConfig, setThemeConfig] = useState(() =>
-    prefersDarkMode ? { name: 'dark', theme: dark } : { name: 'light', theme: light },
-  );
+  const [themeConfig, setThemeConfig] = useState(() => {
+    if (prefersDarkMode || themePreference === 'dark') return { name: 'dark', theme: dark };
+    return { name: 'light', theme: light };
+  });
 
   useEffect(() => {
+    const saveThemeConfig = (config: { name: 'dark' | 'light'; theme: typeof light | typeof dark }) => {
+      window.localStorage.setItem(THEME_PREFERENCE_KEY, config.name);
+      setThemeConfig(config);
+    };
     const changeThemeHandler = (event: CustomEvent<{ theme: 'dark' | 'light' }>) => {
-      switch (event.detail.theme) {
-        case 'dark':
-          return setThemeConfig({ name: 'dark', theme: dark });
-        default:
-          return setThemeConfig({ name: 'light', theme: light });
+      if (event.detail.theme === 'dark') {
+        saveThemeConfig({ name: 'dark', theme: dark });
+      } else {
+        saveThemeConfig({ name: 'light', theme: light });
       }
     };
     window.addEventListener('change-theme', changeThemeHandler);
