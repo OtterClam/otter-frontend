@@ -17,6 +17,7 @@ import './treasury-dashboard.scss';
 import apollo from '../../lib/apolloClient';
 import InfoTooltip from 'src/components/InfoTooltip/InfoTooltip.jsx';
 import OtterKing from './otterking.png';
+import { IReduxState } from 'src/store/slices/state.interface';
 
 const percentFormatter = Intl.NumberFormat('en', { style: 'percent', minimumFractionDigits: 2 });
 
@@ -29,27 +30,17 @@ function TreasuryDashboard() {
   const smallerScreen = useMediaQuery('(max-width: 650px)');
   const verySmallScreen = useMediaQuery('(max-width: 379px)');
 
-  const marketPrice = useSelector(state => {
-    return state.app.marketPrice;
-  });
-  const circSupply = useSelector(state => {
-    return state.app.circSupply;
-  });
-  const totalSupply = useSelector(state => {
-    return state.app.totalSupply;
-  });
-  const marketCap = useSelector(state => {
-    return state.app.marketCap;
-  });
-  const currentIndex = useSelector(state => {
-    return state.app.currentIndex;
-  });
-  const backingPerClam = useSelector(state => state.app.backingPerClam);
-  const stakingAPY = useSelector(state => state.app.stakingAPY);
-  const stakingTVL = useSelector(state => state.app.stakingTVL);
-  const treasuryRunway = useSelector(state => state.app.treasuryRunway);
-  const stakingRatio = useSelector(state => state.app.stakingRatio);
-  const pol = useSelector(state => state.app.pol);
+  const marketPrice = useSelector<IReduxState, number>(state => state.app.marketPrice);
+  const circSupply = useSelector<IReduxState, number>(state => state.app.circSupply);
+  const totalSupply = useSelector<IReduxState, number>(state => state.app.totalSupply);
+  const marketCap = useSelector<IReduxState, number>(state => state.app.marketCap);
+  const currentIndex = useSelector<IReduxState, string>(state => state.app.currentIndex);
+  const backingPerClam = useSelector<IReduxState, number>(state => state.app.backingPerClam);
+  const stakingAPY = useSelector<IReduxState, number>(state => state.app.stakingAPY);
+  const stakingTVL = useSelector<IReduxState, number>(state => state.app.stakingTVL);
+  const treasuryRunway = useSelector<IReduxState, number>(state => state.app.treasuryRunway);
+  const stakingRatio = useSelector<IReduxState, number>(state => state.app.stakingRatio);
+  const treasuryBalance = useSelector<IReduxState, number>(state => state.app.treasuryBalance);
 
   useEffect(() => {
     // apollo(treasuryDataQuery).then(r => {
@@ -103,7 +94,7 @@ function TreasuryDashboard() {
                 </Typography>
                 <Typography variant="h4">
                   {marketCap && formatCurrency(marketCap, 0)}
-                  {!marketCap && <Skeleton type="text" />}
+                  {!marketCap && <Skeleton width="100px" />}
                 </Typography>
               </Box>
 
@@ -113,7 +104,17 @@ function TreasuryDashboard() {
                 </Typography>
                 <Typography variant="h4">
                   {/* appleseed-fix */}
-                  {marketPrice ? formatCurrency(marketPrice, 2) : <Skeleton type="text" />}
+                  {marketPrice ? formatCurrency(marketPrice, 2) : <Skeleton width="100px" />}
+                </Typography>
+              </Box>
+
+              <Box className="metric circ">
+                <Typography variant="h6" color="textSecondary">
+                  Treasury Balance
+                  {/* <InfoTooltip message={tooltipInfoMessages.} /> */}
+                </Typography>
+                <Typography variant="h4">
+                  {treasuryBalance ? formatCurrency(treasuryBalance, 0) : <Skeleton width="100px" />}
                 </Typography>
               </Box>
 
@@ -124,7 +125,7 @@ function TreasuryDashboard() {
                 </Typography>
 
                 <Typography variant="h4">
-                  {stakingTVL ? formatCurrency(stakingTVL, 2) : <Skeleton type="text" />}
+                  {stakingTVL ? formatCurrency(stakingTVL, 0) : <Skeleton width="100px" />}
                 </Typography>
               </Box>
 
@@ -139,7 +140,7 @@ function TreasuryDashboard() {
                 </Typography>
 
                 <Typography variant="h4">
-                  {wsCLAMPrice ? formatCurrency(wsCLAMPrice, 2) : <Skeleton type="text" />}
+                  {wsCLAMPrice ? formatCurrency(wsCLAMPrice, 2) : <Skeleton width="100px />}
                 </Typography>
               </Box> */}
               <Box className="metric circ">
@@ -148,7 +149,7 @@ function TreasuryDashboard() {
                   <InfoTooltip message={tooltipInfoMessages.apy} />
                 </Typography>
                 <Typography variant="h4">
-                  {stakingAPY ? percentFormatter.format(stakingAPY) : <Skeleton type="text" />}
+                  {stakingAPY ? percentFormatter.format(stakingAPY) : <Skeleton width="100px" />}
                 </Typography>
               </Box>
 
@@ -158,16 +159,8 @@ function TreasuryDashboard() {
                   <InfoTooltip message={tooltipInfoMessages.staked} />
                 </Typography>
                 <Typography variant="h4">
-                  {stakingRatio ? percentFormatter.format(stakingRatio) : <Skeleton type="text" />}
+                  {stakingRatio ? percentFormatter.format(stakingRatio) : <Skeleton width="100px" />}
                 </Typography>
-              </Box>
-
-              <Box className="metric circ">
-                <Typography variant="h6" color="textSecondary">
-                  Protocol Own Liquidity
-                  <InfoTooltip message={tooltipInfoMessages.pol} />
-                </Typography>
-                <Typography variant="h4">{pol ? percentFormatter.format(pol) : <Skeleton type="text" />}</Typography>
               </Box>
 
               <Box className="metric bpo">
@@ -175,7 +168,7 @@ function TreasuryDashboard() {
                   Backing per CLAM
                 </Typography>
                 <Typography variant="h4">
-                  {backingPerClam ? formatCurrency(backingPerClam, 2) : <Skeleton type="text" />}
+                  {backingPerClam ? formatCurrency(backingPerClam, 2) : <Skeleton width="100px" />}
                 </Typography>
               </Box>
 
@@ -188,7 +181,7 @@ function TreasuryDashboard() {
                   {treasuryRunway ? (
                     Intl.NumberFormat('en', { maximumFractionDigits: 0 }).format(treasuryRunway) + ' Days'
                   ) : (
-                    <Skeleton type="text" />
+                    <Skeleton width="100px" />
                   )}
                 </Typography>
               </Box>
@@ -203,7 +196,7 @@ function TreasuryDashboard() {
                   />
                 </Typography>
                 <Typography variant="h4">
-                  {currentIndex ? trim(currentIndex, 2) + ' sCLAM' : <Skeleton type="text" />}
+                  {currentIndex ? trim(currentIndex, 2) + ' sCLAM' : <Skeleton width="100px" />}
                 </Typography>
               </Box>
             </Box>
@@ -304,8 +297,7 @@ function TreasuryDashboard() {
                 />
               </Paper>
             </Grid>
-            {/*  Temporarily removed until correct data is in the graph */}
-        {/* <Grid item lg={6} md={12} sm={12} xs={12}>
+         <Grid item lg={6} md={12} sm={12} xs={12}>
               <Paper className="ohm-card">
                 <Chart
                   type="bar"
