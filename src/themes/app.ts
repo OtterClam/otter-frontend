@@ -54,6 +54,9 @@ export const light = responsiveFontSizes(
         primary: {
           main: colorPalette.light.otterDark,
         },
+        secondary: {
+          main: colorPalette.light.lightGray200,
+        },
         background: {
           default: colorPalette.light.lightGray100,
           paper: colorPalette.light.white,
