@@ -1,7 +1,7 @@
 export { abi as OtterBond } from './OtterBondDepository.json';
 
-export { abi as MimReserveContract } from './reserves/MimContract.json';
-export { abi as MimTimeReserveContract } from './reserves/MimTimeContract.json';
+export { abi as MaiReserveContract } from './reserves/MaiContract.json';
+export { abi as ClamMaiReserveContract } from './reserves/ClamMaiContract.json';
 
 export { abi as StakedClamContract } from './tokens/StakedClamTokenContract.json';
 export { abi as ClamTokenContract } from './tokens/ClamTokenContract.json';

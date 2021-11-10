@@ -9,6 +9,7 @@ import { useAddress, useBonds } from '../../../hooks';
 import { Paper, Link, Box, SvgIcon } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import '../sidebar.scss';
+import { BONDS } from 'src/constants';
 
 function NavContent() {
   const [isActive] = useState();
@@ -96,7 +97,9 @@ function NavContent() {
                       ) : (
                         <p>
                           {bond.name}
-                          <span className="bond-pair-roi">{bond.discount && trim(bond.discount * 100, 2)}%</span>
+                          {bond.value !== BONDS.mai_clam && (
+                            <span className="bond-pair-roi">{bond.discount && trim(bond.discount * 100, 2)}%</span>
+                          )}
                         </p>
                       )}
                     </Link>

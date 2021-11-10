@@ -10,6 +10,7 @@ import './bond.scss';
 import { useWeb3Context } from '../../hooks';
 import { Skeleton } from '@material-ui/lab';
 import { IReduxState } from '../../store/slices/state.interface';
+import { BONDS } from 'src/constants';
 
 function a11yProps(index: number) {
   return {
@@ -99,15 +100,17 @@ function Bond({ bond }: IBondProps) {
                 aria-label="bond tabs"
                 className="bond-one-table"
               >
-                <Tab label="Bond" {...a11yProps(0)} />
+                {bond !== BONDS.mai_clam && <Tab label="Bond" {...a11yProps(0)} />}
                 <Tab label="Redeem" {...a11yProps(1)} />
               </Tabs>
 
-              <TabPanel value={view} index={0}>
-                <BondPurchase bond={bond} slippage={slippage} />
-              </TabPanel>
+              {bond !== BONDS.mai_clam && (
+                <TabPanel value={view} index={0}>
+                  <BondPurchase bond={bond} slippage={slippage} />
+                </TabPanel>
+              )}
 
-              <TabPanel value={view} index={1}>
+              <TabPanel value={view} index={bond === BONDS.mai_clam ? 0 : 1}>
                 <BondRedeem bond={bond} />
               </TabPanel>
             </Paper>

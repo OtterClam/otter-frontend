@@ -7,7 +7,7 @@ export const addressForAsset = (bond: string, networkID: number): string => {
     return addresses.RESERVES.MAI;
   }
 
-  if (bond === BONDS.mai_clam) {
+  if (bond === BONDS.mai_clam || bond === BONDS.mai_clam_v2) {
     return addresses.RESERVES.MAI_CLAM;
   }
 
