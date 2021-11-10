@@ -270,7 +270,7 @@ function Stake() {
                                 onClaimWarmup();
                               }}
                             >
-                              <p>{txnButtonText(pendingTransactions, 'claimWarmup', 'Claim')}</p>
+                              <p>{txnButtonText(pendingTransactions, 'claimWarmup', 'Claim Warmup')}</p>
                             </div>
                           )}
                         </div>
