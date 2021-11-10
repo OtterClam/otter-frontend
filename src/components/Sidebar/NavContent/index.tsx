@@ -11,6 +11,7 @@ import { Paper, Link, Box, SvgIcon, makeStyles, Switch, Grid } from '@material-u
 import { Skeleton } from '@material-ui/lab';
 import '../sidebar.scss';
 import { AppThemeContext } from 'src/helpers/app-theme-context';
+import { BONDS } from 'src/constants';
 
 const useStyles = makeStyles(theme => ({
   navbar: {
@@ -61,10 +62,11 @@ function NavContent() {
                 isActive={(match: any, location: any) => {
                   return checkPage(location, 'dashboard');
                 }}
-                className={`button-dapp-menu ${isActive ? 'active' : ''}`}
+                activeClassName="active"
+                className="button-dapp-menu"
               >
                 <div className="dapp-menu-item">
-                  <img src={checkPage(location, 'dashboard') ? ActiveMenuIcon : InactiveMenuIcon} />
+                  {checkPage(location, 'dashboard') ? <ActiveMenuIcon /> : <InactiveMenuIcon />}
                   <p>Dashboard</p>
                 </div>
               </Link>
