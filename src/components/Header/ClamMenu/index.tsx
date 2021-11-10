@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { getAddresses, TOKEN_DECIMALS, DEFAULT_NETWORK } from '../../../constants';
 import { useSelector } from 'react-redux';
-import { Link, SvgIcon, Popper, Button, Paper, Typography, Divider, Box, Fade } from '@material-ui/core';
+import { Link, SvgIcon, Popper, Button, Paper, Typography, Divider, Box, Fade, makeStyles } from '@material-ui/core';
 import { ReactComponent as ArrowUpIcon } from '../../../assets/icons/arrow-up.svg';
 import './clam-menu.scss';
 import { IReduxState } from '../../../store/slices/state.interface';
@@ -30,7 +30,16 @@ const addTokenToWallet = (tokenSymbol: string, tokenAddress: string) => async ()
   }
 };
 
+const useStyles = makeStyles(theme => ({
+  popperMenu: {
+    '& .MuiButton-containedSecondary': {
+      backgroundColor: theme.palette.mode.lightGray200,
+    },
+  },
+}));
+
 function ClamMenu() {
+  const styles = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const isEthereumAPIAvailable = window.ethereum;
 
@@ -64,7 +73,7 @@ function ClamMenu() {
           {({ TransitionProps }) => {
             return (
               <Fade {...TransitionProps} timeout={400}>
-                <Paper className="ohm-menu" elevation={1}>
+                <Paper className={`${styles.popperMenu} ohm-menu`} elevation={1}>
                   <Box component="div" className="buy-tokens">
                     <Link
                       href={'https://quickswap.exchange/#/swap?outputCurrency=' + CLAM_ADDRESS}
