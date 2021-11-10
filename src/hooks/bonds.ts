@@ -18,7 +18,7 @@ export const makeBondsArray = (
     {
       name: 'CLAM-MAI LP(Legacy)',
       value: BONDS.mai_clam,
-      discount: Number(maiClamBondDiscount),
+      discount: 0,
     },
     {
       name: 'CLAM-MAI LP',

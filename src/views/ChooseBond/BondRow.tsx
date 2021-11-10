@@ -2,6 +2,7 @@ import { Link, Paper, Slide, TableCell, TableRow } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
+import { BONDS } from 'src/constants';
 import BondLogo from '../../components/BondLogo';
 import { bondName, isBondLP, lpURL, priceUnits, trim } from '../../helpers';
 import { useWeb3Context } from '../../hooks';
@@ -116,17 +117,21 @@ export function BondTableData({ bond }: IBondProps) {
         <p className="bond-name-title">
           <>
             <span className="currency-icon">{priceUnits(bond)}</span>
-            {isBondLoading ? <Skeleton width="50px" /> : trim(bondPrice, 2)}
+            {isBondLoading ? <Skeleton width="50px" /> : bond === BONDS.mai_clam ? '-' : trim(bondPrice, 2)}
           </>
         </p>
       </TableCell>
       <TableCell align="right">
-        <p className="bond-name-title">{isBondLoading ? <Skeleton /> : `${trim(bondDiscount * 100, 2)}%`}</p>
+        <p className="bond-name-title">
+          {isBondLoading ? <Skeleton /> : bond === BONDS.mai_clam ? '-' : `${trim(bondDiscount * 100, 2)}%`}
+        </p>
       </TableCell>
       <TableCell align="right">
         <p className="bond-name-title">
           {isBondLoading ? (
             <Skeleton />
+          ) : bond === BONDS.mai_clam ? (
+            '-'
           ) : (
             new Intl.NumberFormat('en-US', {
               style: 'currency',

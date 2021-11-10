@@ -79,7 +79,11 @@ function Bond({ bond }: IBondProps) {
                     {isBondLoading ? (
                       <Skeleton />
                     ) : bond.indexOf('lp') >= 0 ? (
-                      `$${trim(bondPrice, 2)}`
+                      bond === BONDS.mai_clam ? (
+                        '-'
+                      ) : (
+                        `$${trim(bondPrice, 2)}`
+                      )
                     ) : (
                       `${trim(bondPrice, 2)} ${bondToken}`
                     )}
