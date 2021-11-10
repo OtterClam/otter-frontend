@@ -9,9 +9,31 @@ import {
   OutlinedInput,
   InputLabel,
   InputAdornment,
+  makeStyles,
 } from '@material-ui/core';
 import { ReactComponent as XIcon } from '../../assets/icons/icon_close.svg';
 import './bondSettings.scss';
+
+const useStyles = makeStyles(theme => ({
+  modalContent: {
+    backgroundColor: theme.palette.mode.lightGray100,
+  },
+  inputGroup: {
+    '& .MuiOutlinedInput-root': {
+      borderColor: theme.palette.mode.lightGray300,
+      backgroundColor: theme.palette.background.default,
+    },
+    '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+      borderColor: theme.palette.mode.lightGray300,
+    },
+    '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+      borderColor: theme.palette.mode.lightGray300,
+    },
+    '& .MuiOutlinedInput-notchedOutline': {
+      borderColor: theme.palette.mode.lightGray300,
+    },
+  },
+}));
 
 interface IAdvancedSettingsProps {
   open: boolean;
@@ -30,9 +52,10 @@ function AdvancedSettings({
   onRecipientAddressChange,
   onSlippageChange,
 }: IAdvancedSettingsProps) {
+  const styles = useStyles();
   return (
     <Modal id="hades" open={open} onClose={handleClose} hideBackdrop>
-      <Paper className="ohm-card ohm-popover">
+      <Paper className={`${styles.modalContent} ohm-card ohm-popover`}>
         <div className="cross-wrap">
           <IconButton onClick={handleClose}>
             <SvgIcon color="primary" component={XIcon} />
@@ -41,7 +64,7 @@ function AdvancedSettings({
 
         <p className="hades-title">Settings</p>
 
-        <Box className="card-content">
+        <Box className={`${styles.inputGroup} card-content`}>
           <InputLabel htmlFor="slippage">
             <p className="input-label">Slippage</p>
           </InputLabel>

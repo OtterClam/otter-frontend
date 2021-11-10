@@ -14,7 +14,6 @@
     display: flex;
     flex-direction: column;
 
-    background: $light-gray100;
     backdrop-filter: blur(100px);
 
     h3 {
@@ -49,7 +48,7 @@
     width: auto;
 
     .input-label {
-      font-weight: 500;
+      font-weight: 700;
       font-size: 16px;
     }
 
@@ -68,27 +67,23 @@
     }
   }
 
-  .bond-input {
-    background: $light-gray100;
-    border: 1px solid $light-gray300;
-    border-radius: 10px;
-    outline: none;
+}
 
-    .MuiOutlinedInput-input {
-      font-size: 16px;
-    }
+.bond-input {
+  border: 1px solid;
+  border-radius: 10px;
+  outline: none;
 
-    .MuiOutlinedInput-notchedOutline {
-      border-color: rgba(255, 255, 255, 0.2) !important;
-    }
+  .MuiOutlinedInput-input {
+    font-size: 16px;
+  }
 
-    .stake-input-btn {
-      cursor: pointer;
+  .stake-input-btn {
+    cursor: pointer;
 
-      p {
-        font-weight: 600;
-        font-size: 18px;
-      }
+    p {
+      font-weight: 600;
+      font-size: 18px;
     }
   }
 }
