@@ -28,10 +28,10 @@ function RebaseTimer() {
         {currentBlockTime ? (
           timeUntilRebase ? (
             <>
-              <strong>{timeUntilRebase}</strong> to Next Rebase
+              <strong>{timeUntilRebase}</strong> to Next Harvest
             </>
           ) : (
-            <strong>Rebasing</strong>
+            <strong>Harvesting</strong>
           )
         ) : (
           <Skeleton width="200px" />
