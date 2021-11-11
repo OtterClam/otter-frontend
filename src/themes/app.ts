@@ -21,7 +21,7 @@ const colorPalette = {
     darkGray300: '#434E77',
   },
   dark: {
-    otterDark: '#FFFFFF',
+    otterDark: '#F7F9FB',
     white: '#0A0E23',
     lightGray100: '#101631',
     lightGray200: '#212B4F',
