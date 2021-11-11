@@ -65,7 +65,7 @@ function ClamMenu() {
         onMouseLeave={e => handleClick(e)}
         id="ohm-menu-button-hover"
       >
-        <Box color="text.primary" borderColor="text.primary" className="ohm-button">
+        <Box color="text.primary" className="ohm-button">
           <p>BUY CLAM</p>
         </Box>
 
@@ -80,7 +80,7 @@ function ClamMenu() {
                       target="_blank"
                       rel="noreferrer"
                     >
-                      <Button size="large" variant="contained" color="secondary" fullWidth>
+                      <Button size="large" variant="text" color="primary" fullWidth>
                         <Typography className="buy-text" align="left">
                           Buy on QuickSwap <SvgIcon component={ArrowUpIcon} htmlColor="#A3A3A3" />
                         </Typography>
@@ -94,16 +94,16 @@ function ClamMenu() {
                       <p>ADD TOKEN TO WALLET</p>
                       <Button
                         size="large"
-                        variant="contained"
-                        color="secondary"
+                        variant="text"
+                        color="primary"
                         onClick={addTokenToWallet('CLAM', CLAM_ADDRESS)}
                       >
                         <Typography className="buy-text">CLAM</Typography>
                       </Button>
                       <Button
-                        variant="contained"
+                        variant="text"
                         size="large"
-                        color="secondary"
+                        color="primary"
                         onClick={addTokenToWallet('sCLAM', sCLAM_ADDRESS)}
                       >
                         <Typography className="buy-text">sCLAM</Typography>
