@@ -1,7 +1,7 @@
 import { AppBar, Toolbar, Box, Button, SvgIcon } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { ReactComponent as MenuIcon } from '../../assets/icons/hamburger.svg';
+import { ReactComponent as MenuIcon } from '../../assets/icons/icon_24x24_hamburger.svg';
 import ClamMenu from './ClamMenu';
 import ConnectMenu from './ConnectMenu';
 import './topbar.scss';
@@ -62,12 +62,12 @@ function Header({ handleDrawerToggle, drawe }: IHeader) {
               aria-label="open drawer"
               edge="start"
               size="large"
-              variant="contained"
+              variant="text"
               color="secondary"
               onClick={handleDrawerToggle}
               className={classes.menuButton}
             >
-              <SvgIcon component={MenuIcon} />
+              <SvgIcon component={MenuIcon} color="primary" />
             </Button>
 
             <Box display="flex">
