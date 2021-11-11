@@ -12,8 +12,8 @@ import { Skeleton } from '@material-ui/lab';
 import '../sidebar.scss';
 import { AppThemeContext } from 'src/helpers/app-theme-context';
 import { BONDS } from 'src/constants';
-import ToggleDark from './toggle-dark.svg';
-import ToggleLight from './toggle-light.svg';
+import ToggleDark from './toggle-dark.png';
+import ToggleLight from './toggle-light.png';
 
 const useStyles = makeStyles(theme => ({
   navbar: {
@@ -144,7 +144,7 @@ function NavContent() {
                   height="32px"
                   onClick={() => window.dispatchEvent(new CustomEvent('change-theme', { detail: { theme: 'light' } }))}
                 >
-                  <img src={ToggleDark} />
+                  <img src={ToggleDark} width="76px" height="40px" />
                 </Box>
               </Grid>
             )}
@@ -163,7 +163,7 @@ function NavContent() {
                   height="32px"
                   onClick={() => window.dispatchEvent(new CustomEvent('change-theme', { detail: { theme: 'dark' } }))}
                 >
-                  <img src={ToggleLight} />
+                  <img src={ToggleLight} width="76px" height="40px" />
                 </Box>
               </Grid>
             )}
