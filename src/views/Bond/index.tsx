@@ -75,7 +75,7 @@ function Bond({ bond }: IBondProps) {
               <Box direction="row" className="bond-price-data-row">
                 <div className="bond-price-data">
                   <p className="bond-price-data-title">Bond Price</p>
-                  <p className="bond-price-data-value">
+                  <Box component="p" color="text.secondary" className="bond-price-data-value">
                     {isBondLoading ? (
                       <Skeleton />
                     ) : bond.indexOf('lp') >= 0 ? (
@@ -87,18 +87,19 @@ function Bond({ bond }: IBondProps) {
                     ) : (
                       `${trim(bondPrice, 2)} ${bondToken}`
                     )}
-                  </p>
+                  </Box>
                 </div>
                 <div className="bond-price-data">
                   <p className="bond-price-data-title">CLAM Price</p>
-                  <p className="bond-price-data-value"> {isBondLoading ? <Skeleton /> : `$${trim(marketPrice, 2)}`} </p>
+                  <Box component="p" color="text.secondary" className="bond-price-data-value">
+                    {isBondLoading ? <Skeleton /> : `$${trim(marketPrice, 2)}`}
+                  </Box>
                 </div>
               </Box>
 
               <Tabs
                 centered
                 value={view}
-                textColor="primary"
                 indicatorColor="primary"
                 onChange={changeView}
                 aria-label="bond tabs"

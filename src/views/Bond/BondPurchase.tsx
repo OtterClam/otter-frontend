@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Box, InputLabel, OutlinedInput, InputAdornment, Slide, FormControl } from '@material-ui/core';
+import { Box, InputLabel, OutlinedInput, InputAdornment, Slide, FormControl, makeStyles } from '@material-ui/core';
 import { shorten, trim, prettifySeconds } from '../../helpers';
 import { changeApproval, bondAsset, calcBondDetails } from '../../store/slices/bond-slice';
 import { useWeb3Context } from '../../hooks';
@@ -8,12 +8,31 @@ import { IPendingTxn, isPendingTxn, txnButtonText } from '../../store/slices/pen
 import { Skeleton } from '@material-ui/lab';
 import { IReduxState } from '../../store/slices/state.interface';
 
+const useStyles = makeStyles(theme => ({
+  input: {
+    '& .MuiOutlinedInput-root': {
+      borderColor: 'transparent',
+      backgroundColor: theme.palette.background.paper,
+    },
+    '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+      borderColor: theme.palette.mode.lightGray300,
+    },
+    '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+      borderColor: theme.palette.mode.lightGray300,
+    },
+    '& .MuiOutlinedInput-notchedOutline': {
+      borderColor: theme.palette.mode.lightGray300,
+    },
+  },
+}));
+
 interface IBondPurchaseProps {
   bond: string;
   slippage: number;
 }
 
 function BondPurchase({ bond, slippage }: IBondPurchaseProps) {
+  const styles = useStyles();
   const dispatch = useDispatch();
   const { provider, address, chainID } = useWeb3Context();
 
@@ -127,7 +146,7 @@ function BondPurchase({ bond, slippage }: IBondPurchaseProps) {
 
   return (
     <Box display="flex" flexDirection="column">
-      <div className="input-container">
+      <div className={`${styles.input} input-container`}>
         <FormControl className="ohm-input" variant="outlined" color="primary" fullWidth>
           <InputLabel htmlFor="outlined-adornment-amount"></InputLabel>
           <OutlinedInput
@@ -148,25 +167,29 @@ function BondPurchase({ bond, slippage }: IBondPurchaseProps) {
           />
         </FormControl>
         {hasAllowance() ? (
-          <div
+          <Box
             className="transaction-button app-otter-button"
+            bgcolor="otter.otterBlue"
+            color="otter.white"
             onClick={async () => {
               if (isPendingTxn(pendingTransactions, 'bond_' + bond)) return;
               await onBond();
             }}
           >
             <p>{txnButtonText(pendingTransactions, 'bond_' + bond, 'Bond')}</p>
-          </div>
+          </Box>
         ) : (
-          <div
+          <Box
             className="transaction-button app-otter-button"
+            bgcolor="otter.otterBlue"
+            color="otter.white"
             onClick={async () => {
               if (isPendingTxn(pendingTransactions, 'approve_' + bond)) return;
               await onSeekApproval();
             }}
           >
             <p>{txnButtonText(pendingTransactions, 'approve_' + bond, 'Approve')}</p>
-          </div>
+          </Box>
         )}
       </div>
       {!hasAllowance() && (

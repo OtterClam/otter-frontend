@@ -42,6 +42,52 @@ function TreasuryDashboard() {
   const stakingRatio = useSelector<IReduxState, number>(state => state.app.stakingRatio);
   const treasuryBalance = useSelector<IReduxState, number>(state => state.app.treasuryBalance);
 
+  const displayData = [
+    {
+      title: 'Market Cap',
+      value: marketCap ? formatCurrency(marketCap, 0) : null,
+    },
+    {
+      title: 'CLAM Price',
+      value: marketPrice ? formatCurrency(marketPrice, 2) : null,
+    },
+    {
+      title: 'Treasury Balance',
+      value: treasuryBalance ? formatCurrency(treasuryBalance, 0) : null,
+    },
+    {
+      title: 'Staking TVL',
+      value: stakingTVL ? formatCurrency(stakingTVL, 0) : null,
+      info: tooltipInfoMessages.tvl,
+    },
+    {
+      title: 'Staking APY',
+      value: stakingAPY ? percentFormatter.format(stakingAPY) : null,
+      info: tooltipInfoMessages.apy,
+    },
+    {
+      title: 'Staking Ratio',
+      value: stakingRatio ? percentFormatter.format(stakingRatio) : null,
+      info: tooltipInfoMessages.staked,
+    },
+    {
+      title: 'Backing per CLAM',
+      value: backingPerClam ? formatCurrency(backingPerClam, 2) : null,
+    },
+    {
+      title: 'Runway',
+      value: treasuryRunway
+        ? Intl.NumberFormat('en', { maximumFractionDigits: 0 }).format(treasuryRunway) + ' Days'
+        : null,
+      info: tooltipInfoMessages.runway,
+    },
+    {
+      title: 'Current Index',
+      value: currentIndex ? trim(currentIndex, 2) + ' sCLAM' : null,
+      info: tooltipInfoMessages.currentIndex,
+    },
+  ];
+
   useEffect(() => {
     // apollo(treasuryDataQuery).then(r => {
     //   let metrics = r.data.protocolMetrics.map(entry =>
@@ -71,11 +117,11 @@ function TreasuryDashboard() {
   return (
     <div id="treasury-dashboard-view" className={`${smallerScreen && 'smaller'} ${verySmallScreen && 'very-small'}`}>
       <div className="hero">
-        <div>
+        <Box component="div" color="text.primary">
           <p>Wen (3,3) becomes (🦦,🦦)</p>
           <h1>Welcome to Otter Kingdom</h1>
           <h3>The Decentralized Reserve Memecoin</h3>
-        </div>
+        </Box>
         <img src={OtterKing} />
       </div>
       <div className="wave" />
@@ -88,117 +134,17 @@ function TreasuryDashboard() {
         <Box className={`hero-metrics`}>
           <Paper className="ohm-card">
             <Box display="flex" flexWrap="wrap" justifyContent="space-between" alignItems="center">
-              <Box className="metric market">
-                <Typography variant="h6" color="textSecondary">
-                  Market Cap
-                </Typography>
-                <Typography variant="h4">
-                  {marketCap && formatCurrency(marketCap, 0)}
-                  {!marketCap && <Skeleton width="100px" />}
-                </Typography>
-              </Box>
-
-              <Box className="metric price">
-                <Typography variant="h6" color="textSecondary">
-                  CLAM Price
-                </Typography>
-                <Typography variant="h4">
-                  {/* appleseed-fix */}
-                  {marketPrice ? formatCurrency(marketPrice, 2) : <Skeleton width="100px" />}
-                </Typography>
-              </Box>
-
-              <Box className="metric circ">
-                <Typography variant="h6" color="textSecondary">
-                  Treasury Balance
-                  {/* <InfoTooltip message={tooltipInfoMessages.} /> */}
-                </Typography>
-                <Typography variant="h4">
-                  {treasuryBalance ? formatCurrency(treasuryBalance, 0) : <Skeleton width="100px" />}
-                </Typography>
-              </Box>
-
-              <Box className="metric wsoprice">
-                <Typography variant="h6" color="textSecondary">
-                  Staking TVL
-                  <InfoTooltip message={tooltipInfoMessages.tvl} />
-                </Typography>
-
-                <Typography variant="h4">
-                  {stakingTVL ? formatCurrency(stakingTVL, 0) : <Skeleton width="100px" />}
-                </Typography>
-              </Box>
-
-              {/* <Box className="metric wsoprice">
-                <Typography variant="h6" color="textSecondary">
-                  wsCLAM Price
-                  <InfoTooltip
-                    message={
-                      'wsCLAM = sCLAM * index\n\nThe price of wsCLAM is equal to the price of CLAM multiplied by the current index'
-                    }
-                  />
-                </Typography>
-
-                <Typography variant="h4">
-                  {wsCLAMPrice ? formatCurrency(wsCLAMPrice, 2) : <Skeleton width="100px />}
-                </Typography>
-              </Box> */}
-              <Box className="metric circ">
-                <Typography variant="h6" color="textSecondary">
-                  Staking APY
-                  <InfoTooltip message={tooltipInfoMessages.apy} />
-                </Typography>
-                <Typography variant="h4">
-                  {stakingAPY ? percentFormatter.format(stakingAPY) : <Skeleton width="100px" />}
-                </Typography>
-              </Box>
-
-              <Box className="metric circ">
-                <Typography variant="h6" color="textSecondary">
-                  Staking Ratio
-                  <InfoTooltip message={tooltipInfoMessages.staked} />
-                </Typography>
-                <Typography variant="h4">
-                  {stakingRatio ? percentFormatter.format(stakingRatio) : <Skeleton width="100px" />}
-                </Typography>
-              </Box>
-
-              <Box className="metric bpo">
-                <Typography variant="h6" color="textSecondary">
-                  Backing per CLAM
-                </Typography>
-                <Typography variant="h4">
-                  {backingPerClam ? formatCurrency(backingPerClam, 2) : <Skeleton width="100px" />}
-                </Typography>
-              </Box>
-
-              <Box className="metric circ">
-                <Typography variant="h6" color="textSecondary">
-                  Runway
-                  <InfoTooltip message={tooltipInfoMessages.runway} />
-                </Typography>
-                <Typography variant="h4">
-                  {treasuryRunway ? (
-                    Intl.NumberFormat('en', { maximumFractionDigits: 0 }).format(treasuryRunway) + ' Days'
-                  ) : (
-                    <Skeleton width="100px" />
-                  )}
-                </Typography>
-              </Box>
-
-              <Box className="metric index">
-                <Typography variant="h6" color="textSecondary">
-                  Current Index
-                  <InfoTooltip
-                    message={
-                      'The current index tracks the amount of sCLAM accumulated since the beginning of staking. Basically, how much sCLAM one would have if they staked and held a single CLAM from day 1.'
-                    }
-                  />
-                </Typography>
-                <Typography variant="h4">
-                  {currentIndex ? trim(currentIndex, 2) + ' sCLAM' : <Skeleton width="100px" />}
-                </Typography>
-              </Box>
+              {displayData.map(({ title, value, info }) => (
+                <Box bgcolor="mode.white" className="metric">
+                  <Typography variant="h6" color="secondary">
+                    {title}
+                    {info && <InfoTooltip message={info} />}
+                  </Typography>
+                  <Typography variant="h4" color="textPrimary">
+                    {value ? value : <Skeleton width="100px" />}
+                  </Typography>
+                </Box>
+              ))}
             </Box>
           </Paper>
         </Box>

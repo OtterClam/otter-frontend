@@ -1,4 +1,4 @@
-import { Link, Paper, Slide, TableCell, TableRow } from '@material-ui/core';
+import { Link, Paper, Slide, TableCell, TableRow, Box } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
@@ -37,7 +37,9 @@ export function BondDataCard({ bond }: IBondProps) {
             {isBondLP(bond) && (
               <div>
                 <Link href={lpURL(bond, chainID)} target="_blank">
-                  <p className="bond-lp-add-liquidity">Add Liquidity</p>
+                  <Box component="p" color="otter.otterBlue" className="bond-lp-add-liquidity">
+                    Add Liquidity
+                  </Box>
                 </Link>
               </div>
             )}
@@ -76,9 +78,16 @@ export function BondDataCard({ bond }: IBondProps) {
           </p>
         </div>
         <Link component={NavLink} to={`/bonds/${bond}`}>
-          <div className="bond-table-btn">
+          <Box
+            bgcolor="otter.otterBlue"
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            height="44px"
+            className="bond-table-btn"
+          >
             <p>Bond {bondName(bond)}</p>
-          </div>
+          </Box>
         </Link>
       </Paper>
     </Slide>
@@ -108,7 +117,9 @@ export function BondTableData({ bond }: IBondProps) {
           <p className="bond-name-title">{bondName(bond)}</p>
           {isBondLP(bond) && (
             <Link color="primary" href={lpURL(bond, chainID)} target="_blank">
-              <p className="bond-lp-add-liquidity">Add Liquidity</p>
+              <Box component="p" color="otter.otterBlue" className="bond-lp-add-liquidity">
+                Add Liquidity
+              </Box>
             </Link>
           )}
         </div>
@@ -144,9 +155,17 @@ export function BondTableData({ bond }: IBondProps) {
       </TableCell>
       <TableCell>
         <Link component={NavLink} to={`/bonds/${bond}`}>
-          <div className="bond-table-btn">
+          <Box
+            bgcolor="otter.otterBlue"
+            color="otter.white"
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            height="44px"
+            className="bond-table-btn"
+          >
             <p>Bond</p>
-          </div>
+          </Box>
         </Link>
       </TableCell>
     </TableRow>

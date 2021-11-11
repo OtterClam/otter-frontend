@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { getAddresses, TOKEN_DECIMALS, DEFAULT_NETWORK } from '../../../constants';
 import { useSelector } from 'react-redux';
-import { Link, SvgIcon, Popper, Button, Paper, Typography, Divider, Box, Fade } from '@material-ui/core';
+import { Link, SvgIcon, Popper, Button, Paper, Typography, Divider, Box, Fade, makeStyles } from '@material-ui/core';
 import { ReactComponent as ArrowUpIcon } from '../../../assets/icons/arrow-up.svg';
 import './clam-menu.scss';
 import { IReduxState } from '../../../store/slices/state.interface';
@@ -30,7 +30,16 @@ const addTokenToWallet = (tokenSymbol: string, tokenAddress: string) => async ()
   }
 };
 
+const useStyles = makeStyles(theme => ({
+  popperMenu: {
+    '& .MuiButton-containedSecondary': {
+      backgroundColor: theme.palette.mode.lightGray200,
+    },
+  },
+}));
+
 function ClamMenu() {
+  const styles = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const isEthereumAPIAvailable = window.ethereum;
 
@@ -56,22 +65,22 @@ function ClamMenu() {
         onMouseLeave={e => handleClick(e)}
         id="ohm-menu-button-hover"
       >
-        <div className="ohm-button">
+        <Box color="text.primary" className="ohm-button">
           <p>BUY CLAM</p>
-        </div>
+        </Box>
 
         <Popper id={id} open={open} anchorEl={anchorEl} transition>
           {({ TransitionProps }) => {
             return (
               <Fade {...TransitionProps} timeout={400}>
-                <Paper className="ohm-menu" elevation={1}>
+                <Paper className={`${styles.popperMenu} ohm-menu`} elevation={1}>
                   <Box component="div" className="buy-tokens">
                     <Link
                       href={'https://quickswap.exchange/#/swap?outputCurrency=' + CLAM_ADDRESS}
                       target="_blank"
                       rel="noreferrer"
                     >
-                      <Button size="large" variant="contained" color="secondary" fullWidth>
+                      <Button size="large" variant="text" color="primary" fullWidth>
                         <Typography className="buy-text" align="left">
                           Buy on QuickSwap <SvgIcon component={ArrowUpIcon} htmlColor="#A3A3A3" />
                         </Typography>
@@ -85,16 +94,16 @@ function ClamMenu() {
                       <p>ADD TOKEN TO WALLET</p>
                       <Button
                         size="large"
-                        variant="contained"
-                        color="secondary"
+                        variant="text"
+                        color="primary"
                         onClick={addTokenToWallet('CLAM', CLAM_ADDRESS)}
                       >
                         <Typography className="buy-text">CLAM</Typography>
                       </Button>
                       <Button
-                        variant="contained"
+                        variant="text"
                         size="large"
-                        color="secondary"
+                        color="primary"
                         onClick={addTokenToWallet('sCLAM', sCLAM_ADDRESS)}
                       >
                         <Typography className="buy-text">sCLAM</Typography>

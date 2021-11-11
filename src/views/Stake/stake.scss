@@ -263,7 +263,7 @@
   font-weight: 800;
   font-size: 24px;
   line-height: 36px;
-  color: $clam-pink;
+  // color: $clam-pink;
 }
 
 .stack-table-title {
@@ -295,7 +295,7 @@
 
 .stake-tab-buttons {
   .MuiTabs-indicator {
-    background-color: $otter-dark;
+    // background-color: $otter-dark;
     height: 3px;
   }
 
@@ -312,16 +312,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: $otter-blue;
+    // background: $otter-blue;
     color: white;
     height: 57px;
     border-radius: 10px;
     cursor: pointer;
     text-align: center;
 
-    &:hover {
-      background: $otter-blue-hover;
-    }
+    // &:hover {
+    //   background: $otter-blue-hover;
+    // }
 
     p {
       font-style: normal;
@@ -348,7 +348,7 @@
       font-size: 14px;
       &-warmup {
         font-weight: 700;
-        color: $clam-pink;
+        // color: $clam-pink;
       }
     }
 
@@ -360,8 +360,8 @@
 }
 
 .stake-input {
-  background: $light-gray100;
-  border: 1px solid $light-gray300;
+  // background: $light-gray100;
+  border: 1px solid;
   border-radius: 10px;
   outline: none;
 
@@ -370,7 +370,7 @@
   }
 
   .MuiOutlinedInput-notchedOutline {
-    border-color: rgba(255, 255, 255, 0.2) !important;
+    // border-color: rgba(255, 255, 255, 0.2) !important;
   }
 
   .stake-input-btn {

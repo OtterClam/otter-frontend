@@ -22,14 +22,13 @@ const useStyles = makeStyles(theme => ({
     zIndex: 10,
   },
   menuButton: {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
     marginRight: theme.spacing(2),
     [theme.breakpoints.up('md')]: {
       display: 'none',
     },
   },
   topBar: {
-    backgroundColor: '#F7F9FB',
+    backgroundColor: theme.palette.background.default,
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
       duration: transitionDuration,

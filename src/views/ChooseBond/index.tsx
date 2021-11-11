@@ -41,7 +41,7 @@ function ChooseBond() {
             <p className="bond-title">
               Bond (
               <span className="bond-title-span">
-                {getTokenImage('clam')},{getTokenImage('clam')}
+                {getTokenImage('clam', 24)},{getTokenImage('clam', 24)}
               </span>
               )
             </p>
@@ -51,7 +51,7 @@ function ChooseBond() {
             <Grid item xs={6}>
               <Box textAlign={`${isVerySmallScreen ? 'left' : 'center'}`}>
                 <p className="bond-hero-title">Treasury Balance</p>
-                <p className="bond-hero-value">
+                <Box component="p" color="text.secondary" className="bond-hero-value">
                   {isAppLoading ? (
                     <Skeleton width="180px" />
                   ) : (
@@ -62,16 +62,16 @@ function ChooseBond() {
                       minimumFractionDigits: 0,
                     }).format(treasuryBalance)
                   )}
-                </p>
+                </Box>
               </Box>
             </Grid>
 
             <Grid item xs={6} className={`ohm-price`}>
               <Box textAlign={`${isVerySmallScreen ? 'right' : 'center'}`}>
                 <p className="bond-hero-title">CLAM Price</p>
-                <p className="bond-hero-value">
+                <Box component="p" color="text.secondary" className="bond-hero-value">
                   {isAppLoading ? <Skeleton width="100px" /> : `$${trim(marketPrice, 2)}`}
-                </p>
+                </Box>
               </Box>
             </Grid>
           </Grid>

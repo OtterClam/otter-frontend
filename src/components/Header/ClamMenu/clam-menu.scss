@@ -15,7 +15,6 @@
 #ohm-popper,
 #ohm-popper-pending {
   z-index: 5;
-  background-color: #fff;
   backdrop-filter: blur(33px);
   -webkit-backdrop-filter: blur(33px);
   margin-top: 10px;
@@ -32,9 +31,6 @@
       text-align: left;
       margin-bottom: 4px;
       padding-left: 16px;
-      &:not(:hover) {
-        background-color: #00000003 !important;
-      }
     }
     a {
       svg {
@@ -63,8 +59,7 @@
 }
 
 .ohm-button {
-  color: $otter-dark;
-  border: 2px solid $otter-dark;
+  border: 2px solid;
   border-radius: 10px;
   cursor: pointer;
   margin-right: 20px;
