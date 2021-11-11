@@ -185,6 +185,8 @@ export const tooltipInfoMessages = {
   staked: 'CLAM Staked, is the ratio of sCLAM to CLAM (staked vs unstaked)',
   apy: 'Annual Percentage Yield, is the normalized representation of an interest rate, based on a compounding period over one year. Note that APYs provided are rather ballpark level indicators and not so much precise future results.',
   runway: 'Runway, is the number of days sCLAM emissions can be sustained at a given rate. Lower APY = longer runway',
+  currentIndex:
+    'The current index tracks the amount of sCLAM accumulated since the beginning of staking. Basically, how much sCLAM one would have if they staked and held a single CLAM from day 1.',
 };
 
 export const itemType = {

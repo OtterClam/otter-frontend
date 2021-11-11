@@ -55,7 +55,7 @@ export const light = responsiveFontSizes(
           main: colorPalette.light.otterDark,
         },
         secondary: {
-          main: colorPalette.light.lightGray200,
+          main: colorPalette.light.darkGray200,
         },
         background: {
           default: colorPalette.light.lightGray100,
@@ -82,6 +82,9 @@ export const dark = responsiveFontSizes(
         mode: colorPalette.dark,
         primary: {
           main: colorPalette.dark.otterDark,
+        },
+        secondary: {
+          main: colorPalette.dark.darkGray200,
         },
         background: {
           default: colorPalette.dark.lightGray100,
