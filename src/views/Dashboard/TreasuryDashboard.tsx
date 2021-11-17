@@ -134,8 +134,8 @@ function TreasuryDashboard() {
         <Box className={`hero-metrics`}>
           <Paper className="ohm-card">
             <Box display="flex" flexWrap="wrap" justifyContent="space-between" alignItems="center">
-              {displayData.map(({ title, value, info }) => (
-                <Box bgcolor="mode.white" className="metric">
+              {displayData.map(({ title, value, info }, i) => (
+                <Box key={i} bgcolor="mode.white" className="metric">
                   <Typography variant="h6" color="secondary">
                     {title}
                     {info && <InfoTooltip message={info} />}

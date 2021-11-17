@@ -6,6 +6,7 @@ import {
   BondingCalcContract,
   ClamCirculatingSupply,
   ClamTokenContract,
+  TreasuryContract,
 } from '../../abi';
 import { addressForAsset, contractForReserve, setAll } from '../../helpers';
 import { createSlice, createSelector, createAsyncThunk } from '@reduxjs/toolkit';
@@ -36,6 +37,8 @@ export interface IApp {
   backingPerClam: number;
   treasuryRunway: number;
   pol: number;
+  oldClamTotalSupply: number;
+  oldTreasuryBalance: number;
 }
 
 interface ILoadAppDetails {
@@ -63,11 +66,11 @@ export const loadAppDetails = createAsyncThunk(
     );
     const stakingContract = new ethers.Contract(addresses.STAKING_ADDRESS, StakingContract, provider);
 
-    let token = contractForReserve(BONDS.mai, networkID, provider);
-    const maiAmount = (await token.balanceOf(addresses.TREASURY_ADDRESS)) / 1e18;
+    const mai = contractForReserve(BONDS.mai, networkID, provider);
+    const maiAmount = (await mai.balanceOf(addresses.TREASURY_ADDRESS)) / 1e18;
 
-    token = contractForReserve(BONDS.mai_clam, networkID, provider);
-    const maiClamAmount = await token.balanceOf(addresses.TREASURY_ADDRESS);
+    const lp = contractForReserve(BONDS.mai_clam, networkID, provider);
+    const maiClamAmount = await lp.balanceOf(addresses.TREASURY_ADDRESS);
     const valuation = await bondCalculator.valuation(addressForAsset(BONDS.mai_clam, networkID), maiClamAmount);
     const markdown = await bondCalculator.markdown(addressForAsset(BONDS.mai_clam, networkID));
     const maiClamUSD = (valuation / 1e9) * (markdown / 1e18);
@@ -98,6 +101,12 @@ export const loadAppDetails = createAsyncThunk(
 
     const treasuryRunway = Math.log(treasuryRiskFreeValue / sClamCirc) / Math.log(1 + stakingRebase) / 3;
 
+    // Migration
+    const oldClamContract = new ethers.Contract(addresses.OLD_CLAM_ADDRESS, ClamTokenContract, provider);
+    const oldClamTotalSupply = (await oldClamContract.totalSupply()) / 1e9;
+    const oldTreasuryBalance = (await mai.balanceOf(addresses.OLD_TREASURY)) / 1e18;
+    // End
+
     return {
       currentIndex: ethers.utils.formatUnits(currentIndex, 'gwei'),
       totalSupply,
@@ -116,6 +125,8 @@ export const loadAppDetails = createAsyncThunk(
       backingPerClam,
       treasuryRunway,
       pol,
+      oldClamTotalSupply,
+      oldTreasuryBalance,
     };
   },
 );
@@ -129,13 +140,18 @@ async function getDiscountedPairUSD(
   const pair = contractForReserve(BONDS.mai_clam, networkID, provider);
   const total_lp = await pair.totalSupply();
   const reserves = await pair.getReserves();
-  // const lp_token_1 = reserves[0] / 1e9;
-  const lp_token_2 = reserves[1] / 1e18;
-  // const kLast = lp_token_1 * lp_token_2;
+  const address = getAddresses(networkID);
+  const [clam, mai] = BigNumber.from(address.MAI_ADDRESS).gt(address.CLAM_ADDRESS)
+    ? [reserves[0], reserves[1]]
+    : [reserves[1], reserves[0]];
+  const lp_token_1 = clam / 1e9;
+  const lp_token_2 = mai / 1e18;
+  const kLast = lp_token_1 * lp_token_2;
 
   const pol = lpAmount.mul(100).div(total_lp).toNumber() / 100;
-  // const part2 = Math.sqrt(kLast) * 2;
-  return [pol * lp_token_2, pol];
+  const part2 = Math.sqrt(kLast) * 2;
+  // return [pol * lp_token_2, pol];
+  return [pol * part2, pol];
 }
 
 const appSlice = createSlice({

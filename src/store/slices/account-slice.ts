@@ -41,6 +41,14 @@ export interface IAccount {
     warmup: string;
     canClaimWarmup: boolean;
   };
+  migration: {
+    oldClam: string;
+    oldSClam: string;
+    oldWarmup: string;
+    canClaimWarmup: boolean;
+    clamAllowance: number;
+    sCLAMAllowance: number;
+  };
 }
 
 export const getBalances = createAsyncThunk(
@@ -53,8 +61,8 @@ export const getBalances = createAsyncThunk(
     const clamBalance = await clamContract.balanceOf(address);
     return {
       balances: {
-        sClam: ethers.utils.formatUnits(sClamBalance, 'gwei'),
-        clam: ethers.utils.formatUnits(clamBalance, 'gwei'),
+        sClam: ethers.utils.formatUnits(sClamBalance, 9),
+        clam: ethers.utils.formatUnits(clamBalance, 9),
       },
     };
   },
@@ -70,7 +78,26 @@ export const loadAccountDetails = createAsyncThunk(
     const sClamContract = new ethers.Contract(addresses.sCLAM_ADDRESS, StakedClamContract, provider);
     const stakingContract = new ethers.Contract(addresses.STAKING_ADDRESS, StakingContract, provider);
 
-    const [maiBalance, clamBalance, stakeAllowance, sClamBalance, unstakeAllowance, warmup, epoch] = await Promise.all([
+    // migrate
+    const oldClamContract = new ethers.Contract(addresses.OLD_CLAM_ADDRESS, ClamTokenContract, provider);
+    const oldSClamContract = new ethers.Contract(addresses.OLD_SCLAM_ADDRESS, StakedClamContract, provider);
+    const oldStakingContract = new ethers.Contract(addresses.OLD_STAKING_ADDRESS, StakingContract, provider);
+    // end
+
+    const [
+      maiBalance,
+      clamBalance,
+      stakeAllowance,
+      sClamBalance,
+      unstakeAllowance,
+      warmup,
+      epoch,
+      oldClamBalance,
+      oldSClamBalance,
+      oldWarmup,
+      oldSClamAllowance,
+      clamMigratorAllowance,
+    ] = await Promise.all([
       maiContract.balanceOf(address),
       clamContract.balanceOf(address),
       clamContract.allowance(address, addresses.STAKING_HELPER_ADDRESS),
@@ -78,15 +105,23 @@ export const loadAccountDetails = createAsyncThunk(
       sClamContract.allowance(address, addresses.STAKING_ADDRESS),
       stakingContract.warmupInfo(address),
       stakingContract.epoch(),
+      oldClamContract.balanceOf(address),
+      oldSClamContract.balanceOf(address),
+      oldStakingContract.warmupInfo(address),
+      oldSClamContract.allowance(address, addresses.OLD_STAKING_ADDRESS),
+      oldClamContract.allowance(address, addresses.MIGRATOR),
     ]);
 
     const gons = warmup[1];
     const warmupBalance = await sClamContract.balanceForGons(gons);
 
+    const oldGons = oldWarmup[1];
+    const oldWarmupBalance = await oldSClamContract.balanceForGons(oldGons);
+
     return {
       balances: {
-        sClam: ethers.utils.formatUnits(sClamBalance, 'gwei'),
-        clam: ethers.utils.formatUnits(clamBalance, 'gwei'),
+        sClam: ethers.utils.formatUnits(sClamBalance, 9),
+        clam: ethers.utils.formatUnits(clamBalance, 9),
         mai: ethers.utils.formatEther(maiBalance),
       },
       staking: {
@@ -94,6 +129,14 @@ export const loadAccountDetails = createAsyncThunk(
         sClamUnstake: +unstakeAllowance,
         warmup: ethers.utils.formatUnits(warmupBalance, 9),
         canClaimWarmup: warmup[0].gt(0) && epoch[1].gte(warmup[2]),
+      },
+      migration: {
+        oldClam: ethers.utils.formatUnits(oldClamBalance, 9),
+        oldSClam: ethers.utils.formatUnits(oldSClamBalance, 9),
+        oldWarmup: ethers.utils.formatUnits(oldWarmupBalance, 9),
+        canClaimWarmup: oldWarmup[0].gt(0) && epoch[1].gte(oldWarmup[2]),
+        sCLAMAllowance: oldSClamAllowance,
+        clamAllowance: clamMigratorAllowance,
       },
     };
   },

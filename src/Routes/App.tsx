@@ -20,6 +20,7 @@ import './style.scss';
 import { IReduxState } from '../store/slices/state.interface';
 import Loading from '../components/Loader';
 import Dashboard from 'src/views/Dashboard/TreasuryDashboard';
+import Migrate from 'src/views/Migrate';
 
 const drawerWidth = 280;
 const transitionDuration = 969;
@@ -188,6 +189,10 @@ function App() {
                 );
               })}
               <ChooseBond />
+            </Route>
+
+            <Route path="/migrate">
+              <Migrate />
             </Route>
 
             <Route component={NotFound} />

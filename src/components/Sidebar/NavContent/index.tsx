@@ -25,6 +25,8 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+type Page = 'dashboard' | 'stake' | 'choose_bond' | 'bonds' | 'migrate';
+
 function NavContent() {
   const styles = useStyles();
   const bonds = useBonds();
@@ -36,15 +38,12 @@ function NavContent() {
   const addresses = getAddresses(networkID);
   const { CLAM_ADDRESS } = addresses;
 
-  const checkPage = useCallback((location: any, page: string): boolean => {
+  const checkPage = useCallback((location: any, page: Page): boolean => {
     const currentPath = location.pathname.replace('/', '');
-    if (currentPath.indexOf('dashboard') >= 0 && page === 'dashboard') {
-      return true;
-    }
-    if (currentPath.indexOf('stake') >= 0 && page === 'stake') {
-      return true;
-    }
     if ((currentPath.indexOf('bonds') >= 0 || currentPath.indexOf('choose_bond') >= 0) && page === 'bonds') {
+      return true;
+    }
+    if (currentPath.indexOf(page) >= 0) {
       return true;
     }
     return false;
@@ -141,6 +140,21 @@ function NavContent() {
                 <div className="dapp-menu-item">
                   <InactiveMenuIcon />
                   <p>Buy CLAM</p>
+                </div>
+              </Link>
+              <Link
+                component={NavLink}
+                id="migrate-nav"
+                to="/migrate"
+                isActive={(match: any, location: any) => {
+                  return checkPage(location, 'migrate');
+                }}
+                activeClassName="active"
+                className="button-dapp-menu"
+              >
+                <div className="dapp-menu-item">
+                  {checkPage(location, 'migrate') ? <ActiveMenuIcon /> : <InactiveMenuIcon />}
+                  <p>Migrate</p>
                 </div>
               </Link>
             </div>
