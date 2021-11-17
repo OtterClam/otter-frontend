@@ -11,9 +11,11 @@ import { Paper, Link, Box, SvgIcon, makeStyles, Switch, Grid } from '@material-u
 import { Skeleton } from '@material-ui/lab';
 import '../sidebar.scss';
 import { AppThemeContext } from 'src/helpers/app-theme-context';
-import { BONDS } from 'src/constants';
+import { BONDS, getAddresses, DEFAULT_NETWORK } from 'src/constants';
 import ToggleDark from './toggle-dark.png';
 import ToggleLight from './toggle-light.png';
+import { useSelector } from 'react-redux';
+import { IReduxState } from 'src/store/slices/state.interface';
 
 const useStyles = makeStyles(theme => ({
   navbar: {
@@ -28,6 +30,11 @@ function NavContent() {
   const bonds = useBonds();
   const location = useLocation();
   const currenTheme = useContext(AppThemeContext).name;
+  const networkID = useSelector<IReduxState, number>(state => {
+    return (state.app && state.app.networkID) || DEFAULT_NETWORK;
+  });
+  const addresses = getAddresses(networkID);
+  const { CLAM_ADDRESS } = addresses;
 
   const checkPage = useCallback((location: any, page: string): boolean => {
     const currentPath = location.pathname.replace('/', '');
@@ -124,6 +131,18 @@ function NavContent() {
                   ))}
                 </div>
               </div>
+
+              <Link
+                href={'https://quickswap.exchange/#/swap?outputCurrency=' + CLAM_ADDRESS}
+                target="_blank"
+                rel="noreferrer"
+                className="button-dapp-menu"
+              >
+                <div className="dapp-menu-item">
+                  <InactiveMenuIcon />
+                  <p>Buy CLAM</p>
+                </div>
+              </Link>
             </div>
           </div>
         </div>
