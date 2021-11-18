@@ -204,9 +204,17 @@ function Migrate() {
 
                   <div className="data-row">
                     <div className="step">3</div>
-                    <p className="data-row-name">Migrate CLAM to CLAM2</p>
+                    <p className="data-row-name">
+                      <div>Migrate CLAM to CLAM2</div>
+                      <div className="estimated-clam2">Estimated CLAM2 </div>
+                    </p>
                     <p className="data-row-value">
-                      {isAppLoading ? <Skeleton width="80px" /> : <>{trim(Number(oldClamBalance), 4)} CLAM</>}
+                      <div>
+                        {isAppLoading ? <Skeleton width="80px" /> : <>{trim(Number(oldClamBalance), 4)} CLAM</>}
+                      </div>
+                      <div className="estimated-clam2">
+                        {isAppLoading ? <Skeleton width="80px" /> : <>{trim(Number(oldClamBalance) / 5, 4)} CLAM2</>}
+                      </div>
                     </p>
                     <p>
                       {+oldClamBalance > 0 &&
