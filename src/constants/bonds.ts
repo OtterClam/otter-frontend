@@ -1,8 +1,8 @@
 import { getAddresses } from '.';
 
-export type BondKey = 'mai' | 'mai_clam' | 'mai_clam_v2';
+export type BondKey = 'mai' | 'mai_clam' | 'mai-v1' | 'mai_clam_v2-v1' | 'mai_clam-v1';
 
-export const BondKeys: BondKey[] = ['mai', 'mai_clam', 'mai_clam_v2'];
+export const BondKeys: BondKey[] = ['mai', 'mai_clam', 'mai-v1', 'mai_clam-v1', 'mai_clam_v2-v1'];
 
 export interface Bond {
   key: BondKey;
@@ -39,10 +39,28 @@ export function listBonds(chainId: number): BondMap {
       lpUrl: `https://quickswap.exchange/#/add/${MAI_ADDRESS}/${CLAM_ADDRESS}`,
       deprecated: false,
     },
-    mai_clam_v2: {
-      key: 'mai_clam_v2',
-      name: 'CLAM-MAI LP V2',
-      address: BONDS.MAI_CLAM_V2,
+    'mai-v1': {
+      key: 'mai-v1',
+      name: 'MAI(v1)',
+      address: BONDS.OLD_MAI,
+      reserve: RESERVES.MAI,
+      type: 'token',
+      lpUrl: '',
+      deprecated: true,
+    },
+    'mai_clam-v1': {
+      key: 'mai_clam-v1',
+      name: 'CLAM-MAI LP(v1)',
+      address: BONDS.OLD_MAI_CLAM,
+      reserve: RESERVES.OLD_MAI_CLAM,
+      type: 'lp',
+      lpUrl: `https://quickswap.exchange/#/add/${MAI_ADDRESS}/${CLAM_ADDRESS}`,
+      deprecated: true,
+    },
+    'mai_clam_v2-v1': {
+      key: 'mai_clam_v2-v1',
+      name: 'CLAM-MAI LP V2(v1)',
+      address: BONDS.OLD_MAI_CLAM_V2,
       reserve: RESERVES.OLD_MAI_CLAM,
       type: 'lp',
       lpUrl: `https://quickswap.exchange/#/add/${MAI_ADDRESS}/${CLAM_ADDRESS}`,

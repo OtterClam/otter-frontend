@@ -78,16 +78,19 @@ export function BondDataCard({ bondKey }: IBondProps) {
             )}
           </p>
         </div>
-        <Link component={NavLink} to={`/bonds/${bond}`}>
+        <Link component={NavLink} to={`/bonds/${bondKey}`}>
           <Box
             bgcolor="otter.otterBlue"
+            color="otter.white"
             display="flex"
             justifyContent="center"
             alignItems="center"
             height="44px"
             className="bond-table-btn"
           >
-            <p>Bond {bond.name}</p>
+            <p>
+              {bond.deprecated ? 'Redeem' : 'Bond'} {bond.name}
+            </p>
           </Box>
         </Link>
       </Paper>
@@ -117,7 +120,7 @@ export function BondTableData({ bondKey }: IBondProps) {
         <BondLogo bond={bond} />
         <div className="bond-name">
           <p className="bond-name-title">{bond.name}</p>
-          {bond.type === 'lp' && (
+          {bond.type === 'lp' && !bond.deprecated && (
             <Link color="primary" href={bond.lpUrl} target="_blank">
               <Box component="p" color="otter.otterBlue" className="bond-lp-add-liquidity">
                 Add Liquidity
@@ -156,7 +159,7 @@ export function BondTableData({ bondKey }: IBondProps) {
         </p>
       </TableCell>
       <TableCell>
-        <Link component={NavLink} to={`/bonds/${bond}`}>
+        <Link component={NavLink} to={`/bonds/${bondKey}`}>
           <Box
             bgcolor="otter.otterBlue"
             color="otter.white"
@@ -166,7 +169,7 @@ export function BondTableData({ bondKey }: IBondProps) {
             height="44px"
             className="bond-table-btn"
           >
-            <p>Bond</p>
+            <p>{bond.deprecated ? 'Redeem' : 'Bond'}</p>
           </Box>
         </Link>
       </TableCell>
