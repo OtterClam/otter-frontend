@@ -147,8 +147,16 @@
 
 .single-stake-title {
   font-weight: 700;
-  font-size: 20px;
+  font-size: 24px;
   margin-bottom: 4px;
+
+  img {
+    width: 24px;
+    height: 24px;
+    margin-bottom: -3px;
+    margin-left: 2px;
+    margin-right: 2px;
+  }
 }
 
 .single-stake-subtitle {
@@ -215,7 +223,7 @@
     line-height: 225%;
     gap: 10px;
     font-size: 16px;
-    height: 64px;
+    min-height: 64px;
     padding: 8px 0;
 
     .step {
@@ -236,6 +244,9 @@
     }
     p:nth-child(4) {
       width: 130px;
+      @media screen and (max-width: 417px) {
+        width: 78px;
+      }
     }
 
     .data-row-value {

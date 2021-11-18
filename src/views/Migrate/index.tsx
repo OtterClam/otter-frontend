@@ -1,13 +1,14 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import './migrate.scss';
 import { useSelector, useDispatch } from 'react-redux';
 import { Grid, Box, Paper, TabsActions, Zoom, makeStyles } from '@material-ui/core';
-import { formatCurrency, trim } from '../../helpers';
+import { formatCurrency, getTokenImage, trim } from '../../helpers';
 import { approveMigration, approveUnstaking, claimWarmup, migrate, unstake } from '../../store/slices/migrate-thunk';
 import { useWeb3Context } from '../../hooks';
 import { IPendingTxn, isPendingTxn, txnButtonText } from '../../store/slices/pending-txns-slice';
 import { Skeleton } from '@material-ui/lab';
 import { IReduxState } from '../../store/slices/state.interface';
+import SCLAM from 'src/assets/tokens/sCLAM.png';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -82,7 +83,9 @@ function Migrate() {
           <Grid container direction="column" spacing={2}>
             <Grid item>
               <div className="card-header">
-                <p className="single-stake-title">Migrate</p>
+                <p className="single-stake-title">
+                  CLAM → CLAM2 Migration ({<img src={SCLAM} />},{<img src={SCLAM} />})
+                </p>
               </div>
             </Grid>
 
