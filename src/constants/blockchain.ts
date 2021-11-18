@@ -9,8 +9,8 @@ export enum Networks {
 }
 
 export const RPCURL = {
-  // POLYGON_MAINNET: 'https://polygon-rpc.com',
-  POLYGON_MAINNET: 'http://localhost:8545',
+  POLYGON_MAINNET: 'https://polygon-rpc.com',
+  // POLYGON_MAINNET: 'http://localhost:8545',
   POLYGON_MUMBAI: 'https://polygon-mumbai.infura.io/v3/d7dae60b5e1d40b9b31767b0086aa75d',
 };
 
