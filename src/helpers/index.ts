@@ -1,5 +1,4 @@
 export * from './address-for-asset';
-export * from './is-bond-lp';
 export * from './lp-url';
 export * from './bond-name';
 export * from './contract-for-bond';

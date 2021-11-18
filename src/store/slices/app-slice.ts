@@ -1,15 +1,14 @@
 import { BigNumber, ethers } from 'ethers';
-import { getAddresses, BONDS } from '../../constants';
+import { getAddresses, getBond, BondKey } from '../../constants';
 import {
   StakingContract,
   StakedClamContract,
   BondingCalcContract,
   ClamCirculatingSupply,
   ClamTokenContract,
-  TreasuryContract,
   ClamTokenMigrator,
 } from '../../abi';
-import { addressForAsset, contractForReserve, setAll } from '../../helpers';
+import { addressForReserve, contractForReserve, setAll } from '../../helpers';
 import { createSlice, createSelector, createAsyncThunk } from '@reduxjs/toolkit';
 import { JsonRpcProvider } from '@ethersproject/providers';
 import { getMarketPrice, getTokenPrice } from '../../helpers';
@@ -68,13 +67,13 @@ export const loadAppDetails = createAsyncThunk(
     );
     const stakingContract = new ethers.Contract(addresses.STAKING_ADDRESS, StakingContract, provider);
 
-    const mai = contractForReserve(BONDS.mai, networkID, provider);
+    const mai = contractForReserve('mai', networkID, provider);
     const maiAmount = (await mai.balanceOf(addresses.TREASURY_ADDRESS)) / 1e18;
 
-    const lp = contractForReserve(BONDS.mai_clam, networkID, provider);
+    const lp = contractForReserve('mai_clam', networkID, provider);
     const maiClamAmount = await lp.balanceOf(addresses.TREASURY_ADDRESS);
-    const valuation = await bondCalculator.valuation(addressForAsset(BONDS.mai_clam, networkID), maiClamAmount);
-    const markdown = await bondCalculator.markdown(addressForAsset(BONDS.mai_clam, networkID));
+    const valuation = await bondCalculator.valuation(addressForReserve('mai_clam', networkID), maiClamAmount);
+    const markdown = await bondCalculator.markdown(addressForReserve('mai_clam', networkID));
     const maiClamUSD = (valuation / 1e9) * (markdown / 1e18);
     const [rfvLPValue, pol] = await getDiscountedPairUSD(maiClamAmount, networkID, provider);
 
@@ -143,7 +142,7 @@ async function getDiscountedPairUSD(
   networkID: number,
   provider: JsonRpcProvider,
 ): Promise<[number, number]> {
-  const pair = contractForReserve(BONDS.mai_clam, networkID, provider);
+  const pair = contractForReserve('mai_clam', networkID, provider);
   const total_lp = await pair.totalSupply();
   const reserves = await pair.getReserves();
   const address = getAddresses(networkID);

@@ -1,6 +1,7 @@
 import { Box, Slide } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import { useDispatch, useSelector } from 'react-redux';
+import { BondKey } from 'src/constants';
 import { prettifySeconds, prettyVestingPeriod, trim } from '../../helpers';
 import { useWeb3Context } from '../../hooks';
 import { redeemBond } from '../../store/slices/bond-slice';
@@ -8,10 +9,10 @@ import { IPendingTxn, isPendingTxn, txnButtonText } from '../../store/slices/pen
 import { IReduxState } from '../../store/slices/state.interface';
 
 interface IBondRedeem {
-  bond: string;
+  bondKey: BondKey;
 }
 
-function BondRedeem({ bond }: IBondRedeem) {
+function BondRedeem({ bondKey }: IBondRedeem) {
   const dispatch = useDispatch();
   const { provider, address, chainID } = useWeb3Context();
 
@@ -22,21 +23,21 @@ function BondRedeem({ bond }: IBondRedeem) {
   const isBondLoading = useSelector<IReduxState, boolean>(state => state.bonding.loading ?? true);
   const bondMaturationTime = useSelector<IReduxState, number>(state => {
     //@ts-ignore
-    return state.account[bond] && state.account[bond].bondMaturationTime;
+    return state.account[bondKey] && state.account[bondKey].bondMaturationTime;
   });
 
   const vestingTerm = useSelector<IReduxState, number>(state => {
-    return state.bonding[bond] && state.bonding[bond].vestingTerm;
+    return state.bonding[bondKey] && state.bonding[bondKey].vestingTerm;
   });
 
   const interestDue = useSelector<IReduxState, number>(state => {
     //@ts-ignore
-    return state.account[bond] && state.account[bond].interestDue;
+    return state.account[bondKey] && state.account[bondKey].interestDue;
   });
 
   const pendingPayout = useSelector<IReduxState, number>(state => {
     //@ts-ignore
-    return state.account[bond] && state.account[bond].pendingPayout;
+    return state.account[bondKey] && state.account[bondKey].pendingPayout;
   });
 
   const pendingTransactions = useSelector<IReduxState, IPendingTxn[]>(state => {
@@ -44,7 +45,7 @@ function BondRedeem({ bond }: IBondRedeem) {
   });
 
   async function onRedeem(autostake: boolean) {
-    await dispatch(redeemBond({ address, bond, networkID: chainID, provider, autostake }));
+    await dispatch(redeemBond({ address, bondKey, networkID: chainID, provider, autostake }));
   }
 
   const vestingTime = () => {
@@ -56,11 +57,11 @@ function BondRedeem({ bond }: IBondRedeem) {
   };
 
   const bondDiscount = useSelector<IReduxState, number>(state => {
-    return state.bonding[bond] && state.bonding[bond].bondDiscount;
+    return state.bonding[bondKey] && state.bonding[bondKey].bondDiscount;
   });
 
   const debtRatio = useSelector<IReduxState, number>(state => {
-    return state.bonding[bond] && state.bonding[bond].debtRatio;
+    return state.bonding[bondKey] && state.bonding[bondKey].debtRatio;
   });
 
   return (
@@ -71,22 +72,22 @@ function BondRedeem({ bond }: IBondRedeem) {
           bgcolor="otter.otterBlue"
           color="otter.white"
           onClick={() => {
-            if (isPendingTxn(pendingTransactions, 'redeem_bond_' + bond)) return;
+            if (isPendingTxn(pendingTransactions, 'redeem_bond_' + bondKey)) return;
             onRedeem(false);
           }}
         >
-          <p>{txnButtonText(pendingTransactions, 'redeem_bond_' + bond, 'Claim')}</p>
+          <p>{txnButtonText(pendingTransactions, 'redeem_bond_' + bondKey, 'Claim')}</p>
         </Box>
         <Box
           className="transaction-button app-otter-button"
           bgcolor="otter.otterBlue"
           color="otter.white"
           onClick={() => {
-            if (isPendingTxn(pendingTransactions, 'redeem_bond_' + bond + '_autostake')) return;
+            if (isPendingTxn(pendingTransactions, 'redeem_bond_' + bondKey + '_autostake')) return;
             onRedeem(true);
           }}
         >
-          <p>{txnButtonText(pendingTransactions, 'redeem_bond_' + bond + '_autostake', 'Claim and Autostake')}</p>
+          <p>{txnButtonText(pendingTransactions, 'redeem_bond_' + bondKey + '_autostake', 'Claim and Autostake')}</p>
         </Box>
       </Box>
 

@@ -1,22 +1,23 @@
-import { isBondLP, getTokenImage, getPairImage } from '../helpers';
+import { getTokenImage, getPairImage } from '../helpers';
 import { Box } from '@material-ui/core';
+import { Bond } from 'src/constants';
 
 interface IBondHeaderProps {
-  bond: string;
+  bond: Bond;
 }
 
 function BondHeader({ bond }: IBondHeaderProps) {
   const reserveAssetImg = () => {
-    if (bond.indexOf('clam') >= 0) {
+    if (bond.key.indexOf('clam') >= 0) {
       return getTokenImage('clam');
-    } else if (bond.indexOf('mai') >= 0) {
+    } else if (bond.key.indexOf('mai') >= 0) {
       return getTokenImage('mai');
     }
   };
 
   return (
     <Box display="flex" alignItems="center" justifyContent="center" width={'74px'}>
-      {isBondLP(bond) ? getPairImage(bond) : reserveAssetImg()}
+      {bond.type === 'lp' ? getPairImage(bond.key) : reserveAssetImg()}
     </Box>
   );
 }

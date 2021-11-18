@@ -1,21 +1,21 @@
+import { Box, Grid, Link, makeStyles, Paper } from '@material-ui/core';
+import { Skeleton } from '@material-ui/lab';
 import { useCallback, useContext } from 'react';
+import { useSelector } from 'react-redux';
 import { NavLink, useLocation } from 'react-router-dom';
+import { DEFAULT_NETWORK, getAddresses } from 'src/constants';
+import { AppThemeContext } from 'src/helpers/app-theme-context';
+import { IReduxState } from 'src/store/slices/state.interface';
+import { trim } from '../../../helpers';
+import { useBonds } from '../../../hooks';
+import '../sidebar.scss';
 import Social from '../Social';
 import ActiveMenuIcon from './ActiveMenuIcon';
-import InactiveMenuIcon from './InactiveMenuIcon';
 import AppLogo from './AppLogo';
 import AppTitle from './AppTitle';
-import { trim, shorten } from '../../../helpers';
-import { useAddress, useBonds } from '../../../hooks';
-import { Paper, Link, Box, SvgIcon, makeStyles, Switch, Grid } from '@material-ui/core';
-import { Skeleton } from '@material-ui/lab';
-import '../sidebar.scss';
-import { AppThemeContext } from 'src/helpers/app-theme-context';
-import { BONDS, getAddresses, DEFAULT_NETWORK } from 'src/constants';
+import InactiveMenuIcon from './InactiveMenuIcon';
 import ToggleDark from './toggle-dark.png';
 import ToggleLight from './toggle-light.png';
-import { useSelector } from 'react-redux';
-import { IReduxState } from 'src/store/slices/state.interface';
 
 const useStyles = makeStyles(theme => ({
   navbar: {
@@ -121,7 +121,7 @@ function NavContent() {
                       ) : (
                         <p>
                           {bond.name}
-                          {bond.value !== BONDS.mai_clam && (
+                          {!bond.deprecated && (
                             <span className="bond-pair-roi">{bond.discount && trim(bond.discount * 100, 2)}%</span>
                           )}
                         </p>

@@ -1,26 +1,23 @@
-import { useEffect, useState, useCallback } from 'react';
-import { Route, Redirect, Switch, useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import { Hidden, useMediaQuery } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { useAddress, useWeb3Context } from '../hooks';
-
-import { calcBondDetails } from '../store/slices/bond-slice';
-import { loadAppDetails } from '../store/slices/app-slice';
-import { loadAccountDetails, calculateUserBondDetails } from '../store/slices/account-slice';
-
-import { Stake, ChooseBond, Bond } from '../views';
-import Sidebar from '../components/Sidebar';
-import TopBar from '../components/Header';
-import NavDrawer from '../components/Sidebar/NavDrawer';
-import NotFound from '../views/404/NotFound';
-
-import { BONDS } from '../constants';
-import './style.scss';
-import { IReduxState } from '../store/slices/state.interface';
-import Loading from '../components/Loader';
+import { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
 import Dashboard from 'src/views/Dashboard/TreasuryDashboard';
 import Migrate from 'src/views/Migrate';
+import TopBar from '../components/Header';
+import Loading from '../components/Loader';
+import Sidebar from '../components/Sidebar';
+import NavDrawer from '../components/Sidebar/NavDrawer';
+import { BondKeys } from '../constants';
+import { useAddress, useWeb3Context } from '../hooks';
+import { calculateUserBondDetails, loadAccountDetails } from '../store/slices/account-slice';
+import { loadAppDetails } from '../store/slices/app-slice';
+import { calcBondDetails } from '../store/slices/bond-slice';
+import { IReduxState } from '../store/slices/state.interface';
+import { Bond, ChooseBond, Stake } from '../views';
+import NotFound from '../views/404/NotFound';
+import './style.scss';
 
 const drawerWidth = 280;
 const transitionDuration = 969;
@@ -90,8 +87,8 @@ function App() {
     }
 
     if (whichDetails === 'userBonds' && address && connected) {
-      Object.values(BONDS).map(async bond => {
-        await dispatch(calculateUserBondDetails({ address, bond, provider, networkID: chainID }));
+      Object.values(BondKeys).map(async bondKey => {
+        await dispatch(calculateUserBondDetails({ address, bondKey, provider, networkID: chainID }));
       });
     }
   }
@@ -99,8 +96,8 @@ function App() {
   const loadApp = useCallback(
     loadProvider => {
       dispatch(loadAppDetails({ networkID: chainID, provider: loadProvider }));
-      Object.values(BONDS).map(async bond => {
-        await dispatch(calcBondDetails({ bond, value: null, provider: loadProvider, networkID: chainID }));
+      BondKeys.map(bondKey => {
+        dispatch(calcBondDetails({ bondKey, value: null, provider: loadProvider, networkID: chainID }));
       });
     },
     [connected],
@@ -181,10 +178,10 @@ function App() {
             </Route>
 
             <Route path="/bonds">
-              {Object.values(BONDS).map(bond => {
+              {BondKeys.map(bond => {
                 return (
                   <Route exact key={bond} path={`/bonds/${bond}`}>
-                    <Bond bond={bond} />
+                    <Bond bondKey={bond} />
                   </Route>
                 );
               })}

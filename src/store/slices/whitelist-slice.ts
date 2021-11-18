@@ -1,10 +1,7 @@
-import { ethers } from 'ethers';
-import { getAddresses, BONDS } from '../../constants';
-import { IDOContract } from '../../abi';
-import { setAll } from '../../helpers';
-import { createSlice, createSelector, createAsyncThunk } from '@reduxjs/toolkit';
 import { JsonRpcProvider } from '@ethersproject/providers';
+import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { setAll } from '../../helpers';
 
 const initialState = {
   loading: true,

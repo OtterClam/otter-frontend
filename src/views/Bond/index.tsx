@@ -1,16 +1,16 @@
-import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { trim } from '../../helpers';
-import { Grid, Backdrop, Paper, Box, Tab, Tabs, Fade } from '@material-ui/core';
-import TabPanel from '../../components/TabPanel';
-import BondHeader from './BondHeader';
-import BondRedeem from './BondRedeem';
-import BondPurchase from './BondPurchase';
-import './bond.scss';
-import { useWeb3Context } from '../../hooks';
+import { Backdrop, Box, Fade, Grid, Paper, Tab, Tabs } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
+import { useEffect, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { BondKey, getBond } from 'src/constants';
+import TabPanel from '../../components/TabPanel';
+import { trim } from '../../helpers';
+import { useWeb3Context } from '../../hooks';
 import { IReduxState } from '../../store/slices/state.interface';
-import { BONDS } from 'src/constants';
+import './bond.scss';
+import BondHeader from './BondHeader';
+import BondPurchase from './BondPurchase';
+import BondRedeem from './BondRedeem';
 
 function a11yProps(index: number) {
   return {
@@ -20,11 +20,11 @@ function a11yProps(index: number) {
 }
 
 interface IBondProps {
-  bond: string;
+  bondKey: BondKey;
 }
 
-function Bond({ bond }: IBondProps) {
-  const { provider, address } = useWeb3Context();
+function Bond({ bondKey }: IBondProps) {
+  const { provider, address, chainID } = useWeb3Context();
 
   const [slippage, setSlippage] = useState(0.5);
   const [recipientAddress, setRecipientAddress] = useState(address);
@@ -32,18 +32,17 @@ function Bond({ bond }: IBondProps) {
   const [view, setView] = useState(0);
   const [quantity, setQuantity] = useState();
 
+  const bond = useMemo(() => getBond(bondKey, chainID), [bondKey, chainID]);
   const isBondLoading = useSelector<IReduxState, boolean>(state => state.bonding.loading ?? true);
   const marketPrice = useSelector<IReduxState, number>(state => {
-    return state.bonding[bond] && state.bonding[bond].marketPrice;
+    return state.bonding[bondKey] && state.bonding[bondKey].marketPrice;
   });
   const bondPrice = useSelector<IReduxState, number>(state => {
-    return state.bonding[bond] && state.bonding[bond].bondPrice;
+    return state.bonding[bondKey] && state.bonding[bondKey].bondPrice;
   });
-
   const onRecipientAddressChange = (e: any) => {
     return setRecipientAddress(e.target.value);
   };
-
   const onSlippageChange = (e: any) => {
     return setSlippage(e.target.value);
   };
@@ -78,12 +77,10 @@ function Bond({ bond }: IBondProps) {
                   <Box component="p" color="text.secondary" className="bond-price-data-value">
                     {isBondLoading ? (
                       <Skeleton />
-                    ) : bond.indexOf('lp') >= 0 ? (
-                      bond === BONDS.mai_clam ? (
-                        '-'
-                      ) : (
-                        `$${trim(bondPrice, 2)}`
-                      )
+                    ) : bond.deprecated ? (
+                      '-'
+                    ) : bond.type === 'lp' ? (
+                      `$${trim(bondPrice, 2)}`
                     ) : (
                       `${trim(bondPrice, 2)} ${bondToken}`
                     )}
@@ -105,18 +102,18 @@ function Bond({ bond }: IBondProps) {
                 aria-label="bond tabs"
                 className="bond-one-table"
               >
-                {bond !== BONDS.mai_clam && <Tab label="Bond" {...a11yProps(0)} />}
+                {!bond.deprecated && <Tab label="Bond" {...a11yProps(0)} />}
                 <Tab label="Redeem" {...a11yProps(1)} />
               </Tabs>
 
-              {bond !== BONDS.mai_clam && (
+              {!bond.deprecated && (
                 <TabPanel value={view} index={0}>
-                  <BondPurchase bond={bond} slippage={slippage} />
+                  <BondPurchase bondKey={bondKey} slippage={slippage} />
                 </TabPanel>
               )}
 
-              <TabPanel value={view} index={bond === BONDS.mai_clam ? 0 : 1}>
-                <BondRedeem bond={bond} />
+              <TabPanel value={view} index={bond.deprecated ? 0 : 1}>
+                <BondRedeem bondKey={bondKey} />
               </TabPanel>
             </Paper>
           </Fade>

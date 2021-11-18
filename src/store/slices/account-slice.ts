@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { BONDS, getAddresses } from '../../constants';
+import { Bond, BondKey, getAddresses, getBond } from '../../constants';
 import { ClamTokenContract, StakedClamContract, MAIContract, StakingContract } from '../../abi/';
 import { contractForBond, contractForReserve, setAll } from '../../helpers';
 
@@ -145,19 +145,19 @@ export const loadAccountDetails = createAsyncThunk(
 
 interface ICalculateUserBondDetails {
   address: string;
-  bond: string;
+  bondKey: BondKey;
   networkID: number;
   provider: JsonRpcProvider;
 }
 
 export const calculateUserBondDetails = createAsyncThunk(
   'bonding/calculateUserBondDetails',
-  async ({ address, bond, networkID, provider }: ICalculateUserBondDetails): Promise<IUserBindDetails> => {
+  async ({ address, bondKey, networkID, provider }: ICalculateUserBondDetails): Promise<IUserBindDetails> => {
     if (!address) return {};
 
     const addresses = getAddresses(networkID);
-    const bondContract = contractForBond(bond, networkID, provider);
-    const reserveContract = contractForReserve(bond, networkID, provider);
+    const bondContract = contractForBond(bondKey, networkID, provider);
+    const reserveContract = contractForReserve(bondKey, networkID, provider);
 
     let interestDue, pendingPayout, bondMaturationTime;
 
@@ -166,29 +166,12 @@ export const calculateUserBondDetails = createAsyncThunk(
     bondMaturationTime = +bondDetails.vesting + +bondDetails.lastTimestamp;
     pendingPayout = await bondContract.pendingPayoutFor(address);
 
-    let allowance,
-      balance = '0';
-
-    if (bond === BONDS.mai) {
-      allowance = await reserveContract.allowance(address, addresses.BONDS.MAI);
-      balance = await reserveContract.balanceOf(address);
-      balance = ethers.utils.formatEther(balance);
-    }
-
-    if (bond === BONDS.mai_clam) {
-      allowance = await reserveContract.allowance(address, addresses.BONDS.MAI_CLAM);
-      balance = await reserveContract.balanceOf(address);
-      balance = ethers.utils.formatEther(balance);
-    }
-
-    if (bond === BONDS.mai_clam_v2) {
-      allowance = await reserveContract.allowance(address, addresses.BONDS.MAI_CLAM_V2);
-      balance = await reserveContract.balanceOf(address);
-      balance = ethers.utils.formatEther(balance);
-    }
+    const bond = getBond(bondKey, networkID);
+    const allowance = await reserveContract.allowance(address, bond.address);
+    const balance = ethers.utils.formatEther(await reserveContract.balanceOf(address));
 
     return {
-      bond,
+      bond: bondKey,
       allowance: Number(allowance),
       balance: Number(balance),
       interestDue,
