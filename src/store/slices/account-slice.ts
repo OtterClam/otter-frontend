@@ -5,6 +5,7 @@ import { contractForBond, contractForReserve, setAll } from '../../helpers';
 
 import { createSlice, createSelector, createAsyncThunk } from '@reduxjs/toolkit';
 import { JsonRpcProvider } from '@ethersproject/providers';
+import _ from 'lodash';
 
 interface IState {
   [key: string]: any;
@@ -135,8 +136,8 @@ export const loadAccountDetails = createAsyncThunk(
         oldSClam: ethers.utils.formatUnits(oldSClamBalance, 9),
         oldWarmup: ethers.utils.formatUnits(oldWarmupBalance, 9),
         canClaimWarmup: oldWarmup[0].gt(0) && epoch[1].gte(oldWarmup[2]),
-        sCLAMAllowance: oldSClamAllowance,
-        clamAllowance: clamMigratorAllowance,
+        sCLAMAllowance: +oldSClamAllowance,
+        clamAllowance: +clamMigratorAllowance,
       },
     };
   },
@@ -202,7 +203,7 @@ const accountSlice = createSlice({
   initialState,
   reducers: {
     fetchAccountSuccess(state, action) {
-      setAll(state, action.payload);
+      _.merge(state, action.payload);
     },
   },
   extraReducers: builder => {

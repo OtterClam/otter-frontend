@@ -5,6 +5,7 @@ import { clearPendingTxn, fetchPendingTxns, getStakingTypeText } from './pending
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchAccountSuccess, getBalances, loadAccountDetails } from './account-slice';
 import { JsonRpcProvider } from '@ethersproject/providers';
+import { loadAppDetails } from './app-slice';
 
 interface IChangeApproval {
   provider: JsonRpcProvider;
@@ -128,6 +129,7 @@ export const migrate = createAsyncThunk(
       }
     }
     dispatch(loadAccountDetails({ address, networkID, provider }));
+    dispatch(loadAppDetails({ networkID, provider }));
   },
 );
 

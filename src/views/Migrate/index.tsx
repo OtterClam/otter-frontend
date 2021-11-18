@@ -44,6 +44,7 @@ function Migrate() {
 
   const oldClamTotalSupply = useSelector<IReduxState, number>(state => state.app?.oldClamTotalSupply);
   const oldTreasuryBalance = useSelector<IReduxState, number>(state => state.app?.oldTreasuryBalance);
+  const migrateProgress = useSelector<IReduxState, number>(state => state.app?.migrateProgress);
 
   const clamBalance = useSelector<IReduxState, string>(state => state.account.balances?.clam);
   const oldClamBalance = useSelector<IReduxState, string>(state => state.account.migration?.oldClam);
@@ -88,7 +89,7 @@ function Migrate() {
             <Grid item>
               <div className="stake-top-metrics">
                 <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6} md={6} lg={6}>
+                  <Grid item xs={12} sm={4} md={4} lg={4}>
                     <div className="stake-apy">
                       <p className="single-stake-subtitle">Old CLAM Supply</p>
                       <Box component="p" color="text.secondary" className="single-stake-subtitle-value">
@@ -97,11 +98,24 @@ function Migrate() {
                     </div>
                   </Grid>
 
-                  <Grid item xs={12} sm={6} md={6} lg={6}>
+                  <Grid item xs={12} sm={4} md={4} lg={4}>
                     <div className="stake-index">
                       <p className="single-stake-subtitle">Old Treasury Reserve</p>
                       <Box component="p" color="text.secondary" className="single-stake-subtitle-value">
                         {oldTreasuryBalance ? formatCurrency(oldTreasuryBalance, 0) : <Skeleton width="150px" />}
+                      </Box>
+                    </div>
+                  </Grid>
+
+                  <Grid item xs={12} sm={4} md={4} lg={4}>
+                    <div className="stake-index">
+                      <p className="single-stake-subtitle">Migration Progress</p>
+                      <Box component="p" color="text.secondary" className="single-stake-subtitle-value">
+                        {migrateProgress ? (
+                          Intl.NumberFormat('en', { style: 'percent' }).format(migrateProgress)
+                        ) : (
+                          <Skeleton width="150px" />
+                        )}
                       </Box>
                     </div>
                   </Grid>
@@ -120,96 +134,113 @@ function Migrate() {
                   <p className="desc-text">Connect your wallet to migrate your CLAM tokens!</p>
                 </div>
               ) : (
-                <div className={`stake-user-data`}>
+                <div className="migrate-table">
                   <div className="data-row">
-                    <p className="data-row-name">1. Claim warmup</p>
+                    <div style={{ width: '24px' }} />
+                    <p>Steps</p>
+                    <p>Your amount</p>
+                    <p />
+                  </div>
+                  <div className="data-row">
+                    <div className="step">1</div>
+                    <p className="data-row-name">Claim warmup</p>
                     <p className="data-row-value">
                       {isAppLoading ? <Skeleton width="80px" /> : <>{trim(Number(oldWarmupBalance), 4)} sCLAM</>}
                     </p>
-                    {Number(oldWarmupBalance) === 0 && <div>DONE</div>}
-                    {canClaimWarmup && (
-                      <Box
-                        className="stake-tab-panel-btn"
-                        bgcolor="otter.otterBlue"
-                        onClick={() => {
-                          if (isPendingTxn(pendingTransactions, 'claimWarmup')) return;
-                          onClaimWarmup();
-                        }}
-                      >
-                        <p>{txnButtonText(pendingTransactions, 'claimWarmup', 'Claim Warmup')}</p>
-                      </Box>
-                    )}
+                    <p>
+                      {Number(oldWarmupBalance) === 0 && <Box className="migrate-done">DONE</Box>}
+                      {canClaimWarmup && (
+                        <Box
+                          className="migrate-btn"
+                          bgcolor="otter.otterBlue"
+                          onClick={() => {
+                            if (isPendingTxn(pendingTransactions, 'claimWarmup')) return;
+                            onClaimWarmup();
+                          }}
+                        >
+                          <p>{txnButtonText(pendingTransactions, 'claimWarmup', 'Claim Warmup')}</p>
+                        </Box>
+                      )}
+                    </p>
                   </div>
 
                   <div className="data-row">
-                    <p className="data-row-name">2. Unstake CLAM</p>
+                    <div className="step">2</div>
+                    <p className="data-row-name">Unstake CLAM</p>
                     <p className="data-row-value">
                       {isAppLoading ? <Skeleton width="80px" /> : <>{trim(Number(oldSClamBalance), 4)} sCLAM</>}
                     </p>
-                    {+oldSClamBalance === 0 && <p>DONE</p>}
-                    {+oldSClamBalance > 0 &&
-                      (sCLAMAllowance > 0 ? (
-                        <Box
-                          className="stake-tab-panel-btn"
-                          bgcolor="otter.otterBlue"
-                          onClick={() => {
-                            if (isPendingTxn(pendingTransactions, 'unstaking')) return;
-                            onUnstake();
-                          }}
-                        >
-                          <p>{txnButtonText(pendingTransactions, 'unstaking', 'Unstake CLAM')}</p>
-                        </Box>
-                      ) : (
-                        <Box
-                          className="stake-tab-panel-btn"
-                          bgcolor="otter.otterBlue"
-                          onClick={() => {
-                            if (isPendingTxn(pendingTransactions, 'approve_unstaking')) return;
-                            dispatch(approveUnstaking({ address, provider, networkID: chainID }));
-                          }}
-                        >
-                          <p>{txnButtonText(pendingTransactions, 'approve_unstaking', 'Approve')}</p>
-                        </Box>
-                      ))}
+                    <p>
+                      {+oldSClamBalance === 0 && <Box className="migrate-done">DONE</Box>}
+                      {+oldSClamBalance > 0 &&
+                        (sCLAMAllowance > 0 ? (
+                          <Box
+                            className="migrate-btn"
+                            bgcolor="otter.otterBlue"
+                            onClick={() => {
+                              if (isPendingTxn(pendingTransactions, 'unstaking')) return;
+                              onUnstake();
+                            }}
+                          >
+                            <p>{txnButtonText(pendingTransactions, 'unstaking', 'Unstake CLAM')}</p>
+                          </Box>
+                        ) : (
+                          <Box
+                            className="migrate-btn"
+                            bgcolor="otter.otterBlue"
+                            onClick={() => {
+                              if (isPendingTxn(pendingTransactions, 'approve_unstaking')) return;
+                              dispatch(approveUnstaking({ address, provider, networkID: chainID }));
+                            }}
+                          >
+                            <p>{txnButtonText(pendingTransactions, 'approve_unstaking', 'Approve')}</p>
+                          </Box>
+                        ))}
+                    </p>
                   </div>
 
                   <div className="data-row">
-                    <p className="data-row-name">3. Migrate CLAM to CLAM2</p>
+                    <div className="step">3</div>
+                    <p className="data-row-name">Migrate CLAM to CLAM2</p>
                     <p className="data-row-value">
                       {isAppLoading ? <Skeleton width="80px" /> : <>{trim(Number(oldClamBalance), 4)} CLAM</>}
                     </p>
-                    {+oldClamBalance > 0 &&
-                      (clamAllowance >= +oldClamBalance ? (
-                        <Box
-                          className="stake-tab-panel-btn"
-                          bgcolor="otter.otterBlue"
-                          onClick={() => {
-                            if (isPendingTxn(pendingTransactions, 'migrating')) return;
-                            onMigrate();
-                          }}
-                        >
-                          <p>{txnButtonText(pendingTransactions, 'migrating', 'Migrate')}</p>
-                        </Box>
-                      ) : (
-                        <Box
-                          className="stake-tab-panel-btn"
-                          bgcolor="otter.otterBlue"
-                          onClick={() => {
-                            if (isPendingTxn(pendingTransactions, 'approve_migration')) return;
-                            dispatch(approveMigration({ address, provider, networkID: chainID }));
-                          }}
-                        >
-                          <p>{txnButtonText(pendingTransactions, 'approve_migration', 'Approve')}</p>
-                        </Box>
-                      ))}
+                    <p>
+                      {+oldClamBalance > 0 &&
+                        (clamAllowance >= +oldClamBalance ? (
+                          <Box
+                            className="migrate-btn"
+                            bgcolor="otter.otterBlue"
+                            onClick={() => {
+                              if (isPendingTxn(pendingTransactions, 'migrating')) return;
+                              onMigrate();
+                            }}
+                          >
+                            <p>{txnButtonText(pendingTransactions, 'migrating', 'Migrate')}</p>
+                          </Box>
+                        ) : (
+                          <Box
+                            className="migrate-btn"
+                            bgcolor="otter.otterBlue"
+                            onClick={() => {
+                              if (isPendingTxn(pendingTransactions, 'approve_migration')) return;
+                              dispatch(approveMigration({ address, provider, networkID: chainID }));
+                            }}
+                          >
+                            <p>{txnButtonText(pendingTransactions, 'approve_migration', 'Approve')}</p>
+                          </Box>
+                        ))}
+                    </p>
                   </div>
 
-                  <div className="data-row">
+                  <Box className="data-row" bgcolor="mode.lightGray100">
+                    <div />
                     <p className="data-row-name">Your CLAM2 Balance</p>
+                    <p />
                     <p className="data-row-value">
                       {isAppLoading ? <Skeleton width="80px" /> : <>{trim(Number(clamBalance), 4)} CLAM2</>}
                     </p>
-                  </div>
+                  </Box>
                 </div>
               )}
             </div>

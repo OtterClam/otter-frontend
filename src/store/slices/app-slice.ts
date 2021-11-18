@@ -7,6 +7,7 @@ import {
   ClamCirculatingSupply,
   ClamTokenContract,
   TreasuryContract,
+  ClamTokenMigrator,
 } from '../../abi';
 import { addressForAsset, contractForReserve, setAll } from '../../helpers';
 import { createSlice, createSelector, createAsyncThunk } from '@reduxjs/toolkit';
@@ -39,6 +40,7 @@ export interface IApp {
   pol: number;
   oldClamTotalSupply: number;
   oldTreasuryBalance: number;
+  migrateProgress: number;
 }
 
 interface ILoadAppDetails {
@@ -103,8 +105,11 @@ export const loadAppDetails = createAsyncThunk(
 
     // Migration
     const oldClamContract = new ethers.Contract(addresses.OLD_CLAM_ADDRESS, ClamTokenContract, provider);
+    const migrator = new ethers.Contract(addresses.MIGRATOR, ClamTokenMigrator, provider);
     const oldClamTotalSupply = (await oldClamContract.totalSupply()) / 1e9;
     const oldTreasuryBalance = (await mai.balanceOf(addresses.OLD_TREASURY)) / 1e18;
+    const oldTotalSupply = (await migrator.oldSupply()) / 1e9;
+    const migrateProgress = 1 - oldClamTotalSupply / oldTotalSupply;
     // End
 
     return {
@@ -127,6 +132,7 @@ export const loadAppDetails = createAsyncThunk(
       pol,
       oldClamTotalSupply,
       oldTreasuryBalance,
+      migrateProgress,
     };
   },
 );

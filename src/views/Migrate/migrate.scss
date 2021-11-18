@@ -101,99 +101,8 @@
   justify-content: center;
 }
 
-.ohm-logo-tiny {
-  height: 14px;
-  width: 14px;
-  vertical-align: middle;
-  background-color: transparent;
-  align-self: center;
-  justify-self: center;
-}
-
-.logo-holder {
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  display: flex;
-  background: none;
-  border: 0 !important;
-  border-radius: inherit;
-  color: #555;
-}
-
-.stake-action-area {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  width: 100%;
-  justify-content: space-around;
-  margin-top: 10px;
-}
-
-.stake-action-row {
-  justify-content: space-around;
-  align-items: center;
-  height: auto;
-}
-
-.mobile .stake-action-row {
-  justify-content: center;
-}
-
-.stake-action-row [role='tabpanel'] {
-  width: 99%;
-  min-width: 162px;
-  max-width: 220px;
-  margin: 5px;
-}
-
-.mobile .stake-action-row {
-  flex-direction: column;
-  [role='tabpanel'] {
-    max-width: 100%;
-    width: 100% !important;
-  }
-}
-
-.stake-button {
-  align-self: center;
-  width: 100%;
-  min-width: 163px !important;
-  max-width: 542px !important;
-  height: 57px !important;
-}
-
-.mobile .stake-button {
-  width: 100% !important;
-  max-width: 542px;
-  align-self: center;
-  justify-self: center;
-}
-
 .staking-area {
   margin: 13px 10px 13px 10px;
-}
-
-.stake-lp-button {
-  text-align: center !important;
-  display: flex !important;
-  justify-content: center !important;
-  svg {
-    margin-left: 4px;
-    vertical-align: middle;
-    font-size: 1.1em;
-  }
-  &:hover {
-    svg {
-      color: inherit;
-    }
-  }
-}
-
-.stake-user-data {
-  justify-content: center;
-  margin: auto;
-  padding: 0 5px;
 }
 
 .tablet .stake-pool,
@@ -211,11 +120,6 @@
   .pool-data {
     margin-top: 15px;
     width: 100%;
-    .pool-data-row {
-      display: flex;
-      justify-content: space-between;
-      line-height: 225%;
-    }
   }
   .stake-lp-button {
     margin-top: 10px;
@@ -260,115 +164,82 @@
   // color: $clam-pink;
 }
 
-.stack-table-title {
-  font-style: normal;
-  font-weight: 600;
-  font-size: 14px;
-}
-
-.stack-table-value {
-  font-weight: bold;
-  font-size: 18px;
-  line-height: 22px;
-}
-
-.stack-table-btn {
-  background: rgba(255, 255, 255, 0.2);
-  box-shadow: 0px 0px 10px rgba(44, 39, 109, 0.1);
+.migrate-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  height: 41px;
   border-radius: 10px;
-  padding: 14px 32px;
   cursor: pointer;
   text-align: center;
 
+  &:hover {
+    background: $otter-blue-hover;
+  }
+
   p {
-    font-style: normal;
-    font-weight: 600;
-    font-size: 18px;
-  }
-}
-
-.stake-tab-buttons {
-  .MuiTabs-indicator {
-    // background-color: $otter-dark;
-    height: 3px;
-  }
-
-  .MuiTab-wrapper {
-    font-style: normal;
-    font-weight: 600;
-    font-size: 18px;
-  }
-}
-
-.stake-tab-panel {
-  .stake-tab-panel-btn {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    // background: $otter-blue;
-    color: white;
-    height: 57px;
-    border-radius: 10px;
-    cursor: pointer;
-    text-align: center;
-
-    // &:hover {
-    //   background: $otter-blue-hover;
-    // }
-
-    p {
-      font-style: normal;
-      font-weight: 600;
-      font-size: 18px;
-    }
-  }
-}
-
-.help-text {
-  .text-desc {
-    font-style: normal;
-    font-weight: 300;
+    font-weight: 700;
     font-size: 14px;
-    line-height: 17px;
-    text-align: center;
   }
 }
 
-.stake-user-data {
+.migrate-done {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $light-gray100;
+  color: $otter-dark;
+  height: 41px;
+  border-radius: 10px;
+  text-align: center;
+
+  p {
+    font-weight: 700;
+    font-size: 14px;
+  }
+}
+
+.migrate-table {
+  width: 100%;
+  justify-content: center;
+  margin: auto;
+  padding: 0 5px;
+
   .data-row {
-    .data-row-name {
-      font-weight: 700;
-      font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    line-height: 225%;
+    gap: 10px;
+    font-size: 16px;
+    height: 64px;
+    padding: 8px 0;
+
+    .step {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 24px;
+      height: 24px;
+      background-color: $light-gray200;
+      border-radius: 12px;
+      color: $otter-dark;
+    }
+    p:nth-child(2) {
+      flex: 1;
+    }
+    p:nth-child(3) {
+      flex: 1;
+    }
+    p:nth-child(4) {
+      width: 130px;
     }
 
     .data-row-value {
-      font-size: 14px;
-      line-height: 17px;
-    }
-  }
-}
-
-.stake-input {
-  // background: $light-gray100;
-  border: 1px solid;
-  border-radius: 10px;
-  outline: none;
-
-  .MuiOutlinedInput-input {
-    font-size: 16px;
-  }
-
-  .MuiOutlinedInput-notchedOutline {
-    // border-color: rgba(255, 255, 255, 0.2) !important;
-  }
-
-  .stake-input-btn {
-    cursor: pointer;
-
-    p {
-      font-weight: 600;
-      font-size: 18px;
+      font-weight: 500;
     }
   }
 }
