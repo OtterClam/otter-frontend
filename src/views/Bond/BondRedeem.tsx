@@ -104,12 +104,14 @@ function BondRedeem({ bondKey }: IBondRedeem) {
             </p>
           </div>
 
-          <div className="data-row">
-            <p className="bond-balance-title">ROI</p>
-            <p className="bond-balance-value">
-              {isBondLoading ? <Skeleton width="100px" /> : `${trim(bondDiscount * 100, 2)}%`}
-            </p>
-          </div>
+          {!bond.deprecated && (
+            <div className="data-row">
+              <p className="bond-balance-title">ROI</p>
+              <p className="bond-balance-value">
+                {isBondLoading ? <Skeleton width="100px" /> : `${trim(bondDiscount * 100, 2)}%`}
+              </p>
+            </div>
+          )}
 
           <div className="data-row">
             <p className="bond-balance-title">Debt Ratio</p>
