@@ -76,7 +76,17 @@ function Bond({ bond }: IBondProps) {
                 <div className="bond-price-data">
                   <p className="bond-price-data-title">Bond Price</p>
                   <Box component="p" color="text.secondary" className="bond-price-data-value">
-                    {isBondLoading ? <Skeleton /> : '-'}
+                    {isBondLoading ? (
+                      <Skeleton />
+                    ) : bond.indexOf('lp') >= 0 ? (
+                      bond === BONDS.mai_clam ? (
+                        '-'
+                      ) : (
+                        `$${trim(bondPrice, 2)}`
+                      )
+                    ) : (
+                      `${trim(bondPrice, 2)} ${bondToken}`
+                    )}
                   </Box>
                 </div>
                 <div className="bond-price-data">
@@ -95,10 +105,17 @@ function Bond({ bond }: IBondProps) {
                 aria-label="bond tabs"
                 className="bond-one-table"
               >
+                {bond !== BONDS.mai_clam && <Tab label="Bond" {...a11yProps(0)} />}
                 <Tab label="Redeem" {...a11yProps(1)} />
               </Tabs>
 
-              <TabPanel value={view} index={0}>
+              {bond !== BONDS.mai_clam && (
+                <TabPanel value={view} index={0}>
+                  <BondPurchase bond={bond} slippage={slippage} />
+                </TabPanel>
+              )}
+
+              <TabPanel value={view} index={bond === BONDS.mai_clam ? 0 : 1}>
                 <BondRedeem bond={bond} />
               </TabPanel>
             </Paper>

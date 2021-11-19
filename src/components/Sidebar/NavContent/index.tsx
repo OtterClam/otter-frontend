@@ -117,7 +117,16 @@ function NavContent() {
                   <p>Bond discounts</p>
                   {bonds.map((bond, i) => (
                     <Link component={NavLink} to={`/bonds/${bond.value}`} key={i} className={'bond'}>
-                      {bond.discount == NaN ? <Skeleton variant="text" width={'150px'} /> : <p>{bond.name}</p>}
+                      {bond.discount == NaN ? (
+                        <Skeleton variant="text" width={'150px'} />
+                      ) : (
+                        <p>
+                          {bond.name}
+                          {bond.value !== BONDS.mai_clam && (
+                            <span className="bond-pair-roi">{bond.discount && trim(bond.discount * 100, 2)}%</span>
+                          )}
+                        </p>
+                      )}
                     </Link>
                   ))}
                 </div>

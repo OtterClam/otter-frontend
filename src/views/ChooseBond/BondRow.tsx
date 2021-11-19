@@ -128,15 +128,30 @@ export function BondTableData({ bond }: IBondProps) {
         <p className="bond-name-title">
           <>
             <span className="currency-icon">{priceUnits(bond)}</span>
-            {isBondLoading ? <Skeleton width="50px" /> : '-'}
+            {isBondLoading ? <Skeleton width="50px" /> : bond === BONDS.mai_clam ? '-' : trim(bondPrice, 2)}
           </>
         </p>
       </TableCell>
       <TableCell align="right">
-        <p className="bond-name-title">{isBondLoading ? <Skeleton /> : '-'}</p>
+        <p className="bond-name-title">
+          {isBondLoading ? <Skeleton /> : bond === BONDS.mai_clam ? '-' : `${trim(bondDiscount * 100, 2)}%`}
+        </p>
       </TableCell>
       <TableCell align="right">
-        <p className="bond-name-title">{isBondLoading ? <Skeleton /> : '-'}</p>
+        <p className="bond-name-title">
+          {isBondLoading ? (
+            <Skeleton />
+          ) : bond === BONDS.mai_clam ? (
+            '-'
+          ) : (
+            new Intl.NumberFormat('en-US', {
+              style: 'currency',
+              currency: 'USD',
+              maximumFractionDigits: 0,
+              minimumFractionDigits: 0,
+            }).format(bondPurchased)
+          )}
+        </p>
       </TableCell>
       <TableCell>
         <Link component={NavLink} to={`/bonds/${bond}`}>
