@@ -95,8 +95,11 @@ export const calcBondDetails = createAsyncThunk(
 
     const maxBondPrice = await bondContract.maxPayout();
 
-    const standardizedDebtRatio = await bondContract.standardizedDebtRatio();
-    let debtRatio = standardizedDebtRatio / 1e9;
+    // FIXME: uncomment after launch
+    // const standardizedDebtRatio = await bondContract.standardizedDebtRatio();
+    // let debtRatio = standardizedDebtRatio / 1e9;
+    const standardizedDebtRatio = ethers.BigNumber.from(0);
+    let debtRatio = 0;
 
     const maiPrice = await getTokenPrice('MAI');
     const rawMarketPrice = (await getMarketPrice(networkID, provider)).mul(maiPrice);
@@ -109,16 +112,18 @@ export const calcBondDetails = createAsyncThunk(
       console.log('error getting bondPriceInUSD', e);
     }
 
-    if (bond.type === 'lp') {
-      valuation = await bondCalcContract.valuation(bond.reserve, amountInWei);
-      bondQuote = await bondContract.payoutFor(valuation);
-      bondQuote = bondQuote / 1e9;
-    } else {
-      bondQuote = await bondContract.payoutFor(amountInWei);
-      bondQuote = bondQuote / 1e18;
-      // @dev: fix for non-lp bond
-      debtRatio = standardizedDebtRatio.toNumber();
-    }
+    // FIXME: before new bonds launch
+    bondQuote = 0;
+    // if (bond.type === 'lp') {
+    //   valuation = await bondCalcContract.valuation(bond.reserve, amountInWei);
+    //   bondQuote = await bondContract.payoutFor(valuation);
+    //   bondQuote = bondQuote / 1e9;
+    // } else {
+    //   bondQuote = await bondContract.payoutFor(amountInWei);
+    //   bondQuote = bondQuote / 1e18;
+    //   // @dev: fix for non-lp bond
+    //   debtRatio = standardizedDebtRatio.toNumber();
+    // }
 
     // Display error if user tries to exceed maximum.
     if (!!value && bondQuote > maxBondPrice / 1e9) {
