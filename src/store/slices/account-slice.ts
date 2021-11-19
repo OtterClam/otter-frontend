@@ -1,10 +1,11 @@
 import { ethers } from 'ethers';
-import { BONDS, getAddresses } from '../../constants';
+import { Bond, BondKey, getAddresses, getBond } from '../../constants';
 import { ClamTokenContract, StakedClamContract, MAIContract, StakingContract } from '../../abi/';
 import { contractForBond, contractForReserve, setAll } from '../../helpers';
 
 import { createSlice, createSelector, createAsyncThunk } from '@reduxjs/toolkit';
 import { JsonRpcProvider } from '@ethersproject/providers';
+import _ from 'lodash';
 
 interface IState {
   [key: string]: any;
@@ -41,6 +42,14 @@ export interface IAccount {
     warmup: string;
     canClaimWarmup: boolean;
   };
+  migration: {
+    oldClam: string;
+    oldSClam: string;
+    oldWarmup: string;
+    canClaimWarmup: boolean;
+    clamAllowance: number;
+    sCLAMAllowance: number;
+  };
 }
 
 export const getBalances = createAsyncThunk(
@@ -53,8 +62,8 @@ export const getBalances = createAsyncThunk(
     const clamBalance = await clamContract.balanceOf(address);
     return {
       balances: {
-        sClam: ethers.utils.formatUnits(sClamBalance, 'gwei'),
-        clam: ethers.utils.formatUnits(clamBalance, 'gwei'),
+        sClam: ethers.utils.formatUnits(sClamBalance, 9),
+        clam: ethers.utils.formatUnits(clamBalance, 9),
       },
     };
   },
@@ -70,7 +79,26 @@ export const loadAccountDetails = createAsyncThunk(
     const sClamContract = new ethers.Contract(addresses.sCLAM_ADDRESS, StakedClamContract, provider);
     const stakingContract = new ethers.Contract(addresses.STAKING_ADDRESS, StakingContract, provider);
 
-    const [maiBalance, clamBalance, stakeAllowance, sClamBalance, unstakeAllowance, warmup, epoch] = await Promise.all([
+    // migrate
+    const oldClamContract = new ethers.Contract(addresses.OLD_CLAM_ADDRESS, ClamTokenContract, provider);
+    const oldSClamContract = new ethers.Contract(addresses.OLD_SCLAM_ADDRESS, StakedClamContract, provider);
+    const oldStakingContract = new ethers.Contract(addresses.OLD_STAKING_ADDRESS, StakingContract, provider);
+    // end
+
+    const [
+      maiBalance,
+      clamBalance,
+      stakeAllowance,
+      sClamBalance,
+      unstakeAllowance,
+      warmup,
+      epoch,
+      oldClamBalance,
+      oldSClamBalance,
+      oldWarmup,
+      oldSClamAllowance,
+      clamMigratorAllowance,
+    ] = await Promise.all([
       maiContract.balanceOf(address),
       clamContract.balanceOf(address),
       clamContract.allowance(address, addresses.STAKING_HELPER_ADDRESS),
@@ -78,15 +106,23 @@ export const loadAccountDetails = createAsyncThunk(
       sClamContract.allowance(address, addresses.STAKING_ADDRESS),
       stakingContract.warmupInfo(address),
       stakingContract.epoch(),
+      oldClamContract.balanceOf(address),
+      oldSClamContract.balanceOf(address),
+      oldStakingContract.warmupInfo(address),
+      oldSClamContract.allowance(address, addresses.OLD_STAKING_ADDRESS),
+      oldClamContract.allowance(address, addresses.MIGRATOR),
     ]);
 
     const gons = warmup[1];
     const warmupBalance = await sClamContract.balanceForGons(gons);
 
+    const oldGons = oldWarmup[1];
+    const oldWarmupBalance = await oldSClamContract.balanceForGons(oldGons);
+
     return {
       balances: {
-        sClam: ethers.utils.formatUnits(sClamBalance, 'gwei'),
-        clam: ethers.utils.formatUnits(clamBalance, 'gwei'),
+        sClam: ethers.utils.formatUnits(sClamBalance, 9),
+        clam: ethers.utils.formatUnits(clamBalance, 9),
         mai: ethers.utils.formatEther(maiBalance),
       },
       staking: {
@@ -95,25 +131,33 @@ export const loadAccountDetails = createAsyncThunk(
         warmup: ethers.utils.formatUnits(warmupBalance, 9),
         canClaimWarmup: warmup[0].gt(0) && epoch[1].gte(warmup[2]),
       },
+      migration: {
+        oldClam: ethers.utils.formatUnits(oldClamBalance, 9),
+        oldSClam: ethers.utils.formatUnits(oldSClamBalance, 9),
+        oldWarmup: ethers.utils.formatUnits(oldWarmupBalance, 9),
+        canClaimWarmup: oldWarmup[0].gt(0) && epoch[1].gte(oldWarmup[2]),
+        sCLAMAllowance: +oldSClamAllowance,
+        clamAllowance: +clamMigratorAllowance,
+      },
     };
   },
 );
 
 interface ICalculateUserBondDetails {
   address: string;
-  bond: string;
+  bondKey: BondKey;
   networkID: number;
   provider: JsonRpcProvider;
 }
 
 export const calculateUserBondDetails = createAsyncThunk(
   'bonding/calculateUserBondDetails',
-  async ({ address, bond, networkID, provider }: ICalculateUserBondDetails): Promise<IUserBindDetails> => {
+  async ({ address, bondKey, networkID, provider }: ICalculateUserBondDetails): Promise<IUserBindDetails> => {
     if (!address) return {};
 
     const addresses = getAddresses(networkID);
-    const bondContract = contractForBond(bond, networkID, provider);
-    const reserveContract = contractForReserve(bond, networkID, provider);
+    const bondContract = contractForBond(bondKey, networkID, provider);
+    const reserveContract = contractForReserve(bondKey, networkID, provider);
 
     let interestDue, pendingPayout, bondMaturationTime;
 
@@ -122,29 +166,12 @@ export const calculateUserBondDetails = createAsyncThunk(
     bondMaturationTime = +bondDetails.vesting + +bondDetails.lastTimestamp;
     pendingPayout = await bondContract.pendingPayoutFor(address);
 
-    let allowance,
-      balance = '0';
-
-    if (bond === BONDS.mai) {
-      allowance = await reserveContract.allowance(address, addresses.BONDS.MAI);
-      balance = await reserveContract.balanceOf(address);
-      balance = ethers.utils.formatEther(balance);
-    }
-
-    if (bond === BONDS.mai_clam) {
-      allowance = await reserveContract.allowance(address, addresses.BONDS.MAI_CLAM);
-      balance = await reserveContract.balanceOf(address);
-      balance = ethers.utils.formatEther(balance);
-    }
-
-    if (bond === BONDS.mai_clam_v2) {
-      allowance = await reserveContract.allowance(address, addresses.BONDS.MAI_CLAM_V2);
-      balance = await reserveContract.balanceOf(address);
-      balance = ethers.utils.formatEther(balance);
-    }
+    const bond = getBond(bondKey, networkID);
+    const allowance = await reserveContract.allowance(address, bond.address);
+    const balance = ethers.utils.formatEther(await reserveContract.balanceOf(address));
 
     return {
-      bond,
+      bond: bondKey,
       allowance: Number(allowance),
       balance: Number(balance),
       interestDue,
@@ -159,7 +186,7 @@ const accountSlice = createSlice({
   initialState,
   reducers: {
     fetchAccountSuccess(state, action) {
-      setAll(state, action.payload);
+      _.merge(state, action.payload);
     },
   },
   extraReducers: builder => {

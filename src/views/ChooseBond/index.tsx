@@ -99,7 +99,7 @@ function ChooseBond() {
                   </TableHead>
                   <TableBody>
                     {bonds.map(bond => (
-                      <BondTableData key={bond.value} bond={bond.value} />
+                      <BondTableData key={bond.value} bondKey={bond.value} />
                     ))}
                   </TableBody>
                 </Table>
@@ -114,7 +114,7 @@ function ChooseBond() {
           <Grid container item spacing={2}>
             {bonds.map(bond => (
               <Grid item xs={12} key={bond.value}>
-                <BondDataCard key={bond.value} bond={bond.value} />
+                <BondDataCard key={bond.value} bondKey={bond.value} />
               </Grid>
             ))}
           </Grid>

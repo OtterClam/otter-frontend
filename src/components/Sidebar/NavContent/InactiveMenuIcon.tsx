@@ -14,14 +14,14 @@ function InactiveMenuIcon(props: SVGProps<SVGSVGElement> & { color?: string }) {
       <path
         d="M9.90124 4C9.20416 4.95352 9.62626 12.7374 12 19.8586C7.15152 16.2727 5.18182 7.63636 5.76851 5.65612"
         stroke={color}
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M14.0988 4C14.7958 4.95352 14.3737 12.7374 12 19.8586C16.8485 16.2727 18.8182 7.63636 18.2315 5.65612"
         stroke={color}
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

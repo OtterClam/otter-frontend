@@ -1,0 +1,272 @@
+@import 'styles/_colors.scss';
+
+#stake-view {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  .rebase-timer {
+    margin: 0 !important;
+    line-height: 110% !important;
+  }
+
+  .stake-tab-buttons-group {
+    display: flex;
+    gap: 8px;
+  }
+
+  .stake-tab-buttons {
+    margin-bottom: 20px;
+  }
+
+  .stake-table-panel,
+  .stake-tab-panel > div.MuiBox-root {
+    width: 100%;
+    padding: 0;
+  }
+  .mobile .stake-tab-panel,
+  .mobile .stake-tab-panel > div.MuiBox-root {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    justify-items: center;
+  }
+
+  .ohm-card .header {
+    min-height: 3em;
+  }
+  .ohm-card.secondary .card-header {
+    min-height: 33px !important;
+    height: 20px;
+  }
+}
+
+.migrate-sohm-button {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  font-size: 1em;
+  display: flex;
+  align-items: center;
+  color: #f08080;
+  line-height: 30px;
+  svg {
+    margin-right: 8px;
+    color: inherit;
+  }
+}
+
+.migrate-sohm-button.complete {
+  color: #35ee66 !important;
+}
+
+.stake-top-metrics {
+  display: flex;
+  width: 100%;
+  padding: 0;
+  text-align: center;
+  margin-top: 10px;
+  h5 {
+    font-weight: 400;
+  }
+  h4 {
+    font-weight: 500;
+  }
+  .stake-apy,
+  .stake-tvl,
+  .stake-index {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+}
+
+.mobile .stake-top-metrics {
+  .stake-apy,
+  .stake-tvl,
+  .stake-index {
+    align-items: flex-start;
+  }
+}
+
+.mobile .stake-apy {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.staking-area {
+  margin: 13px 10px 13px 10px;
+}
+
+.tablet .stake-pool,
+.mobile .stake-pool {
+  .pool-card-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    .ohm-pairs p {
+      margin-bottom: 0 !important;
+    }
+  }
+
+  .pool-data {
+    margin-top: 15px;
+    width: 100%;
+  }
+  .stake-lp-button {
+    margin-top: 10px;
+    svg {
+      margin-left: 10px !important;
+    }
+  }
+}
+
+.stake-wallet-notification {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .wallet-menu {
+    display: flex;
+    margin-bottom: 10px;
+  }
+  .desc-text {
+    font-weight: 300;
+    font-size: 14px;
+  }
+}
+
+.single-stake-title {
+  font-weight: 700;
+  font-size: 24px;
+  margin-bottom: 4px;
+
+  img {
+    width: 24px;
+    height: 24px;
+    margin-bottom: -3px;
+    margin-left: 2px;
+    margin-right: 2px;
+  }
+}
+
+.single-stake-subtitle {
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 2px;
+}
+
+.single-stake-subtitle-value {
+  font-weight: 800;
+  font-size: 24px;
+  line-height: 36px;
+  // color: $clam-pink;
+}
+
+.migrate-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  height: 41px;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: center;
+
+  &:hover {
+    background: $otter-blue-hover;
+  }
+
+  p {
+    font-weight: 700;
+    font-size: 14px;
+  }
+}
+
+.migrate-done {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $light-gray100;
+  color: $otter-dark;
+  height: 41px;
+  border-radius: 10px;
+  text-align: center;
+
+  p {
+    font-weight: 700;
+    font-size: 14px;
+  }
+}
+
+.migrate-table {
+  width: 100%;
+  justify-content: center;
+  margin: auto;
+  padding: 0 5px;
+
+  .data-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    line-height: 225%;
+    gap: 10px;
+    font-size: 16px;
+    min-height: 64px;
+    padding: 8px 0;
+
+    .step {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 24px;
+      height: 24px;
+      background-color: $light-gray200;
+      border-radius: 12px;
+      color: $otter-dark;
+    }
+    p:nth-child(2) {
+      flex: 1;
+    }
+    p:nth-child(3) {
+      flex: 1;
+    }
+    p:nth-child(4) {
+      width: 130px;
+      @media screen and (max-width: 417px) {
+        width: 78px;
+      }
+    }
+
+    .estimated-clam2 {
+      color: $otter-blue;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .data-row-value {
+      font-weight: 500;
+    }
+  }
+}
+
+@media screen and (max-width: 417px) {
+  .single-stake-subtitle {
+    font-size: 18px !important;
+  }
+
+  .single-stake-subtitle-value {
+    font-size: 18px !important;
+  }
+}

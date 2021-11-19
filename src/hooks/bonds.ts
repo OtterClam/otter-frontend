@@ -1,55 +1,35 @@
-import { useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
 import orderBy from 'lodash/orderBy';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { BondKey, getBond } from 'src/constants';
+import { IBond } from 'src/store/slices/bond-slice';
+import { useWeb3Context } from '.';
 import { IReduxState } from '../store/slices/state.interface';
-import { BONDS } from 'src/constants';
 
-export const makeBondsArray = (
-  maiBondDiscount?: string | number,
-  maiClamBondDiscount?: string | number,
-  maiClamBondV2Discount?: string | number,
-) => {
-  return [
-    {
-      name: 'MAI',
-      value: BONDS.mai,
-      discount: Number(maiBondDiscount),
-    },
-    {
-      name: 'CLAM-MAI LP(Legacy)',
-      value: BONDS.mai_clam,
-      discount: 0,
-    },
-    {
-      name: 'CLAM-MAI LP',
-      value: BONDS.mai_clam_v2,
-      discount: Number(maiClamBondV2Discount),
-    },
-  ];
+export const makeBondsArray = (bondings: IBond, chainId: number) => {
+  return Object.keys(bondings)
+    .filter(k => k !== 'loading')
+    .map(key => {
+      const bond = getBond(key as BondKey, chainId);
+      return {
+        name: bond.name,
+        value: key as BondKey,
+        discount: Number(bondings[key as BondKey].bondDiscount),
+        deprecated: bond.deprecated,
+      };
+    });
 };
 
-const BONDS_ARRAY = makeBondsArray();
-
 export const useBonds = () => {
-  const maiBondDiscount = useSelector<IReduxState, number>(state => {
-    return state.bonding['mai'] && state.bonding['mai'].bondDiscount;
-  });
-
-  const maiClamDiscount = useSelector<IReduxState, number>(state => {
-    return state.bonding['mai_clam_lp'] && state.bonding['mai_clam_lp'].bondDiscount;
-  });
-
-  const maiClamV2Discount = useSelector<IReduxState, number>(state => {
-    return state.bonding[BONDS.mai_clam_v2] && state.bonding[BONDS.mai_clam_v2].bondDiscount;
-  });
-
-  const [bonds, setBonds] = useState(BONDS_ARRAY);
+  const { chainID } = useWeb3Context();
+  const bondings = useSelector<IReduxState, IBond>(state => state.bonding);
+  const [bonds, setBonds] = useState(makeBondsArray(bondings, chainID));
 
   useEffect(() => {
-    const bondValues = makeBondsArray(maiBondDiscount, maiClamDiscount, maiClamV2Discount);
-    const mostProfitableBonds = orderBy(bondValues, 'discount', 'desc');
+    const bondValues = makeBondsArray(bondings, chainID);
+    const mostProfitableBonds = orderBy(bondValues, ['deprecated', 'name'], ['asc', 'desc']);
     setBonds(mostProfitableBonds);
-  }, [maiBondDiscount, maiClamDiscount, maiClamV2Discount]);
+  }, [bondings]);
 
   return bonds;
 };

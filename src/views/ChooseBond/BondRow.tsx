@@ -1,30 +1,31 @@
-import { Link, Paper, Slide, TableCell, TableRow, Box } from '@material-ui/core';
+import { Box, Link, Paper, Slide, TableCell, TableRow } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { BONDS } from 'src/constants';
+import { BondKey, getBond } from 'src/constants';
 import BondLogo from '../../components/BondLogo';
-import { bondName, isBondLP, lpURL, priceUnits, trim } from '../../helpers';
+import { priceUnits, trim } from '../../helpers';
 import { useWeb3Context } from '../../hooks';
 import { IReduxState } from '../../store/slices/state.interface';
 import './choose-bond.scss';
 
 interface IBondProps {
-  bond: string;
+  bondKey: BondKey;
 }
 
-export function BondDataCard({ bond }: IBondProps) {
+export function BondDataCard({ bondKey }: IBondProps) {
   const { chainID } = useWeb3Context();
+  const bond = getBond(bondKey, chainID);
 
-  const isBondLoading = useSelector<IReduxState, boolean>(state => !state.bonding[bond]?.bondPrice ?? true);
+  const isBondLoading = useSelector<IReduxState, boolean>(state => !state.bonding[bondKey]?.bondPrice ?? true);
   const bondPrice = useSelector<IReduxState, number | undefined>(state => {
-    return state.bonding[bond] && state.bonding[bond].bondPrice;
+    return state.bonding[bondKey] && state.bonding[bondKey].bondPrice;
   });
   const bondDiscount = useSelector<IReduxState, number>(state => {
-    return state.bonding[bond] && state.bonding[bond].bondDiscount;
+    return state.bonding[bondKey] && state.bonding[bondKey].bondDiscount;
   });
   const bondPurchased = useSelector<IReduxState, number>(state => {
-    return state.bonding[bond] && state.bonding[bond].purchased;
+    return state.bonding[bondKey] && state.bonding[bondKey].purchased;
   });
 
   return (
@@ -33,10 +34,10 @@ export function BondDataCard({ bond }: IBondProps) {
         <div className="bond-pair">
           <BondLogo bond={bond} />
           <div className="bond-name">
-            <p className="bond-name-title">{bondName(bond)}</p>
-            {isBondLP(bond) && (
+            <p className="bond-name-title">{bond.name}</p>
+            {bond.type === 'lp' && (
               <div>
-                <Link href={lpURL(bond, chainID)} target="_blank">
+                <Link href={bond.lpUrl} target="_blank">
                   <Box component="p" color="otter.otterBlue" className="bond-lp-add-liquidity">
                     Add Liquidity
                   </Box>
@@ -50,7 +51,7 @@ export function BondDataCard({ bond }: IBondProps) {
           <p className="bond-name-title">Price</p>
           <p className="bond-price bond-name-title">
             <>
-              {priceUnits(bond)} {isBondLoading ? <Skeleton width="50px" /> : trim(bondPrice, 2)}
+              {priceUnits(bondKey)} {isBondLoading ? <Skeleton width="50px" /> : trim(bondPrice, 2)}
             </>
           </p>
         </div>
@@ -77,16 +78,19 @@ export function BondDataCard({ bond }: IBondProps) {
             )}
           </p>
         </div>
-        <Link component={NavLink} to={`/bonds/${bond}`}>
+        <Link component={NavLink} to={`/bonds/${bondKey}`}>
           <Box
             bgcolor="otter.otterBlue"
+            color="otter.white"
             display="flex"
             justifyContent="center"
             alignItems="center"
             height="44px"
             className="bond-table-btn"
           >
-            <p>Bond {bondName(bond)}</p>
+            <p>
+              {bond.deprecated ? 'Redeem' : 'Bond'} {bond.name}
+            </p>
           </Box>
         </Link>
       </Paper>
@@ -94,29 +98,30 @@ export function BondDataCard({ bond }: IBondProps) {
   );
 }
 
-export function BondTableData({ bond }: IBondProps) {
+export function BondTableData({ bondKey }: IBondProps) {
   const { chainID } = useWeb3Context();
   // Use BondPrice as indicator of loading.
-  const isBondLoading = useSelector<IReduxState, boolean>(state => !state.bonding[bond]?.bondPrice ?? true);
+  const isBondLoading = useSelector<IReduxState, boolean>(state => !state.bonding[bondKey]?.bondPrice ?? true);
+  const bond = getBond(bondKey, chainID);
 
   const bondPrice = useSelector<IReduxState, number>(state => {
-    return state.bonding[bond] && state.bonding[bond].bondPrice;
+    return state.bonding[bondKey] && state.bonding[bondKey].bondPrice;
   });
   const bondDiscount = useSelector<IReduxState, number>(state => {
-    return state.bonding[bond] && state.bonding[bond].bondDiscount;
+    return state.bonding[bondKey] && state.bonding[bondKey].bondDiscount;
   });
   const bondPurchased = useSelector<IReduxState, number>(state => {
-    return state.bonding[bond] && state.bonding[bond].purchased;
+    return state.bonding[bondKey] && state.bonding[bondKey].purchased;
   });
 
   return (
-    <TableRow id={`${bond}--bond`}>
+    <TableRow id={`${bondKey}--bond`}>
       <TableCell align="left">
         <BondLogo bond={bond} />
         <div className="bond-name">
-          <p className="bond-name-title">{bondName(bond)}</p>
-          {isBondLP(bond) && (
-            <Link color="primary" href={lpURL(bond, chainID)} target="_blank">
+          <p className="bond-name-title">{bond.name}</p>
+          {bond.type === 'lp' && !bond.deprecated && (
+            <Link color="primary" href={bond.lpUrl} target="_blank">
               <Box component="p" color="otter.otterBlue" className="bond-lp-add-liquidity">
                 Add Liquidity
               </Box>
@@ -127,21 +132,21 @@ export function BondTableData({ bond }: IBondProps) {
       <TableCell align="center">
         <p className="bond-name-title">
           <>
-            <span className="currency-icon">{priceUnits(bond)}</span>
-            {isBondLoading ? <Skeleton width="50px" /> : bond === BONDS.mai_clam ? '-' : trim(bondPrice, 2)}
+            <span className="currency-icon">{priceUnits(bondKey)}</span>
+            {isBondLoading ? <Skeleton width="50px" /> : bond.deprecated ? '-' : trim(bondPrice, 2)}
           </>
         </p>
       </TableCell>
       <TableCell align="right">
         <p className="bond-name-title">
-          {isBondLoading ? <Skeleton /> : bond === BONDS.mai_clam ? '-' : `${trim(bondDiscount * 100, 2)}%`}
+          {isBondLoading ? <Skeleton /> : bond.deprecated ? '-' : `${trim(bondDiscount * 100, 2)}%`}
         </p>
       </TableCell>
       <TableCell align="right">
         <p className="bond-name-title">
           {isBondLoading ? (
             <Skeleton />
-          ) : bond === BONDS.mai_clam ? (
+          ) : bond.deprecated ? (
             '-'
           ) : (
             new Intl.NumberFormat('en-US', {
@@ -154,7 +159,7 @@ export function BondTableData({ bond }: IBondProps) {
         </p>
       </TableCell>
       <TableCell>
-        <Link component={NavLink} to={`/bonds/${bond}`}>
+        <Link component={NavLink} to={`/bonds/${bondKey}`}>
           <Box
             bgcolor="otter.otterBlue"
             color="otter.white"
@@ -164,7 +169,7 @@ export function BondTableData({ bond }: IBondProps) {
             height="44px"
             className="bond-table-btn"
           >
-            <p>Bond</p>
+            <p>{bond.deprecated ? 'Redeem' : 'Bond'}</p>
           </Box>
         </Link>
       </TableCell>

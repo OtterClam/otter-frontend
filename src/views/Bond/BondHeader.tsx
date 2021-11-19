@@ -2,14 +2,14 @@ import { useState } from 'react';
 import { NavLink, useHistory } from 'react-router-dom';
 import BondLogo from '../../components/BondLogo';
 import AdvancedSettings from './AdvancedSettings';
-import { bondName } from '../../helpers';
 import { IconButton, SvgIcon, Link } from '@material-ui/core';
 import SettingsIcon from './SettingsIcon';
 import { ReactComponent as XIcon } from '../../assets/icons/icon_close.svg';
 import { useEscape } from '../../hooks';
+import { Bond } from 'src/constants';
 
 interface IBondHeaderProps {
-  bond: string;
+  bond: Bond;
   slippage: number;
   recipientAddress: string;
   onRecipientAddressChange: (e: any) => void;
@@ -49,7 +49,7 @@ function BondHeader({
       <div className="bond-header-logo">
         <BondLogo bond={bond} />
         <div className="bond-header-name">
-          <p>{bondName(bond)}</p>
+          <p>{bond.name}</p>
         </div>
       </div>
 

@@ -9,6 +9,9 @@ export async function getMarketPrice(
   const address = getAddresses(networkID);
   const pairContract = new ethers.Contract(address.RESERVES.MAI_CLAM, ClamMaiReserveContract, provider);
   const reserves = await pairContract.getReserves();
-  const marketPrice = reserves[1].div(reserves[0]);
+  const [clam, mai] = BigNumber.from(address.MAI_ADDRESS).gt(address.CLAM_ADDRESS)
+    ? [reserves[0], reserves[1]]
+    : [reserves[1], reserves[0]];
+  const marketPrice = mai.div(clam);
   return marketPrice;
 }

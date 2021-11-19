@@ -7,6 +7,7 @@ import { useWeb3Context } from '../../hooks';
 import { IPendingTxn, isPendingTxn, txnButtonText } from '../../store/slices/pending-txns-slice';
 import { Skeleton } from '@material-ui/lab';
 import { IReduxState } from '../../store/slices/state.interface';
+import { BondKey, getBond } from 'src/constants';
 
 const useStyles = makeStyles(theme => ({
   input: {
@@ -27,50 +28,50 @@ const useStyles = makeStyles(theme => ({
 }));
 
 interface IBondPurchaseProps {
-  bond: string;
+  bondKey: BondKey;
   slippage: number;
 }
 
-function BondPurchase({ bond, slippage }: IBondPurchaseProps) {
+function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
   const styles = useStyles();
   const dispatch = useDispatch();
   const { provider, address, chainID } = useWeb3Context();
-
+  const bond = getBond(bondKey, chainID);
   const [recipientAddress, setRecipientAddress] = useState(address);
   const [quantity, setQuantity] = useState('');
 
   const isBondLoading = useSelector<IReduxState, boolean>(state => state.bonding.loading ?? true);
   const vestingTerm = useSelector<IReduxState, number>(state => {
-    return state.bonding[bond] && state.bonding[bond].vestingTerm;
+    return state.bonding[bondKey] && state.bonding[bondKey].vestingTerm;
   });
 
   const bondDiscount = useSelector<IReduxState, number>(state => {
-    return state.bonding[bond] && state.bonding[bond].bondDiscount;
+    return state.bonding[bondKey] && state.bonding[bondKey].bondDiscount;
   });
   const maxBondPrice = useSelector<IReduxState, number>(state => {
-    return state.bonding[bond] && state.bonding[bond].maxBondPrice;
+    return state.bonding[bondKey] && state.bonding[bondKey].maxBondPrice;
   });
   const interestDue = useSelector<IReduxState, number>(state => {
     //@ts-ignore
-    return state.account[bond] && state.account[bond].interestDue;
+    return state.account[bondKey] && state.account[bondKey].interestDue;
   });
   const pendingPayout = useSelector<IReduxState, number>(state => {
     //@ts-ignore
-    return state.account[bond] && state.account[bond].pendingPayout;
+    return state.account[bondKey] && state.account[bondKey].pendingPayout;
   });
   const debtRatio = useSelector<IReduxState, number>(state => {
-    return state.bonding[bond] && state.bonding[bond].debtRatio;
+    return state.bonding[bondKey] && state.bonding[bondKey].debtRatio;
   });
   const bondQuote = useSelector<IReduxState, number>(state => {
-    return state.bonding[bond] && state.bonding[bond].bondQuote;
+    return state.bonding[bondKey] && state.bonding[bondKey].bondQuote;
   });
   const balance = useSelector<IReduxState, number>(state => {
     //@ts-ignore
-    return state.account[bond] && state.account[bond].balance;
+    return state.account[bondKey] && state.account[bondKey].balance;
   });
   const allowance = useSelector<IReduxState, number>(state => {
     //@ts-ignore
-    return state.account[bond] && state.account[bond].allowance;
+    return state.account[bondKey] && state.account[bondKey].allowance;
   });
 
   const pendingTransactions = useSelector<IReduxState, IPendingTxn[]>(state => {
@@ -96,7 +97,7 @@ function BondPurchase({ bond, slippage }: IBondPurchaseProps) {
           bondAsset({
             value: quantity,
             slippage,
-            bond,
+            bondKey,
             networkID: chainID,
             provider,
             address: recipientAddress || address,
@@ -109,7 +110,7 @@ function BondPurchase({ bond, slippage }: IBondPurchaseProps) {
         bondAsset({
           value: quantity,
           slippage,
-          bond,
+          bondKey,
           networkID: chainID,
           provider,
           address: recipientAddress || address,
@@ -127,12 +128,12 @@ function BondPurchase({ bond, slippage }: IBondPurchaseProps) {
   };
 
   const balanceUnits = () => {
-    if (bond.indexOf('_lp') >= 0) return 'LP';
+    if (bond.type === 'lp') return 'LP';
     else return 'MAI';
   };
 
   async function loadBondDetails() {
-    if (provider) await dispatch(calcBondDetails({ bond, value: quantity, provider, networkID: chainID }));
+    if (provider) await dispatch(calcBondDetails({ bondKey, value: quantity, provider, networkID: chainID }));
   }
 
   useEffect(() => {
@@ -141,7 +142,7 @@ function BondPurchase({ bond, slippage }: IBondPurchaseProps) {
   }, [provider, quantity, address]);
 
   const onSeekApproval = async () => {
-    await dispatch(changeApproval({ bond, provider, networkID: chainID, address }));
+    await dispatch(changeApproval({ bondKey, provider, networkID: chainID, address }));
   };
 
   return (

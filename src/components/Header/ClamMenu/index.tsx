@@ -1,14 +1,14 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { getAddresses, TOKEN_DECIMALS, DEFAULT_NETWORK } from '../../../constants';
 import { useSelector } from 'react-redux';
 import { Link, SvgIcon, Popper, Button, Paper, Typography, Divider, Box, Fade, makeStyles } from '@material-ui/core';
 import { ReactComponent as ArrowUpIcon } from '../../../assets/icons/arrow-up.svg';
 import './clam-menu.scss';
 import { IReduxState } from '../../../store/slices/state.interface';
-import { getTokenUrl } from '../../../helpers';
+import { getTokenUrl, Token } from '../../../helpers';
 
 const addTokenToWallet = (tokenSymbol: string, tokenAddress: string) => async () => {
-  const tokenImage = getTokenUrl(tokenSymbol.toLowerCase());
+  const tokenImage = getTokenUrl(tokenSymbol.toLowerCase() as Token);
 
   if (window.ethereum) {
     try {
@@ -96,17 +96,17 @@ function ClamMenu() {
                         size="large"
                         variant="text"
                         color="primary"
-                        onClick={addTokenToWallet('CLAM', CLAM_ADDRESS)}
+                        onClick={addTokenToWallet('CLAM2', CLAM_ADDRESS)}
                       >
-                        <Typography className="buy-text">CLAM</Typography>
+                        <Typography className="buy-text">CLAM2</Typography>
                       </Button>
                       <Button
                         variant="text"
                         size="large"
                         color="primary"
-                        onClick={addTokenToWallet('sCLAM', sCLAM_ADDRESS)}
+                        onClick={addTokenToWallet('sCLAM2', sCLAM_ADDRESS)}
                       >
-                        <Typography className="buy-text">sCLAM</Typography>
+                        <Typography className="buy-text">sCLAM2</Typography>
                       </Button>
                     </Box>
                   ) : null}
