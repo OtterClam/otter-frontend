@@ -51,7 +51,7 @@ function NavContent() {
 
   return (
     <Paper className="dapp-sidebar">
-      <Box className="dapp-sidebar" display="flex" justifyContent="flex-end" flexDirection="column">
+      <Box className="dapp-sidebar" display="flex" justifyContent="space-between" flexDirection="column">
         <div className="dapp-menu-top">
           <Link href="https://www.otterclam.finance" target="_blank">
             <Box display="flex" flexDirection="column" className="branding-header">
