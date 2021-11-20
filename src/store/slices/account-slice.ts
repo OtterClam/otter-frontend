@@ -155,7 +155,6 @@ export const calculateUserBondDetails = createAsyncThunk(
   async ({ address, bondKey, networkID, provider }: ICalculateUserBondDetails): Promise<IUserBindDetails> => {
     if (!address) return {};
 
-    const addresses = getAddresses(networkID);
     const bondContract = contractForBond(bondKey, networkID, provider);
     const reserveContract = contractForReserve(bondKey, networkID, provider);
 

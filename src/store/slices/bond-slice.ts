@@ -84,7 +84,10 @@ export const calcBondDetails = createAsyncThunk(
       amountInWei = ethers.utils.parseEther(value);
     }
 
-    let bondPrice, bondDiscount, valuation, bondQuote;
+    let bondPrice = 0,
+      bondDiscount = 0,
+      valuation,
+      bondQuote;
 
     const addresses = getAddresses(networkID);
     const bondContract = contractForBond(bondKey, networkID, provider);
@@ -95,11 +98,8 @@ export const calcBondDetails = createAsyncThunk(
 
     const maxBondPrice = await bondContract.maxPayout();
 
-    // FIXME: uncomment after launch
-    // const standardizedDebtRatio = await bondContract.standardizedDebtRatio();
-    // let debtRatio = standardizedDebtRatio / 1e9;
-    const standardizedDebtRatio = ethers.BigNumber.from(0);
-    let debtRatio = 0;
+    const standardizedDebtRatio = await bondContract.standardizedDebtRatio();
+    let debtRatio = standardizedDebtRatio / 1e9;
 
     const maiPrice = await getTokenPrice('MAI');
     const rawMarketPrice = (await getMarketPrice(networkID, provider)).mul(maiPrice);
@@ -112,18 +112,16 @@ export const calcBondDetails = createAsyncThunk(
       console.log('error getting bondPriceInUSD', e);
     }
 
-    // FIXME: before new bonds launch
-    bondQuote = 0;
-    // if (bond.type === 'lp') {
-    //   valuation = await bondCalcContract.valuation(bond.reserve, amountInWei);
-    //   bondQuote = await bondContract.payoutFor(valuation);
-    //   bondQuote = bondQuote / 1e9;
-    // } else {
-    //   bondQuote = await bondContract.payoutFor(amountInWei);
-    //   bondQuote = bondQuote / 1e18;
-    //   // @dev: fix for non-lp bond
-    //   debtRatio = standardizedDebtRatio.toNumber();
-    // }
+    if (bond.type === 'lp') {
+      valuation = await bondCalcContract.valuation(bond.reserve, amountInWei);
+      bondQuote = await bondContract.payoutFor(valuation);
+      bondQuote = bondQuote / 1e9;
+    } else {
+      bondQuote = await bondContract.payoutFor(amountInWei);
+      bondQuote = bondQuote / 1e18;
+      // @dev: fix for non-lp bond
+      debtRatio = standardizedDebtRatio.toNumber();
+    }
 
     // Display error if user tries to exceed maximum.
     if (!!value && bondQuote > maxBondPrice / 1e9) {
