@@ -139,7 +139,7 @@ function NavContent() {
               >
                 <div className="dapp-menu-item">
                   <InactiveMenuIcon />
-                  <p>Buy CLAM</p>
+                  <p>Buy CLAM2</p>
                 </div>
               </Link>
               <Link
