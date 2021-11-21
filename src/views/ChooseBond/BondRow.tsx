@@ -51,7 +51,8 @@ export function BondDataCard({ bondKey }: IBondProps) {
           <p className="bond-name-title">Price</p>
           <p className="bond-price bond-name-title">
             <>
-              {priceUnits(bondKey)} {isBondLoading ? <Skeleton width="50px" /> : trim(bondPrice, 2)}
+              {priceUnits(bondKey)}{' '}
+              {isBondLoading ? <Skeleton width="50px" /> : bond.deprecated ? '-' : trim(bondPrice, 2)}
             </>
           </p>
         </div>
@@ -59,7 +60,7 @@ export function BondDataCard({ bondKey }: IBondProps) {
         <div className="data-row">
           <p className="bond-name-title">ROI</p>
           <p className="bond-name-title">
-            {isBondLoading ? <Skeleton width="50px" /> : `${trim(bondDiscount * 100, 2)}%`}
+            {isBondLoading ? <Skeleton width="50px" /> : bond.deprecated ? '-' : `${trim(bondDiscount * 100, 2)}%`}
           </p>
         </div>
 
@@ -68,6 +69,8 @@ export function BondDataCard({ bondKey }: IBondProps) {
           <p className="bond-name-title">
             {isBondLoading ? (
               <Skeleton width="80px" />
+            ) : bond.deprecated ? (
+              '-'
             ) : (
               new Intl.NumberFormat('en-US', {
                 style: 'currency',

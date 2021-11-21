@@ -3,7 +3,6 @@ import { getAddresses } from '.';
 export type BondKey = 'mai' | 'mai_clam' | 'mai-v1' | 'mai_clam_v2-v1' | 'mai_clam-v1';
 
 export const BondKeys: BondKey[] = ['mai', 'mai_clam', 'mai-v1', 'mai_clam-v1', 'mai_clam_v2-v1'];
-// export const BondKeys: BondKey[] = ['mai-v1', 'mai_clam-v1', 'mai_clam_v2-v1'];
 
 export interface Bond {
   key: BondKey;
