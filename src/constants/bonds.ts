@@ -32,7 +32,7 @@ export function listBonds(chainId: number): BondMap {
     },
     mai_clam: {
       key: 'mai_clam',
-      name: 'CLAM2-MAI LP',
+      name: 'MAI-CLAM2 LP',
       address: BONDS.MAI_CLAM,
       reserve: RESERVES.MAI_CLAM,
       type: 'lp',
@@ -41,7 +41,7 @@ export function listBonds(chainId: number): BondMap {
     },
     'mai-v1': {
       key: 'mai-v1',
-      name: 'MAI (v1)',
+      name: 'MAI v1',
       address: BONDS.OLD_MAI,
       reserve: RESERVES.MAI,
       type: 'token',
@@ -50,7 +50,7 @@ export function listBonds(chainId: number): BondMap {
     },
     'mai_clam-v1': {
       key: 'mai_clam-v1',
-      name: 'CLAM-MAI (v1-legacy)',
+      name: 'MAI-CLAM v1-legacy',
       address: BONDS.OLD_MAI_CLAM,
       reserve: RESERVES.OLD_MAI_CLAM,
       type: 'lp',
@@ -59,7 +59,7 @@ export function listBonds(chainId: number): BondMap {
     },
     'mai_clam_v2-v1': {
       key: 'mai_clam_v2-v1',
-      name: 'CLAM-MAI (v1)',
+      name: 'MAI-CLAM v1',
       address: BONDS.OLD_MAI_CLAM_V2,
       reserve: RESERVES.OLD_MAI_CLAM,
       type: 'lp',

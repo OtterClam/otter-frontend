@@ -27,7 +27,7 @@ export const useBonds = () => {
 
   useEffect(() => {
     const bondValues = makeBondsArray(bondings, chainID);
-    const mostProfitableBonds = orderBy(bondValues, ['deprecated', 'name'], ['asc', 'desc']);
+    const mostProfitableBonds = orderBy(bondValues, ['deprecated', 'name'], ['asc', 'asc']);
     setBonds(mostProfitableBonds);
   }, [bondings]);
 
