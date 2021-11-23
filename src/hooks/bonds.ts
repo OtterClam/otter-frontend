@@ -16,6 +16,7 @@ export const makeBondsArray = (bondings: IBond, chainId: number) => {
         value: key as BondKey,
         discount: Number(bondings[key as BondKey].bondDiscount),
         deprecated: bond.deprecated,
+        autostake: bond.autostake,
       };
     });
 };

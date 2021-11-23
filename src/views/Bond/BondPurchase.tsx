@@ -126,11 +126,7 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
   const setMax = () => {
     setQuantity((balance || '').toString());
   };
-
-  const balanceUnits = () => {
-    if (bond.type === 'lp') return 'LP';
-    else return 'MAI';
-  };
+  const fiveDayRate = useSelector<IReduxState, number>(state => state.app.fiveDayRate);
 
   async function loadBondDetails() {
     if (provider) await dispatch(calcBondDetails({ bondKey, value: quantity, provider, networkID: chainID }));
@@ -144,6 +140,9 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
   const onSeekApproval = async () => {
     await dispatch(changeApproval({ bondKey, provider, networkID: chainID, address }));
   };
+
+  const balanceUnits = () => bond.reserveUnit;
+  const bondUnit = bond.autostake ? 'sCLAM' : 'CLAM';
 
   return (
     <Box display="flex" flexDirection="column">
@@ -193,7 +192,19 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
           </Box>
         )}
       </div>
-      {!hasAllowance() && (
+      {hasAllowance() ? (
+        bond.autostake && (
+          <div className="help-text">
+            <p className="help-text-desc">
+              Note: The (4,4) bond will auto stake when purchasing, which means you earn all rebase reward during the
+              vesting term.
+            </p>
+            <p className="help-text-desc">
+              You don't need to claim it every epoch. But you can only claim sCLAM after its fully vested.
+            </p>
+          </div>
+        )
+      ) : (
         <div className="help-text">
           <p className="help-text-desc">
             Note: The "Approve" transaction is only needed when bonding for the first time; subsequent bonding only
@@ -220,21 +231,25 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
           <div className={`data-row`}>
             <p className="bond-balance-title">You Will Get</p>
             <p className="price-data bond-balance-value">
-              {isBondLoading ? <Skeleton width="100px" /> : `${trim(bondQuote, 4) || '0'} CLAM`}
+              {isBondLoading ? <Skeleton width="100px" /> : `${trim(bondQuote, 4) || '0'} ${bondUnit}`}
             </p>
           </div>
 
           <div className={`data-row`}>
             <p className="bond-balance-title">Max You Can Buy</p>
             <p className="price-data bond-balance-value">
-              {isBondLoading ? <Skeleton width="100px" /> : `${trim(maxBondPrice, 4) || '0'} CLAM`}
+              {isBondLoading ? <Skeleton width="100px" /> : `${trim(maxBondPrice, 4) || '0'} ${bondUnit}`}
             </p>
           </div>
 
           <div className="data-row">
             <p className="bond-balance-title">ROI</p>
             <p className="bond-balance-value">
-              {isBondLoading ? <Skeleton width="100px" /> : `${trim(bondDiscount * 100, 2)}%`}
+              {isBondLoading ? (
+                <Skeleton width="100px" />
+              ) : (
+                `${trim(bondDiscount * 100, 2)}%` + (bond.autostake && `+ staking ${trim(fiveDayRate * 100, 2)}%`)
+              )}
             </p>
           </div>
 

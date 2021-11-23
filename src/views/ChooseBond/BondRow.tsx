@@ -27,6 +27,7 @@ export function BondDataCard({ bondKey }: IBondProps) {
   const bondPurchased = useSelector<IReduxState, number>(state => {
     return state.bonding[bondKey] && state.bonding[bondKey].purchased;
   });
+  const fiveDayRate = useSelector<IReduxState, number>(state => state.app.fiveDayRate);
 
   return (
     <Slide direction="up" in={true}>
@@ -61,6 +62,7 @@ export function BondDataCard({ bondKey }: IBondProps) {
           <p className="bond-name-title">ROI</p>
           <p className="bond-name-title">
             {isBondLoading ? <Skeleton width="50px" /> : bond.deprecated ? '-' : `${trim(bondDiscount * 100, 2)}%`}
+            {bond.autostake && ` + ${trim(fiveDayRate * 100, 2)}%`}
           </p>
         </div>
 
@@ -116,6 +118,7 @@ export function BondTableData({ bondKey }: IBondProps) {
   const bondPurchased = useSelector<IReduxState, number>(state => {
     return state.bonding[bondKey] && state.bonding[bondKey].purchased;
   });
+  const fiveDayRate = useSelector<IReduxState, number>(state => state.app.fiveDayRate);
 
   return (
     <TableRow id={`${bondKey}--bond`}>
@@ -143,6 +146,7 @@ export function BondTableData({ bondKey }: IBondProps) {
       <TableCell align="right">
         <p className="bond-name-title">
           {isBondLoading ? <Skeleton /> : bond.deprecated ? '-' : `${trim(bondDiscount * 100, 2)}%`}
+          {bond.autostake && ` + ${trim(fiveDayRate * 100, 2)}%`}
         </p>
       </TableCell>
       <TableCell align="right">
