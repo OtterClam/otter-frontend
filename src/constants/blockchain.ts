@@ -13,6 +13,6 @@ export const RPCURL = {
   [Networks.HARDHAT]: 'http://localhost:8545',
 };
 
-// export const DEFAULT_NETWORK = Networks.POLYGON_MAINNET;
+export const DEFAULT_NETWORK = Networks.POLYGON_MAINNET;
 // export const DEFAULT_NETWORK = Networks.POLYGON_MUMBAI;
-export const DEFAULT_NETWORK = Networks.HARDHAT;
+// export const DEFAULT_NETWORK = Networks.HARDHAT;

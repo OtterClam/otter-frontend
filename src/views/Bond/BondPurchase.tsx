@@ -196,11 +196,8 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
         bond.autostake && (
           <div className="help-text">
             <p className="help-text-desc">
-              Note: The (4,4) bond will auto stake when purchasing, which means you earn all rebase reward during the
-              vesting term.
-            </p>
-            <p className="help-text-desc">
-              You don't need to claim it every epoch. But you can only claim sCLAM after its fully vested.
+              Note: The (4, 4) bond will auto stake at the end of each epoch, so you will earn all rebase rewards during
+              the vesting term. Once fully vested, you will only be able to claim sClam.
             </p>
           </div>
         )

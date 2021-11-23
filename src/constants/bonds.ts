@@ -26,8 +26,8 @@ export function listBonds(chainId: number): BondMap {
     frax: {
       key: 'frax',
       name: 'FRAX (4,4)',
-      address: '0xbB57FE325e769DEDB1236525a91cDEd842143fA7',
-      reserve: '0xAB8Eb9F37bD460dF99b11767aa843a8F27FB7A6e',
+      address: '0x5Fa0FBDb07Fe9647B43426dcc79da984f0327E4a',
+      reserve: '0x45c32fa6df82ead1e2ef74d17b76547eddfaff89',
       reserveUnit: 'FRAX',
       type: 'token',
       lpUrl: '',
