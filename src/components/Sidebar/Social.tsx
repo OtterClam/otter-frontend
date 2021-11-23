@@ -3,7 +3,8 @@ import { ReactComponent as GitHub } from 'src/assets/icons/icon_github.svg';
 import { ReactComponent as Twitter } from 'src/assets/icons/icon_twitter.svg';
 import { ReactComponent as Medium } from 'src/assets/icons/icon_medium.svg';
 import { ReactComponent as Docs } from 'src/assets/icons/icon_doc.svg';
-import { DocsLink, GithubLink, MediumLink, TwitterLink } from 'src/constants';
+import { ReactComponent as Discord } from 'src/assets/icons/icon_discord.svg';
+import { DocsLink, GithubLink, MediumLink, TwitterLink, DiscordLink } from 'src/constants';
 
 export default function Social() {
   return (
@@ -22,6 +23,10 @@ export default function Social() {
 
       <Link href={DocsLink} target="_blank">
         <SvgIcon color="primary" component={Docs} />
+      </Link>
+
+      <Link href={DiscordLink} target="_blank">
+        <SvgIcon color="primary" component={Discord} />
       </Link>
     </div>
   );
