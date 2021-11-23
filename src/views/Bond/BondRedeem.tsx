@@ -34,13 +34,15 @@ function BondRedeem({ bondKey }: IBondRedeem) {
   });
   const pendingTransactions = useSelector<IReduxState, IPendingTxn[]>(state => state.pendingTransactions);
 
-  async function onRedeem(autostake: boolean) {
+  const onRedeem = async (autostake: boolean) => {
     await dispatch(redeemBond({ address, bondKey, networkID: chainID, provider, autostake }));
-  }
+  };
 
   const vestingTime = () => {
     return prettyVestingPeriod(currentBlockTime, bondMaturationTime);
   };
+
+  const fullVested = currentBlockTime > bondMaturationTime;
 
   const vestingPeriod = () => {
     return prettifySeconds(vestingTerm, 'day');
@@ -50,9 +52,9 @@ function BondRedeem({ bondKey }: IBondRedeem) {
     return state.bonding[bondKey] && state.bonding[bondKey].bondDiscount;
   });
 
-  const debtRatio = useSelector<IReduxState, number>(state => {
-    return state.bonding[bondKey] && state.bonding[bondKey].debtRatio;
-  });
+  const debtRatio = useSelector<IReduxState, number>(
+    state => state.bonding[bondKey] && state.bonding[bondKey].debtRatio,
+  );
 
   return (
     <Box display="flex" flexDirection="column">
@@ -62,13 +64,17 @@ function BondRedeem({ bondKey }: IBondRedeem) {
           bgcolor="otter.otterBlue"
           color="otter.white"
           onClick={() => {
+            if (bond.autostake && !fullVested) {
+              window.alert('You can only claim (4,4) bond after it fully vested.');
+              return;
+            }
             if (isPendingTxn(pendingTransactions, 'redeem_bond_' + bondKey)) return;
             onRedeem(false);
           }}
         >
           <p>{txnButtonText(pendingTransactions, 'redeem_bond_' + bondKey, 'Claim')}</p>
         </Box>
-        {!bond.deprecated && (
+        {!bond.deprecated && !bond.autostake && (
           <Box
             className="transaction-button app-otter-button"
             bgcolor="otter.otterBlue"
@@ -88,15 +94,23 @@ function BondRedeem({ bondKey }: IBondRedeem) {
           <div className="data-row">
             <p className="bond-balance-title">Pending Rewards</p>
             <p className="price-data bond-balance-value">
-              {isBondLoading ? <Skeleton width="100px" /> : `${trim(interestDue, 4)} CLAM`}
+              {isBondLoading ? (
+                <Skeleton width="100px" />
+              ) : bond.autostake ? (
+                `${trim(interestDue, 4)} sCLAM`
+              ) : (
+                `${trim(interestDue, 4)} CLAM`
+              )}
             </p>
           </div>
-          <div className="data-row">
-            <p className="bond-balance-title">Claimable Rewards</p>
-            <p className="price-data bond-balance-value">
-              {isBondLoading ? <Skeleton width="100px" /> : `${trim(pendingPayout, 4)} CLAM`}
-            </p>
-          </div>
+          {!bond.autostake && (
+            <div className="data-row">
+              <p className="bond-balance-title">Claimable Rewards</p>
+              <p className="price-data bond-balance-value">
+                {isBondLoading ? <Skeleton width="100px" /> : `${trim(pendingPayout, 4)} CLAM`}
+              </p>
+            </div>
+          )}
           <div className="data-row">
             <p className="bond-balance-title">Time until fully vested</p>
             <p className="price-data bond-balance-value">

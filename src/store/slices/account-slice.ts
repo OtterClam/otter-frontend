@@ -155,17 +155,20 @@ export const calculateUserBondDetails = createAsyncThunk(
   async ({ address, bondKey, networkID, provider }: ICalculateUserBondDetails): Promise<IUserBindDetails> => {
     if (!address) return {};
 
+    const addresses = getAddresses(networkID);
+    const bond = getBond(bondKey, networkID);
     const bondContract = contractForBond(bondKey, networkID, provider);
     const reserveContract = contractForReserve(bondKey, networkID, provider);
+    const sCLAM = new ethers.Contract(addresses.sCLAM_ADDRESS, StakedClamContract, provider);
 
     let interestDue, pendingPayout, bondMaturationTime;
 
     const bondDetails = await bondContract.bondInfo(address);
-    interestDue = bondDetails.payout / Math.pow(10, 9);
+    interestDue =
+      (bond.autostake ? await sCLAM.balanceForGons(bondDetails.gonsPayout) : bondDetails.payout) / Math.pow(10, 9);
     bondMaturationTime = +bondDetails.vesting + +bondDetails.lastTimestamp;
     pendingPayout = await bondContract.pendingPayoutFor(address);
 
-    const bond = getBond(bondKey, networkID);
     const allowance = await reserveContract.allowance(address, bond.address);
     const balance = ethers.utils.formatEther(await reserveContract.balanceOf(address));
 

@@ -2,6 +2,7 @@ import { SvgIcon } from '@material-ui/core';
 import { ReactComponent as MAI } from '../assets/tokens/MAI.svg';
 import { ReactComponent as CLAM } from '../assets/tokens/CLAM.svg';
 import { ReactComponent as StakedClam } from '../assets/tokens/sCLAM.svg';
+import FRAX from '../assets/tokens/FRAX.png';
 
 function getMAITokenImage(size: number = 32) {
   const style = { height: size, width: size };
@@ -18,12 +19,13 @@ function getStakedCLAMTokenImage(size: number = 32) {
   return <SvgIcon component={StakedClam} viewBox="0 0 100 100" style={style} />;
 }
 
-export type Token = 'clam' | 'mai' | 'sclam' | 'clam2' | 'sclam2';
+export type Token = 'clam' | 'mai' | 'sclam' | 'clam2' | 'sclam2' | 'frax';
 
 export function getTokenImage(name: Token, size?: number): JSX.Element {
   if (name === 'mai') return getMAITokenImage(size);
   if (name === 'clam' || name === 'clam2') return getCLAMTokenImage(size);
   if (name === 'sclam' || name === 'sclam2') return getStakedCLAMTokenImage(size);
+  if (name === 'frax') return <img src={FRAX} style={{ width: size, height: size, borderRadius: (size || 0) / 2 }} />;
 
   throw Error(`Token image doesn't support: ${name}`);
 }

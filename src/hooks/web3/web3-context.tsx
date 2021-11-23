@@ -2,9 +2,7 @@ import React, { useState, ReactElement, useContext, useMemo, useCallback } from 
 import Web3Modal from 'web3modal';
 import { StaticJsonRpcProvider, JsonRpcProvider, Web3Provider } from '@ethersproject/providers';
 import WalletConnectProvider from '@walletconnect/web3-provider';
-import { getTestnetURI, getMainnetURI } from './helpers';
-import { DEFAULT_NETWORK } from '../../constants';
-import { Networks } from '../../constants';
+import { DEFAULT_NETWORK, Networks, RPCURL } from '../../constants';
 
 type onChainProvider = {
   connect: () => Promise<Web3Provider>;
@@ -47,7 +45,8 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
   const [chainID, setChainID] = useState(DEFAULT_NETWORK);
   const [address, setAddress] = useState('');
 
-  const [uri, setUri] = useState(chainID === Networks.POLYGON_MUMBAI ? getTestnetURI() : getMainnetURI());
+  const rpcUrl = (RPCURL as any)[chainID];
+  const [uri, setUri] = useState(rpcUrl);
   const [provider, setProvider] = useState<JsonRpcProvider>(new StaticJsonRpcProvider(uri));
 
   const [web3Modal] = useState<Web3Modal>(
@@ -57,10 +56,7 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
         walletconnect: {
           package: WalletConnectProvider,
           options: {
-            rpc: {
-              [Networks.POLYGON_MAINNET]: uri,
-              [Networks.POLYGON_MUMBAI]: uri,
-            },
+            rpc: RPCURL,
           },
         },
       },
@@ -96,15 +92,20 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
   );
 
   const _checkNetwork = (otherChainID: number): Boolean => {
-    if (Number(otherChainID) !== Networks.POLYGON_MAINNET) {
+    if (
+      Number(otherChainID) !== Networks.POLYGON_MAINNET &&
+      Number(otherChainID) !== Networks.POLYGON_MUMBAI &&
+      Number(otherChainID) !== Networks.HARDHAT
+    ) {
       alert('Please switch your wallet to Polygon network to use OtterClam!');
     }
 
     if (chainID !== otherChainID) {
       console.warn('You are switching networks: ', otherChainID);
-      if (otherChainID === Networks.POLYGON_MAINNET || otherChainID === Networks.POLYGON_MUMBAI) {
+      const rpcUrl = (RPCURL as any)[otherChainID];
+      if (rpcUrl) {
         setChainID(otherChainID);
-        otherChainID === Networks.POLYGON_MAINNET ? setUri(getMainnetURI()) : setUri(getTestnetURI());
+        setUri(rpcUrl);
         return true;
       }
       return false;

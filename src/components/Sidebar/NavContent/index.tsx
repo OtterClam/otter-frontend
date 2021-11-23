@@ -37,6 +37,7 @@ function NavContent() {
   });
   const addresses = getAddresses(networkID);
   const { CLAM_ADDRESS } = addresses;
+  const fiveDayRate = useSelector<IReduxState, number>(state => state.app.fiveDayRate);
 
   const checkPage = useCallback((location: any, page: Page): boolean => {
     const currentPath = location.pathname.replace('/', '');
@@ -122,7 +123,12 @@ function NavContent() {
                         <p>
                           {bond.name}
                           {!bond.deprecated && (
-                            <span className="bond-pair-roi">{bond.discount && trim(bond.discount * 100, 2)}%</span>
+                            <>
+                              <span className="bond-pair-roi">
+                                {bond.discount && trim(bond.discount * 100, 2)}%
+                                {bond.autostake && ` + ${trim(fiveDayRate * 100, 2)}%`}
+                              </span>
+                            </>
                           )}
                         </p>
                       )}

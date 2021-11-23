@@ -1,4 +1,5 @@
 export { abi as OtterBond } from './OtterBondDepository.json';
+export { abi as OtterBondStake } from './OtterBondStakeDepository.json';
 
 export { abi as MaiReserveContract } from './reserves/MaiContract.json';
 export { abi as ClamMaiReserveContract } from './reserves/ClamMaiContract.json';
