@@ -166,19 +166,35 @@ export function BondTableData({ bondKey }: IBondProps) {
         </p>
       </TableCell>
       <TableCell>
-        <Link component={NavLink} to={`/bonds/${bondKey}`}>
-          <Box
-            bgcolor="otter.otterBlue"
-            color="otter.white"
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            height="44px"
-            className="bond-table-btn"
-          >
-            <p>{bond.deprecated ? 'Redeem' : 'Bond'}</p>
-          </Box>
-        </Link>
+        <div className="bond-table-actions">
+          {!bond.deprecated && (
+            <Link className="bond-table-action-button" component={NavLink} to={`/bonds/${bondKey}?tab=bond`}>
+              <Box
+                bgcolor="otter.otterBlue"
+                color="otter.white"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                height="44px"
+                className="bond-table-btn"
+              >
+                <p>Bond</p>
+              </Box>
+            </Link>
+          )}
+          <Link className="bond-table-action-button" component={NavLink} to={`/bonds/${bondKey}?tab=redeem`}>
+            <Box
+              color="otter.otterBlue"
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              height="44px"
+              className="bond-table-btn bond-table-btn__redeem"
+            >
+              <p>Redeem</p>
+            </Box>
+          </Link>
+        </div>
       </TableCell>
     </TableRow>
   );
