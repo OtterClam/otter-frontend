@@ -168,7 +168,7 @@ export function BondTableData({ bondKey }: IBondProps) {
       <TableCell>
         <div className="bond-table-actions">
           {!bond.deprecated && (
-            <Link className="bond-table-action-button" component={NavLink} to={`/bonds/${bondKey}?tab=bond`}>
+            <Link className="bond-table-action-button" component={NavLink} to={`/bonds/${bondKey}?action=bond`}>
               <Box
                 bgcolor="otter.otterBlue"
                 color="otter.white"
@@ -182,7 +182,7 @@ export function BondTableData({ bondKey }: IBondProps) {
               </Box>
             </Link>
           )}
-          <Link className="bond-table-action-button" component={NavLink} to={`/bonds/${bondKey}?tab=redeem`}>
+          <Link className="bond-table-action-button" component={NavLink} to={`/bonds/${bondKey}?action=redeem`}>
             <Box
               color="otter.otterBlue"
               display="flex"

@@ -2,7 +2,8 @@ import { Backdrop, Box, Fade, Grid, Paper, Tab, Tabs } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { BondKey, getBond } from 'src/constants';
+import { useLocation } from 'react-router';
+import { Bond as BondType, BondAction, BondKey, getBond } from 'src/constants';
 import TabPanel from '../../components/TabPanel';
 import { trim } from '../../helpers';
 import { useWeb3Context } from '../../hooks';
@@ -29,7 +30,7 @@ function Bond({ bondKey }: IBondProps) {
   const [slippage, setSlippage] = useState(0.5);
   const [recipientAddress, setRecipientAddress] = useState(address);
 
-  const [view, setView] = useState(0);
+  const [view, setView] = useState(BondAction.Redeem);
   const [quantity, setQuantity] = useState();
 
   const bond = useMemo(() => getBond(bondKey, chainID), [bondKey, chainID]);
@@ -51,7 +52,9 @@ function Bond({ bondKey }: IBondProps) {
     if (address) setRecipientAddress(address);
   }, [provider, quantity, address]);
 
-  const changeView = (event: any, newView: number) => {
+  useActionEffect(bond, setView);
+
+  const changeView = (event: any, newView: BondAction) => {
     setView(newView);
   };
 
@@ -100,8 +103,8 @@ function Bond({ bondKey }: IBondProps) {
                 aria-label="bond tabs"
                 className="bond-one-table"
               >
-                {!bond.deprecated && <Tab label="Bond" {...a11yProps(0)} />}
-                <Tab label="Redeem" {...a11yProps(1)} />
+                {!bond.deprecated && <Tab value={BondAction.Bond} label="Bond" {...a11yProps(0)} />}
+                <Tab value={BondAction.Redeem} label="Redeem" {...a11yProps(1)} />
               </Tabs>
 
               {!bond.deprecated && (
@@ -119,6 +122,20 @@ function Bond({ bondKey }: IBondProps) {
       </Grid>
     </Fade>
   );
+}
+
+function useActionEffect(bond: BondType, cb: (action: BondAction) => void) {
+  const location = useLocation();
+  const query = new URLSearchParams(location.search.substr(1));
+  let action = query.get('action');
+
+  if (action !== BondAction.Bond && action !== BondAction.Redeem) {
+    action = bond.deprecated ? BondAction.Redeem : BondAction.Bond;
+  }
+
+  useEffect(() => {
+    cb(action as BondAction);
+  }, [action]);
 }
 
 export default Bond;
