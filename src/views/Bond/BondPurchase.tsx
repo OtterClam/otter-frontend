@@ -150,7 +150,7 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
         <FormControl className="ohm-input" variant="outlined" color="primary" fullWidth>
           <InputLabel htmlFor="outlined-adornment-amount"></InputLabel>
           <OutlinedInput
-            placeholder="Amount"
+            placeholder="Mai Amount"
             id="outlined-adornment-amount"
             type="number"
             value={quantity}
