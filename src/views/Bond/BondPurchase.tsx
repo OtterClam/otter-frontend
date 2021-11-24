@@ -245,7 +245,9 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
               {isBondLoading ? (
                 <Skeleton width="100px" />
               ) : (
-                `${trim(bondDiscount * 100, 2)}%` + (bond.autostake && `+ staking ${trim(fiveDayRate * 100, 2)}%`)
+                <>
+                  {trim(bondDiscount * 100, 2)}%{bond.autostake && `+ staking ${trim(fiveDayRate * 100, 2)}%`}
+                </>
               )}
             </p>
           </div>
