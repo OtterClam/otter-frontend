@@ -124,7 +124,7 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
   }, [allowance]);
 
   const setMax = () => {
-    setQuantity((balance || '').toString());
+    setQuantity((balance.toFixed(3) || '').toString());
   };
   const fiveDayRate = useSelector<IReduxState, number>(state => state.app.fiveDayRate);
 
