@@ -4,6 +4,8 @@ export type BondKey = 'frax' | 'mai' | 'mai_clam' | 'mai-v1' | 'mai_clam_v2-v1' 
 
 export const BondKeys: BondKey[] = ['frax', 'mai', 'mai_clam', 'mai-v1', 'mai_clam-v1', 'mai_clam_v2-v1'];
 
+export const ReserveKeys: BondKey[] = ['mai', 'frax'];
+
 export interface Bond {
   key: BondKey;
   name: string;

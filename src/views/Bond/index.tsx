@@ -55,8 +55,6 @@ function Bond({ bondKey }: IBondProps) {
     setView(newView);
   };
 
-  let bondToken = 'MAI';
-
   return (
     <Fade in={true} mountOnEnter unmountOnExit>
       <Grid container id="bond-view">
@@ -82,7 +80,7 @@ function Bond({ bondKey }: IBondProps) {
                     ) : bond.type === 'lp' ? (
                       `$${trim(bondPrice, 2)}`
                     ) : (
-                      `${trim(bondPrice, 2)} ${bondToken}`
+                      `${trim(bondPrice, 2)} ${bond.reserveUnit}`
                     )}
                   </Box>
                 </div>

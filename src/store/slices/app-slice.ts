@@ -1,17 +1,16 @@
+import { JsonRpcProvider } from '@ethersproject/providers';
+import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
 import { BigNumber, ethers } from 'ethers';
-import { getAddresses, getBond, BondKey } from '../../constants';
 import {
-  StakingContract,
-  StakedClamContract,
   BondingCalcContract,
   ClamCirculatingSupply,
   ClamTokenContract,
   ClamTokenMigrator,
+  StakedClamContract,
+  StakingContract,
 } from '../../abi';
-import { addressForReserve, contractForReserve, setAll } from '../../helpers';
-import { createSlice, createSelector, createAsyncThunk } from '@reduxjs/toolkit';
-import { JsonRpcProvider } from '@ethersproject/providers';
-import { getMarketPrice, getTokenPrice } from '../../helpers';
+import { getAddresses, ReserveKeys } from '../../constants';
+import { addressForReserve, contractForReserve, getMarketPrice, getTokenPrice, setAll } from '../../helpers';
 
 const initialState = {
   loading: true,
@@ -67,8 +66,16 @@ export const loadAppDetails = createAsyncThunk(
     );
     const stakingContract = new ethers.Contract(addresses.STAKING_ADDRESS, StakingContract, provider);
 
+    let reserveAmount = (
+      await Promise.all(
+        ReserveKeys.map(async key => {
+          const token = contractForReserve(key, networkID, provider);
+          return (await token.balanceOf(addresses.TREASURY_ADDRESS)) / 1e18;
+        }),
+      )
+    ).reduce((prev, value) => prev + value);
+
     const mai = contractForReserve('mai', networkID, provider);
-    const maiAmount = (await mai.balanceOf(addresses.TREASURY_ADDRESS)) / 1e18;
 
     const lp = contractForReserve('mai_clam', networkID, provider);
     const maiClamAmount = await lp.balanceOf(addresses.TREASURY_ADDRESS);
@@ -77,8 +84,8 @@ export const loadAppDetails = createAsyncThunk(
     const maiClamUSD = (valuation / 1e9) * (markdown / 1e18);
     const [rfvLPValue, pol] = await getDiscountedPairUSD(maiClamAmount, networkID, provider);
 
-    const treasuryBalance = maiAmount + maiClamUSD;
-    const treasuryRiskFreeValue = maiAmount + rfvLPValue;
+    const treasuryBalance = reserveAmount + maiClamUSD;
+    const treasuryRiskFreeValue = reserveAmount + rfvLPValue;
 
     const stakingBalance = await stakingContract.contractBalance();
     const circSupply = (await clamCirculatingSupply.CLAMCirculatingSupply()) / 1e9;
