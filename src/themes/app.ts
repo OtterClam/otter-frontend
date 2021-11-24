@@ -7,6 +7,7 @@ const colorPalette = {
     clamPinkHover: '#F5523C',
     otterBlue: '#3B4BD8',
     otterBlueHover: '#303FC7',
+    otterGreen: '#38D076',
     white: '#FFFFFF',
   },
   light: {

@@ -2,6 +2,7 @@ import { Box, Link, Paper, Slide, TableCell, TableRow } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
+import { LabelChip } from 'src/components/Chip';
 import { BondKey, getBond } from 'src/constants';
 import BondLogo from '../../components/BondLogo';
 import { priceUnits, trim } from '../../helpers';
@@ -125,6 +126,7 @@ export function BondTableData({ bondKey }: IBondProps) {
       <TableCell align="left">
         <BondLogo bond={bond} />
         <div className="bond-name">
+          {bond.deprecated && <LabelChip label="Deprecated" className="bond-name-label" />}
           <p className="bond-name-title">{bond.name}</p>
           {bond.type === 'lp' && !bond.deprecated && (
             <Link color="primary" href={bond.lpUrl} target="_blank">
