@@ -17,14 +17,14 @@ export interface StatusChipProps extends Omit<ChipProps, 'icon'> {
   status?: Status;
 }
 
-export function StatusChip({ status = Status.Success, ...restProps }: StatusChipProps) {
+export function StatusChip({ className, status = Status.Success, ...restProps }: StatusChipProps) {
   const theme = useTheme();
   const color = {
-    [Status.Success]: '',
+    [Status.Success]: theme.palette.otter.otterGreen,
   }[status];
-  const icon = <span />;
-  console.log(theme);
-  return <Chip icon={icon} {...restProps} />;
+  className = classNames(className, 'chip--status');
+  const icon = <span className="chip__dot" style={{ background: color }} />;
+  return <Chip icon={icon} className={className} {...restProps} style={{ color }} />;
 }
 
 export type LabelChipProps = ChipProps;

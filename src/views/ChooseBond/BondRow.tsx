@@ -2,7 +2,7 @@ import { Box, Link, Paper, Slide, TableCell, TableRow } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { LabelChip } from 'src/components/Chip';
+import { LabelChip, Status, StatusChip } from 'src/components/Chip';
 import { BondKey, getBond } from 'src/constants';
 import BondLogo from '../../components/BondLogo';
 import { priceUnits, trim } from '../../helpers';
@@ -120,6 +120,10 @@ export function BondTableData({ bondKey }: IBondProps) {
     return state.bonding[bondKey] && state.bonding[bondKey].purchased;
   });
   const fiveDayRate = useSelector<IReduxState, number>(state => state.app.fiveDayRate);
+  const marketPrice = useSelector<IReduxState, number | undefined>(state => {
+    return state.bonding[bondKey] && state.bonding[bondKey].marketPrice;
+  });
+  const priceDiff = Math.floor((bondPrice ?? 0) - (marketPrice ?? 0));
 
   return (
     <TableRow id={`${bondKey}--bond`}>
@@ -138,12 +142,13 @@ export function BondTableData({ bondKey }: IBondProps) {
         </div>
       </TableCell>
       <TableCell align="center">
-        <p className="bond-name-title">
-          <>
+        <div className="bond-name-container">
+          <p className="bond-name-title">
             <span className="currency-icon">{priceUnits(bondKey)}</span>
-            {isBondLoading ? <Skeleton width="50px" /> : bond.deprecated ? '-' : trim(bondPrice, 2)}
-          </>
-        </p>
+            <span>{isBondLoading ? <Skeleton width="50px" /> : bond.deprecated ? '-' : trim(bondPrice, 2)}</span>
+          </p>
+          {priceDiff > 0 && <StatusChip status={Status.Success} label={`$${priceDiff} cheaper!`} />}
+        </div>
       </TableCell>
       <TableCell align="right">
         <p className="bond-name-title">

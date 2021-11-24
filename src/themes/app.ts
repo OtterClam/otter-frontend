@@ -1,4 +1,4 @@
-import { createTheme, responsiveFontSizes } from '@material-ui/core/styles';
+import { createTheme, responsiveFontSizes, Theme as MuiTheme } from '@material-ui/core/styles';
 import commonSettings from './global';
 
 const colorPalette = {
@@ -43,6 +43,10 @@ declare module '@material-ui/core/styles/createPalette' {
     otter: typeof colorPalette['common'];
     mode: typeof colorPalette['light'];
   }
+}
+
+export interface Theme extends MuiTheme {
+  otter: typeof colorPalette['common'];
 }
 
 export const light = responsiveFontSizes(
