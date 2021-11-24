@@ -97,7 +97,7 @@ export const loadAppDetails = createAsyncThunk(
     const fiveDayRate = Math.pow(1 + stakingRebase, 5 * 3) - 1;
     const stakingAPY = Math.pow(1 + stakingRebase, 365 * 3) - 1;
     const stakingRatio = sClamCirc / circSupply;
-    const backingPerClam = treasuryRiskFreeValue / circSupply;
+    const backingPerClam = treasuryBalance / circSupply;
 
     const currentIndex = await stakingContract.index();
     const nextRebase = epoch.endTime.toNumber();
@@ -162,7 +162,6 @@ async function getDiscountedPairUSD(
 
   const pol = lpAmount.mul(100).div(total_lp).toNumber() / 100;
   const part2 = Math.sqrt(kLast) * 2;
-  // return [pol * lp_token_2, pol];
   return [pol * part2, pol];
 }
 
