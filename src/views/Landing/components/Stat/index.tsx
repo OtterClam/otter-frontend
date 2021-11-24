@@ -1,4 +1,3 @@
-import React from 'react';
 import './stat.scss';
 import { Grid } from '@material-ui/core';
 import { useSelector } from 'react-redux';

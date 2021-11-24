@@ -8,7 +8,7 @@ import { AppThemeProvider } from 'src/helpers/app-theme-context';
 
 function Root() {
   const isApp = (): boolean => {
-    return window.location.host.includes('app') || process.env.NODE_ENV === 'development';
+    return window.location.host.includes('app');
   };
 
   const isIDO = (): boolean => {
