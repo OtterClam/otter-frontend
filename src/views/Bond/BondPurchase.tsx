@@ -124,7 +124,11 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
   }, [allowance]);
 
   const setMax = () => {
-    setQuantity((balance.toFixed(3) || '').toString());
+    if (bond.key === 'frax') {
+      setQuantity((Math.min(500, balance).toFixed(3) || '').toString());
+    } else {
+      setQuantity((balance.toFixed(3) || '').toString());
+    }
   };
   const fiveDayRate = useSelector<IReduxState, number>(state => state.app.fiveDayRate);
 
@@ -146,6 +150,7 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
 
   return (
     <Box display="flex" flexDirection="column">
+      {bond.key === 'frax' && <p className="help-text-desc">Each wallet is limited to 500 FRAX for a fair launch</p>}
       <div className={`${styles.input} input-container`}>
         <FormControl className="ohm-input" variant="outlined" color="primary" fullWidth>
           <InputLabel htmlFor="outlined-adornment-amount"></InputLabel>
