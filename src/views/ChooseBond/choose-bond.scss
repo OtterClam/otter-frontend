@@ -88,9 +88,6 @@
         margin-right: 3px;
       }
     }
-    &.MuiTableCell-alignLeft {
-      display: flex;
-    }
   }
 
   .MuiTableBody-root .MuiTableRow-root .MuiTableCell-alignLeft {
@@ -134,6 +131,9 @@
         margin-left: 3px !important;
         font-size: 1.2em !important;
       }
+    }
+    .bond-name-cell {
+      display: flex;
     }
   }
 }

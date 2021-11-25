@@ -132,17 +132,19 @@ export function BondTableData({ bondKey }: IBondProps) {
   return (
     <TableRow id={`${bondKey}--bond`}>
       <TableCell align="left">
-        <BondLogo bond={bond} />
-        <div className="bond-name">
-          {bond.deprecated && <LabelChip label="Deprecated" className="bond-name-label" />}
-          <p className="bond-name-title">{bond.name}</p>
-          {bond.type === 'lp' && !bond.deprecated && (
-            <Link color="primary" href={bond.lpUrl} target="_blank">
-              <Box component="p" color="otter.otterBlue" className="bond-lp-add-liquidity">
-                Add Liquidity
-              </Box>
-            </Link>
-          )}
+        <div className="bond-name-cell">
+          <BondLogo bond={bond} />
+          <div className="bond-name">
+            {bond.deprecated && <LabelChip label="Deprecated" className="bond-name-label" />}
+            <p className="bond-name-title">{bond.name}</p>
+            {bond.type === 'lp' && !bond.deprecated && (
+              <Link color="primary" href={bond.lpUrl} target="_blank">
+                <Box component="p" color="otter.otterBlue" className="bond-lp-add-liquidity">
+                  Add Liquidity
+                </Box>
+              </Link>
+            )}
+          </div>
         </div>
       </TableCell>
       <TableCell align="center">
