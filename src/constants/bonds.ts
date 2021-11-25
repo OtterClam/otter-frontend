@@ -13,7 +13,7 @@ export interface Bond {
   reserve: string;
   reserveUnit: string;
   type: 'token' | 'lp';
-  lpUrl: string;
+  dexUrl: string;
   deprecated: boolean;
   autostake: boolean;
 }
@@ -32,7 +32,7 @@ export function listBonds(chainId: number): BondMap {
       reserve: '0x45c32fa6df82ead1e2ef74d17b76547eddfaff89',
       reserveUnit: 'FRAX',
       type: 'token',
-      lpUrl: '',
+      dexUrl: 'https://app.sushi.com/swap?outputCurrency=0x45c32fA6DF82ead1e2EF74d17b76547EDdFaFF89',
       deprecated: false,
       autostake: true,
     },
@@ -43,7 +43,7 @@ export function listBonds(chainId: number): BondMap {
       reserve: RESERVES.MAI,
       reserveUnit: 'MAI',
       type: 'token',
-      lpUrl: '',
+      dexUrl: `https://quickswap.exchange/#/swap?outputCurrency=${MAI_ADDRESS}`,
       deprecated: false,
       autostake: false,
     },
@@ -54,7 +54,7 @@ export function listBonds(chainId: number): BondMap {
       reserve: RESERVES.MAI_CLAM,
       reserveUnit: 'LP',
       type: 'lp',
-      lpUrl: `https://quickswap.exchange/#/add/${MAI_ADDRESS}/${CLAM_ADDRESS}`,
+      dexUrl: `https://quickswap.exchange/#/add/${MAI_ADDRESS}/${CLAM_ADDRESS}`,
       deprecated: false,
       autostake: false,
     },

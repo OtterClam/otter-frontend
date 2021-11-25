@@ -38,9 +38,9 @@ export function BondDataCard({ bondKey }: IBondProps) {
             <p className="bond-name-title">{bond.name}</p>
             {bond.type === 'lp' && (
               <div>
-                <Link href={bond.lpUrl} target="_blank">
+                <Link href={bond.dexUrl} target="_blank">
                   <Box component="p" color="otter.otterBlue" className="bond-lp-add-liquidity">
-                    Add Liquidity
+                    {bond.type === 'lp' ? 'Add Liquidity' : `Buy ${bond.reserveUnit}`}
                   </Box>
                 </Link>
               </div>
@@ -62,7 +62,7 @@ export function BondDataCard({ bondKey }: IBondProps) {
           <p className="bond-name-title">ROI</p>
           <p className="bond-name-title">
             {isBondLoading ? <Skeleton width="50px" /> : bond.deprecated ? '-' : `${trim(bondDiscount * 100, 2)}%`}
-            {bond.autostake && ` + ${trim(fiveDayRate * 100, 2)}%`}
+            {!bond.deprecated && bond.autostake && ` + ${trim(fiveDayRate * 100, 2)}%`}
           </p>
         </div>
 
@@ -126,10 +126,10 @@ export function BondTableData({ bondKey }: IBondProps) {
         <BondLogo bond={bond} />
         <div className="bond-name">
           <p className="bond-name-title">{bond.name}</p>
-          {bond.type === 'lp' && !bond.deprecated && (
-            <Link color="primary" href={bond.lpUrl} target="_blank">
+          {!bond.deprecated && (
+            <Link color="primary" href={bond.dexUrl} target="_blank">
               <Box component="p" color="otter.otterBlue" className="bond-lp-add-liquidity">
-                Add Liquidity
+                {bond.type === 'lp' ? 'Add Liquidity' : `Buy ${bond.reserveUnit}`}
               </Box>
             </Link>
           )}
@@ -146,7 +146,7 @@ export function BondTableData({ bondKey }: IBondProps) {
       <TableCell align="right">
         <p className="bond-name-title">
           {isBondLoading ? <Skeleton /> : bond.deprecated ? '-' : `${trim(bondDiscount * 100, 2)}%`}
-          {bond.autostake && ` + ${trim(fiveDayRate * 100, 2)}%`}
+          {!bond.deprecated && bond.autostake && ` + ${trim(fiveDayRate * 100, 2)}%`}
         </p>
       </TableCell>
       <TableCell align="right">
