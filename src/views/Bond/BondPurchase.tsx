@@ -51,6 +51,9 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
   const maxBondPrice = useSelector<IReduxState, number>(state => {
     return state.bonding[bondKey] && state.bonding[bondKey].maxBondPrice;
   });
+  const bondPrice = useSelector<IReduxState, number>(state => {
+    return state.bonding[bondKey] && state.bonding[bondKey].bondPrice;
+  });
   const interestDue = useSelector<IReduxState, number>(state => {
     //@ts-ignore
     return state.account[bondKey] && state.account[bondKey].interestDue;
@@ -124,7 +127,9 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
   }, [allowance]);
 
   const setMax = () => {
-    setQuantity((balance || '').toString());
+    if (bondPrice && balance) {
+      setQuantity((balance / bondPrice).toString());
+    }
   };
   const fiveDayRate = useSelector<IReduxState, number>(state => state.app.fiveDayRate);
 
@@ -150,7 +155,7 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
         <FormControl className="ohm-input" variant="outlined" color="primary" fullWidth>
           <InputLabel htmlFor="outlined-adornment-amount"></InputLabel>
           <OutlinedInput
-            placeholder="Mai Amount"
+            placeholder="CLAM Amount"
             id="outlined-adornment-amount"
             type="number"
             value={quantity}
