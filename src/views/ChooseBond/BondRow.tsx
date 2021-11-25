@@ -36,7 +36,7 @@ export function BondDataCard({ bondKey }: IBondProps) {
           <BondLogo bond={bond} />
           <div className="bond-name">
             <p className="bond-name-title">{bond.name}</p>
-            {bond.type === 'lp' && (
+            {!bond.deprecated && (
               <div>
                 <Link href={bond.dexUrl} target="_blank">
                   <Box component="p" color="otter.otterBlue" className="bond-lp-add-liquidity">
