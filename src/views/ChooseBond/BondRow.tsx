@@ -123,6 +123,10 @@ export function BondTableData({ bondKey }: IBondProps) {
   const marketPrice = useSelector<IReduxState, number | undefined>(state => {
     return state.bonding[bondKey] && state.bonding[bondKey].marketPrice;
   });
+  const myBalance = useSelector<IReduxState, number>(state => {
+    //@ts-ignore
+    return state.account[bondKey] && state.account[bondKey].balance;
+  });
   const priceDiff = Math.floor((bondPrice ?? 0) - (marketPrice ?? 0));
 
   return (
@@ -171,6 +175,9 @@ export function BondTableData({ bondKey }: IBondProps) {
             }).format(bondPurchased)
           )}
         </p>
+      </TableCell>
+      <TableCell>
+        <p className="bond-name-title">{myBalance ? myBalance : '-'}</p>
       </TableCell>
       <TableCell>
         <div className="bond-table-actions">

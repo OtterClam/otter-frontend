@@ -94,6 +94,9 @@ function ChooseBond() {
                       <TableCell align="right">
                         <p className="bond-table-title">Purchased</p>
                       </TableCell>
+                      <TableCell align="right">
+                        <p className="bond-table-title">My Bond</p>
+                      </TableCell>
                       <TableCell align="right"></TableCell>
                     </TableRow>
                   </TableHead>
