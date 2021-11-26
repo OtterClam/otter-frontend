@@ -1,8 +1,17 @@
 import { getAddresses } from '.';
 
-export type BondKey = 'frax' | 'frax2' | 'mai' | 'mai_clam' | 'mai-v1' | 'mai_clam_v2-v1' | 'mai_clam-v1';
+export type BondKey = 'frax' | 'frax2' | 'mai' | 'mai44' | 'mai_clam' | 'mai-v1' | 'mai_clam_v2-v1' | 'mai_clam-v1';
 
-export const BondKeys: BondKey[] = ['frax', 'frax2', 'mai', 'mai_clam', 'mai-v1', 'mai_clam-v1', 'mai_clam_v2-v1'];
+export const BondKeys: BondKey[] = [
+  'frax',
+  'frax2',
+  'mai',
+  'mai44',
+  'mai_clam',
+  'mai-v1',
+  'mai_clam-v1',
+  'mai_clam_v2-v1',
+];
 
 export const ReserveKeys: BondKey[] = ['mai', 'frax2'];
 
@@ -57,6 +66,17 @@ export function listBonds(chainId: number): BondMap {
       dexUrl: `https://quickswap.exchange/#/swap?outputCurrency=${MAI_ADDRESS}`,
       deprecated: false,
       autostake: false,
+    },
+    mai44: {
+      key: 'mai44',
+      name: 'MAI (4,4)',
+      address: '0x779CB532e289CbaA3d0692Ae989C63C2B4fBd4d0',
+      reserve: RESERVES.MAI,
+      reserveUnit: 'MAI',
+      type: 'token',
+      dexUrl: `https://quickswap.exchange/#/swap?outputCurrency=${MAI_ADDRESS}`,
+      deprecated: false,
+      autostake: true,
     },
     mai_clam: {
       key: 'mai_clam',
