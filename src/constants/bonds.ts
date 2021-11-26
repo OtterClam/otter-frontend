@@ -58,13 +58,13 @@ export function listBonds(chainId: number): BondMap {
     },
     mai: {
       key: 'mai',
-      name: 'MAI',
+      name: 'MAI v2',
       address: BONDS.MAI,
       reserve: RESERVES.MAI,
       reserveUnit: 'MAI',
       type: 'token',
       dexUrl: `https://quickswap.exchange/#/swap?outputCurrency=${MAI_ADDRESS}`,
-      deprecated: false,
+      deprecated: true,
       autostake: false,
     },
     mai44: {
