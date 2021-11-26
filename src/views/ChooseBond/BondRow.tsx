@@ -153,7 +153,7 @@ export function BondTableData({ bondKey }: IBondProps) {
         <p className="bond-name-title">
           {isBondLoading ? (
             <Skeleton />
-          ) : bond.deprecated || bond.key === 'mai44' ? (
+          ) : bond.deprecated ? (
             '-'
           ) : (
             new Intl.NumberFormat('en-US', {
