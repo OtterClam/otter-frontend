@@ -42,14 +42,6 @@ export interface IAccount {
     warmup: string;
     canClaimWarmup: boolean;
   };
-  migration: {
-    oldClam: string;
-    oldSClam: string;
-    oldWarmup: string;
-    canClaimWarmup: boolean;
-    clamAllowance: number;
-    sCLAMAllowance: number;
-  };
 }
 
 export const getBalances = createAsyncThunk(
@@ -130,14 +122,6 @@ export const loadAccountDetails = createAsyncThunk(
         sClamUnstake: +unstakeAllowance,
         warmup: ethers.utils.formatUnits(warmupBalance, 9),
         canClaimWarmup: warmup[0].gt(0) && epoch[1].gte(warmup[2]),
-      },
-      migration: {
-        oldClam: ethers.utils.formatUnits(oldClamBalance, 9),
-        oldSClam: ethers.utils.formatUnits(oldSClamBalance, 9),
-        oldWarmup: ethers.utils.formatUnits(oldWarmupBalance, 9),
-        canClaimWarmup: oldWarmup[0].gt(0) && epoch[1].gte(oldWarmup[2]),
-        sCLAMAllowance: +oldSClamAllowance,
-        clamAllowance: +clamMigratorAllowance,
       },
     };
   },

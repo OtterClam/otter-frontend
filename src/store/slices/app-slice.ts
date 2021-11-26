@@ -36,9 +36,6 @@ export interface IApp {
   backingPerClam: number;
   treasuryRunway: number;
   pol: number;
-  oldClamTotalSupply: number;
-  oldTreasuryBalance: number;
-  migrateProgress: number;
 }
 
 interface ILoadAppDetails {
@@ -75,8 +72,6 @@ export const loadAppDetails = createAsyncThunk(
       )
     ).reduce((prev, value) => prev + value);
 
-    const mai = contractForReserve('mai', networkID, provider);
-
     const lp = contractForReserve('mai_clam', networkID, provider);
     const maiClamAmount = await lp.balanceOf(addresses.TREASURY_ADDRESS);
     const valuation = await bondCalculator.valuation(addressForReserve('mai_clam', networkID), maiClamAmount);
@@ -109,15 +104,6 @@ export const loadAppDetails = createAsyncThunk(
 
     const treasuryRunway = Math.log(treasuryRiskFreeValue / sClamCirc) / Math.log(1 + stakingRebase) / 3;
 
-    // Migration
-    const oldClamContract = new ethers.Contract(addresses.OLD_CLAM_ADDRESS, ClamTokenContract, provider);
-    const migrator = new ethers.Contract(addresses.MIGRATOR, ClamTokenMigrator, provider);
-    const oldClamTotalSupply = (await oldClamContract.totalSupply()) / 1e9;
-    const oldTreasuryBalance = (await mai.balanceOf(addresses.OLD_TREASURY)) / 1e18;
-    const oldTotalSupply = (await migrator.oldSupply()) / 1e9;
-    const migrateProgress = 1 - oldClamTotalSupply / oldTotalSupply;
-    // End
-
     return {
       currentIndex: ethers.utils.formatUnits(currentIndex, 'gwei'),
       totalSupply,
@@ -136,9 +122,6 @@ export const loadAppDetails = createAsyncThunk(
       backingPerClam,
       treasuryRunway,
       pol,
-      oldClamTotalSupply,
-      oldTreasuryBalance,
-      migrateProgress,
     };
   },
 );
