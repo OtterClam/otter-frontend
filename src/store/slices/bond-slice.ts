@@ -54,13 +54,15 @@ export const changeApproval = createAsyncThunk(
     }
 
     const allowance = await reserveContract.allowance(address, bond.address);
-    const balance = ethers.utils.formatEther(await reserveContract.balanceOf(address));
+    const rawBalance = (await reserveContract.balanceOf(address)).toString();
+    const balance = ethers.utils.formatEther(rawBalance);
 
     return dispatch(
       fetchAccountSuccess({
         [bondKey]: {
           allowance: +allowance,
           balance: +balance,
+          rawBalance,
         },
       }),
     );
@@ -92,6 +94,22 @@ export const calcBondDetails = createAsyncThunk(
     const addresses = getAddresses(networkID);
     const bondContract = contractForBond(bondKey, networkID, provider);
     const bond = getBond(bondKey, networkID);
+
+    // skip loading if bond is deprecated
+    if (bond.deprecated) {
+      return {
+        bond: bondKey,
+        bondDiscount: 1,
+        debtRatio: 1,
+        bondQuote: 1,
+        purchased: 1,
+        vestingTerm: 1,
+        maxBondPrice: 1,
+        bondPrice: 1,
+        marketPrice: '0.0',
+      };
+    }
+
     const bondCalcContract = new ethers.Contract(addresses.CLAM_BONDING_CALC_ADDRESS, BondingCalcContract, provider);
 
     const terms = await bondContract.terms();
@@ -166,12 +184,13 @@ interface IBondAsset {
   provider: JsonRpcProvider;
   slippage: number;
 }
+
 export const bondAsset = createAsyncThunk(
   'bonding/bondAsset',
   async ({ value, address, bondKey, networkID, provider, slippage }: IBondAsset, { dispatch }) => {
     const depositorAddress = address;
     const acceptedSlippage = slippage / 100 || 0.005;
-    const valueInWei = ethers.utils.parseUnits(value.toString(), 'ether');
+    const valueInWei = ethers.utils.parseEther(value);
 
     const signer = provider.getSigner();
     const bondContract = contractForBond(bondKey, networkID, signer);

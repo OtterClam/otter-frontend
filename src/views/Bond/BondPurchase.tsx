@@ -8,6 +8,7 @@ import { IPendingTxn, isPendingTxn, txnButtonText } from '../../store/slices/pen
 import { Skeleton } from '@material-ui/lab';
 import { IReduxState } from '../../store/slices/state.interface';
 import { BondKey, getBond } from 'src/constants';
+import { ethers } from 'ethers';
 
 const useStyles = makeStyles(theme => ({
   input: {
@@ -67,7 +68,11 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
   });
   const balance = useSelector<IReduxState, number>(state => {
     //@ts-ignore
-    return state.account[bondKey] && state.account[bondKey].balance;
+    return state.account[bondKey]?.balance;
+  });
+  const rawBalance = useSelector<IReduxState, string>(state => {
+    //@ts-ignore
+    return state.account[bondKey]?.rawBalance;
   });
   const allowance = useSelector<IReduxState, number>(state => {
     //@ts-ignore
@@ -90,7 +95,9 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
       alert('Please enter a valid value!');
     } else if (interestDue > 0 || pendingPayout > 0) {
       const shouldProceed = window.confirm(
-        'You have an existing bond. Bonding will reset your vesting period and forfeit rewards. We recommend claiming rewards first or using a fresh wallet. Do you still want to proceed?',
+        bond.autostake
+          ? 'You have an existing bond. Bonding will reset your vesting period. Do you still want to process?'
+          : 'You have an existing bond. Bonding will reset your vesting period and forfeit rewards. We recommend claiming rewards first or using a fresh wallet. Do you still want to proceed?',
       );
       if (shouldProceed) {
         await dispatch(
@@ -125,9 +132,13 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
 
   const setMax = () => {
     if (bond.key === 'frax') {
-      setQuantity((Math.min(500, balance).toFixed(3) || '').toString());
+      if (balance < 500) {
+        setQuantity(ethers.utils.formatEther(rawBalance || ''));
+      } else {
+        setQuantity('500');
+      }
     } else {
-      setQuantity((balance.toFixed(3) || '').toString());
+      setQuantity(ethers.utils.formatEther(rawBalance || ''));
     }
   };
   const fiveDayRate = useSelector<IReduxState, number>(state => state.app.fiveDayRate);
@@ -145,7 +156,6 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
     await dispatch(changeApproval({ bondKey, provider, networkID: chainID, address }));
   };
 
-  const balanceUnits = () => bond.reserveUnit;
   const bondUnit = bond.autostake ? 'sCLAM' : 'CLAM';
 
   return (
@@ -220,13 +230,7 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
           <div className="data-row">
             <p className="bond-balance-title">Your Balance</p>
             <p className="bond-balance-value">
-              {isBondLoading ? (
-                <Skeleton width="100px" />
-              ) : (
-                <>
-                  {trim(balance, 4)} {balanceUnits()}
-                </>
-              )}
+              {isBondLoading ? <Skeleton width="100px" /> : <>{`${trim(balance, 4)} ${bond.reserveUnit}`}</>}
             </p>
           </div>
 
