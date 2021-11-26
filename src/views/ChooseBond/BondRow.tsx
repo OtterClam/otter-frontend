@@ -125,7 +125,7 @@ export function BondTableData({ bondKey }: IBondProps) {
   });
   const myBalance = useSelector<IReduxState, number>(state => {
     //@ts-ignore
-    return state.account[bondKey] && state.account[bondKey].balance;
+    return state.account[bondKey] && state.account[bondKey].interestDue;
   });
   const priceDiff = Math.floor((bondPrice ?? 0) - (marketPrice ?? 0));
 
@@ -179,7 +179,9 @@ export function BondTableData({ bondKey }: IBondProps) {
         </p>
       </TableCell>
       <TableCell>
-        <p className="bond-name-title">{myBalance ? myBalance : '-'}</p>
+        <p className="bond-name-title">
+          {myBalance ? `${trim(myBalance, 2)} ${bond.autostake ? 'sCLAM' : 'CLAM'}` : '-'}
+        </p>
       </TableCell>
       <TableCell>
         <div className="bond-table-actions">
