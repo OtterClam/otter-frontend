@@ -131,15 +131,7 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
   }, [allowance]);
 
   const setMax = () => {
-    if (bond.key === 'frax') {
-      if (balance < 500) {
-        setQuantity(ethers.utils.formatEther(rawBalance || ''));
-      } else {
-        setQuantity('500');
-      }
-    } else {
-      setQuantity(ethers.utils.formatEther(rawBalance || ''));
-    }
+    setQuantity(ethers.utils.formatEther(rawBalance || ''));
   };
   const fiveDayRate = useSelector<IReduxState, number>(state => state.app.fiveDayRate);
 
@@ -160,7 +152,6 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
 
   return (
     <Box display="flex" flexDirection="column">
-      {bond.key === 'frax' && <p className="help-text-desc">Each wallet is limited to 500 FRAX for a fair launch</p>}
       <div className={`${styles.input} input-container`}>
         <FormControl className="ohm-input" variant="outlined" color="primary" fullWidth>
           <InputLabel htmlFor="outlined-adornment-amount"></InputLabel>

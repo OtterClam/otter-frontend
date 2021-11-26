@@ -1,10 +1,10 @@
 import { getAddresses } from '.';
 
-export type BondKey = 'frax' | 'mai' | 'mai_clam' | 'mai-v1' | 'mai_clam_v2-v1' | 'mai_clam-v1';
+export type BondKey = 'frax' | 'frax2' | 'mai' | 'mai_clam' | 'mai-v1' | 'mai_clam_v2-v1' | 'mai_clam-v1';
 
-export const BondKeys: BondKey[] = ['frax', 'mai', 'mai_clam', 'mai-v1', 'mai_clam-v1', 'mai_clam_v2-v1'];
+export const BondKeys: BondKey[] = ['frax', 'frax2', 'mai', 'mai_clam', 'mai-v1', 'mai_clam-v1', 'mai_clam_v2-v1'];
 
-export const ReserveKeys: BondKey[] = ['mai', 'frax'];
+export const ReserveKeys: BondKey[] = ['mai', 'frax2'];
 
 export interface Bond {
   key: BondKey;
@@ -27,8 +27,19 @@ export function listBonds(chainId: number): BondMap {
   return {
     frax: {
       key: 'frax',
-      name: 'FRAX (4,4)',
+      name: 'FRAX legacy',
       address: '0x5Fa0FBDb07Fe9647B43426dcc79da984f0327E4a',
+      reserve: '0x45c32fa6df82ead1e2ef74d17b76547eddfaff89',
+      reserveUnit: 'FRAX',
+      type: 'token',
+      dexUrl: 'https://app.sushi.com/swap?outputCurrency=0x45c32fA6DF82ead1e2EF74d17b76547EDdFaFF89',
+      deprecated: true,
+      autostake: true,
+    },
+    frax2: {
+      key: 'frax2',
+      name: 'FRAX (4,4)',
+      address: '0x9e1430EB3b56e8953a342BFBBdD2DDC3b6E84d9D',
       reserve: '0x45c32fa6df82ead1e2ef74d17b76547eddfaff89',
       reserveUnit: 'FRAX',
       type: 'token',
