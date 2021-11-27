@@ -1,4 +1,4 @@
-import { Box, Link, Paper, Slide, TableCell, TableRow } from '@material-ui/core';
+import { Box, Link, Paper, Slide, TableCell, TableRow, Tooltip } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
@@ -37,11 +37,11 @@ export function BondDataCard({ bondKey }: IBondProps) {
           <BondLogo bond={bond} />
           <div className="bond-name">
             <p className="bond-name-title">{bond.name}</p>
-            {bond.type === 'lp' && (
+            {!bond.deprecated && (
               <div>
-                <Link href={bond.lpUrl} target="_blank">
+                <Link href={bond.dexUrl} target="_blank">
                   <Box component="p" color="otter.otterBlue" className="bond-lp-add-liquidity">
-                    Add Liquidity
+                    {bond.type === 'lp' ? 'Add Liquidity' : `Buy ${bond.reserveUnit}`}
                   </Box>
                 </Link>
               </div>
@@ -63,7 +63,11 @@ export function BondDataCard({ bondKey }: IBondProps) {
           <p className="bond-name-title">ROI</p>
           <p className="bond-name-title">
             {isBondLoading ? <Skeleton width="50px" /> : bond.deprecated ? '-' : `${trim(bondDiscount * 100, 2)}%`}
-            {bond.autostake && ` + ${trim(fiveDayRate * 100, 2)}%`}
+            {!bond.deprecated && bond.autostake && (
+              <Tooltip title="* The ROI of (4,4) bond includes 5-days staking reward ">
+                <span>{` + ${trim(fiveDayRate * 100, 2)}%*`}</span>
+              </Tooltip>
+            )}
           </p>
         </div>
 
@@ -137,10 +141,10 @@ export function BondTableData({ bondKey }: IBondProps) {
           <div className="bond-name">
             {bond.deprecated && <LabelChip label="Deprecated" className="bond-name-label" />}
             <p className="bond-name-title">{bond.name}</p>
-            {bond.type === 'lp' && !bond.deprecated && (
-              <Link color="primary" href={bond.lpUrl} target="_blank">
+            {!bond.deprecated && (
+              <Link color="primary" href={bond.dexUrl} target="_blank">
                 <Box component="p" color="otter.otterBlue" className="bond-lp-add-liquidity">
-                  Add Liquidity
+                  {bond.type === 'lp' ? 'Add Liquidity' : `Buy ${bond.reserveUnit}`}
                 </Box>
               </Link>
             )}
@@ -159,7 +163,11 @@ export function BondTableData({ bondKey }: IBondProps) {
       <TableCell align="right">
         <p className="bond-name-title">
           {isBondLoading ? <Skeleton /> : bond.deprecated ? '-' : `${trim(bondDiscount * 100, 2)}%`}
-          {bond.autostake && ` + ${trim(fiveDayRate * 100, 2)}%`}
+          {!bond.deprecated && bond.autostake && (
+            <Tooltip title="* The ROI of (4,4) bond includes 5-days staking reward ">
+              <span>{` + ${trim(fiveDayRate * 100, 2)}%*`}</span>
+            </Tooltip>
+          )}
         </p>
       </TableCell>
       <TableCell align="right">

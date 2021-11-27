@@ -1,5 +1,5 @@
 import groupBy from 'lodash/groupBy';
-import { Box, Grid, Link, makeStyles, Paper, useTheme } from '@material-ui/core';
+import { Box, Grid, Link, makeStyles, Paper, Tooltip, useTheme } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import { useCallback, useContext } from 'react';
 import { useSelector } from 'react-redux';
@@ -166,7 +166,13 @@ function NavContent() {
                         ) : (
                           <p>
                             {bond.name}
-                            <BondROI bond={bond} />
+                            {bond.autostake ? (
+                              <Tooltip title="* The ROI of (4,4) bond includes 5-days staking reward">
+                                <BondROI bond={bond} />
+                              </Tooltip>
+                            ) : (
+                              <BondROI bond={bond} />
+                            )}
                           </p>
                         )}
                       </Link>

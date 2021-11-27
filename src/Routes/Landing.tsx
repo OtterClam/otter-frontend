@@ -8,7 +8,7 @@ import './style.scss';
 function App() {
   const dispatch = useDispatch();
 
-  const { provider, chainID, connected } = useWeb3Context();
+  const { readOnlyProvider, chainID, connected } = useWeb3Context();
 
   const loadApp = useCallback(
     loadProvider => {
@@ -18,7 +18,7 @@ function App() {
   );
 
   useEffect(() => {
-    loadApp(provider);
+    loadApp(readOnlyProvider);
   }, []);
 
   return <Landing />;

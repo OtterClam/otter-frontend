@@ -73,29 +73,30 @@ function Bond({ bondKey }: IBondProps) {
                 onSlippageChange={onSlippageChange}
                 onRecipientAddressChange={onRecipientAddressChange}
               />
-              {/* @ts-ignore */}
-              <Box direction="row" className="bond-price-data-row">
-                <div className="bond-price-data">
-                  <p className="bond-price-data-title">Bond Price</p>
-                  <Box component="p" color="text.secondary" className="bond-price-data-value">
-                    {isBondLoading ? (
-                      <Skeleton />
-                    ) : bond.deprecated ? (
-                      '-'
-                    ) : bond.type === 'lp' ? (
-                      `$${trim(bondPrice, 2)}`
-                    ) : (
-                      `${trim(bondPrice, 2)} ${bond.reserveUnit}`
-                    )}
-                  </Box>
-                </div>
-                <div className="bond-price-data">
-                  <p className="bond-price-data-title">CLAM Price</p>
-                  <Box component="p" color="text.secondary" className="bond-price-data-value">
-                    {isBondLoading ? <Skeleton /> : `$${trim(marketPrice, 2)}`}
-                  </Box>
-                </div>
-              </Box>
+              {!bond.deprecated && (
+                <Box className="bond-price-data-row">
+                  <div className="bond-price-data">
+                    <p className="bond-price-data-title">Bond Price</p>
+                    <Box component="p" color="text.secondary" className="bond-price-data-value">
+                      {isBondLoading ? (
+                        <Skeleton />
+                      ) : bond.deprecated ? (
+                        '-'
+                      ) : bond.type === 'lp' ? (
+                        `$${trim(bondPrice, 2)}`
+                      ) : (
+                        `${trim(bondPrice, 2)} ${bond.reserveUnit}`
+                      )}
+                    </Box>
+                  </div>
+                  <div className="bond-price-data">
+                    <p className="bond-price-data-title">CLAM Price</p>
+                    <Box component="p" color="text.secondary" className="bond-price-data-value">
+                      {isBondLoading ? <Skeleton /> : `$${trim(marketPrice, 2)}`}
+                    </Box>
+                  </div>
+                </Box>
+              )}
 
               <Tabs
                 centered

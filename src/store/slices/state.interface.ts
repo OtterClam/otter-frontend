@@ -4,6 +4,7 @@ import { IApp } from './app-slice';
 import { IBond } from './bond-slice';
 import { IWhitelist } from './whitelist-slice';
 import { IDOState } from './ido-slice';
+import { MigrationState } from './migrate-slice';
 
 export interface IReduxState {
   pendingTransactions: IPendingTxn[];
@@ -12,4 +13,5 @@ export interface IReduxState {
   bonding: IBond;
   whitelist: IWhitelist;
   ido: IDOState;
+  migrate: MigrationState;
 }

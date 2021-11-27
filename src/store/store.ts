@@ -6,6 +6,7 @@ import appReducer from './slices/app-slice';
 import pendingTransactionsReducer from './slices/pending-txns-slice';
 import whitelistReducer from './slices/whitelist-slice';
 import ido from './slices/ido-slice';
+import migrate from './slices/migrate-slice';
 
 const store = configureStore({
   reducer: {
@@ -15,6 +16,7 @@ const store = configureStore({
     pendingTransactions: pendingTransactionsReducer,
     whitelist: whitelistReducer,
     ido,
+    migrate,
   },
 });
 

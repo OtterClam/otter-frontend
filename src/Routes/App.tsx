@@ -64,7 +64,7 @@ function App() {
   const isSmallerScreen = useMediaQuery('(max-width: 960px)');
   const isSmallScreen = useMediaQuery('(max-width: 600px)');
 
-  const { connect, provider, hasCachedProvider, chainID, connected } = useWeb3Context();
+  const { connect, provider, readOnlyProvider, hasCachedProvider, chainID, connected } = useWeb3Context();
   const address = useAddress();
 
   const [walletChecked, setWalletChecked] = useState(false);
@@ -73,7 +73,7 @@ function App() {
   const isAppLoaded = useSelector<IReduxState>(state => typeof state.app.marketPrice != 'undefined');
 
   async function loadDetails(whichDetails: string) {
-    let loadProvider = provider;
+    let loadProvider = readOnlyProvider;
 
     if (whichDetails === 'app') {
       loadApp(loadProvider);

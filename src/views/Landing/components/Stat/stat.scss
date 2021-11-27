@@ -1,7 +1,10 @@
 .landing-footer {
   margin-top: auto;
-  padding: 32px 30%;
-  background-color: #1D2654;
+  padding: 0 30%;
+  background-color: #1d2654;
+  height: 210px;
+  display: flex;
+  align-items: center;
 
   .landing-footer-item-wrap {
     display: flex;

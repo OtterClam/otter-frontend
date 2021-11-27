@@ -61,29 +61,10 @@ function Landing() {
           </div>
         </div>
         <div className="landing__first-section__footer">
-          <img className="landing__first-section__footer__shell" src={Shell} alt="shell" />
           <div className="landing__first-section__footer__wave" />
-          <div className="landing__first-section__footer__banner">
-            <p>Public Launch at</p>
-            <span style={{ color: '#3B4BD8' }}>Nov 3, 2021 0:00 UTC</span>
-            <div className="action-buttons-container">
-              <a href="https://ido.otterclam.finance">
-                <Button variant="outlined" color="primary" size="medium" disableElevation>
-                  Claim IDO CLAMs
-                </Button>
-              </a>
-            </div>
-          </div>
         </div>
       </section>
-
-      {Date.now() < 1635897600000 ? (
-        <div className="countdown">
-          <Countdown />
-        </div>
-      ) : (
-        <Stat />
-      )}
+      <Stat />
       <SecondSection />
       <Footer />
       <Backdrop open={open} className="whitelist-check">

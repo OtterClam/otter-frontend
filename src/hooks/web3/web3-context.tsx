@@ -8,6 +8,7 @@ type onChainProvider = {
   connect: () => Promise<Web3Provider>;
   disconnect: () => void;
   provider: JsonRpcProvider;
+  readOnlyProvider: JsonRpcProvider;
   address: string;
   connected: Boolean;
   web3Modal: Web3Modal;
@@ -48,6 +49,7 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
   const rpcUrl = (RPCURL as any)[chainID];
   const [uri, setUri] = useState(rpcUrl);
   const [provider, setProvider] = useState<JsonRpcProvider>(new StaticJsonRpcProvider(uri));
+  const readOnlyProvider = useMemo(() => new StaticJsonRpcProvider((RPCURL as any)[chainID]), [chainID]);
 
   const [web3Modal] = useState<Web3Modal>(
     new Web3Modal({
@@ -147,8 +149,18 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
   }, [provider, web3Modal, connected]);
 
   const onChainProvider = useMemo(
-    () => ({ connect, disconnect, hasCachedProvider, provider, connected, address, chainID, web3Modal }),
-    [connect, disconnect, hasCachedProvider, provider, connected, address, chainID, web3Modal],
+    () => ({
+      connect,
+      disconnect,
+      hasCachedProvider,
+      provider,
+      connected,
+      address,
+      chainID,
+      web3Modal,
+      readOnlyProvider,
+    }),
+    [connect, disconnect, hasCachedProvider, provider, connected, address, chainID, web3Modal, readOnlyProvider],
   );
   //@ts-ignore
   return <Web3Context.Provider value={{ onChainProvider }}>{children}</Web3Context.Provider>;

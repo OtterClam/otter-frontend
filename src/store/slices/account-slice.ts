@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { Bond, BondKey, getAddresses, getBond } from '../../constants';
+import { BondKey, getAddresses, getBond } from '../../constants';
 import { ClamTokenContract, StakedClamContract, MAIContract, StakingContract } from '../../abi/';
 import { contractForBond, contractForReserve, setAll } from '../../helpers';
 
@@ -21,10 +21,11 @@ interface IAccountProps {
   provider: JsonRpcProvider;
 }
 
-interface IUserBindDetails {
+interface IUserBondDetails {
   bond?: string;
   allowance?: number;
   balance?: number;
+  rawBalance?: string;
   interestDue?: number;
   bondMaturationTime?: number;
   pendingPayout?: number;
@@ -41,14 +42,6 @@ export interface IAccount {
     sClamUnstake: number;
     warmup: string;
     canClaimWarmup: boolean;
-  };
-  migration: {
-    oldClam: string;
-    oldSClam: string;
-    oldWarmup: string;
-    canClaimWarmup: boolean;
-    clamAllowance: number;
-    sCLAMAllowance: number;
   };
 }
 
@@ -79,26 +72,7 @@ export const loadAccountDetails = createAsyncThunk(
     const sClamContract = new ethers.Contract(addresses.sCLAM_ADDRESS, StakedClamContract, provider);
     const stakingContract = new ethers.Contract(addresses.STAKING_ADDRESS, StakingContract, provider);
 
-    // migrate
-    const oldClamContract = new ethers.Contract(addresses.OLD_CLAM_ADDRESS, ClamTokenContract, provider);
-    const oldSClamContract = new ethers.Contract(addresses.OLD_SCLAM_ADDRESS, StakedClamContract, provider);
-    const oldStakingContract = new ethers.Contract(addresses.OLD_STAKING_ADDRESS, StakingContract, provider);
-    // end
-
-    const [
-      maiBalance,
-      clamBalance,
-      stakeAllowance,
-      sClamBalance,
-      unstakeAllowance,
-      warmup,
-      epoch,
-      oldClamBalance,
-      oldSClamBalance,
-      oldWarmup,
-      oldSClamAllowance,
-      clamMigratorAllowance,
-    ] = await Promise.all([
+    const [maiBalance, clamBalance, stakeAllowance, sClamBalance, unstakeAllowance, warmup, epoch] = await Promise.all([
       maiContract.balanceOf(address),
       clamContract.balanceOf(address),
       clamContract.allowance(address, addresses.STAKING_HELPER_ADDRESS),
@@ -106,18 +80,10 @@ export const loadAccountDetails = createAsyncThunk(
       sClamContract.allowance(address, addresses.STAKING_ADDRESS),
       stakingContract.warmupInfo(address),
       stakingContract.epoch(),
-      oldClamContract.balanceOf(address),
-      oldSClamContract.balanceOf(address),
-      oldStakingContract.warmupInfo(address),
-      oldSClamContract.allowance(address, addresses.OLD_STAKING_ADDRESS),
-      oldClamContract.allowance(address, addresses.MIGRATOR),
     ]);
 
     const gons = warmup[1];
     const warmupBalance = await sClamContract.balanceForGons(gons);
-
-    const oldGons = oldWarmup[1];
-    const oldWarmupBalance = await oldSClamContract.balanceForGons(oldGons);
 
     return {
       balances: {
@@ -131,19 +97,11 @@ export const loadAccountDetails = createAsyncThunk(
         warmup: ethers.utils.formatUnits(warmupBalance, 9),
         canClaimWarmup: warmup[0].gt(0) && epoch[1].gte(warmup[2]),
       },
-      migration: {
-        oldClam: ethers.utils.formatUnits(oldClamBalance, 9),
-        oldSClam: ethers.utils.formatUnits(oldSClamBalance, 9),
-        oldWarmup: ethers.utils.formatUnits(oldWarmupBalance, 9),
-        canClaimWarmup: oldWarmup[0].gt(0) && epoch[1].gte(oldWarmup[2]),
-        sCLAMAllowance: +oldSClamAllowance,
-        clamAllowance: +clamMigratorAllowance,
-      },
     };
   },
 );
 
-interface ICalculateUserBondDetails {
+interface CalculateUserBondDetailsActionPayload {
   address: string;
   bondKey: BondKey;
   networkID: number;
@@ -152,7 +110,12 @@ interface ICalculateUserBondDetails {
 
 export const calculateUserBondDetails = createAsyncThunk(
   'bonding/calculateUserBondDetails',
-  async ({ address, bondKey, networkID, provider }: ICalculateUserBondDetails): Promise<IUserBindDetails> => {
+  async ({
+    address,
+    bondKey,
+    networkID,
+    provider,
+  }: CalculateUserBondDetailsActionPayload): Promise<IUserBondDetails> => {
     if (!address) return {};
 
     const addresses = getAddresses(networkID);
@@ -164,21 +127,22 @@ export const calculateUserBondDetails = createAsyncThunk(
     let interestDue, pendingPayout, bondMaturationTime;
 
     const bondDetails = await bondContract.bondInfo(address);
-    interestDue =
-      (bond.autostake ? await sCLAM.balanceForGons(bondDetails.gonsPayout) : bondDetails.payout) / Math.pow(10, 9);
+    interestDue = (bond.autostake ? await sCLAM.balanceForGons(bondDetails.gonsPayout) : bondDetails.payout) / 1e9;
     bondMaturationTime = +bondDetails.vesting + +bondDetails.lastTimestamp;
     pendingPayout = await bondContract.pendingPayoutFor(address);
 
     const allowance = await reserveContract.allowance(address, bond.address);
-    const balance = ethers.utils.formatEther(await reserveContract.balanceOf(address));
+    const rawBalance = (await reserveContract.balanceOf(address)).toString();
+    const balance = ethers.utils.formatEther(rawBalance);
 
     return {
       bond: bondKey,
       allowance: Number(allowance),
       balance: Number(balance),
+      rawBalance,
       interestDue,
       bondMaturationTime,
-      pendingPayout: Number(ethers.utils.formatUnits(pendingPayout, 'gwei')),
+      pendingPayout: Number(ethers.utils.formatUnits(pendingPayout, 9)),
     };
   },
 );

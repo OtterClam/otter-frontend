@@ -1,14 +1,21 @@
-import { useEffect, useRef } from 'react';
-import './migrate.scss';
-import { useSelector, useDispatch } from 'react-redux';
-import { Grid, Box, Paper, TabsActions, Zoom, makeStyles } from '@material-ui/core';
-import { formatCurrency, getTokenImage, trim } from '../../helpers';
-import { approveMigration, approveUnstaking, claimWarmup, migrate, unstake } from '../../store/slices/migrate-thunk';
-import { useWeb3Context } from '../../hooks';
-import { IPendingTxn, isPendingTxn, txnButtonText } from '../../store/slices/pending-txns-slice';
+import { Box, Grid, makeStyles, Paper, TabsActions, Zoom } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
-import { IReduxState } from '../../store/slices/state.interface';
+import { useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import SCLAM from 'src/assets/tokens/sCLAM.png';
+import { formatCurrency, trim } from '../../helpers';
+import { useWeb3Context } from '../../hooks';
+import {
+  approveMigration,
+  approveUnstaking,
+  claimWarmup,
+  loadMigrationDetails,
+  migrate,
+  unstake,
+} from '../../store/slices/migrate-slice';
+import { IPendingTxn, isPendingTxn, txnButtonText } from '../../store/slices/pending-txns-slice';
+import { IReduxState } from '../../store/slices/state.interface';
+import './migrate.scss';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -28,32 +35,24 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function a11yProps(index: number) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
-}
-
 function Migrate() {
   const styles = useStyles();
   const dispatch = useDispatch();
-  const { provider, address, connect, chainID } = useWeb3Context();
+  const { provider, readOnlyProvider, address, connect, connected, chainID } = useWeb3Context();
   const tabsActions = useRef<TabsActions>(null);
 
-  const isAppLoading = useSelector<IReduxState, boolean>(state => state.app.loading);
+  const isAppLoading = useSelector<IReduxState, boolean>(state => state.migrate.loading);
 
-  const oldClamTotalSupply = useSelector<IReduxState, number>(state => state.app?.oldClamTotalSupply);
-  const oldTreasuryBalance = useSelector<IReduxState, number>(state => state.app?.oldTreasuryBalance);
-  const migrateProgress = useSelector<IReduxState, number>(state => state.app?.migrateProgress);
-
+  const oldClamTotalSupply = useSelector<IReduxState, number>(state => state.migrate?.oldClamTotalSupply);
+  const oldTreasuryBalance = useSelector<IReduxState, number>(state => state.migrate?.oldTreasuryBalance);
+  const migrateProgress = useSelector<IReduxState, number>(state => state.migrate?.migrateProgress);
   const clamBalance = useSelector<IReduxState, string>(state => state.account.balances?.clam);
-  const oldClamBalance = useSelector<IReduxState, string>(state => state.account.migration?.oldClam);
-  const oldSClamBalance = useSelector<IReduxState, string>(state => state.account.migration?.oldSClam);
-  const oldWarmupBalance = useSelector<IReduxState, string>(state => state.account.migration?.oldWarmup);
-  const canClaimWarmup = useSelector<IReduxState, boolean>(state => state.account.migration?.canClaimWarmup);
-  const clamAllowance = useSelector<IReduxState, number>(state => state.account.migration?.clamAllowance);
-  const sCLAMAllowance = useSelector<IReduxState, number>(state => state.account.migration?.sCLAMAllowance);
+  const oldClamBalance = useSelector<IReduxState, string>(state => state.migrate?.oldClam);
+  const oldSClamBalance = useSelector<IReduxState, string>(state => state.migrate?.oldSClam);
+  const oldWarmupBalance = useSelector<IReduxState, string>(state => state.migrate?.oldWarmup);
+  const canClaimWarmup = useSelector<IReduxState, boolean>(state => state.migrate?.canClaimWarmup);
+  const clamAllowance = useSelector<IReduxState, number>(state => state.migrate?.clamAllowance);
+  const sCLAMAllowance = useSelector<IReduxState, number>(state => state.migrate?.sCLAMAllowance);
   const pendingTransactions = useSelector<IReduxState, IPendingTxn[]>(state => {
     return state.pendingTransactions;
   });
@@ -75,6 +74,17 @@ function Migrate() {
       setTimeout(() => tabsActions?.current?.updateIndicator(), 300);
     }
   }, [tabsActions]);
+  useEffect(() => {
+    if (connected) {
+      dispatch(
+        loadMigrationDetails({
+          provider: readOnlyProvider,
+          networkID: chainID,
+          address,
+        }),
+      );
+    }
+  }, [connected, address]);
 
   return (
     <div id="stake-view" className={styles.root}>
@@ -140,17 +150,17 @@ function Migrate() {
                 <div className="migrate-table">
                   <div className="data-row">
                     <div style={{ width: '24px' }} />
-                    <p>Steps</p>
-                    <p>Your amount</p>
-                    <p />
+                    <div className="data-row-title">Steps</div>
+                    <div className="data-row-title">Your amount</div>
+                    <div className="data-row-action" />
                   </div>
                   <div className="data-row">
                     <div className="step">1</div>
-                    <p className="data-row-name">Claim warmup</p>
-                    <p className="data-row-value">
+                    <div className="data-row-name data-row-expand">Claim warmup</div>
+                    <div className="data-row-value data-row-expand">
                       {isAppLoading ? <Skeleton width="80px" /> : <>{trim(Number(oldWarmupBalance), 4)} sCLAM</>}
-                    </p>
-                    <p>
+                    </div>
+                    <div className="data-row-action">
                       {Number(oldWarmupBalance) === 0 && <Box className="migrate-done">DONE</Box>}
                       {canClaimWarmup && (
                         <Box
@@ -164,16 +174,16 @@ function Migrate() {
                           <p>{txnButtonText(pendingTransactions, 'claimWarmup', 'Claim Warmup')}</p>
                         </Box>
                       )}
-                    </p>
+                    </div>
                   </div>
 
                   <div className="data-row">
                     <div className="step">2</div>
-                    <p className="data-row-name">Unstake CLAM</p>
-                    <p className="data-row-value">
+                    <div className="data-row-name data-row-expand">Unstake CLAM</div>
+                    <div className="data-row-value data-row-expand">
                       {isAppLoading ? <Skeleton width="80px" /> : <>{trim(Number(oldSClamBalance), 4)} sCLAM</>}
-                    </p>
-                    <p>
+                    </div>
+                    <div className="data-row-action">
                       {+oldSClamBalance === 0 && <Box className="migrate-done">DONE</Box>}
                       {+oldSClamBalance > 0 &&
                         (sCLAMAllowance > 0 ? (
@@ -199,24 +209,24 @@ function Migrate() {
                             <p>{txnButtonText(pendingTransactions, 'approve_unstaking', 'Approve')}</p>
                           </Box>
                         ))}
-                    </p>
+                    </div>
                   </div>
 
                   <div className="data-row">
                     <div className="step">3</div>
-                    <p className="data-row-name">
+                    <div className="data-row-name data-row-expand">
                       <div>Migrate CLAM to CLAM2</div>
                       <div className="estimated-clam2">Estimated CLAM2 </div>
-                    </p>
-                    <p className="data-row-value">
+                    </div>
+                    <div className="data-row-value data-row-expand">
                       <div>
                         {isAppLoading ? <Skeleton width="80px" /> : <>{trim(Number(oldClamBalance), 4)} CLAM</>}
                       </div>
                       <div className="estimated-clam2">
                         {isAppLoading ? <Skeleton width="80px" /> : <>{trim(Number(oldClamBalance) / 5, 4)} CLAM2</>}
                       </div>
-                    </p>
-                    <p>
+                    </div>
+                    <div className="data-row-action">
                       {+oldClamBalance > 0 &&
                         (clamAllowance >= +oldClamBalance ? (
                           <Box
@@ -241,14 +251,14 @@ function Migrate() {
                             <p>{txnButtonText(pendingTransactions, 'approve_migration', 'Approve')}</p>
                           </Box>
                         ))}
-                    </p>
+                    </div>
                   </div>
 
                   <Box className="data-row" bgcolor="mode.lightGray100">
                     <div />
-                    <p className="data-row-name">Your CLAM2 Balance</p>
+                    <p className="data-row-name data-row-expand">Your CLAM2 Balance</p>
                     <p />
-                    <p className="data-row-value">
+                    <p className="data-row-value data-row-action">
                       {isAppLoading ? <Skeleton width="80px" /> : <>{trim(Number(clamBalance), 4)} CLAM2</>}
                     </p>
                   </Box>
