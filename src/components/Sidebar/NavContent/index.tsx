@@ -1,5 +1,5 @@
 import groupBy from 'lodash/groupBy';
-import { Box, Grid, Link, makeStyles, Paper } from '@material-ui/core';
+import { Box, Grid, Link, makeStyles, Paper, useTheme } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import { useCallback, useContext } from 'react';
 import { useSelector } from 'react-redux';
@@ -17,6 +17,7 @@ import AppTitle from './AppTitle';
 import InactiveMenuIcon from './InactiveMenuIcon';
 import ToggleDark from './toggle-dark.png';
 import ToggleLight from './toggle-light.png';
+import { Status, StatusChip } from 'src/components/Chip';
 
 const useStyles = makeStyles(theme => ({
   navbar: {
@@ -33,6 +34,39 @@ const useGroupedBonds = () => {
 
 type Page = 'dashboard' | 'stake' | 'choose_bond' | 'bonds' | 'migrate';
 
+type ComputedBond = ReturnType<typeof useBonds>[0];
+
+function BondROI({ bond }: { bond: ComputedBond }) {
+  const theme = useTheme();
+  const fiveDayRate = useSelector<IReduxState, number>(state => state.app.fiveDayRate);
+  const bondPrice = useSelector<IReduxState, number>(state => {
+    return state.bonding[bond.value] && state.bonding[bond.value].bondPrice;
+  });
+  const marketPrice = useSelector<IReduxState, number | undefined>(state => {
+    return state.bonding[bond.value] && state.bonding[bond.value].marketPrice;
+  });
+  const priceDiff = Math.floor((bondPrice ?? 0) - (marketPrice ?? 0));
+  const dot = <span className="bond-pair-roi-dot" style={{ background: theme.palette.otter.otterGreen }} />;
+  return (
+    <span className="bond-pair-roi">
+      <span className="bond-pair-roi-value">
+        {priceDiff > 0 && dot}
+        <span>
+          {bond.discount && trim(bond.discount * 100, 2)}%{bond.autostake && ` + ${trim(fiveDayRate * 100, 2)}%`}
+        </span>
+      </span>
+      {priceDiff > 0 && (
+        <StatusChip
+          className="bond-pair-roi-discount"
+          dot={false}
+          status={Status.Success}
+          label={`${priceDiff} cheaper!`}
+        />
+      )}
+    </span>
+  );
+}
+
 function NavContent() {
   const styles = useStyles();
   const { deprecated: deprecatedBonds, active: activeBonds } = useGroupedBonds();
@@ -43,7 +77,6 @@ function NavContent() {
   });
   const addresses = getAddresses(networkID);
   const { CLAM_ADDRESS } = addresses;
-  const fiveDayRate = useSelector<IReduxState, number>(state => state.app.fiveDayRate);
   useGroupedBonds();
 
   const checkPage = useCallback((location: any, page: Page): boolean => {
@@ -133,10 +166,7 @@ function NavContent() {
                         ) : (
                           <p>
                             {bond.name}
-                            <span className="bond-pair-roi">
-                              {bond.discount && trim(bond.discount * 100, 2)}%
-                              {bond.autostake && ` + ${trim(fiveDayRate * 100, 2)}%`}
-                            </span>
+                            <BondROI bond={bond} />
                           </p>
                         )}
                       </Link>

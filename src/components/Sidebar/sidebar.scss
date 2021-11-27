@@ -136,8 +136,25 @@
     margin-bottom: 0 0 1px 0;
     text-decoration: none !important;
     .bond-pair-roi {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
       float: right;
       margin-left: 33px;
+
+      .bond-pair-roi-value {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+      }
+
+      .bond-pair-roi-dot {
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        border-radius: 3px;
+        margin-right: 10px;
+      }
     }
   }
 

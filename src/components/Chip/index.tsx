@@ -15,15 +15,16 @@ export enum Status {
 
 export interface StatusChipProps extends Omit<ChipProps, 'icon'> {
   status?: Status;
+  dot?: boolean;
 }
 
-export function StatusChip({ className, status = Status.Success, ...restProps }: StatusChipProps) {
+export function StatusChip({ className, status = Status.Success, dot = true, ...restProps }: StatusChipProps) {
   const theme = useTheme();
   const color = {
     [Status.Success]: theme.palette.otter.otterGreen,
   }[status];
   className = classNames(className, 'chip--status');
-  const icon = <span className="chip__dot" style={{ background: color }} />;
+  const icon = dot ? <span className="chip__dot" style={{ background: color }} /> : undefined;
   return <Chip icon={icon} className={className} {...restProps} style={{ color }} />;
 }
 
