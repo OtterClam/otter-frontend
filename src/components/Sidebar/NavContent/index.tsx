@@ -126,7 +126,7 @@ function NavContent() {
                             (bond.autostake ? (
                               <Tooltip title="* The ROI of (4,4) bond includes 5-days staking reward">
                                 <span className="bond-pair-roi">
-                                  {bond.discount && trim(bond.discount + fiveDayRate * 100, 2)}%*
+                                  {bond.discount && trim((bond.discount + fiveDayRate) * 100, 2)}%*
                                 </span>
                               </Tooltip>
                             ) : (
