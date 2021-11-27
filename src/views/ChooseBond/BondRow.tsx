@@ -161,7 +161,7 @@ export function BondTableData({ bondKey }: IBondProps) {
         </div>
       </TableCell>
       <TableCell align="right">
-        <p className="bond-name-title">
+        <p className="bond-name-title bond-name-title--roi">
           {isBondLoading ? <Skeleton /> : bond.deprecated ? '-' : `${trim(bondDiscount * 100, 2)}%`}
           {!bond.deprecated && bond.autostake && (
             <Tooltip title="* The ROI of (4,4) bond includes 5-days staking reward ">

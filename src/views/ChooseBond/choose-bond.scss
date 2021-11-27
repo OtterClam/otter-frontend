@@ -78,6 +78,7 @@
   }
 
   .MuiTableCell-root {
+    padding: 12px;
     p {
       margin: 0 !important;
       display: flex !important;
@@ -181,6 +182,10 @@
   font-weight: 600;
   font-size: 14px;
   line-height: 24px;
+
+  &--roi {
+    white-space: unset !important;
+  }
 }
 
 .bond-name-label {
