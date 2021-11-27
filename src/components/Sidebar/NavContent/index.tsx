@@ -1,3 +1,4 @@
+import groupBy from 'lodash/groupBy';
 import { Box, Grid, Link, makeStyles, Paper } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import { useCallback, useContext } from 'react';
@@ -25,11 +26,16 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+const useGroupedBonds = () => {
+  const bonds = useBonds();
+  return groupBy(bonds, bond => (bond.deprecated ? 'deprecated' : 'active'));
+};
+
 type Page = 'dashboard' | 'stake' | 'choose_bond' | 'bonds' | 'migrate';
 
 function NavContent() {
   const styles = useStyles();
-  const bonds = useBonds();
+  const { deprecated: deprecatedBonds, active: activeBonds } = useGroupedBonds();
   const location = useLocation();
   const currenTheme = useContext(AppThemeContext).name;
   const networkID = useSelector<IReduxState, number>(state => {
@@ -38,6 +44,7 @@ function NavContent() {
   const addresses = getAddresses(networkID);
   const { CLAM_ADDRESS } = addresses;
   const fiveDayRate = useSelector<IReduxState, number>(state => state.app.fiveDayRate);
+  useGroupedBonds();
 
   const checkPage = useCallback((location: any, page: Page): boolean => {
     const currentPath = location.pathname.replace('/', '');
@@ -114,26 +121,55 @@ function NavContent() {
 
               <div className="dapp-menu-data discounts">
                 <div className="bond-discounts">
-                  <p>Bond discounts</p>
-                  {bonds.map((bond, i) => (
-                    <Link component={NavLink} to={`/bonds/${bond.value}`} key={i} className={'bond'}>
-                      {bond.discount == NaN ? (
-                        <Skeleton variant="text" width={'150px'} />
-                      ) : (
-                        <p>
-                          {bond.name}
-                          {!bond.deprecated && (
-                            <>
-                              <span className="bond-pair-roi">
-                                {bond.discount && trim(bond.discount * 100, 2)}%
-                                {bond.autostake && ` + ${trim(fiveDayRate * 100, 2)}%`}
-                              </span>
-                            </>
-                          )}
-                        </p>
-                      )}
-                    </Link>
-                  ))}
+                  <div className="bond-discounts-group">
+                    <div className="bond-discounts-group-title bond">
+                      <span>Active</span>
+                      <span className="bond-pair-roi">ROI</span>
+                    </div>
+                    {activeBonds.map((bond, i) => (
+                      <Link component={NavLink} to={`/bonds/${bond.value}`} key={i} className={'bond'}>
+                        {bond.discount == NaN ? (
+                          <Skeleton variant="text" width={'150px'} />
+                        ) : (
+                          <p>
+                            {bond.name}
+                            {!bond.deprecated && (
+                              <>
+                                <span className="bond-pair-roi">
+                                  {bond.discount && trim(bond.discount * 100, 2)}%
+                                  {bond.autostake && ` + ${trim(fiveDayRate * 100, 2)}%`}
+                                </span>
+                              </>
+                            )}
+                          </p>
+                        )}
+                      </Link>
+                    ))}
+                  </div>
+                  <div className="bond-discounts-group">
+                    <div className="bond-discounts-group-title bond">
+                      <span>Deprecated</span>
+                    </div>
+                    {deprecatedBonds.map((bond, i) => (
+                      <Link component={NavLink} to={`/bonds/${bond.value}`} key={i} className={'bond'}>
+                        {bond.discount == NaN ? (
+                          <Skeleton variant="text" width={'150px'} />
+                        ) : (
+                          <p>
+                            {bond.name}
+                            {!bond.deprecated && (
+                              <>
+                                <span className="bond-pair-roi">
+                                  {bond.discount && trim(bond.discount * 100, 2)}%
+                                  {bond.autostake && ` + ${trim(fiveDayRate * 100, 2)}%`}
+                                </span>
+                              </>
+                            )}
+                          </p>
+                        )}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               </div>
 
