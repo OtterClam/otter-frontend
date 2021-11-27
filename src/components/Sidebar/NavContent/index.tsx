@@ -133,14 +133,10 @@ function NavContent() {
                         ) : (
                           <p>
                             {bond.name}
-                            {!bond.deprecated && (
-                              <>
-                                <span className="bond-pair-roi">
-                                  {bond.discount && trim(bond.discount * 100, 2)}%
-                                  {bond.autostake && ` + ${trim(fiveDayRate * 100, 2)}%`}
-                                </span>
-                              </>
-                            )}
+                            <span className="bond-pair-roi">
+                              {bond.discount && trim(bond.discount * 100, 2)}%
+                              {bond.autostake && ` + ${trim(fiveDayRate * 100, 2)}%`}
+                            </span>
                           </p>
                         )}
                       </Link>
@@ -152,21 +148,7 @@ function NavContent() {
                     </div>
                     {deprecatedBonds.map((bond, i) => (
                       <Link component={NavLink} to={`/bonds/${bond.value}`} key={i} className={'bond'}>
-                        {bond.discount == NaN ? (
-                          <Skeleton variant="text" width={'150px'} />
-                        ) : (
-                          <p>
-                            {bond.name}
-                            {!bond.deprecated && (
-                              <>
-                                <span className="bond-pair-roi">
-                                  {bond.discount && trim(bond.discount * 100, 2)}%
-                                  {bond.autostake && ` + ${trim(fiveDayRate * 100, 2)}%`}
-                                </span>
-                              </>
-                            )}
-                          </p>
-                        )}
+                        {bond.discount == NaN ? <Skeleton variant="text" width={'150px'} /> : <p>{bond.name}</p>}
                       </Link>
                     ))}
                   </div>
