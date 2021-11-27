@@ -1,4 +1,4 @@
-import { Box, Link, Paper, Slide, TableCell, TableRow } from '@material-ui/core';
+import { Box, Link, Paper, Slide, TableCell, TableRow, Tooltip } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
@@ -62,7 +62,11 @@ export function BondDataCard({ bondKey }: IBondProps) {
           <p className="bond-name-title">ROI</p>
           <p className="bond-name-title">
             {isBondLoading ? <Skeleton width="50px" /> : bond.deprecated ? '-' : `${trim(bondDiscount * 100, 2)}%`}
-            {!bond.deprecated && bond.autostake && ` + ${trim(fiveDayRate * 100, 2)}%`}
+            {!bond.deprecated && bond.autostake && (
+              <Tooltip title="* The ROI of (4,4) bond includes 5-days staking reward ">
+                <span>{` + ${trim(fiveDayRate * 100, 2)}%*`}</span>
+              </Tooltip>
+            )}
           </p>
         </div>
 
@@ -146,7 +150,11 @@ export function BondTableData({ bondKey }: IBondProps) {
       <TableCell align="right">
         <p className="bond-name-title">
           {isBondLoading ? <Skeleton /> : bond.deprecated ? '-' : `${trim(bondDiscount * 100, 2)}%`}
-          {!bond.deprecated && bond.autostake && ` + ${trim(fiveDayRate * 100, 2)}%`}
+          {!bond.deprecated && bond.autostake && (
+            <Tooltip title="* The ROI of (4,4) bond includes 5-days staking reward ">
+              <span>{` + ${trim(fiveDayRate * 100, 2)}%*`}</span>
+            </Tooltip>
+          )}
         </p>
       </TableCell>
       <TableCell align="right">

@@ -1,4 +1,4 @@
-import { Box, Grid, Link, makeStyles, Paper } from '@material-ui/core';
+import { Box, Grid, Link, makeStyles, Paper, Tooltip } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import { useCallback, useContext } from 'react';
 import { useSelector } from 'react-redux';
@@ -122,14 +122,16 @@ function NavContent() {
                       ) : (
                         <p>
                           {bond.name}
-                          {!bond.deprecated && (
-                            <>
-                              <span className="bond-pair-roi">
-                                {bond.discount && trim(bond.discount * 100, 2)}%
-                                {bond.autostake && ` + ${trim(fiveDayRate * 100, 2)}%`}
-                              </span>
-                            </>
-                          )}
+                          {!bond.deprecated &&
+                            (bond.autostake ? (
+                              <Tooltip title="* The ROI of (4,4) bond includes 5-days staking reward">
+                                <span className="bond-pair-roi">
+                                  {bond.discount && trim(bond.discount + fiveDayRate * 100, 2)}%*
+                                </span>
+                              </Tooltip>
+                            ) : (
+                              <span className="bond-pair-roi">{bond.discount && trim(bond.discount * 100, 2)}%</span>
+                            ))}
                         </p>
                       )}
                     </Link>
