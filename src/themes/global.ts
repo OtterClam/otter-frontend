@@ -75,7 +75,7 @@ const commonSettings = {
         '&.ohm-card': {
           padding: '20px 20px 20px 20px',
           borderRadius: '10px',
-          maxWidth: '833px',
+          maxWidth: '840px',
           width: '97%',
           marginBottom: '1.8rem',
         },

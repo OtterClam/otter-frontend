@@ -78,7 +78,7 @@ function ChooseBond() {
 
           {!isSmallScreen && (
             <Grid container item>
-              <TableContainer>
+              <TableContainer className="bond-table-container">
                 <Table aria-label="Available bonds">
                   <TableHead>
                     <TableRow>
