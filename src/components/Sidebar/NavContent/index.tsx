@@ -1,4 +1,5 @@
-import { Box, Grid, Link, makeStyles, Paper, Tooltip } from '@material-ui/core';
+import groupBy from 'lodash/groupBy';
+import { Box, Grid, Link, makeStyles, Paper, Tooltip, useTheme } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import { useCallback, useContext } from 'react';
 import { useSelector } from 'react-redux';
@@ -16,6 +17,7 @@ import AppTitle from './AppTitle';
 import InactiveMenuIcon from './InactiveMenuIcon';
 import ToggleDark from './toggle-dark.png';
 import ToggleLight from './toggle-light.png';
+import { Status, StatusChip } from 'src/components/Chip';
 
 const useStyles = makeStyles(theme => ({
   navbar: {
@@ -25,11 +27,49 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+const useGroupedBonds = () => {
+  const bonds = useBonds();
+  return groupBy(bonds, bond => (bond.deprecated ? 'deprecated' : 'active'));
+};
+
 type Page = 'dashboard' | 'stake' | 'choose_bond' | 'bonds' | 'migrate';
+
+type ComputedBond = ReturnType<typeof useBonds>[0];
+
+function BondROI({ bond }: { bond: ComputedBond }) {
+  const theme = useTheme();
+  const fiveDayRate = useSelector<IReduxState, number>(state => state.app.fiveDayRate);
+  const bondPrice = useSelector<IReduxState, number>(state => {
+    return state.bonding[bond.value] && state.bonding[bond.value].bondPrice;
+  });
+  const marketPrice = useSelector<IReduxState, number | undefined>(state => {
+    return state.bonding[bond.value] && state.bonding[bond.value].marketPrice;
+  });
+  const priceDiff = Math.floor((bondPrice ?? 0) - (marketPrice ?? 0));
+  const dot = <span className="bond-pair-roi-dot" style={{ background: theme.palette.otter.otterGreen }} />;
+  return (
+    <span className="bond-pair-roi">
+      <span className="bond-pair-roi-value">
+        {priceDiff > 0 && dot}
+        <span>
+          {bond.discount && trim(bond.discount * 100, 2)}%{bond.autostake && ` + ${trim(fiveDayRate * 100, 2)}%`}
+        </span>
+      </span>
+      {priceDiff > 0 && (
+        <StatusChip
+          className="bond-pair-roi-discount"
+          dot={false}
+          status={Status.Success}
+          label={`${priceDiff} cheaper!`}
+        />
+      )}
+    </span>
+  );
+}
 
 function NavContent() {
   const styles = useStyles();
-  const bonds = useBonds();
+  const { deprecated: deprecatedBonds, active: activeBonds } = useGroupedBonds();
   const location = useLocation();
   const currenTheme = useContext(AppThemeContext).name;
   const networkID = useSelector<IReduxState, number>(state => {
@@ -37,7 +77,7 @@ function NavContent() {
   });
   const addresses = getAddresses(networkID);
   const { CLAM_ADDRESS } = addresses;
-  const fiveDayRate = useSelector<IReduxState, number>(state => state.app.fiveDayRate);
+  useGroupedBonds();
 
   const checkPage = useCallback((location: any, page: Page): boolean => {
     const currentPath = location.pathname.replace('/', '');
@@ -114,28 +154,40 @@ function NavContent() {
 
               <div className="dapp-menu-data discounts">
                 <div className="bond-discounts">
-                  <p>Bond discounts</p>
-                  {bonds.map((bond, i) => (
-                    <Link component={NavLink} to={`/bonds/${bond.value}`} key={i} className={'bond'}>
-                      {bond.discount == NaN ? (
-                        <Skeleton variant="text" width={'150px'} />
-                      ) : (
-                        <p>
-                          {bond.name}
-                          {!bond.deprecated &&
-                            (bond.autostake ? (
+                  <div className="bond-discounts-group">
+                    <div className="bond-discounts-group-title bond">
+                      <span>Active</span>
+                      <span className="bond-pair-roi">ROI</span>
+                    </div>
+                    {activeBonds.map((bond, i) => (
+                      <Link component={NavLink} to={`/bonds/${bond.value}`} key={i} className={'bond'}>
+                        {bond.discount == NaN ? (
+                          <Skeleton variant="text" width={'150px'} />
+                        ) : (
+                          <p>
+                            {bond.name}
+                            {bond.autostake ? (
                               <Tooltip title="* The ROI of (4,4) bond includes 5-days staking reward">
-                                <span className="bond-pair-roi">
-                                  {bond.discount && trim((bond.discount + fiveDayRate) * 100, 2)}%*
-                                </span>
+                                <BondROI bond={bond} />
                               </Tooltip>
                             ) : (
-                              <span className="bond-pair-roi">{bond.discount && trim(bond.discount * 100, 2)}%</span>
-                            ))}
-                        </p>
-                      )}
-                    </Link>
-                  ))}
+                              <BondROI bond={bond} />
+                            )}
+                          </p>
+                        )}
+                      </Link>
+                    ))}
+                  </div>
+                  <div className="bond-discounts-group">
+                    <div className="bond-discounts-group-title bond">
+                      <span>Deprecated</span>
+                    </div>
+                    {deprecatedBonds.map((bond, i) => (
+                      <Link component={NavLink} to={`/bonds/${bond.value}`} key={i} className={'bond'}>
+                        {bond.discount == NaN ? <Skeleton variant="text" width={'150px'} /> : <p>{bond.name}</p>}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               </div>
 

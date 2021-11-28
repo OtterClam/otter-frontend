@@ -15,6 +15,11 @@ export const BondKeys: BondKey[] = [
 
 export const ReserveKeys: BondKey[] = ['mai', 'frax2'];
 
+export enum BondAction {
+  Bond = 'bond',
+  Redeem = 'redeem',
+}
+
 export interface Bond {
   key: BondKey;
   name: string;

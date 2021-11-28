@@ -2,6 +2,7 @@ import { Box, Link, Paper, Slide, TableCell, TableRow, Tooltip } from '@material
 import { Skeleton } from '@material-ui/lab';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
+import { LabelChip, Status, StatusChip } from 'src/components/Chip';
 import { BondKey, getBond } from 'src/constants';
 import BondLogo from '../../components/BondLogo';
 import { priceUnits, trim } from '../../helpers';
@@ -107,7 +108,7 @@ export function BondDataCard({ bondKey }: IBondProps) {
   );
 }
 
-export function BondTableData({ bondKey }: IBondProps) {
+export function BondTableRow({ bondKey }: IBondProps) {
   const { chainID } = useWeb3Context();
   // Use BondPrice as indicator of loading.
   const isBondLoading = useSelector<IReduxState, boolean>(state => !state.bonding[bondKey]?.bondPrice ?? true);
@@ -123,29 +124,41 @@ export function BondTableData({ bondKey }: IBondProps) {
     return state.bonding[bondKey] && state.bonding[bondKey].purchased;
   });
   const fiveDayRate = useSelector<IReduxState, number>(state => state.app.fiveDayRate);
+  const marketPrice = useSelector<IReduxState, number | undefined>(state => {
+    return state.bonding[bondKey] && state.bonding[bondKey].marketPrice;
+  });
+  const myBalance = useSelector<IReduxState, number>(state => {
+    //@ts-ignore
+    return state.account[bondKey] && state.account[bondKey].interestDue;
+  });
+  const priceDiff = (marketPrice ?? 0) - (bondPrice ?? 0);
 
   return (
     <TableRow id={`${bondKey}--bond`}>
       <TableCell align="left">
-        <BondLogo bond={bond} />
-        <div className="bond-name">
-          <p className="bond-name-title">{bond.name}</p>
-          {!bond.deprecated && (
-            <Link color="primary" href={bond.dexUrl} target="_blank">
-              <Box component="p" color="otter.otterBlue" className="bond-lp-add-liquidity">
-                {bond.type === 'lp' ? 'Add Liquidity' : `Buy ${bond.reserveUnit}`}
-              </Box>
-            </Link>
-          )}
+        <div className="bond-name-cell">
+          <BondLogo bond={bond} />
+          <div className="bond-name">
+            {bond.deprecated && <LabelChip label="Deprecated" className="bond-name-label" />}
+            <p className="bond-name-title">{bond.name}</p>
+            {!bond.deprecated && (
+              <Link color="primary" href={bond.dexUrl} target="_blank">
+                <Box component="p" color="otter.otterBlue" className="bond-lp-add-liquidity">
+                  {bond.type === 'lp' ? 'Add Liquidity' : `Buy ${bond.reserveUnit}`}
+                </Box>
+              </Link>
+            )}
+          </div>
         </div>
       </TableCell>
       <TableCell align="center">
-        <p className="bond-name-title">
-          <>
+        <div className="bond-name-container">
+          <p className="bond-name-title">
             <span className="currency-icon">{priceUnits(bondKey)}</span>
-            {isBondLoading ? <Skeleton width="50px" /> : bond.deprecated ? '-' : trim(bondPrice, 2)}
-          </>
-        </p>
+            <span>{isBondLoading ? <Skeleton width="50px" /> : bond.deprecated ? '-' : trim(bondPrice, 2)}</span>
+          </p>
+          {priceDiff > 0 && <StatusChip status={Status.Success} label={`$${trim(priceDiff, 2)} cheaper!`} />}
+        </div>
       </TableCell>
       <TableCell align="right">
         <p className="bond-name-title">
@@ -174,19 +187,40 @@ export function BondTableData({ bondKey }: IBondProps) {
         </p>
       </TableCell>
       <TableCell>
-        <Link component={NavLink} to={`/bonds/${bondKey}`}>
-          <Box
-            bgcolor="otter.otterBlue"
-            color="otter.white"
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            height="44px"
-            className="bond-table-btn"
-          >
-            <p>{bond.deprecated ? 'Redeem' : 'Bond'}</p>
-          </Box>
-        </Link>
+        <p className="bond-name-title">
+          {myBalance ? `${trim(myBalance, 2)} ${bond.autostake ? 'sCLAM' : 'CLAM'}` : '-'}
+        </p>
+      </TableCell>
+      <TableCell>
+        <div className="bond-table-actions">
+          {!bond.deprecated && (
+            <Link className="bond-table-action-button" component={NavLink} to={`/bonds/${bondKey}?action=bond`}>
+              <Box
+                bgcolor="otter.otterBlue"
+                color="otter.white"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                height="44px"
+                className="bond-table-btn"
+              >
+                <p>Bond</p>
+              </Box>
+            </Link>
+          )}
+          <Link className="bond-table-action-button" component={NavLink} to={`/bonds/${bondKey}?action=redeem`}>
+            <Box
+              color="otter.otterBlue"
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              height="44px"
+              className="bond-table-btn bond-table-btn__redeem"
+            >
+              <p>Redeem</p>
+            </Box>
+          </Link>
+        </div>
       </TableCell>
     </TableRow>
   );

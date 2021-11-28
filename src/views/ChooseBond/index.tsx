@@ -16,7 +16,7 @@ import { useSelector } from 'react-redux';
 import { getTokenImage, trim } from '../../helpers';
 import { useBonds } from '../../hooks';
 import { IReduxState } from '../../store/slices/state.interface';
-import { BondDataCard, BondTableData } from './BondRow';
+import { BondDataCard, BondTableRow } from './BondRow';
 import './choose-bond.scss';
 
 function ChooseBond() {
@@ -78,7 +78,7 @@ function ChooseBond() {
 
           {!isSmallScreen && (
             <Grid container item>
-              <TableContainer>
+              <TableContainer className="bond-table-container">
                 <Table aria-label="Available bonds">
                   <TableHead>
                     <TableRow>
@@ -94,12 +94,15 @@ function ChooseBond() {
                       <TableCell align="right">
                         <p className="bond-table-title">Purchased</p>
                       </TableCell>
+                      <TableCell align="right">
+                        <p className="bond-table-title">My Bond</p>
+                      </TableCell>
                       <TableCell align="right"></TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {bonds.map(bond => (
-                      <BondTableData key={bond.value} bondKey={bond.value} />
+                      <BondTableRow key={bond.value} bondKey={bond.value} />
                     ))}
                   </TableBody>
                 </Table>

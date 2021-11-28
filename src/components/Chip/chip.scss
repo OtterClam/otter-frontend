@@ -1,0 +1,32 @@
+@import 'styles/_colors.scss';
+
+.MuiChip-root {
+  &.chip {
+    font-size: 12px;
+    line-height: 18px;
+    border-radius: 9px;
+    background: $light-gray100;
+    color: $otter-dark;
+    padding: 0;
+    height: 18px;
+
+    .MuiChip-label {
+      padding: 0 5px;
+    }
+
+    &--label {
+      background: $light-gray300;
+      border-radius: 4px;
+    }
+  }
+
+  .chip {
+    &__dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 3px;
+      margin-right: 0;
+    }
+  }
+}

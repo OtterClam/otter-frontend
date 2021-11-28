@@ -52,6 +52,9 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
   const maxBondPrice = useSelector<IReduxState, number>(state => {
     return state.bonding[bondKey] && state.bonding[bondKey].maxBondPrice;
   });
+  const bondPrice = useSelector<IReduxState, number>(state => {
+    return state.bonding[bondKey] && state.bonding[bondKey].bondPrice;
+  });
   const interestDue = useSelector<IReduxState, number>(state => {
     //@ts-ignore
     return state.account[bondKey] && state.account[bondKey].interestDue;
@@ -129,9 +132,8 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
   const hasAllowance = useCallback(() => {
     return allowance > 0;
   }, [allowance]);
-
   const setMax = () => {
-    setQuantity(ethers.utils.formatEther(rawBalance || ''));
+    setQuantity(ethers.utils.formatEther(rawBalance));
   };
   const fiveDayRate = useSelector<IReduxState, number>(state => state.app.fiveDayRate);
 
@@ -156,7 +158,7 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
         <FormControl className="ohm-input" variant="outlined" color="primary" fullWidth>
           <InputLabel htmlFor="outlined-adornment-amount"></InputLabel>
           <OutlinedInput
-            placeholder="Amount"
+            placeholder={`${bond.reserveUnit} Amount`}
             id="outlined-adornment-amount"
             type="number"
             value={quantity}
