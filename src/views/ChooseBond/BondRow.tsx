@@ -108,7 +108,7 @@ export function BondDataCard({ bondKey }: IBondProps) {
   );
 }
 
-export function BondTableData({ bondKey }: IBondProps) {
+export function BondTableRow({ bondKey }: IBondProps) {
   const { chainID } = useWeb3Context();
   // Use BondPrice as indicator of loading.
   const isBondLoading = useSelector<IReduxState, boolean>(state => !state.bonding[bondKey]?.bondPrice ?? true);
@@ -131,7 +131,7 @@ export function BondTableData({ bondKey }: IBondProps) {
     //@ts-ignore
     return state.account[bondKey] && state.account[bondKey].interestDue;
   });
-  const priceDiff = Math.floor((bondPrice ?? 0) - (marketPrice ?? 0));
+  const priceDiff = (marketPrice ?? 0) - (bondPrice ?? 0);
 
   return (
     <TableRow id={`${bondKey}--bond`}>
@@ -157,11 +157,11 @@ export function BondTableData({ bondKey }: IBondProps) {
             <span className="currency-icon">{priceUnits(bondKey)}</span>
             <span>{isBondLoading ? <Skeleton width="50px" /> : bond.deprecated ? '-' : trim(bondPrice, 2)}</span>
           </p>
-          {priceDiff > 0 && <StatusChip status={Status.Success} label={`$${priceDiff} cheaper!`} />}
+          {priceDiff > 0 && <StatusChip status={Status.Success} label={`$${trim(priceDiff, 2)} cheaper!`} />}
         </div>
       </TableCell>
       <TableCell align="right">
-        <p className="bond-name-title bond-name-title--roi">
+        <p className="bond-name-title">
           {isBondLoading ? <Skeleton /> : bond.deprecated ? '-' : `${trim(bondDiscount * 100, 2)}%`}
           {!bond.deprecated && bond.autostake && (
             <Tooltip title="* The ROI of (4,4) bond includes 5-days staking reward ">

@@ -16,7 +16,7 @@ import { useSelector } from 'react-redux';
 import { getTokenImage, trim } from '../../helpers';
 import { useBonds } from '../../hooks';
 import { IReduxState } from '../../store/slices/state.interface';
-import { BondDataCard, BondTableData } from './BondRow';
+import { BondDataCard, BondTableRow } from './BondRow';
 import './choose-bond.scss';
 
 function ChooseBond() {
@@ -102,7 +102,7 @@ function ChooseBond() {
                   </TableHead>
                   <TableBody>
                     {bonds.map(bond => (
-                      <BondTableData key={bond.value} bondKey={bond.value} />
+                      <BondTableRow key={bond.value} bondKey={bond.value} />
                     ))}
                   </TableBody>
                 </Table>
