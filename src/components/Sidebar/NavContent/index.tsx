@@ -1,9 +1,10 @@
-import groupBy from 'lodash/groupBy';
 import { Box, Grid, Link, makeStyles, Paper, Tooltip, useTheme } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
+import groupBy from 'lodash/groupBy';
 import { useCallback, useContext } from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink, useLocation } from 'react-router-dom';
+import { Status, StatusChip } from 'src/components/Chip';
 import { DEFAULT_NETWORK, getAddresses } from 'src/constants';
 import { AppThemeContext } from 'src/helpers/app-theme-context';
 import { IReduxState } from 'src/store/slices/state.interface';
@@ -17,7 +18,6 @@ import AppTitle from './AppTitle';
 import InactiveMenuIcon from './InactiveMenuIcon';
 import ToggleDark from './toggle-dark.png';
 import ToggleLight from './toggle-light.png';
-import { Status, StatusChip } from 'src/components/Chip';
 
 const useStyles = makeStyles(theme => ({
   navbar: {
@@ -45,24 +45,28 @@ function BondROI({ bond }: { bond: ComputedBond }) {
   const marketPrice = useSelector<IReduxState, number | undefined>(state => {
     return state.bonding[bond.value] && state.bonding[bond.value].marketPrice;
   });
-  const priceDiff = Math.floor((bondPrice ?? 0) - (marketPrice ?? 0));
+  const priceDiff = (marketPrice ?? 0) - (bondPrice ?? 0);
   const dot = <span className="bond-pair-roi-dot" style={{ background: theme.palette.otter.otterGreen }} />;
   return (
     <span className="bond-pair-roi">
       <span className="bond-pair-roi-value">
         {priceDiff > 0 && dot}
-        <span>
-          {bond.discount && trim(bond.discount * 100, 2)}%{bond.autostake && ` + ${trim(fiveDayRate * 100, 2)}%`}
-        </span>
+        {bond.autostake ? (
+          <Tooltip title="* The ROI of (4,4) bond includes 5-days staking reward">
+            <span>{bond.discount && trim((bond.discount + fiveDayRate) * 100, 2)}%*</span>
+          </Tooltip>
+        ) : (
+          <span>{bond.discount && trim(bond.discount * 100, 2)}%</span>
+        )}
       </span>
-      {priceDiff > 0 && (
+      {/* {priceDiff > 0 && (
         <StatusChip
           className="bond-pair-roi-discount"
           dot={false}
           status={Status.Success}
-          label={`${priceDiff} cheaper!`}
+          label={`$${trim(priceDiff, 2)} cheaper!`}
         />
-      )}
+      )} */}
     </span>
   );
 }
@@ -77,7 +81,6 @@ function NavContent() {
   });
   const addresses = getAddresses(networkID);
   const { CLAM_ADDRESS } = addresses;
-  useGroupedBonds();
 
   const checkPage = useCallback((location: any, page: Page): boolean => {
     const currentPath = location.pathname.replace('/', '');
@@ -166,13 +169,7 @@ function NavContent() {
                         ) : (
                           <p>
                             {bond.name}
-                            {bond.autostake ? (
-                              <Tooltip title="* The ROI of (4,4) bond includes 5-days staking reward">
-                                <BondROI bond={bond} />
-                              </Tooltip>
-                            ) : (
-                              <BondROI bond={bond} />
-                            )}
+                            <BondROI bond={bond} />
                           </p>
                         )}
                       </Link>

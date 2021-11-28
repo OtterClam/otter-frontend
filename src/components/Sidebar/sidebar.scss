@@ -116,6 +116,8 @@
 .bond-discounts {
   text-align: left;
   padding-left: 56px;
+  display: flex;
+  flex-direction: column;
 
   a {
     margin-left: 0;
@@ -139,7 +141,7 @@
       flex-direction: column;
       align-items: flex-end;
       float: right;
-      margin-left: 33px;
+      margin-left: 44px;
 
       .bond-pair-roi-value {
         display: flex;

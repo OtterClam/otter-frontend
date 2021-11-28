@@ -108,7 +108,7 @@
   }
 
   .ohm-input {
-    flex:1;
+    flex: 1;
     min-width: 50%;
     margin: 5px;
   }
@@ -118,6 +118,10 @@
   min-width: 185px !important;
   max-width: 408px;
   margin: 5px !important;
+  @media screen and (max-width: 417px) {
+    max-width: unset;
+    width: 100%;
+  }
 }
 
 .mobile #bond-view {
@@ -194,6 +198,9 @@
 
 .input-container {
   display: flex;
+  @media screen and (max-width: 417px) {
+    flex-direction: column;
+  }
 }
 
 .help-text {
