@@ -132,11 +132,8 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
   const hasAllowance = useCallback(() => {
     return allowance > 0;
   }, [allowance]);
-
   const setMax = () => {
-    if (bondPrice && balance) {
-      setQuantity((balance / bondPrice).toString());
-    }
+    setQuantity(ethers.utils.formatEther(rawBalance));
   };
   const fiveDayRate = useSelector<IReduxState, number>(state => state.app.fiveDayRate);
 
@@ -161,7 +158,7 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
         <FormControl className="ohm-input" variant="outlined" color="primary" fullWidth>
           <InputLabel htmlFor="outlined-adornment-amount"></InputLabel>
           <OutlinedInput
-            placeholder="CLAM Amount"
+            placeholder={`${bond.reserveUnit} Amount`}
             id="outlined-adornment-amount"
             type="number"
             value={quantity}
