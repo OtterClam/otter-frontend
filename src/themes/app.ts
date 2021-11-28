@@ -20,6 +20,16 @@ const colorPalette = {
     darkGray100: '#8193B5',
     darkGray200: '#5E6E99',
     darkGray300: '#434E77',
+    chip: {
+      normal: {
+        bg: '#DBE6EC',
+        fg: '#1D2654',
+      },
+      status: {
+        bg: '#F7F9FB',
+        success: '#38D076',
+      },
+    },
   },
   dark: {
     otterDark: '#F7F9FB',
@@ -31,6 +41,16 @@ const colorPalette = {
     darkGray100: '#8192B4',
     darkGray200: '#A1AEC9',
     darkGray300: '#CCD6E7',
+    chip: {
+      normal: {
+        bg: '#303E65',
+        fg: '#E9F0F3',
+      },
+      status: {
+        bg: '#101631',
+        success: '#38D076',
+      },
+    },
   },
 };
 
