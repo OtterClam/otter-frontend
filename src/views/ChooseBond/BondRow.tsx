@@ -157,7 +157,7 @@ export function BondTableRow({ bondKey }: IBondProps) {
             <span className="currency-icon">{priceUnits(bondKey)}</span>
             <span>{isBondLoading ? <Skeleton width="50px" /> : bond.deprecated ? '-' : trim(bondPrice, 2)}</span>
           </p>
-          {priceDiff > 0 && <StatusChip status={Status.Success} label={`$${trim(priceDiff, 2)} cheaper!`} />}
+          {priceDiff > 0 && <StatusChip status={Status.Success} label={`$${trim(priceDiff, 2)} discount!`} />}
         </div>
       </TableCell>
       <TableCell align="right">

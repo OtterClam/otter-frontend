@@ -64,7 +64,7 @@ function BondROI({ bond }: { bond: ComputedBond }) {
           className="bond-pair-roi-discount"
           dot={false}
           status={Status.Success}
-          label={`$${trim(priceDiff, 2)} cheaper!`}
+          label={`$${trim(priceDiff, 2)} discount!`}
         />
       )} */}
     </span>
