@@ -71,7 +71,7 @@ function BondROI({ bond }: { bond: ComputedBond }) {
 
 function NavContent() {
   const styles = useStyles();
-  const { deprecated: deprecatedBonds, active: activeBonds } = useGroupedBonds();
+  const { deprecated: deprecatedBonds = [], active: activeBonds = [] } = useGroupedBonds();
   const location = useLocation();
   const currenTheme = useContext(AppThemeContext).name;
   const networkID = useSelector<IReduxState, number>(state => {

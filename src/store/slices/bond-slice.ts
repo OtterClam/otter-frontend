@@ -1,4 +1,4 @@
-import { ethers, constants } from 'ethers';
+import { ethers, constants, BigNumber } from 'ethers';
 import { getMarketPrice, contractForBond, contractForReserve, getTokenPrice } from '../../helpers';
 import { calculateUserBondDetails, getBalances } from './account-slice';
 import { BondKey, getAddresses, getBond } from '../../constants';
@@ -31,9 +31,10 @@ export interface BondDetails {
   bondQuote: number;
   purchased: number;
   vestingTerm: number;
-  maxBondPrice: number;
+  maxPayout: number;
   bondPrice: number;
   marketPrice: string;
+  maxUserCanBuy: string;
 }
 
 export type IBond = {
@@ -81,27 +82,21 @@ export const changeApproval = createAsyncThunk(
   },
 );
 
-interface ICalcBondDetails {
+interface CalcBondDetailsPayload {
   bondKey: BondKey;
   value?: string | null;
   provider: JsonRpcProvider;
   networkID: number;
+  userBalance: string;
 }
 
 export const calcBondDetails = createAsyncThunk(
   'bonding/calcBondDetails',
-  async ({ bondKey, value, provider, networkID }: ICalcBondDetails): Promise<BondDetails> => {
-    let amountInWei;
-    if (!value || value === '') {
-      amountInWei = ethers.utils.parseEther('0.0001'); // Use a realistic SLP ownership
-    } else {
-      amountInWei = ethers.utils.parseEther(value);
-    }
-
-    let bondPrice = 0,
-      bondDiscount = 0,
-      valuation,
-      bondQuote;
+  async ({ bondKey, value, provider, networkID, userBalance }: CalcBondDetailsPayload): Promise<BondDetails> => {
+    const amountInWei =
+      !value || value === ''
+        ? ethers.utils.parseEther('0.0001') // Use a realistic SLP ownership
+        : ethers.utils.parseEther(value);
 
     const addresses = getAddresses(networkID);
     const bondContract = contractForBond(bondKey, networkID, provider);
@@ -116,21 +111,26 @@ export const calcBondDetails = createAsyncThunk(
         bondQuote: 1,
         purchased: 1,
         vestingTerm: 1,
-        maxBondPrice: 1,
+        maxPayout: 1,
         bondPrice: 1,
         marketPrice: '0.0',
+        maxUserCanBuy: '0.0',
       };
     }
+
+    let bondPrice = 0,
+      bondDiscount = 0,
+      valuation,
+      bondQuote,
+      maxUserCanBuy = userBalance;
 
     const bondCalcContract = new ethers.Contract(addresses.CLAM_BONDING_CALC_ADDRESS, BondingCalcContract, provider);
 
     const terms = await bondContract.terms();
-
-    const maxBondPrice = await bondContract.maxPayout();
-
+    const maxPayout = await bondContract.maxPayout();
     const standardizedDebtRatio = await bondContract.standardizedDebtRatio();
-    let debtRatio = standardizedDebtRatio / 1e9;
 
+    let debtRatio = standardizedDebtRatio / 1e9;
     const maiPrice = await getTokenPrice('MAI');
     const rawMarketPrice = (await getMarketPrice(networkID, provider)).mul(maiPrice);
     const marketPrice = formatUnits(rawMarketPrice, 9);
@@ -146,18 +146,32 @@ export const calcBondDetails = createAsyncThunk(
       valuation = await bondCalcContract.valuation(bond.reserve, amountInWei);
       bondQuote = await bondContract.payoutFor(valuation);
       bondQuote = bondQuote / 1e9;
+
+      // let maxQuoteOfUser = await bondContract.payoutFor(await bondCalcContract.valuation(bond.reserve, userBalance));
+      // if (maxQuoteOfUser.gte(maxPayout)) {
+      //   maxQuoteOfUser = maxPayout.sub(1);
+      //   const rawBondPrice = await bondContract.bondPrice();
+      //   maxUserCanBuy = maxQuoteOfUser.mul(rawBondPrice).toString();
+      // } else {
+      //   maxUserCanBuy = userBalance;
+      // }
     } else {
       bondQuote = await bondContract.payoutFor(amountInWei);
       bondQuote = bondQuote / 1e18;
       // @dev: fix for non-lp bond
       debtRatio = standardizedDebtRatio.toNumber();
+
+      let maxQuoteOfUser = (await bondContract.payoutFor(userBalance)).div(1e9);
+      if (maxQuoteOfUser.gte(maxPayout)) {
+        maxUserCanBuy = maxPayout.sub(1).mul(bondPrice).div(1e9).toString();
+      }
     }
 
     // Display error if user tries to exceed maximum.
-    if (!!value && bondQuote > maxBondPrice / 1e9) {
+    if (!!value && bondQuote > maxPayout / 1e9) {
       alert(
         "You're trying to bond more than the maximum payout available! The maximum bond payout is " +
-          (maxBondPrice / 1e9).toFixed(2).toString() +
+          (maxPayout / 1e9).toFixed(2).toString() +
           ' CLAM.',
       );
     }
@@ -181,9 +195,10 @@ export const calcBondDetails = createAsyncThunk(
       bondQuote,
       purchased,
       vestingTerm: Number(terms.vestingTerm),
-      maxBondPrice: maxBondPrice / 1e9,
+      maxPayout: maxPayout / 1e9,
       bondPrice: bondPrice / 1e18,
       marketPrice,
+      maxUserCanBuy,
     };
   },
 );

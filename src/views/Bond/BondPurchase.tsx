@@ -49,8 +49,8 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
   const bondDiscount = useSelector<IReduxState, number>(state => {
     return state.bonding[bondKey] && state.bonding[bondKey].bondDiscount;
   });
-  const maxBondPrice = useSelector<IReduxState, number>(state => {
-    return state.bonding[bondKey] && state.bonding[bondKey].maxBondPrice;
+  const maxPayout = useSelector<IReduxState, number>(state => {
+    return state.bonding[bondKey] && state.bonding[bondKey].maxPayout;
   });
   const bondPrice = useSelector<IReduxState, number>(state => {
     return state.bonding[bondKey] && state.bonding[bondKey].bondPrice;
@@ -81,11 +81,10 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
     //@ts-ignore
     return state.account[bondKey] && state.account[bondKey].allowance;
   });
-
   const pendingTransactions = useSelector<IReduxState, IPendingTxn[]>(state => {
     return state.pendingTransactions;
   });
-
+  const maxUserCanBuy = useSelector<IReduxState, string>(state => state.bonding[bondKey]?.maxUserCanBuy);
   const vestingPeriod = () => {
     return prettifySeconds(vestingTerm, 'day');
   };
@@ -133,18 +132,21 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
     return allowance > 0;
   }, [allowance]);
   const setMax = () => {
-    setQuantity(ethers.utils.formatEther(rawBalance));
+    setQuantity(ethers.utils.formatEther(maxUserCanBuy));
   };
   const fiveDayRate = useSelector<IReduxState, number>(state => state.app.fiveDayRate);
 
   async function loadBondDetails() {
-    if (provider) await dispatch(calcBondDetails({ bondKey, value: quantity, provider, networkID: chainID }));
+    if (provider)
+      await dispatch(
+        calcBondDetails({ bondKey, value: quantity, provider, networkID: chainID, userBalance: rawBalance }),
+      );
   }
 
   useEffect(() => {
     loadBondDetails();
     if (address) setRecipientAddress(address);
-  }, [provider, quantity, address]);
+  }, [provider, quantity, address, rawBalance]);
 
   const onSeekApproval = async () => {
     await dispatch(changeApproval({ bondKey, provider, networkID: chainID, address }));
@@ -204,8 +206,8 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
         bond.autostake && (
           <div className="help-text">
             <p className="help-text-desc">
-              Note: The (4, 4) bond will auto stake at the end of each epoch, so you will earn all rebase rewards during
-              the vesting term. Once fully vested, you will only be able to claim sClam.
+              Note: The (4, 4) bond will stake all CLAMs at the start, so you will earn all rebase rewards during the
+              vesting term. Once fully vested, you will only be able to claim sClam.
             </p>
           </div>
         )
@@ -237,7 +239,7 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
           <div className={`data-row`}>
             <p className="bond-balance-title">Max You Can Buy</p>
             <p className="price-data bond-balance-value">
-              {isBondLoading ? <Skeleton width="100px" /> : `${trim(maxBondPrice, 4) || '0'} ${bondUnit}`}
+              {isBondLoading ? <Skeleton width="100px" /> : `${trim(maxPayout, 4) || '0'} ${bondUnit}`}
             </p>
           </div>
 
