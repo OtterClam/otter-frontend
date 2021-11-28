@@ -6,23 +6,18 @@ query {
   protocolMetrics(first: 100, orderBy: timestamp, orderDirection: desc) {
     id
     timestamp
-    ohmCirculatingSupply
-    sOhmCirculatingSupply
+    clamCirculatingSupply
+    sClamCirculatingSupply
     totalSupply
-    ohmPrice
+    clamPrice
     marketCap
     totalValueLocked
     treasuryRiskFreeValue
     treasuryMarketValue
     nextEpochRebase
-    nextDistributedOhm
-    treasuryDaiRiskFreeValue
-    treasuryFraxMarketValue
-    treasuryDaiMarketValue
-    treasuryFraxRiskFreeValue
-    treasuryXsushiMarketValue
-    treasuryWETHMarketValue
-    treasuryLusdRiskFreeValue
+    nextDistributedClam
+    treasuryMaiRiskFreeValue
+    treasuryMaiMarketValue
     currentAPY
     runway10k
     runway20k
@@ -31,9 +26,7 @@ query {
     runway5k
     runway2dot5k
     runwayCurrent
-    holders
-    treasuryOhmDaiPOL
-    treasuryOhmFraxPOL
+    treasuryClamMaiPOL
   }
 }
 `;
@@ -168,8 +161,8 @@ export const bulletpoints = {
 
 export const tooltipItems = {
   tvl: ['Total Value Deposited'],
-  coin: ['DAI', 'FRAX', 'ETH', 'SUSHI', 'LUSD'],
-  rfv: ['DAI', 'FRAX', 'LUSD'],
+  coin: ['MAI'],
+  rfv: ['MAI'],
   holder: ['CLAMies'],
   apy: ['APY'],
   runway: ['Current', '7.5K APY', '5K APY', '2.5K APY'],
