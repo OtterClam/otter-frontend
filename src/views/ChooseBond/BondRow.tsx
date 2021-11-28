@@ -124,14 +124,12 @@ export function BondTableRow({ bondKey }: IBondProps) {
     return state.bonding[bondKey] && state.bonding[bondKey].purchased;
   });
   const fiveDayRate = useSelector<IReduxState, number>(state => state.app.fiveDayRate);
-  const marketPrice = useSelector<IReduxState, number | undefined>(state => {
-    return state.bonding[bondKey] && state.bonding[bondKey].marketPrice;
-  });
+  const marketPrice = useSelector<IReduxState, string>(state => state.bonding[bondKey]?.marketPrice);
   const myBalance = useSelector<IReduxState, number>(state => {
     //@ts-ignore
     return state.account[bondKey] && state.account[bondKey].interestDue;
   });
-  const priceDiff = (marketPrice ?? 0) - (bondPrice ?? 0);
+  const priceDiff = (Number(marketPrice) ?? 0) - (bondPrice ?? 0);
 
   return (
     <TableRow id={`${bondKey}--bond`}>

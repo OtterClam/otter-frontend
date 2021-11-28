@@ -42,10 +42,8 @@ function BondROI({ bond }: { bond: ComputedBond }) {
   const bondPrice = useSelector<IReduxState, number>(state => {
     return state.bonding[bond.value] && state.bonding[bond.value].bondPrice;
   });
-  const marketPrice = useSelector<IReduxState, number | undefined>(state => {
-    return state.bonding[bond.value] && state.bonding[bond.value].marketPrice;
-  });
-  const priceDiff = (marketPrice ?? 0) - (bondPrice ?? 0);
+  const marketPrice = useSelector<IReduxState, string>(state => state.bonding[bond.value]?.marketPrice);
+  const priceDiff = (Number(marketPrice) ?? 0) - (bondPrice ?? 0);
   const dot = <span className="bond-pair-roi-dot" style={{ background: theme.palette.otter.otterGreen }} />;
   return (
     <span className="bond-pair-roi">

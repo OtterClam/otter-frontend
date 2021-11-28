@@ -35,9 +35,7 @@ function Bond({ bondKey }: IBondProps) {
   const bond = useMemo(() => getBond(bondKey, chainID), [bondKey, chainID]);
   const [view, setView] = useState(0);
   const isBondLoading = useSelector<IReduxState, boolean>(state => state.bonding.loading ?? true);
-  const marketPrice = useSelector<IReduxState, number>(state => {
-    return state.bonding[bondKey] && state.bonding[bondKey].marketPrice;
-  });
+  const marketPrice = useSelector<IReduxState, string>(state => state.bonding[bondKey]?.marketPrice);
   const bondPrice = useSelector<IReduxState, number>(state => {
     return state.bonding[bondKey] && state.bonding[bondKey].bondPrice;
   });

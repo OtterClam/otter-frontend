@@ -24,8 +24,20 @@ interface IChangeApproval {
   address: string;
 }
 
+export interface BondDetails {
+  bond: BondKey;
+  bondDiscount: number;
+  debtRatio: number;
+  bondQuote: number;
+  purchased: number;
+  vestingTerm: number;
+  maxBondPrice: number;
+  bondPrice: number;
+  marketPrice: string;
+}
+
 export type IBond = {
-  [key in BondKey]: any;
+  [key in BondKey]: BondDetails;
 } & { loading: boolean };
 
 export const changeApproval = createAsyncThunk(
@@ -78,7 +90,7 @@ interface ICalcBondDetails {
 
 export const calcBondDetails = createAsyncThunk(
   'bonding/calcBondDetails',
-  async ({ bondKey, value, provider, networkID }: ICalcBondDetails) => {
+  async ({ bondKey, value, provider, networkID }: ICalcBondDetails): Promise<BondDetails> => {
     let amountInWei;
     if (!value || value === '') {
       amountInWei = ethers.utils.parseEther('0.0001'); // Use a realistic SLP ownership
