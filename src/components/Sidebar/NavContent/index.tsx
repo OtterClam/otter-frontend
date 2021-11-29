@@ -4,7 +4,6 @@ import groupBy from 'lodash/groupBy';
 import { useCallback, useContext } from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink, useLocation } from 'react-router-dom';
-import { Status, StatusChip } from 'src/components/Chip';
 import { DEFAULT_NETWORK, getAddresses } from 'src/constants';
 import { AppThemeContext } from 'src/helpers/app-theme-context';
 import { IReduxState } from 'src/store/slices/state.interface';
@@ -72,7 +71,7 @@ function BondROI({ bond }: { bond: ComputedBond }) {
 
 function NavContent() {
   const styles = useStyles();
-  const { deprecated: deprecatedBonds = [], active: activeBonds = [] } = useGroupedBonds();
+  const { active: activeBonds = [] } = useGroupedBonds();
   const location = useLocation();
   const currenTheme = useContext(AppThemeContext).name;
   const networkID = useSelector<IReduxState, number>(state => {
@@ -158,7 +157,7 @@ function NavContent() {
                 <div className="bond-discounts">
                   <div className="bond-discounts-group">
                     <div className="bond-discounts-group-title bond">
-                      <span>Active</span>
+                      <span>Name</span>
                       <span className="bond-pair-roi">ROI</span>
                     </div>
                     {activeBonds.map((bond, i) => (
@@ -171,16 +170,6 @@ function NavContent() {
                             <BondROI bond={bond} />
                           </p>
                         )}
-                      </Link>
-                    ))}
-                  </div>
-                  <div className="bond-discounts-group">
-                    <div className="bond-discounts-group-title bond">
-                      <span>Deprecated</span>
-                    </div>
-                    {deprecatedBonds.map((bond, i) => (
-                      <Link component={NavLink} to={`/bonds/${bond.value}`} key={i} className={'bond'}>
-                        {bond.discount == NaN ? <Skeleton variant="text" width={'150px'} /> : <p>{bond.name}</p>}
                       </Link>
                     ))}
                   </div>

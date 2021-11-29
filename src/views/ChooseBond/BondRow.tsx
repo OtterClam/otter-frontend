@@ -28,7 +28,9 @@ export function BondDataCard({ bondKey }: IBondProps) {
   const bondPurchased = useSelector<IReduxState, number>(state => {
     return state.bonding[bondKey] && state.bonding[bondKey].purchased;
   });
+  const marketPrice = useSelector<IReduxState, string>(state => state.bonding[bondKey]?.marketPrice);
   const fiveDayRate = useSelector<IReduxState, number>(state => state.app.fiveDayRate);
+  const priceDiff = (Number(marketPrice) ?? 0) - (bondPrice ?? 0);
 
   return (
     <Slide direction="up" in={true}>
@@ -56,6 +58,7 @@ export function BondDataCard({ bondKey }: IBondProps) {
               {priceUnits(bondKey)}{' '}
               {isBondLoading ? <Skeleton width="50px" /> : bond.deprecated ? '-' : trim(bondPrice, 2)}
             </>
+            {priceDiff > 0 && <StatusChip status={Status.Success} label={`$${trim(priceDiff, 2)} discount!`} />}
           </p>
         </div>
 

@@ -52,9 +52,6 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
   const maxPayout = useSelector<IReduxState, number>(state => {
     return state.bonding[bondKey] && state.bonding[bondKey].maxPayout;
   });
-  const bondPrice = useSelector<IReduxState, number>(state => {
-    return state.bonding[bondKey] && state.bonding[bondKey].bondPrice;
-  });
   const interestDue = useSelector<IReduxState, number>(state => {
     //@ts-ignore
     return state.account[bondKey] && state.account[bondKey].interestDue;

@@ -3,6 +3,7 @@ import { Skeleton } from '@material-ui/lab';
 import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router';
+import { Status, StatusChip } from 'src/components/Chip';
 import { Bond as BondType, BondAction, BondKey, getBond } from 'src/constants';
 import TabPanel from '../../components/TabPanel';
 import { trim } from '../../helpers';
@@ -39,6 +40,7 @@ function Bond({ bondKey }: IBondProps) {
   const bondPrice = useSelector<IReduxState, number>(state => {
     return state.bonding[bondKey] && state.bonding[bondKey].bondPrice;
   });
+  const priceDiff = (Number(marketPrice) ?? 0) - (bondPrice ?? 0);
   const onRecipientAddressChange = (e: any) => {
     return setRecipientAddress(e.target.value);
   };
@@ -86,6 +88,7 @@ function Bond({ bondKey }: IBondProps) {
                         `${trim(bondPrice, 2)} ${bond.reserveUnit}`
                       )}
                     </Box>
+                    {priceDiff > 0 && <StatusChip status={Status.Success} label={`$${trim(priceDiff, 2)} discount!`} />}
                   </div>
                   <div className="bond-price-data">
                     <p className="bond-price-data-title">CLAM Price</p>
