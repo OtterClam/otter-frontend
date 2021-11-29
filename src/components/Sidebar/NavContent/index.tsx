@@ -44,7 +44,8 @@ function BondROI({ bond }: { bond: ComputedBond }) {
   });
   const marketPrice = useSelector<IReduxState, string>(state => state.bonding[bond.value]?.marketPrice);
   const priceDiff = (Number(marketPrice) ?? 0) - (bondPrice ?? 0);
-  const dot = <span className="bond-pair-roi-dot" style={{ background: theme.palette.otter.otterGreen }} />;
+  const dotColor = theme.palette.mode.chip.status.success;
+  const dot = <span className="bond-pair-roi-dot" style={{ background: dotColor }} />;
   return (
     <span className="bond-pair-roi">
       <span className="bond-pair-roi-value">

@@ -20,17 +20,19 @@ export interface StatusChipProps extends Omit<ChipProps, 'icon'> {
 
 export function StatusChip({ className, status = Status.Success, dot = true, ...restProps }: StatusChipProps) {
   const theme = useTheme();
-  const color = {
-    [Status.Success]: theme.palette.otter.otterGreen,
-  }[status];
+  const color = theme.palette.mode.chip.status[status];
+  const backgroundColor = theme.palette.mode.chip.status.bg;
   className = classNames(className, 'chip--status');
   const icon = dot ? <span className="chip__dot" style={{ background: color }} /> : undefined;
-  return <Chip icon={icon} className={className} {...restProps} style={{ color }} />;
+  return <Chip icon={icon} className={className} {...restProps} style={{ backgroundColor, color }} />;
 }
 
 export type LabelChipProps = ChipProps;
 
 export function LabelChip({ className, ...restProps }: ChipProps) {
+  const theme = useTheme();
+  const color = theme.palette.mode.chip.normal.fg;
+  const backgroundColor = theme.palette.mode.chip.normal.bg;
   className = classNames('chip--label', className);
-  return <Chip className={className} {...restProps} />;
+  return <Chip className={className} style={{ color, backgroundColor }} {...restProps} />;
 }
