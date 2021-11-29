@@ -24,7 +24,7 @@ function ExpandedChart({
             <div className="chart-card-header">
               <Box display="flex">
                 <Box display="flex" alignItems="center" style={{ width: 'max-content', whiteSpace: 'nowrap' }}>
-                  <Typography variant="h6" color="textSecondary" style={{ fontWeight: 400 }}>
+                  <Typography variant="h6" color="textPrimary" style={{ fontWeight: 700 }}>
                     {headerText}
                   </Typography>
                 </Box>
@@ -49,7 +49,7 @@ function ExpandedChart({
                   {headerSubText}
                 </Typography>
                 {runwayExtraInfo}
-                <Typography variant="h4" color="textSecondary" style={{ fontWeight: 400 }}>
+                <Typography variant="h4" color="textPrimary" style={{ fontWeight: 500 }}>
                   Today
                 </Typography>
               </Box>

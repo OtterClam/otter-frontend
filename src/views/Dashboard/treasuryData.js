@@ -18,6 +18,8 @@ query {
     nextDistributedClam
     treasuryMaiRiskFreeValue
     treasuryMaiMarketValue
+    treasuryFraxMarketValue
+    treasuryFraxRiskFreeValue
     currentAPY
     runway10k
     runway20k
@@ -161,12 +163,12 @@ export const bulletpoints = {
 
 export const tooltipItems = {
   tvl: ['Total Value Deposited'],
-  coin: ['MAI'],
-  rfv: ['MAI'],
+  coin: ['MAI', 'FRAX'],
+  rfv: ['MAI', 'FRAX'],
   holder: ['CLAMies'],
   apy: ['APY'],
   runway: ['Current', '7.5K APY', '5K APY', '2.5K APY'],
-  pol: ['SLP Treasury', 'Market SLP'],
+  pol: ['LP Treasury', 'Market LP'],
 };
 
 export const tooltipInfoMessages = {

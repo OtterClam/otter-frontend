@@ -462,9 +462,9 @@ function Chart({
           <Box display="flex" width="90%" alignItems="center">
             <Typography
               variant="h6"
-              color="textSecondary"
+              color="textPrimary"
               className="card-title-text"
-              style={{ fontWeight: 400, overflow: 'hidden' }}
+              style={{ fontWeight: 700, overflow: 'hidden' }}
             >
               {headerText}
             </Typography>
@@ -496,7 +496,7 @@ function Chart({
             <Typography variant="h4" style={{ fontWeight: 600, marginRight: 5 }}>
               {headerSubText}
             </Typography>
-            <Typography variant="h4" color="textSecondary" style={{ fontWeight: 400 }}>
+            <Typography variant="h4" color="textPrimary" style={{ fontWeight: 500 }}>
               {type !== 'multi' && 'Today'}
             </Typography>
           </Box>

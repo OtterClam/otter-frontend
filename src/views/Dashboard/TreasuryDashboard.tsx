@@ -1,28 +1,22 @@
-import { useEffect, useState } from 'react';
-import { Paper, Grid, Typography, Box, Zoom, Container, useMediaQuery } from '@material-ui/core';
-import { Skeleton } from '@material-ui/lab';
-import { useSelector } from 'react-redux';
-import Chart from '../../components/Chart/Chart.jsx';
-import { trim, formatCurrency } from '../../helpers';
-import {
-  treasuryDataQuery,
-  rebasesDataQuery,
-  bulletpoints,
-  tooltipItems,
-  tooltipInfoMessages,
-  itemType,
-} from './treasuryData.js';
+import { Box, Container, Grid, Paper, Typography, useMediaQuery, Zoom } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
-import './treasury-dashboard.scss';
-import apollo from '../../lib/apolloClient';
+import { Skeleton } from '@material-ui/lab';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import InfoTooltip from 'src/components/InfoTooltip/InfoTooltip.jsx';
-import OtterKing from './otterking.png';
 import { IReduxState } from 'src/store/slices/state.interface';
+import Chart from '../../components/Chart/Chart.jsx';
+import { formatCurrency, trim } from '../../helpers';
+import apollo from '../../lib/apolloClient';
+import OtterKing from './otterking.png';
+import './treasury-dashboard.scss';
+import { bulletpoints, itemType, tooltipInfoMessages, tooltipItems, treasuryDataQuery } from './treasuryData.js';
 
 const percentFormatter = Intl.NumberFormat('en', { style: 'percent', minimumFractionDigits: 2 });
+const numberFormatter = Intl.NumberFormat('en', { maximumFractionDigits: 0 });
 
 function TreasuryDashboard() {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState<any>(null);
   const [apy, setApy] = useState(null);
   const [runway, setRunway] = useState(null);
   const [staked, setStaked] = useState(null);
@@ -36,11 +30,7 @@ function TreasuryDashboard() {
   const marketCap = useSelector<IReduxState, number>(state => state.app.marketCap);
   const currentIndex = useSelector<IReduxState, string>(state => state.app.currentIndex);
   const backingPerClam = useSelector<IReduxState, number>(state => state.app.backingPerClam);
-  const stakingAPY = useSelector<IReduxState, number>(state => state.app.stakingAPY);
-  const stakingTVL = useSelector<IReduxState, number>(state => state.app.stakingTVL);
-  const treasuryRunway = useSelector<IReduxState, number>(state => state.app.treasuryRunway);
   const stakingRatio = useSelector<IReduxState, number>(state => state.app.stakingRatio);
-  const treasuryBalance = useSelector<IReduxState, number>(state => state.app.treasuryBalance);
 
   const displayData = [
     {
@@ -52,34 +42,17 @@ function TreasuryDashboard() {
       value: marketPrice ? formatCurrency(marketPrice, 2) : null,
     },
     {
-      title: 'Treasury Balance',
-      value: treasuryBalance ? formatCurrency(treasuryBalance, 0) : null,
-    },
-    {
-      title: 'Staking TVL',
-      value: stakingTVL ? formatCurrency(stakingTVL, 0) : null,
-      info: tooltipInfoMessages.tvl,
-    },
-    {
-      title: 'Staking APY',
-      value: stakingAPY ? percentFormatter.format(stakingAPY) : null,
-      info: tooltipInfoMessages.apy,
-    },
-    {
       title: 'Staking Ratio',
       value: stakingRatio ? percentFormatter.format(stakingRatio) : null,
       info: tooltipInfoMessages.staked,
     },
     {
-      title: 'Backing per CLAM',
-      value: backingPerClam ? formatCurrency(backingPerClam, 2) : null,
+      title: 'Circulating Supply',
+      value: circSupply ? `${numberFormatter.format(circSupply)} / ${numberFormatter.format(totalSupply)}` : null,
     },
     {
-      title: 'Runway',
-      value: treasuryRunway
-        ? Intl.NumberFormat('en', { maximumFractionDigits: 0 }).format(treasuryRunway) + ' Days'
-        : null,
-      info: tooltipInfoMessages.runway,
+      title: 'Backing per CLAM',
+      value: backingPerClam ? formatCurrency(backingPerClam, 2) : null,
     },
     {
       title: 'Current Index',
@@ -90,9 +63,8 @@ function TreasuryDashboard() {
 
   useEffect(() => {
     apollo(treasuryDataQuery).then(r => {
-      debugger;
       // @ts-ignore
-      let metrics = r.data.protocolMetrics.map(entry =>
+      let metrics = r?.data.protocolMetrics.map(entry =>
         // @ts-ignore
         Object.entries(entry).reduce((obj, [key, value]) => ((obj[key] = parseFloat(value)), obj), {}),
       );
@@ -144,8 +116,8 @@ function TreasuryDashboard() {
           paddingRight: smallerScreen || verySmallScreen ? '0' : '3.3rem',
         }}
       >
-        <Box className={`hero-metrics`}>
-          <Paper className="ohm-card">
+        <Box className="hero-metrics">
+          <Paper className="hero-metrics__paper">
             <Box display="flex" flexWrap="wrap" justifyContent="space-between" alignItems="center">
               {displayData.map(({ title, value, info }, i) => (
                 <Box key={i} bgcolor="mode.white" className="metric">
@@ -193,7 +165,7 @@ function TreasuryDashboard() {
                   <Chart
                     type="stack"
                     data={data}
-                    dataKey={['treasuryMaiMarketValue']}
+                    dataKey={['treasuryMaiMarketValue', 'treasuryFraxMarketValue']}
                     stopColor={[
                       ['#F5AC37', '#EA9276'],
                       ['#768299', '#98B3E9'],
@@ -222,7 +194,7 @@ function TreasuryDashboard() {
                     data={data}
                     // @ts-ignore
                     format="currency"
-                    dataKey={['treasuryMaiRiskFreeValue']}
+                    dataKey={['treasuryMaiRiskFreeValue', 'treasuryFraxRiskFreeValue']}
                     stopColor={[
                       ['#F5AC37', '#EA9276'],
                       ['#768299', '#98B3E9'],
