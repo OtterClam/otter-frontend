@@ -38,6 +38,9 @@ const renderExpandedChartStroke = (isExpanded, color) => {
   return isExpanded ? <CartesianGrid vertical={false} stroke={color} /> : '';
 };
 
+const xAxisTickProps = { fontSize: '12px' };
+const yAxisTickProps = { fontSize: '12px' };
+
 const renderAreaChart = (
   data,
   dataKey,
@@ -65,6 +68,7 @@ const renderAreaChart = (
       axisLine={false}
       tickLine={false}
       tickFormatter={str => format(new Date(str * 1000), 'MMM dd')}
+      tick={xAxisTickProps}
       reversed={true}
       connectNulls={true}
       padding={{ right: 20 }}
@@ -73,12 +77,13 @@ const renderAreaChart = (
       tickCount={isExpanded ? expandedTickCount : tickCount}
       axisLine={false}
       tickLine={false}
-      width={dataFormat === 'percent' ? 33 : 55}
+      tick={yAxisTickProps}
+      width={33}
       tickFormatter={number =>
         number !== 0
           ? dataFormat !== 'percent'
             ? `${formatCurrency(parseFloat(number) / 1000000)}M`
-            : `${trim(parseFloat(number), 2)}%`
+            : `${trim(parseFloat(number), 0)}%`
           : ''
       }
       domain={[0, 'auto']}
@@ -141,6 +146,7 @@ const renderStackedAreaChart = (
       dataKey="timestamp"
       interval={30}
       axisLine={false}
+      tick={xAxisTickProps}
       tickLine={false}
       tickFormatter={str => format(new Date(str * 1000), 'MMM dd')}
       reversed={true}
@@ -151,7 +157,8 @@ const renderStackedAreaChart = (
       tickCount={isExpanded ? expandedTickCount : tickCount}
       axisLine={false}
       tickLine={false}
-      width={dataFormat === 'percent' ? 33 : 55}
+      width={33}
+      tick={yAxisTickProps}
       tickFormatter={number => {
         if (number !== 0) {
           if (dataFormat === 'percent') {
@@ -226,6 +233,7 @@ const renderLineChart = (
       dataKey="timestamp"
       interval={100}
       axisLine={false}
+      tick={xAxisTickProps}
       tickCount={3}
       tickLine={false}
       reversed={true}
@@ -236,6 +244,7 @@ const renderLineChart = (
     <YAxis
       tickCount={scale == 'log' ? 1 : isExpanded ? expandedTickCount : tickCount}
       axisLine={false}
+      tick={yAxisTickProps}
       tickLine={false}
       width={32}
       scale={scale}
@@ -271,6 +280,7 @@ const renderMultiLineChart = (
       dataKey="timestamp"
       interval={30}
       axisLine={false}
+      tick={xAxisTickProps}
       tickCount={3}
       tickLine={false}
       reversed={true}
@@ -281,9 +291,10 @@ const renderMultiLineChart = (
     <YAxis
       tickCount={isExpanded ? expandedTickCount : tickCount}
       axisLine={false}
+      tick={yAxisTickProps}
       tickLine={false}
-      width={25}
-      tickFormatter={number => (number !== 0 ? `${trim(parseFloat(number), 2)}` : '')}
+      width={33}
+      tickFormatter={number => (number !== 0 ? `${trim(parseFloat(number), 0)}` : '')}
       domain={[0, 'auto']}
       connectNulls={true}
       allowDataOverflow={false}
@@ -462,7 +473,7 @@ function Chart({
           <Box display="flex" width="90%" alignItems="center">
             <Typography
               variant="h6"
-              color="textPrimary"
+              color="secondary"
               className="card-title-text"
               style={{ fontWeight: 700, overflow: 'hidden' }}
             >
@@ -496,7 +507,7 @@ function Chart({
             <Typography variant="h4" style={{ fontWeight: 600, marginRight: 5 }}>
               {headerSubText}
             </Typography>
-            <Typography variant="h4" color="textPrimary" style={{ fontWeight: 500 }}>
+            <Typography variant="h4" color="secondary" style={{ fontWeight: 500 }}>
               {type !== 'multi' && 'Today'}
             </Typography>
           </Box>

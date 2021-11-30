@@ -144,7 +144,7 @@ function TreasuryDashboard() {
                     type="area"
                     data={data}
                     dataKey={['totalValueLocked']}
-                    stopColor={[['#768299', '#98B3E9']]}
+                    stopColor={[['#FFACA1', 'rgba(255, 172, 161, 0.5)']]}
                     headerText="Total Value Deposited"
                     // @ts-ignore
                     headerSubText={`${data && formatCurrency(data[0].totalValueLocked)}`}
@@ -167,8 +167,8 @@ function TreasuryDashboard() {
                     data={data}
                     dataKey={['treasuryMaiMarketValue', 'treasuryFraxMarketValue']}
                     stopColor={[
-                      ['#F5AC37', '#EA9276'],
-                      ['#768299', '#98B3E9'],
+                      ['#EE4B4E', 'rgba(219, 55, 55, 0.5)'],
+                      ['#8F5AE8', '#rgba(143, 90, 232, 0.5)'],
                       ['#DC30EB', '#EA98F1'],
                       ['#8BFF4D', '#4C8C2A'],
                       ['#ff758f', '#c9184a'],
@@ -196,8 +196,8 @@ function TreasuryDashboard() {
                     format="currency"
                     dataKey={['treasuryMaiRiskFreeValue', 'treasuryFraxRiskFreeValue']}
                     stopColor={[
-                      ['#F5AC37', '#EA9276'],
-                      ['#768299', '#98B3E9'],
+                      ['#EE4B4E', 'rgba(219, 55, 55, 0.5)'],
+                      ['#8F5AE8', '#rgba(143, 90, 232, 0.5)'],
                       ['#DC30EB', '#EA98F1'],
                       ['#000', '#fff'],
                       ['#000', '#fff'],
@@ -266,7 +266,7 @@ function TreasuryDashboard() {
                     type="area"
                     data={staked}
                     dataKey={['staked']}
-                    stopColor={[['#55EBC7', '#47ACEB']]}
+                    stopColor={[['rgba(255, 220, 119, 1)', 'rgba(255, 220, 119, 0.5)']]}
                     headerText="CLAM Staked"
                     dataFormat="percent"
                     // @ts-ignore
