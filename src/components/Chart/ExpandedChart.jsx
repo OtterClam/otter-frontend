@@ -1,8 +1,7 @@
-import InfoTooltip from '../InfoTooltip/InfoTooltip';
-import { Box, Backdrop, Modal, Paper, SvgIcon, Typography, Fade, useMediaQuery } from '@material-ui/core';
-import { ReactComponent as XIcon } from '../../assets/icons/x.svg';
+import { Backdrop, Box, Fade, Modal, Paper, SvgIcon, Typography, useMediaQuery } from '@material-ui/core';
 import { ResponsiveContainer } from 'recharts';
-import { style } from '@material-ui/system';
+import { ReactComponent as XIcon } from '../../assets/icons/x.svg';
+import InfoTooltip from '../InfoTooltip/InfoTooltip';
 
 function ExpandedChart({
   open,
@@ -24,7 +23,7 @@ function ExpandedChart({
             <div className="chart-card-header">
               <Box display="flex">
                 <Box display="flex" alignItems="center" style={{ width: 'max-content', whiteSpace: 'nowrap' }}>
-                  <Typography variant="h6" color="textSecondary" style={{ fontWeight: 400 }}>
+                  <Typography variant="h6" color="secondary" style={{ fontWeight: 700 }}>
                     {headerText}
                   </Typography>
                 </Box>
@@ -49,7 +48,7 @@ function ExpandedChart({
                   {headerSubText}
                 </Typography>
                 {runwayExtraInfo}
-                <Typography variant="h4" color="textSecondary" style={{ fontWeight: 400 }}>
+                <Typography variant="h4" color="secondary" style={{ fontWeight: 500 }}>
                   Today
                 </Typography>
               </Box>

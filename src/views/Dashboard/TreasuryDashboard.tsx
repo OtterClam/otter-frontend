@@ -1,28 +1,22 @@
-import { useEffect, useState } from 'react';
-import { Paper, Grid, Typography, Box, Zoom, Container, useMediaQuery } from '@material-ui/core';
-import { Skeleton } from '@material-ui/lab';
-import { useSelector } from 'react-redux';
-import Chart from '../../components/Chart/Chart.jsx';
-import { trim, formatCurrency } from '../../helpers';
-import {
-  treasuryDataQuery,
-  rebasesDataQuery,
-  bulletpoints,
-  tooltipItems,
-  tooltipInfoMessages,
-  itemType,
-} from './treasuryData.js';
+import { Box, Container, Grid, Paper, Typography, useMediaQuery, Zoom } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
-import './treasury-dashboard.scss';
-import apollo from '../../lib/apolloClient';
+import { Skeleton } from '@material-ui/lab';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import InfoTooltip from 'src/components/InfoTooltip/InfoTooltip.jsx';
-import OtterKing from './otterking.png';
 import { IReduxState } from 'src/store/slices/state.interface';
+import Chart from '../../components/Chart/Chart.jsx';
+import { formatCurrency, trim } from '../../helpers';
+import apollo from '../../lib/apolloClient';
+import OtterKing from './otterking.png';
+import './treasury-dashboard.scss';
+import { bulletpoints, itemType, tooltipInfoMessages, tooltipItems, treasuryDataQuery } from './treasuryData.js';
 
 const percentFormatter = Intl.NumberFormat('en', { style: 'percent', minimumFractionDigits: 2 });
+const numberFormatter = Intl.NumberFormat('en', { maximumFractionDigits: 0 });
 
 function TreasuryDashboard() {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState<any>(null);
   const [apy, setApy] = useState(null);
   const [runway, setRunway] = useState(null);
   const [staked, setStaked] = useState(null);
@@ -36,11 +30,7 @@ function TreasuryDashboard() {
   const marketCap = useSelector<IReduxState, number>(state => state.app.marketCap);
   const currentIndex = useSelector<IReduxState, string>(state => state.app.currentIndex);
   const backingPerClam = useSelector<IReduxState, number>(state => state.app.backingPerClam);
-  const stakingAPY = useSelector<IReduxState, number>(state => state.app.stakingAPY);
-  const stakingTVL = useSelector<IReduxState, number>(state => state.app.stakingTVL);
-  const treasuryRunway = useSelector<IReduxState, number>(state => state.app.treasuryRunway);
   const stakingRatio = useSelector<IReduxState, number>(state => state.app.stakingRatio);
-  const treasuryBalance = useSelector<IReduxState, number>(state => state.app.treasuryBalance);
 
   const displayData = [
     {
@@ -52,34 +42,17 @@ function TreasuryDashboard() {
       value: marketPrice ? formatCurrency(marketPrice, 2) : null,
     },
     {
-      title: 'Treasury Balance',
-      value: treasuryBalance ? formatCurrency(treasuryBalance, 0) : null,
-    },
-    {
-      title: 'Staking TVL',
-      value: stakingTVL ? formatCurrency(stakingTVL, 0) : null,
-      info: tooltipInfoMessages.tvl,
-    },
-    {
-      title: 'Staking APY',
-      value: stakingAPY ? percentFormatter.format(stakingAPY) : null,
-      info: tooltipInfoMessages.apy,
-    },
-    {
       title: 'Staking Ratio',
       value: stakingRatio ? percentFormatter.format(stakingRatio) : null,
       info: tooltipInfoMessages.staked,
     },
     {
-      title: 'Backing per CLAM',
-      value: backingPerClam ? formatCurrency(backingPerClam, 2) : null,
+      title: 'Circulating Supply',
+      value: circSupply ? `${numberFormatter.format(circSupply)} / ${numberFormatter.format(totalSupply)}` : null,
     },
     {
-      title: 'Runway',
-      value: treasuryRunway
-        ? Intl.NumberFormat('en', { maximumFractionDigits: 0 }).format(treasuryRunway) + ' Days'
-        : null,
-      info: tooltipInfoMessages.runway,
+      title: 'Backing per CLAM',
+      value: backingPerClam ? formatCurrency(backingPerClam, 2) : null,
     },
     {
       title: 'Current Index',
@@ -89,21 +62,33 @@ function TreasuryDashboard() {
   ];
 
   useEffect(() => {
-    // apollo(treasuryDataQuery).then(r => {
-    //   let metrics = r.data.protocolMetrics.map(entry =>
-    //     Object.entries(entry).reduce((obj, [key, value]) => ((obj[key] = parseFloat(value)), obj), {}),
-    //   );
-    //   metrics = metrics.filter(pm => pm.treasuryMarketValue > 0);
-    //   setData(metrics);
-    //   let staked = r.data.protocolMetrics.map(entry => ({
-    //     staked: (parseFloat(entry.sCLAMCirculatingSupply) / parseFloat(entry.ohmCirculatingSupply)) * 100,
-    //     timestamp: entry.timestamp,
-    //   }));
-    //   staked = staked.filter(pm => pm.staked < 100);
-    //   setStaked(staked);
-    //   let runway = metrics.filter(pm => pm.runway10k > 5);
-    //   setRunway(runway);
-    // });
+    apollo(treasuryDataQuery).then(r => {
+      // @ts-ignore
+      let metrics = r?.data.protocolMetrics.map(entry =>
+        // @ts-ignore
+        Object.entries(entry).reduce((obj, [key, value]) => ((obj[key] = parseFloat(value)), obj), {}),
+      );
+      // @ts-ignore
+      metrics = metrics.filter(pm => pm.treasuryMarketValue > 0);
+      setData(metrics);
+      // @ts-ignore
+      let staked = r.data.protocolMetrics.map(entry => ({
+        staked: (parseFloat(entry.sClamCirculatingSupply) / parseFloat(entry.clamCirculatingSupply)) * 100,
+        timestamp: entry.timestamp,
+      }));
+      // @ts-ignore
+      staked = staked.filter(pm => pm.staked < 100);
+      setStaked(staked);
+      // @ts-ignore
+      let runway = metrics.filter(pm => pm.runway10k > 5);
+      setRunway(runway);
+      // @ts-ignore
+      let apy = r.data.protocolMetrics.map(entry => ({
+        apy: entry.currentAPY,
+        timestamp: entry.timestamp,
+      }));
+      setApy(apy);
+    });
     // apollo(rebasesDataQuery).then(r => {
     //   let apy = r.data.rebases.map(entry => ({
     //     apy: Math.pow(parseFloat(entry.percentage) + 1, 365 * 3) * 100,
@@ -131,8 +116,8 @@ function TreasuryDashboard() {
           paddingRight: smallerScreen || verySmallScreen ? '0' : '3.3rem',
         }}
       >
-        <Box className={`hero-metrics`}>
-          <Paper className="ohm-card">
+        <Box className="hero-metrics">
+          <Paper className="hero-metrics__paper">
             <Box display="flex" flexWrap="wrap" justifyContent="space-between" alignItems="center">
               {displayData.map(({ title, value, info }, i) => (
                 <Box key={i} bgcolor="mode.white" className="metric">
@@ -149,178 +134,202 @@ function TreasuryDashboard() {
           </Paper>
         </Box>
 
-        {/* <Zoom in={true}>
+        <Zoom in={true}>
           <Grid container spacing={2} className="data-grid">
             <Grid item lg={6} md={6} sm={12} xs={12}>
               <Paper className="ohm-card ohm-chart-card">
-                <Chart
-                  type="area"
-                  data={data}
-                  dataKey={['totalValueLocked']}
-                  stopColor={[['#768299', '#98B3E9']]}
-                  headerText="Total Value Deposited"
-                  headerSubText={`${data && formatCurrency(data[0].totalValueLocked)}`}
-                  bulletpointColors={bulletpoints.tvl}
-                  itemNames={tooltipItems.tvl}
-                  itemType={itemType.dollar}
-                  infoTooltipMessage={tooltipInfoMessages.tvl}
-                  expandedGraphStrokeColor={theme.palette.graphStrokeColor}
-                />
+                {
+                  // @ts-ignore
+                  <Chart
+                    type="area"
+                    data={data}
+                    dataKey={['totalValueLocked']}
+                    stopColor={[['#FFACA1', 'rgba(255, 172, 161, 0.5)']]}
+                    headerText="Total Value Deposited"
+                    // @ts-ignore
+                    headerSubText={`${data && formatCurrency(data[0].totalValueLocked)}`}
+                    bulletpointColors={bulletpoints.tvl}
+                    itemNames={tooltipItems.tvl}
+                    itemType={itemType.dollar}
+                    infoTooltipMessage={tooltipInfoMessages.tvl}
+                    // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
+                  />
+                }
               </Paper>
             </Grid>
 
             <Grid item lg={6} md={6} sm={12} xs={12}>
               <Paper className="ohm-card ohm-chart-card">
-                <Chart
-                  type="stack"
-                  data={data}
-                  dataKey={[
-                    'treasuryDaiMarketValue',
-                    'treasuryFraxMarketValue',
-                    'treasuryWETHMarketValue',
-                    'treasuryXsushiMarketValue',
-                    'treasuryLusdRiskFreeValue',
-                  ]}
-                  stopColor={[
-                    ['#F5AC37', '#EA9276'],
-                    ['#768299', '#98B3E9'],
-                    ['#DC30EB', '#EA98F1'],
-                    ['#8BFF4D', '#4C8C2A'],
-                    ['#ff758f', '#c9184a'],
-                  ]}
-                  headerText="Market Value of Treasury Assets"
-                  headerSubText={`${data && formatCurrency(data[0].treasuryMarketValue)}`}
-                  bulletpointColors={bulletpoints.coin}
-                  itemNames={tooltipItems.coin}
-                  itemType={itemType.dollar}
-                  infoTooltipMessage={tooltipInfoMessages.mvt}
-                  expandedGraphStrokeColor={theme.palette.graphStrokeColor}
-                />
+                {
+                  // @ts-ignore
+                  <Chart
+                    type="stack"
+                    data={data}
+                    dataKey={['treasuryMaiMarketValue', 'treasuryFraxMarketValue']}
+                    stopColor={[
+                      ['#EE4B4E', 'rgba(219, 55, 55, 0.5)'],
+                      ['#8F5AE8', '#rgba(143, 90, 232, 0.5)'],
+                      ['#DC30EB', '#EA98F1'],
+                      ['#8BFF4D', '#4C8C2A'],
+                      ['#ff758f', '#c9184a'],
+                    ]}
+                    headerText="Market Value of Treasury Assets"
+                    // @ts-ignore
+                    headerSubText={`${data && formatCurrency(data[0].treasuryMarketValue)}`}
+                    bulletpointColors={bulletpoints.coin}
+                    itemNames={tooltipItems.coin}
+                    itemType={itemType.dollar}
+                    infoTooltipMessage={tooltipInfoMessages.mvt}
+                    // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
+                  />
+                }
               </Paper>
             </Grid>
 
             <Grid item lg={6} md={6} sm={12} xs={12}>
               <Paper className="ohm-card ohm-chart-card">
-                <Chart
-                  type="stack"
-                  data={data}
-                  format="currency"
-                  dataKey={['treasuryDaiRiskFreeValue', 'treasuryFraxRiskFreeValue', 'treasuryLusdRiskFreeValue']}
-                  stopColor={[
-                    ['#F5AC37', '#EA9276'],
-                    ['#768299', '#98B3E9'],
-                    ['#DC30EB', '#EA98F1'],
-                    ['#000', '#fff'],
-                    ['#000', '#fff'],
-                  ]}
-                  headerText="Risk Free Value of Treasury Assets"
-                  headerSubText={`${data && formatCurrency(data[0].treasuryRiskFreeValue)}`}
-                  bulletpointColors={bulletpoints.rfv}
-                  itemNames={tooltipItems.rfv}
-                  itemType={itemType.dollar}
-                  infoTooltipMessage={tooltipInfoMessages.rfv}
-                  expandedGraphStrokeColor={theme.palette.graphStrokeColor}
-                />
+                {
+                  <Chart
+                    type="stack"
+                    data={data}
+                    // @ts-ignore
+                    format="currency"
+                    dataKey={['treasuryMaiRiskFreeValue', 'treasuryFraxRiskFreeValue']}
+                    stopColor={[
+                      ['#EE4B4E', 'rgba(219, 55, 55, 0.5)'],
+                      ['#8F5AE8', '#rgba(143, 90, 232, 0.5)'],
+                      ['#DC30EB', '#EA98F1'],
+                      ['#000', '#fff'],
+                      ['#000', '#fff'],
+                    ]}
+                    headerText="Risk Free Value of Treasury Assets"
+                    // @ts-ignore
+                    headerSubText={`${data && formatCurrency(data[0].treasuryRiskFreeValue)}`}
+                    bulletpointColors={bulletpoints.rfv}
+                    itemNames={tooltipItems.rfv}
+                    itemType={itemType.dollar}
+                    infoTooltipMessage={tooltipInfoMessages.rfv}
+                    // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
+                  />
+                }
               </Paper>
             </Grid>
 
             <Grid item lg={6} md={6} sm={12} xs={12}>
               <Paper className="ohm-card">
-                <Chart
-                  type="area"
-                  data={data}
-                  dataKey={['treasuryOhmDaiPOL']}
-                  stopColor={[['rgba(128, 204, 131, 1)', 'rgba(128, 204, 131, 0)']]}
-                  headerText="Protocol Owned Liquidity CLAM-DAI"
-                  headerSubText={`${data && trim(data[0].treasuryOhmDaiPOL, 2)}% `}
-                  dataFormat="percent"
-                  bulletpointColors={bulletpoints.pol}
-                  itemNames={tooltipItems.pol}
-                  itemType={itemType.percentage}
-                  infoTooltipMessage={tooltipInfoMessages.pol}
-                  expandedGraphStrokeColor={theme.palette.graphStrokeColor}
-                  isPOL={true}
-                />
+                {
+                  // @ts-ignore
+                  <Chart
+                    type="area"
+                    data={data}
+                    dataKey={['treasuryClamMaiPOL']}
+                    stopColor={[['rgba(128, 204, 131, 1)', 'rgba(128, 204, 131, 0)']]}
+                    headerText="Protocol Owned Liquidity CLAM-MAI"
+                    // @ts-ignore
+                    headerSubText={`${data && trim(data[0].treasuryClamMaiPOL, 2)}% `}
+                    dataFormat="percent"
+                    bulletpointColors={bulletpoints.pol}
+                    itemNames={tooltipItems.pol}
+                    itemType={itemType.percentage}
+                    infoTooltipMessage={tooltipInfoMessages.pol}
+                    isPOL={true}
+                    // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
+                  />
+                }
               </Paper>
             </Grid>
-         <Grid item lg={6} md={12} sm={12} xs={12}>
+            {/*
+            <Grid item lg={6} md={12} sm={12} xs={12}>
               <Paper className="ohm-card">
                 <Chart
                   type="bar"
                   data={data}
-                  dataKey={["holders"]}
+                  dataKey={['holders']}
                   headerText="Holders"
                   stroke={[theme.palette.text.secondary]}
                   headerSubText={`${data && data[0].holders}`}
                   bulletpointColors={bulletpoints.holder}
                   itemNames={tooltipItems.holder}
-                  itemType={""}
+                  itemType={''}
                   infoTooltipMessage={tooltipInfoMessages.holder}
                   expandedGraphStrokeColor={theme.palette.graphStrokeColor}
                 />
               </Paper>
             </Grid>
+            */}
 
             <Grid item lg={6} md={6} sm={12} xs={12}>
               <Paper className="ohm-card">
-                <Chart
-                  type="area"
-                  data={staked}
-                  dataKey={['staked']}
-                  stopColor={[['#55EBC7', '#47ACEB']]}
-                  headerText="CLAM Staked"
-                  dataFormat="percent"
-                  headerSubText={`${staked && trim(staked[0].staked, 2)}% `}
-                  isStaked={true}
-                  bulletpointColors={bulletpoints.staked}
-                  infoTooltipMessage={tooltipInfoMessages.staked}
-                  expandedGraphStrokeColor={theme.palette.graphStrokeColor}
-                />
+                {
+                  // @ts-ignore
+                  <Chart
+                    type="area"
+                    data={staked}
+                    dataKey={['staked']}
+                    stopColor={[['rgba(255, 220, 119, 1)', 'rgba(255, 220, 119, 0.5)']]}
+                    headerText="CLAM Staked"
+                    dataFormat="percent"
+                    // @ts-ignore
+                    headerSubText={`${staked && trim(staked[0].staked, 2)}% `}
+                    isStaked={true}
+                    bulletpointColors={bulletpoints.staked}
+                    infoTooltipMessage={tooltipInfoMessages.staked}
+                    // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
+                  />
+                }
               </Paper>
             </Grid>
 
             <Grid item lg={6} md={6} sm={12} xs={12}>
               <Paper className="ohm-card">
-                <Chart
-                  type="line"
-                  scale="log"
-                  data={apy}
-                  dataKey={['apy']}
-                  color={theme.palette.text.primary}
-                  stroke={[theme.palette.text.primary]}
-                  headerText="APY over time"
-                  dataFormat="percent"
-                  headerSubText={`${apy && trim(apy[0].apy, 2)}%`}
-                  bulletpointColors={bulletpoints.apy}
-                  itemNames={tooltipItems.apy}
-                  itemType={itemType.percentage}
-                  infoTooltipMessage={tooltipInfoMessages.apy}
-                  expandedGraphStrokeColor={theme.palette.graphStrokeColor}
-                />
+                {
+                  // @ts-ignore
+                  <Chart
+                    type="line"
+                    scale="log"
+                    data={apy}
+                    dataKey={['apy']}
+                    color={theme.palette.text.primary}
+                    stroke={[theme.palette.text.primary]}
+                    headerText="APY over time"
+                    dataFormat="percent"
+                    // @ts-ignore
+                    headerSubText={`${apy && trim(apy[0].apy, 2)}%`}
+                    bulletpointColors={bulletpoints.apy}
+                    itemNames={tooltipItems.apy}
+                    itemType={itemType.percentage}
+                    infoTooltipMessage={tooltipInfoMessages.apy}
+                    // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
+                  />
+                }
               </Paper>
             </Grid>
 
             <Grid item lg={6} md={6} sm={12} xs={12}>
               <Paper className="ohm-card">
-                <Chart
-                  type="multi"
-                  data={runway}
-                  dataKey={['runwayCurrent', 'runway7dot5k', 'runway5k', 'runway2dot5k']}
-                  color={theme.palette.text.primary}
-                  stroke={[theme.palette.text.primary, '#2EC608', '#49A1F2', '#ff758f']}
-                  headerText="Runway Available"
-                  headerSubText={`${data && trim(data[0].runwayCurrent, 1)} Days`}
-                  dataFormat="days"
-                  bulletpointColors={bulletpoints.runway}
-                  itemNames={tooltipItems.runway}
-                  itemType={''}
-                  infoTooltipMessage={tooltipInfoMessages.runway}
-                  expandedGraphStrokeColor={theme.palette.graphStrokeColor}
-                />
+                {
+                  // @ts-ignore
+                  <Chart
+                    type="multi"
+                    data={runway}
+                    dataKey={['runwayCurrent', 'runway7dot5k', 'runway5k', 'runway2dot5k']}
+                    color={theme.palette.text.primary}
+                    stroke={[theme.palette.text.primary, '#2EC608', '#49A1F2', '#ff758f']}
+                    headerText="Runway Available"
+                    // @ts-ignore
+                    headerSubText={`${data && trim(data[0].runwayCurrent, 1)} Days`}
+                    dataFormat="days"
+                    bulletpointColors={bulletpoints.runway}
+                    itemNames={tooltipItems.runway}
+                    itemType={''}
+                    infoTooltipMessage={tooltipInfoMessages.runway}
+                    // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
+                  />
+                }
               </Paper>
             </Grid>
           </Grid>
-        </Zoom>*/}
+        </Zoom>
       </Container>
     </div>
   );
