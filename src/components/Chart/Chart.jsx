@@ -54,6 +54,7 @@ const renderAreaChart = (
   isExpanded,
   expandedGraphStrokeColor,
   isPOL,
+  domain,
 ) => (
   <AreaChart data={data}>
     <defs>
@@ -86,7 +87,7 @@ const renderAreaChart = (
             : `${trim(parseFloat(number), 0)}%`
           : ''
       }
-      domain={[0, 'auto']}
+      domain={domain}
       dx={3}
       connectNulls={true}
       allowDataOverflow={false}
@@ -368,6 +369,7 @@ function Chart({
   infoTooltipMessage,
   expandedGraphStrokeColor,
   isPOL,
+  domain = [0, 'auto'],
 }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -409,6 +411,7 @@ function Chart({
         isExpanded,
         expandedGraphStrokeColor,
         isPOL,
+        domain,
       );
     if (type === 'stack')
       return renderStackedAreaChart(

@@ -236,6 +236,7 @@ function TreasuryDashboard() {
                     itemNames={tooltipItems.pol}
                     itemType={itemType.percentage}
                     infoTooltipMessage={tooltipInfoMessages.pol}
+                    domain={[98, 'auto']}
                     isPOL={true}
                     // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
                   />
