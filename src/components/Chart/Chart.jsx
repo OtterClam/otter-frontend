@@ -60,7 +60,7 @@ const renderAreaChart = (
     <defs>
       <linearGradient id={`color-${dataKey[0]}`} x1="0" y1="0" x2="0" y2="1">
         <stop offset="0%" stopColor={stopColor[0][0]} stopOpacity={1} />
-        <stop offset="90%" stopColor={stopColor[0][1]} stopOpacity={0.9} />
+        <stop offset="90%" stopColor={stopColor[0][1]} stopOpacity={1} />
       </linearGradient>
     </defs>
     <XAxis
@@ -124,13 +124,13 @@ const renderStackedAreaChart = (
     <defs>
       <linearGradient id={`color-${dataKey[0]}`} x1="0" y1="0" x2="0" y2="1">
         <stop offset="0%" stopColor={stopColor[0][0]} stopOpacity={1} />
-        <stop offset="90%" stopColor={stopColor[0][1]} stopOpacity={0.9} />
+        <stop offset="90%" stopColor={stopColor[0][1]} stopOpacity={1} />
       </linearGradient>
       <linearGradient id={`color-${dataKey[1]}`} x1="0" y1="0" x2="0" y2="1">
         <stop offset="0%" stopColor={stopColor[1][0]} stopOpacity={1} />
-        <stop offset="90%" stopColor={stopColor[1][1]} stopOpacity={0.9} />
+        <stop offset="90%" stopColor={stopColor[1][1]} stopOpacity={1} />
       </linearGradient>
-      <linearGradient id={`color-${dataKey[2]}`} x1="0" y1="0" x2="0" y2="1">
+      {/* <linearGradient id={`color-${dataKey[2]}`} x1="0" y1="0" x2="0" y2="1">
         <stop offset="0%" stopColor={stopColor[2][0]} stopOpacity={1} />
         <stop offset="90%" stopColor={stopColor[2][1]} stopOpacity={0.9} />
       </linearGradient>
@@ -141,7 +141,7 @@ const renderStackedAreaChart = (
       <linearGradient id={`color-${dataKey[4]}`} x1="0" y1="0" x2="0" y2="1">
         <stop offset="0%" stopColor={stopColor[4][0]} stopOpacity={1} />
         <stop offset="90%" stopColor={stopColor[4][1]} stopOpacity={0.9} />
-      </linearGradient>
+      </linearGradient> */}
     </defs>
     <XAxis
       dataKey="timestamp"

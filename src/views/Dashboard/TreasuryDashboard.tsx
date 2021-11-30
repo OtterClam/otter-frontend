@@ -172,10 +172,10 @@ function TreasuryDashboard() {
                     dataKey={['treasuryMaiMarketValue', 'treasuryFraxMarketValue']}
                     stopColor={[
                       ['#EE4B4E', 'rgba(219, 55, 55, 0.5)'],
-                      ['#8F5AE8', '#rgba(143, 90, 232, 0.5)'],
-                      ['#DC30EB', '#EA98F1'],
-                      ['#8BFF4D', '#4C8C2A'],
-                      ['#ff758f', '#c9184a'],
+                      ['#8F5AE8', 'rgba(143, 90, 232, 0.5)'],
+                      // ['#DC30EB', '#EA98F1'],
+                      // ['#8BFF4D', '#4C8C2A'],
+                      // ['#ff758f', '#c9184a'],
                     ]}
                     headerText="Market Value of Treasury Assets"
                     // @ts-ignore
@@ -201,10 +201,10 @@ function TreasuryDashboard() {
                     dataKey={['treasuryMaiRiskFreeValue', 'treasuryFraxRiskFreeValue']}
                     stopColor={[
                       ['#EE4B4E', 'rgba(219, 55, 55, 0.5)'],
-                      ['#8F5AE8', '#rgba(143, 90, 232, 0.5)'],
-                      ['#DC30EB', '#EA98F1'],
-                      ['#000', '#fff'],
-                      ['#000', '#fff'],
+                      ['#8F5AE8', 'rgba(143, 90, 232, 0.5)'],
+                      // ['#DC30EB', '#EA98F1'],
+                      // ['#000', '#fff'],
+                      // ['#000', '#fff'],
                     ]}
                     headerText="Risk Free Value of Treasury Assets"
                     // @ts-ignore
@@ -227,7 +227,7 @@ function TreasuryDashboard() {
                     type="area"
                     data={data}
                     dataKey={['treasuryClamMaiPOL']}
-                    stopColor={[['rgba(128, 204, 131, 1)', 'rgba(128, 204, 131, 0)']]}
+                    stopColor={[['rgba(128, 204, 131, 1)', 'rgba(128, 204, 131, 0.5)']]}
                     headerText="Protocol Owned Liquidity CLAM-MAI"
                     // @ts-ignore
                     headerSubText={`${data && trim(data[0].treasuryClamMaiPOL, 2)}% `}
