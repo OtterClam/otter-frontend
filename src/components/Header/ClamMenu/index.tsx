@@ -1,7 +1,19 @@
 import { useState } from 'react';
 import { getAddresses, TOKEN_DECIMALS, DEFAULT_NETWORK } from '../../../constants';
 import { useSelector } from 'react-redux';
-import { Link, SvgIcon, Popper, Button, Paper, Typography, Divider, Box, Fade, makeStyles } from '@material-ui/core';
+import {
+  Link,
+  SvgIcon,
+  Popper,
+  Button,
+  Paper,
+  Typography,
+  Divider,
+  Box,
+  Fade,
+  makeStyles,
+  useMediaQuery,
+} from '@material-ui/core';
 import { ReactComponent as ArrowUpIcon } from '../../../assets/icons/arrow-up.svg';
 import './clam-menu.scss';
 import { IReduxState } from '../../../store/slices/state.interface';
@@ -42,6 +54,7 @@ function ClamMenu() {
   const styles = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const isEthereumAPIAvailable = window.ethereum;
+  const isSmallScreen = useMediaQuery('(max-width: 600px)');
 
   const networkID = useSelector<IReduxState, number>(state => {
     return (state.app && state.app.networkID) || DEFAULT_NETWORK;
@@ -57,66 +70,73 @@ function ClamMenu() {
 
   const open = Boolean(anchorEl);
   const id = 'ohm-popper';
-  return (
-    <>
-      <Box
-        component="div"
-        onMouseEnter={e => handleClick(e)}
-        onMouseLeave={e => handleClick(e)}
-        id="ohm-menu-button-hover"
-      >
+  if (isSmallScreen) {
+    return (
+      <Link href={'https://quickswap.exchange/#/swap?outputCurrency=' + CLAM_ADDRESS} target="_blank" rel="noreferrer">
         <Box color="text.primary" className="ohm-button">
-          <p>BUY CLAM2</p>
+          <p>BUY</p>
         </Box>
-
-        <Popper id={id} open={open} anchorEl={anchorEl} transition>
-          {({ TransitionProps }) => {
-            return (
-              <Fade {...TransitionProps} timeout={400}>
-                <Paper className={`${styles.popperMenu} ohm-menu`} elevation={1}>
-                  <Box component="div" className="buy-tokens">
-                    <Link
-                      href={'https://quickswap.exchange/#/swap?outputCurrency=' + CLAM_ADDRESS}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <Button size="large" variant="text" color="primary" fullWidth>
-                        <Typography className="buy-text" align="left">
-                          Buy on QuickSwap <SvgIcon component={ArrowUpIcon} htmlColor="#A3A3A3" />
-                        </Typography>
-                      </Button>
-                    </Link>
-                  </Box>
-
-                  {isEthereumAPIAvailable ? (
-                    <Box className="add-tokens">
-                      <Divider color="secondary" />
-                      <p>ADD TOKEN TO WALLET</p>
-                      <Button
-                        size="large"
-                        variant="text"
-                        color="primary"
-                        onClick={addTokenToWallet('CLAM2', CLAM_ADDRESS)}
-                      >
-                        <Typography className="buy-text">CLAM2</Typography>
-                      </Button>
-                      <Button
-                        variant="text"
-                        size="large"
-                        color="primary"
-                        onClick={addTokenToWallet('sCLAM2', sCLAM_ADDRESS)}
-                      >
-                        <Typography className="buy-text">sCLAM2</Typography>
-                      </Button>
-                    </Box>
-                  ) : null}
-                </Paper>
-              </Fade>
-            );
-          }}
-        </Popper>
+      </Link>
+    );
+  }
+  return (
+    <Box
+      component="div"
+      onMouseEnter={e => handleClick(e)}
+      onMouseLeave={e => handleClick(e)}
+      id="ohm-menu-button-hover"
+    >
+      <Box color="text.primary" className="ohm-button">
+        <p>BUY CLAM2</p>
       </Box>
-    </>
+
+      <Popper id={id} open={open} anchorEl={anchorEl} transition>
+        {({ TransitionProps }) => {
+          return (
+            <Fade {...TransitionProps} timeout={400}>
+              <Paper className={`${styles.popperMenu} ohm-menu`} elevation={1}>
+                <Box component="div" className="buy-tokens">
+                  <Link
+                    href={'https://quickswap.exchange/#/swap?outputCurrency=' + CLAM_ADDRESS}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <Button size="large" variant="text" color="primary" fullWidth>
+                      <Typography className="buy-text" align="left">
+                        Buy on QuickSwap <SvgIcon component={ArrowUpIcon} htmlColor="#A3A3A3" />
+                      </Typography>
+                    </Button>
+                  </Link>
+                </Box>
+
+                {isEthereumAPIAvailable ? (
+                  <Box className="add-tokens">
+                    <Divider color="secondary" />
+                    <p>ADD TOKEN TO WALLET</p>
+                    <Button
+                      size="large"
+                      variant="text"
+                      color="primary"
+                      onClick={addTokenToWallet('CLAM2', CLAM_ADDRESS)}
+                    >
+                      <Typography className="buy-text">CLAM2</Typography>
+                    </Button>
+                    <Button
+                      variant="text"
+                      size="large"
+                      color="primary"
+                      onClick={addTokenToWallet('sCLAM2', sCLAM_ADDRESS)}
+                    >
+                      <Typography className="buy-text">sCLAM2</Typography>
+                    </Button>
+                  </Box>
+                ) : null}
+              </Paper>
+            </Fade>
+          );
+        }}
+      </Popper>
+    </Box>
   );
 }
 

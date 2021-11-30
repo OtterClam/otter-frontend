@@ -72,7 +72,6 @@ function Header({ handleDrawerToggle, drawe }: IHeader) {
 
             <Box display="flex">
               {!isVerySmallScreen && <ClamMenu />}
-
               <ConnectMenu />
             </Box>
           </Toolbar>
