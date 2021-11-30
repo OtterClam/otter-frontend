@@ -93,6 +93,13 @@ export const light = responsiveFontSizes(
           disabled: colorPalette.light.darkGray200,
         },
       },
+      overrides: {
+        MuiDrawer: {
+          paperAnchorLeft: {
+            backgroundColor: colorPalette.dark.white,
+          },
+        },
+      },
     },
     commonSettings,
   ),
@@ -120,6 +127,13 @@ export const dark = responsiveFontSizes(
           secondary: colorPalette.common.clamPink,
           hint: colorPalette.common.white,
           disabled: colorPalette.dark.darkGray200,
+        },
+      },
+      overrides: {
+        MuiDrawer: {
+          paperAnchorLeft: {
+            backgroundColor: colorPalette.dark.white,
+          },
         },
       },
     },
