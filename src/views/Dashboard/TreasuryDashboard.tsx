@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import InfoTooltip from 'src/components/InfoTooltip/InfoTooltip.jsx';
 import { IReduxState } from 'src/store/slices/state.interface';
 import Chart from '../../components/Chart/Chart.jsx';
-import { formatCurrency, trim } from '../../helpers';
+import { formatCurrency, getTokenImage, trim } from '../../helpers';
 import apollo from '../../lib/apolloClient';
 import OtterKing from './otterking.png';
 import './treasury-dashboard.scss';
@@ -40,6 +40,7 @@ function TreasuryDashboard() {
     {
       title: 'CLAM Price',
       value: marketPrice ? formatCurrency(marketPrice, 2) : null,
+      image: getTokenImage('clam'),
     },
     {
       title: 'Staking Ratio',
@@ -119,15 +120,18 @@ function TreasuryDashboard() {
         <Box className="hero-metrics">
           <Paper className="hero-metrics__paper">
             <Box display="flex" flexWrap="wrap" justifyContent="space-between" alignItems="center">
-              {displayData.map(({ title, value, info }, i) => (
-                <Box key={i} bgcolor="mode.white" className="metric">
-                  <Typography variant="h6" color="secondary">
-                    {title}
-                    {info && <InfoTooltip message={info} />}
-                  </Typography>
-                  <Typography variant="h4" color="textPrimary">
-                    {value ? value : <Skeleton width="100px" />}
-                  </Typography>
+              {displayData.map(({ title, value, info, image }, i) => (
+                <Box key={i} bgcolor="mode.white" className="metric-container">
+                  <Box className="metic">
+                    <Typography variant="h6" color="secondary">
+                      {title}
+                      {info && <InfoTooltip message={info} />}
+                    </Typography>
+                    <Typography variant="h4" color="textPrimary">
+                      {value ? value : <Skeleton width="100px" />}
+                    </Typography>
+                  </Box>
+                  {image && <Box>{image}</Box>}
                 </Box>
               ))}
             </Box>
