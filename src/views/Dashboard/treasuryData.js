@@ -133,6 +133,28 @@ export const bulletpoints = {
       background: '#c9184a',
     },
   ],
+  runway_darktheme: [
+    {
+      right: 45,
+      top: -12,
+      background: '#FFFFFF',
+    },
+    {
+      right: 48,
+      top: -12,
+      background: '#2EC608',
+    },
+    {
+      right: 48,
+      top: -12,
+      background: '#49A1F2',
+    },
+    {
+      right: 48,
+      top: -12,
+      background: '#c9184a',
+    },
+  ],
   staked: [
     {
       right: 45,
