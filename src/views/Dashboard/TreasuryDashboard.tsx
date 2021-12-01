@@ -324,7 +324,9 @@ function TreasuryDashboard() {
                     // @ts-ignore
                     headerSubText={`${data && trim(data[0].runwayCurrent, 1)} Days`}
                     dataFormat="days"
-                    bulletpointColors={bulletpoints.runway}
+                    bulletpointColors={
+                      theme.palette.text.primary == '#1D2654' ? bulletpoints.runway : bulletpoints.runway_darktheme
+                    }
                     itemNames={tooltipItems.runway}
                     itemType={''}
                     infoTooltipMessage={tooltipInfoMessages.runway}
