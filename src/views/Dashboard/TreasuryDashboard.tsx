@@ -200,9 +200,9 @@ function TreasuryDashboard() {
                     format="currency"
                     dataKey={['treasuryMaiRiskFreeValue', 'treasuryFraxRiskFreeValue']}
                     stopColor={[
-                      ['#EE4B4E', 'rgba(219, 55, 55, 0.5)'],
-                      ['#8F5AE8', 'rgba(143, 90, 232, 0.5)'],
-                      // ['#DC30EB', '#EA98F1'],
+                      ['#EE4B4E', 'rgba(219, 55, 55, 0.5)'], //MAI
+                      ['#8F5AE8', 'rgba(143, 90, 232, 0.5)'], //FRAX
+                      // ['#DC30EB', '#EA98F1']
                       // ['#000', '#fff'],
                       // ['#000', '#fff'],
                     ]}

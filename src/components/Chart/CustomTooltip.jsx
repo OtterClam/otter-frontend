@@ -56,7 +56,7 @@ const renderTooltipItems = (payload, bulletpointColors, itemNames, itemType, isS
           <span className="tooltip-bulletpoint" style={bulletpointColors[1]}></span>
           {itemNames[1]}
         </Typography>
-        <Typography>{`${Math.round(100 - payload[0].value)}%`}</Typography>
+        <Typography>{`${(100 - payload[0].value).toFixed(2)}%`}</Typography>
       </Box>
       <Box>{renderDate(0, payload, payload[0])}</Box>
     </Box>
