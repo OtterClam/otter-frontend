@@ -50,19 +50,19 @@ export const bulletpoints = {
     {
       right: 20,
       top: -12,
-      background: 'linear-gradient(180deg, #768299 -10%, #98B3E9 100%)',
+      background: 'linear-gradient(180deg, #FFACA1 -10%, #FFACA1 100%)',
     },
   ],
   coin: [
     {
       right: 15,
       top: -12,
-      background: 'linear-gradient(180deg, #F5AC37 -10%, #EA9276 100%)',
+      background: 'linear-gradient(180deg, #DB3737 -10%, #EA9276 100%)',
     },
     {
       right: 25,
       top: -12,
-      background: 'linear-gradient(180deg, #768299 -10%, #98B3E9 100%)',
+      background: 'linear-gradient(180deg, #8f5ae8 -10%, #98B3E9 100%)',
     },
     {
       right: 29,
@@ -84,12 +84,12 @@ export const bulletpoints = {
     {
       right: 15,
       top: -12,
-      background: 'linear-gradient(180deg, #F5AC37 -10%, #EA9276 100%)',
+      background: 'linear-gradient(180deg, #DB3737 -10%, #EA9276 100%)',
     },
     {
       right: 25,
       top: -12,
-      background: 'linear-gradient(180deg, #768299 -10%, #98B3E9 100%)',
+      background: 'linear-gradient(180deg, #8f5ae8 -10%, #98B3E9 100%)',
     },
     {
       right: 29,
@@ -108,7 +108,7 @@ export const bulletpoints = {
     {
       right: 20,
       top: -12,
-      background: '#49A1F2',
+      background: '#1D2654',
     },
   ],
   runway: [
@@ -137,7 +137,7 @@ export const bulletpoints = {
     {
       right: 45,
       top: -11,
-      background: 'linear-gradient(180deg, #55EBC7 -10%, rgba(71, 172, 235, 0) 100%)',
+      background: 'linear-gradient(180deg, #ffdc77, #ffdc77 100%)',
     },
     {
       right: 68,
