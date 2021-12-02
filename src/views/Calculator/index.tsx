@@ -157,7 +157,7 @@ function Calculator() {
               <Box>
                 <Box className="calculator-card-action-area">
                   <Grid container spacing={3}>
-                    <Grid item xs={12} sm={6}>
+                    <Grid className="calculator-metric-area" item xs={12} sm={6}>
                       <Box className="calculator-card-action-area-inp-wrap">
                         <Typography variant="h6">sClam Amount</Typography>
                         <OutlinedInput
@@ -180,7 +180,7 @@ function Calculator() {
                         />
                       </Box>
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid className="calculator-metric-area" item xs={12} sm={6}>
                       <Box className="calculator-card-action-area-inp-wrap">
                         <Typography variant="h6">APY (%)</Typography>
                         <OutlinedInput
@@ -203,7 +203,7 @@ function Calculator() {
                         />
                       </Box>
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid className="calculator-metric-area" item xs={12} sm={6}>
                       <Box className="calculator-card-action-area-inp-wrap">
                         <Typography variant="h6">CLAM price at purchase ($)</Typography>
                         <OutlinedInput
@@ -226,7 +226,7 @@ function Calculator() {
                         />
                       </Box>
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid className="calculator-metric-area" item xs={12} sm={6}>
                       <Box className="calculator-card-action-area-inp-wrap">
                         <Typography variant="h6">Future CLAM market price ($)</Typography>
                         <OutlinedInput
