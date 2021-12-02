@@ -123,6 +123,7 @@
   margin: auto;
   justify-content: center;
   display: flex;
+  width: 100% !important;
 }
 .calculator-card-area {
   width: 100%;
@@ -138,7 +139,7 @@
   justify-content: space-around;
   margin-top: 10px;
   .calculator-card-action-input {
-    width: 100%;
+    width: 100% !important;
     border-radius: 10px;
     outline: none;
 
@@ -149,9 +150,7 @@
     }
   }
 }
-.lft {
-  margin-left: 20px !important;
-}
+
 .calculator-days-slider-wrap {
   width: 80%;
   align-items: center;
@@ -179,7 +178,7 @@
     .MuiSlider-track {
       border-top-left-radius: 10px;
       border-bottom-left-radius: 10px;
-      background: linear-gradient(90deg, #bf7d3e 0%, #e77609 90%);
+      background: linear-gradient(90deg, rgb(255, 104, 84) 0%, rgb(255, 104, 84) 90%);
       box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     }
 
@@ -188,7 +187,7 @@
       height: 20px;
       background: #161515;
       box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-      border: 3px solid #ff9900;
+      border: 3px solid rgb(187, 70, 54);
     }
   }
 }
@@ -327,7 +326,6 @@
 }
 
 .single-calculator-subtitle-value {
-  font-weight: 800;
   font-size: 24px;
   line-height: 36px;
   max-width: 300px;
@@ -336,7 +334,6 @@
 
 .stack-table-title {
   font-style: normal;
-  font-weight: 600;
   font-size: 14px;
 }
 
@@ -368,7 +365,6 @@
 
   .MuiTab-wrapper {
     font-style: normal;
-    font-weight: 600;
     font-size: 18px;
   }
 }
@@ -392,7 +388,6 @@
 
     p {
       font-style: normal;
-      font-weight: 600;
       font-size: 18px;
     }
   }
@@ -401,7 +396,6 @@
 .help-text {
   .text-desc {
     font-style: normal;
-    font-weight: 300;
     font-size: 14px;
     line-height: 17px;
     text-align: center;
@@ -411,10 +405,8 @@
 .calculator-user-data {
   .data-row {
     .data-row-name {
-      font-weight: 700;
       font-size: 14px;
       &-warmup {
-        font-weight: 700;
         // color: $clam-pink;
       }
     }
@@ -444,7 +436,6 @@
     cursor: pointer;
 
     p {
-      font-weight: 600;
       font-size: 18px;
     }
   }

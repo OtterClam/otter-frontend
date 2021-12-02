@@ -173,7 +173,7 @@ function Calculator() {
                                 onClick={() => setsClamAmount(trimmedsClamBalance)}
                                 className="stake-card-action-input-btn"
                               >
-                                <Typography>Max</Typography>
+                                <Typography>&nbsp;&nbsp;Max&nbsp;&nbsp; &nbsp;</Typography>
                               </div>
                             </InputAdornment>
                           }
@@ -205,13 +205,11 @@ function Calculator() {
                     </Grid>
                     <Grid className="calculator-metric-area" item xs={12} sm={6}>
                       <Box className="calculator-card-action-area-inp-wrap">
-                        <Typography className="lft" variant="h6">
-                          CLAM price at purchase ($)
-                        </Typography>
+                        <Typography variant="h6">CLAM price at purchase ($)</Typography>
                         <OutlinedInput
                           type="number"
                           placeholder="Amount"
-                          className="calculator-card-action-input lft"
+                          className="calculator-card-action-input"
                           value={priceAtPurchase}
                           onChange={e => setPriceAtPurchase(e.target.value)}
                           labelWidth={0}
