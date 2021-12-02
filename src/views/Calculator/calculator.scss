@@ -6,6 +6,7 @@
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  font-family: 'Gilroy';
   .rebase-timer {
     margin: 0 !important;
     line-height: 110% !important;
@@ -67,12 +68,6 @@
   padding: 0;
   text-align: center;
   margin-top: 10px;
-  h5 {
-    font-weight: 400;
-  }
-  h4 {
-    font-weight: 500;
-  }
   .calculator-apy,
   .calculator-tvl,
   .calculator-index {
@@ -84,6 +79,9 @@
     white-space: nowrap;
     overflow: hidden;
   }
+}
+.stake-card-action-input-btn {
+  cursor: pointer;
 }
 
 .mobile .calculator-top-metrics {
@@ -140,17 +138,19 @@
   justify-content: space-around;
   margin-top: 10px;
   .calculator-card-action-input {
-    width: 50%;
+    width: 100%;
     border-radius: 10px;
     outline: none;
 
     .MuiOutlinedInput-input {
       font-style: normal;
-      font-weight: 500;
       font-size: 16px;
       padding: 14px 20px;
     }
   }
+}
+.lft {
+  margin-left: 20px !important;
 }
 .calculator-days-slider-wrap {
   width: 80%;
@@ -159,7 +159,6 @@
 
   .calculator-days-slider-wrap-title {
     font-style: normal;
-    font-weight: 500;
     font-size: 16px;
     color: #ffffff;
     margin-bottom: 10px;
@@ -313,19 +312,16 @@
     margin-bottom: 10px;
   }
   .desc-text {
-    font-weight: 300;
     font-size: 14px;
   }
 }
 
 .single-calculator-title {
-  font-weight: 700;
   font-size: 20px;
   margin-bottom: 4px;
 }
 
 .single-calculator-subtitle {
-  font-weight: 600;
   font-size: 16px;
   margin-bottom: 2px;
 }
@@ -360,7 +356,6 @@
 
   p {
     font-style: normal;
-    font-weight: 600;
     font-size: 18px;
   }
 }

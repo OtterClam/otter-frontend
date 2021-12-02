@@ -205,11 +205,13 @@ function Calculator() {
                     </Grid>
                     <Grid className="calculator-metric-area" item xs={12} sm={6}>
                       <Box className="calculator-card-action-area-inp-wrap">
-                        <Typography variant="h6">CLAM price at purchase ($)</Typography>
+                        <Typography className="lft" variant="h6">
+                          CLAM price at purchase ($)
+                        </Typography>
                         <OutlinedInput
                           type="number"
                           placeholder="Amount"
-                          className="calculator-card-action-input"
+                          className="calculator-card-action-input lft"
                           value={priceAtPurchase}
                           onChange={e => setPriceAtPurchase(e.target.value)}
                           labelWidth={0}
@@ -278,12 +280,12 @@ function Calculator() {
                     <Typography>Potential return</Typography>
                     <Typography>{isAppLoading ? <Skeleton width="80px" /> : <>${potentialReturn}</>}</Typography>
                   </Box>
-                  <Box className="data-row">
+                  {/* <Box className="data-row">
                     <Typography>Potential number of Tesla Roadsters</Typography>
                     <Typography>
                       {isAppLoading ? <Skeleton width="80px" /> : <>{Math.floor(Number(potentialReturn) / 220000)}</>}
                     </Typography>
-                  </Box>
+                  </Box> */}
                 </Box>
               </Box>
             </Box>
