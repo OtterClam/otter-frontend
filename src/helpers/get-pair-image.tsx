@@ -1,5 +1,6 @@
 import { SvgIcon } from '@material-ui/core';
 import { ReactComponent as CLAM } from '../assets/tokens/CLAM.svg';
+import { ReactComponent as FRAX } from '../assets/tokens/FRAX.svg';
 import { ReactComponent as MAI } from '../assets/tokens/MAI.svg';
 
 const iconStyle = {
@@ -20,6 +21,14 @@ export function getPairImage(name: string) {
       <>
         <SvgIcon component={CLAM} viewBox="0 0 32 32" style={iconStyle} />
         <SvgIcon component={MAI} viewBox="0 0 32 32" style={secondIconStyle} />
+      </>
+    );
+  }
+  if (name.indexOf('frax') >= 0) {
+    return (
+      <>
+        <SvgIcon component={CLAM} viewBox="0 0 32 32" style={iconStyle} />
+        <SvgIcon component={FRAX} viewBox="0 0 32 32" style={secondIconStyle} />
       </>
     );
   }
