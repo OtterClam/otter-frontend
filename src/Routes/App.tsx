@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
 import Dashboard from 'src/views/Dashboard/TreasuryDashboard';
 import Migrate from 'src/views/Migrate';
+import Calculator from 'src/views/Calculator';
 import TopBar from '../components/Header';
 import Loading from '../components/Loader';
 import Sidebar from '../components/Sidebar';
@@ -192,6 +193,10 @@ function App() {
 
             <Route path="/migrate">
               <Migrate />
+            </Route>
+
+            <Route path="/calculator">
+              <Calculator />
             </Route>
 
             <Route component={NotFound} />
