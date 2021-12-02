@@ -1,5 +1,8 @@
 @import 'styles/_colors.scss';
-
+.MuiPaper-root.ohm-card {
+  width: unset !important;
+  max-width: none !important;
+}
 #bond-view {
   position: absolute !important;
   width: 100%;
