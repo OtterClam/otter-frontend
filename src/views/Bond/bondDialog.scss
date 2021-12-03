@@ -1,0 +1,64 @@
+@import '../../styles/colors';
+
+#bdialog {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  background-color: #55555555;
+
+  .ohm-popover {
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+
+    backdrop-filter: blur(100px);
+  }
+
+  .title {
+    padding: 12px;
+    text-align: center;
+  }
+
+  .msg {
+    padding: 12px;
+    text-align: center;
+  }
+
+  .icon-wrapper {
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
+
+    svg {
+      height: 80px !important;
+      width: 80px !important;
+    }
+  }
+
+  .close-wrapper {
+    position: fixed;
+    right: 0;
+
+    .btn-close {
+      float: right;
+      margin-right: 10px;
+      margin-top: -10px;
+    }
+  }
+
+  .quantity {
+    color: $clam-pink;
+  }
+
+  .rcv {
+    text-align: center;
+    margin: 20px;
+  }
+
+  .details {
+    font-size: 14px;
+  }
+}

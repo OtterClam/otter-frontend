@@ -9,6 +9,7 @@ import { Skeleton } from '@material-ui/lab';
 import { IReduxState } from '../../store/slices/state.interface';
 import { BondKey, getBond } from 'src/constants';
 import { ethers } from 'ethers';
+import BondPurchaseDialog from './BondPurchaseDialog';
 
 const useStyles = makeStyles(theme => ({
   input: {
@@ -40,6 +41,8 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
   const bond = getBond(bondKey, chainID);
   const [recipientAddress, setRecipientAddress] = useState(address);
   const [quantity, setQuantity] = useState('');
+
+  const [open, setOpen] = useState(false);
 
   const isBondLoading = useSelector<IReduxState, boolean>(state => state.bonding.loading ?? true);
   const vestingTerm = useSelector<IReduxState, number>(state => {
@@ -86,6 +89,14 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
     return prettifySeconds(vestingTerm, 'day');
   };
 
+  const handleOpenDialog = () => {
+    setOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpen(false);
+  };
+
   async function onBond() {
     if (quantity === '') {
       alert('Please enter a value!');
@@ -99,7 +110,7 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
           : 'You have an existing bond. Bonding will reset your vesting period and forfeit rewards. We recommend claiming rewards first or using a fresh wallet. Do you still want to proceed?',
       );
       if (shouldProceed) {
-        await dispatch(
+        let bondTx: any = await dispatch(
           bondAsset({
             value: quantity,
             slippage,
@@ -109,9 +120,12 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
             address: recipientAddress || address,
           }),
         );
+        if (bondTx.payload != undefined) {
+          handleOpenDialog();
+        }
       }
     } else {
-      await dispatch(
+      let bondTx: any = await dispatch(
         //@ts-ignore
         bondAsset({
           value: quantity,
@@ -122,6 +136,9 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
           address: recipientAddress || address,
         }),
       );
+      if (bondTx.payload != undefined) {
+        handleOpenDialog();
+      }
     }
   }
 
@@ -198,6 +215,17 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
             <p>{txnButtonText(pendingTransactions, 'approve_' + bond, 'Approve')}</p>
           </Box>
         )}
+        <BondPurchaseDialog
+          open={open}
+          handleClose={handleCloseDialog}
+          bond={bond}
+          balance={balance}
+          reserveUnit={bond.reserveUnit}
+          bondQuote={trim(bondQuote, 4) || '0'}
+          bondDiscount={trim(bondDiscount * 100, 2)}
+          autoStake={trim(fiveDayRate * 100, 2)}
+          vestingTerm={vestingTerm}
+        />
       </div>
       {hasAllowance() ? (
         bond.autostake && (

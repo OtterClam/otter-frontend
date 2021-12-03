@@ -110,7 +110,7 @@ export const changeStake = createAsyncThunk(
       }
     }
     dispatch(getBalances({ address, networkID, provider }));
-    return;
+    return stakeTx;
   },
 );
 

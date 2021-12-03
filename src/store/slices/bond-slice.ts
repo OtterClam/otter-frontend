@@ -242,6 +242,7 @@ export const bondAsset = createAsyncThunk(
       if (bondTx) {
         dispatch(clearPendingTxn(bondTx.hash));
       }
+      return bondTx;
     }
   },
 );
@@ -282,6 +283,7 @@ export const redeemBond = createAsyncThunk(
         dispatch(clearPendingTxn(redeemTx.hash));
       }
     }
+    return redeemTx;
   },
 );
 

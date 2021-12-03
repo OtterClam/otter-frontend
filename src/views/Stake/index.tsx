@@ -23,6 +23,7 @@ import { useWeb3Context } from '../../hooks';
 import { IPendingTxn, isPendingTxn, txnButtonText } from '../../store/slices/pending-txns-slice';
 import { Skeleton } from '@material-ui/lab';
 import { IReduxState } from '../../store/slices/state.interface';
+import StakeDialog from './StakeDialog';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -56,7 +57,10 @@ function Stake() {
   const tabsActions = useRef<TabsActions>(null);
 
   const [view, setView] = useState(0);
-  const [quantity, setQuantity] = useState<string>();
+  const [quantity, setQuantity] = useState<string>('');
+
+  const [open, setOpen] = useState(false);
+  const [action, setAction] = useState<string>('');
 
   const isAppLoading = useSelector<IReduxState, boolean>(state => state.app.loading);
   const currentIndex = useSelector<IReduxState, string>(state => {
@@ -104,6 +108,14 @@ function Stake() {
     }
   };
 
+  const handleOpenDialog = () => {
+    setOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpen(false);
+  };
+
   const onSeekApproval = async (token: string) => {
     await dispatch(changeApproval({ address, token, provider, networkID: chainID }));
   };
@@ -115,7 +127,12 @@ function Stake() {
       // eslint-disable-next-line no-alert
       alert('Please enter a value!');
     } else {
-      await dispatch(changeStake({ address, action, value: String(quantity), provider, networkID: chainID }));
+      let stakeTx: any = await dispatch(
+        changeStake({ address, action, value: String(quantity), provider, networkID: chainID }),
+      );
+      if (stakeTx.payload != undefined) {
+        handleOpenDialog();
+      }
     }
   };
 
@@ -265,6 +282,7 @@ function Stake() {
                               className="stake-tab-panel-btn"
                               bgcolor="otter.otterBlue"
                               onClick={() => {
+                                setAction('stake');
                                 if (isPendingTxn(pendingTransactions, 'staking')) return;
                                 onChangeStake('stake');
                               }}
@@ -304,6 +322,7 @@ function Stake() {
                             className="stake-tab-panel-btn"
                             bgcolor="otter.otterBlue"
                             onClick={() => {
+                              setAction('unstake');
                               if (isPendingTxn(pendingTransactions, 'unstaking')) return;
                               onChangeStake('unstake');
                             }}
@@ -324,7 +343,16 @@ function Stake() {
                         )}
                       </TabPanel>
                     </Box>
-
+                    <StakeDialog
+                      open={open}
+                      handleClose={handleCloseDialog}
+                      stakingRebasePercentage={stakingRebasePercentage}
+                      quantity={quantity}
+                      balance={trim(Number(clamBalance), 4)}
+                      stakeBalance={new Intl.NumberFormat('en-US').format(Number(trimmedSClamBalance))}
+                      nextRewardValue={nextRewardValue}
+                      action={action}
+                    />
                     <div className="help-text">
                       {address && ((!hasAllowance('CLAM') && view === 0) || (!hasAllowance('sCLAM') && view === 1)) && (
                         <p className="text-desc">

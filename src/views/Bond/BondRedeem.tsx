@@ -1,5 +1,6 @@
 import { Box, Slide } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BondKey, getBond } from 'src/constants';
 import { prettifySeconds, prettyVestingPeriod, trim } from '../../helpers';
@@ -7,7 +8,7 @@ import { useWeb3Context } from '../../hooks';
 import { redeemBond } from '../../store/slices/bond-slice';
 import { IPendingTxn, isPendingTxn, txnButtonText } from '../../store/slices/pending-txns-slice';
 import { IReduxState } from '../../store/slices/state.interface';
-
+import BondRedeemDialog from './BondRedeemDialog';
 interface IBondRedeem {
   bondKey: BondKey;
 }
@@ -16,6 +17,7 @@ function BondRedeem({ bondKey }: IBondRedeem) {
   const dispatch = useDispatch();
   const { provider, address, chainID } = useWeb3Context();
   const bond = getBond(bondKey, chainID);
+  const [open, setOpen] = useState(false);
 
   const currentBlockTime = useSelector<IReduxState, number>(state => state.app.currentBlockTime);
   const isBondLoading = useSelector<IReduxState, boolean>(state => state.bonding.loading ?? true);
@@ -28,6 +30,10 @@ function BondRedeem({ bondKey }: IBondRedeem) {
     //@ts-ignore
     return state.account[bondKey] && state.account[bondKey].interestDue;
   });
+  const balance = useSelector<IReduxState, number>(state => {
+    //@ts-ignore
+    return state.account[bondKey]?.balance;
+  });
   const pendingPayout = useSelector<IReduxState, number>(state => {
     //@ts-ignore
     return state.account[bondKey] && state.account[bondKey].pendingPayout;
@@ -35,7 +41,10 @@ function BondRedeem({ bondKey }: IBondRedeem) {
   const pendingTransactions = useSelector<IReduxState, IPendingTxn[]>(state => state.pendingTransactions);
 
   const onRedeem = async (autostake: boolean) => {
-    await dispatch(redeemBond({ address, bondKey, networkID: chainID, provider, autostake }));
+    let redeemTx: any = await dispatch(redeemBond({ address, bondKey, networkID: chainID, provider, autostake }));
+    if (redeemTx.payload != undefined) {
+      handleOpenDialog();
+    }
   };
 
   const vestingTime = () => {
@@ -46,6 +55,14 @@ function BondRedeem({ bondKey }: IBondRedeem) {
 
   const vestingPeriod = () => {
     return prettifySeconds(vestingTerm, 'day');
+  };
+
+  const handleOpenDialog = () => {
+    setOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpen(false);
   };
 
   const bondDiscount = useSelector<IReduxState, number>(state => {
@@ -70,6 +87,7 @@ function BondRedeem({ bondKey }: IBondRedeem) {
             }
             if (isPendingTxn(pendingTransactions, 'redeem_bond_' + bondKey)) return;
             onRedeem(false);
+            handleOpenDialog();
           }}
         >
           <p>{txnButtonText(pendingTransactions, 'redeem_bond_' + bondKey, 'Claim')}</p>
@@ -88,7 +106,12 @@ function BondRedeem({ bondKey }: IBondRedeem) {
           </Box>
         )}
       </Box>
-
+      <BondRedeemDialog
+        open={open}
+        handleClose={handleCloseDialog}
+        pendingPayout={trim(pendingPayout, 4)}
+        balance={pendingPayout}
+      />
       <Slide direction="right" in={true} mountOnEnter unmountOnExit {...{ timeout: 533 }}>
         <Box className="bond-data">
           <div className="data-row">
