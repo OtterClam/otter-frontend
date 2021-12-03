@@ -37,6 +37,15 @@ const useStyles = makeStyles(theme => ({
 
 function Calculator() {
   const styles = useStyles();
+  const priceFormat = (x: string) => {
+    var y = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      maximumFractionDigits: 0,
+      minimumFractionDigits: 0,
+    });
+    return y.format(parseInt(x)).toString();
+  };
   const isAppLoading = useSelector<IReduxState, boolean>(state => state.app.loading);
   const clamBalance = useSelector<IReduxState, string>(state => {
     return state.account.balances && state.account.balances.clam;
@@ -264,22 +273,30 @@ function Calculator() {
                 <Box className="calculator-user-data">
                   <Box className="data-row">
                     <Typography>Your initial investment</Typography>
-                    <Typography>{isAppLoading ? <Skeleton width="80px" /> : <>${initialInvestment}</>}</Typography>
+                    <Typography>
+                      {isAppLoading ? <Skeleton width="80px" /> : <>{priceFormat(initialInvestment)}</>}
+                    </Typography>
                   </Box>
                   <Box className="data-row">
                     <Typography>Current wealth</Typography>
-                    <Typography>{isAppLoading ? <Skeleton width="80px" /> : <>${calcCurrentWealth()}</>}</Typography>
+                    <Typography>
+                      {isAppLoading ? <Skeleton width="80px" /> : <>{priceFormat(calcCurrentWealth())}</>}
+                    </Typography>
                   </Box>
                   <Box className="data-row">
                     <Typography>CLAM rewards estimation</Typography>
-                    <Typography>{isAppLoading ? <Skeleton width="80px" /> : <>{rewardsEstimation} CLAM</>}</Typography>
+                    <Typography>
+                      {isAppLoading ? <Skeleton width="80px" /> : <>{parseFloat(rewardsEstimation).toFixed(4)} CLAM</>}
+                    </Typography>
                   </Box>
                   <Box className="data-row">
                     <Typography>Potential return</Typography>
-                    <Typography>{isAppLoading ? <Skeleton width="80px" /> : <>${potentialReturn}</>}</Typography>
+                    <Typography>
+                      {isAppLoading ? <Skeleton width="80px" /> : <>{priceFormat(potentialReturn)}</>}
+                    </Typography>
                   </Box>
                   {/* <Box className="data-row">
-                    <Typography>Potential number of Tesla Roadsters</Typography>
+                    <Typography>Potential number of X</Typography>
                     <Typography>
                       {isAppLoading ? <Skeleton width="80px" /> : <>{Math.floor(Number(potentialReturn) / 220000)}</>}
                     </Typography>
