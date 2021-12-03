@@ -10,6 +10,7 @@ import { IReduxState } from '../../store/slices/state.interface';
 import { BondKey, getBond } from 'src/constants';
 import { ethers } from 'ethers';
 import BondPurchaseDialog from './BondPurchaseDialog';
+import ActionButton from '../../components/Button/ActionButton';
 
 const useStyles = makeStyles(theme => ({
   input: {
@@ -120,7 +121,7 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
             address: recipientAddress || address,
           }),
         );
-        if (bondTx.payload != undefined) {
+        if (bondTx.payload == true) {
           handleOpenDialog();
         }
       }
@@ -136,7 +137,7 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
           address: recipientAddress || address,
         }),
       );
-      if (bondTx.payload != undefined) {
+      if (bondTx.payload == true) {
         handleOpenDialog();
       }
     }
@@ -191,29 +192,21 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
           />
         </FormControl>
         {hasAllowance() ? (
-          <Box
-            className="transaction-button app-otter-button"
-            bgcolor="otter.otterBlue"
-            color="otter.white"
-            onClick={async () => {
-              if (isPendingTxn(pendingTransactions, 'bond_' + bond)) return;
-              await onBond();
-            }}
-          >
-            <p>{txnButtonText(pendingTransactions, 'bond_' + bond, 'Bond')}</p>
-          </Box>
+          <ActionButton
+            pendingTransactions={pendingTransactions}
+            type={'bond_' + bond.key}
+            start="Bond"
+            progress="Bonding..."
+            processTx={() => onBond()}
+          ></ActionButton>
         ) : (
-          <Box
-            className="transaction-button app-otter-button"
-            bgcolor="otter.otterBlue"
-            color="otter.white"
-            onClick={async () => {
-              if (isPendingTxn(pendingTransactions, 'approve_' + bond)) return;
-              await onSeekApproval();
-            }}
-          >
-            <p>{txnButtonText(pendingTransactions, 'approve_' + bond, 'Approve')}</p>
-          </Box>
+          <ActionButton
+            pendingTransactions={pendingTransactions}
+            type={'approve_' + bond.key}
+            start="Approve"
+            progress="Approving..."
+            processTx={() => onSeekApproval()}
+          ></ActionButton>
         )}
         <BondPurchaseDialog
           open={open}

@@ -63,17 +63,17 @@ function StakeDialog({
         <Box className={`${styles.inputGroup} card-content`}>
           {action === `stake` ? (
             <div className="rcv">
-              You will get <span className="quantity">{quantity}</span> sClam!
+              You will get <span className="quantity">{quantity}</span> sCLAM2!
             </div>
           ) : (
             <div className="rcv">
-              You just received <span className="quantity">{quantity}</span> CLAM!
+              You just received <span className="quantity">{quantity}</span> CLAM2!
             </div>
           )}
           <div className="details">
             <div className="data-row">
               <p className="data-row-name">Your Balance</p>
-              <p className="data-row-value">{balance} CLAM</p>
+              <p className="data-row-value">{balance} CLAM2</p>
             </div>
             <div className="data-row">
               <p className="data-row-name">Your Staked Balance</p>

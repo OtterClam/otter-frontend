@@ -9,6 +9,8 @@ import { redeemBond } from '../../store/slices/bond-slice';
 import { IPendingTxn, isPendingTxn, txnButtonText } from '../../store/slices/pending-txns-slice';
 import { IReduxState } from '../../store/slices/state.interface';
 import BondRedeemDialog from './BondRedeemDialog';
+import ActionButton from '../../components/Button/ActionButton';
+
 interface IBondRedeem {
   bondKey: BondKey;
 }
@@ -76,34 +78,22 @@ function BondRedeem({ bondKey }: IBondRedeem) {
   return (
     <Box display="flex" flexDirection="column">
       <Box display="flex" justifyContent="space-around" flexWrap="wrap">
-        <Box
-          className="transaction-button app-otter-button"
-          bgcolor="otter.otterBlue"
-          color="otter.white"
-          onClick={() => {
-            if (bond.autostake && !fullVested) {
-              window.alert('You can only claim (4,4) bond after it fully vested.');
-              return;
-            }
-            if (isPendingTxn(pendingTransactions, 'redeem_bond_' + bondKey)) return;
-            onRedeem(false);
-            handleOpenDialog();
-          }}
-        >
-          <p>{txnButtonText(pendingTransactions, 'redeem_bond_' + bondKey, 'Claim')}</p>
-        </Box>
+        <ActionButton
+          pendingTransactions={pendingTransactions}
+          type={'redeem_bond_' + bondKey}
+          start="Claim"
+          progress="Claiming..."
+          nonRedeem={bond.autostake && !fullVested}
+          processTx={() => onRedeem(false)}
+        ></ActionButton>
         {!bond.deprecated && !bond.autostake && (
-          <Box
-            className="transaction-button app-otter-button"
-            bgcolor="otter.otterBlue"
-            color="otter.white"
-            onClick={() => {
-              if (isPendingTxn(pendingTransactions, 'redeem_bond_' + bondKey + '_autostake')) return;
-              onRedeem(true);
-            }}
-          >
-            <p>{txnButtonText(pendingTransactions, 'redeem_bond_' + bondKey + '_autostake', 'Claim and Autostake')}</p>
-          </Box>
+          <ActionButton
+            pendingTransactions={pendingTransactions}
+            type={'redeem_bond_' + bondKey + '_autostake'}
+            start="Claim and Autostake"
+            progress="Claiming..."
+            processTx={() => onRedeem(true)}
+          ></ActionButton>
         )}
       </Box>
       <BondRedeemDialog

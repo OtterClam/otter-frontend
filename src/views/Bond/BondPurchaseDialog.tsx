@@ -70,7 +70,7 @@ function BondPurchaseDialog({
         </div>
         <Box className={`${styles.inputGroup} card-content`}>
           <div className="rcv">
-            You will get <span className="quantity">{bondQuote}</span> CLAM
+            You will get <span className="quantity">{bondQuote}</span> sCLAM
           </div>
           <div className="details">
             <div className="data-row">

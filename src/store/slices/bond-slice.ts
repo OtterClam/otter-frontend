@@ -241,8 +241,8 @@ export const bondAsset = createAsyncThunk(
     } finally {
       if (bondTx) {
         dispatch(clearPendingTxn(bondTx.hash));
+        return true;
       }
-      return bondTx;
     }
   },
 );
