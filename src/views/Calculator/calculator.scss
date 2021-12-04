@@ -76,14 +76,18 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-
-    h5,
-    h4 {
-      font-weight: 800;
-      font-size: 24px;
-      line-height: 36px;
-      max-width: 300px;
-    }
+  }
+  .metric-title {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 1.5;
+    max-width: 300px;
+  }
+  .metric-body {
+    font-weight: 800;
+    font-size: 24px;
+    line-height: 1.5;
+    max-width: 300px;
   }
 }
 .stake-card-action-input-btn {
@@ -130,12 +134,32 @@
   justify-content: center;
   display: flex;
   width: 100% !important;
+  .box-title {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.5;
+    padding-bottom: 4px;
+  }
 }
 .calculator-card-area {
   width: 100%;
   justify-content: center;
   align-content: center;
   margin: auto;
+}
+.calculator-card-header {
+  margin: 4px;
+  .calc-head {
+    font-weight: 800;
+    font-size: 24px;
+    line-height: 1.5;
+  }
+  .calc-body {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 4px;
+  }
 }
 .calculator-action-area {
   display: flex;
@@ -176,7 +200,6 @@
     }
 
     .MuiSlider-rail {
-      background: #6b6a6a;
       box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
       border-radius: 10px;
     }
@@ -190,10 +213,9 @@
 
     .MuiSlider-thumb {
       width: 20px;
+      background-color: rgb(255, 104, 84);
       height: 20px;
-      background: #161515;
       box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-      border: 3px solid rgb(187, 70, 54);
     }
   }
 }
@@ -414,14 +436,12 @@
   .data-row {
     .data-row-name {
       font-size: 14px;
-      &-warmup {
-        // color: $clam-pink;
-      }
     }
 
     .data-row-value {
       font-size: 14px;
       line-height: 17px;
+      font-weight: normal;
     }
   }
 }

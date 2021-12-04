@@ -32,6 +32,12 @@ const useStyles = makeStyles(theme => ({
     '& .MuiOutlinedInput-notchedOutline': {
       borderColor: theme.palette.mode.lightGray300,
     },
+    '& .MuiSlider-rail': {
+      background: theme.palette.background.default,
+    },
+    '& .MuiSlider-thumb': {
+      border: `1px ${theme.palette.background.default} solid`,
+    },
   },
 }));
 
@@ -117,25 +123,25 @@ function Calculator() {
           <Grid className="calculator-card-grid" container direction="column" spacing={2}>
             <Grid item>
               <Box className="calculator-card-header">
-                <Typography variant="h5">Calculator</Typography>
-                <Typography variant="body2">Estimate your returns</Typography>
+                <Typography className="calc-head">Calculator</Typography>
+                <Typography className="calc-body">Estimate your returns</Typography>
               </Box>
             </Grid>
             <Grid item>
               <Box className="calculator-top-metrics">
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={4} md={4} lg={4}>
-                    <Typography variant="h5">CLAM Price</Typography>
+                    <Typography className="metric-title">CLAM Price</Typography>
                     <Box component="p" color="text.secondary" className="calculator-card-metrics">
-                      <Typography variant="h4">
+                      <Typography className="metric-body">
                         {isAppLoading ? <Skeleton width="100px" /> : `$${trimeMarketPrice}`}
                       </Typography>
                     </Box>
                   </Grid>
                   <Grid item xs={12} sm={4} md={4} lg={4}>
-                    <Typography variant="h5">Current APY</Typography>
+                    <Typography className="metric-title">Current APY</Typography>
                     <Box component="p" color="text.secondary" className="calculator-card-metrics">
-                      <Typography variant="h4">
+                      <Typography className="metric-body">
                         {isAppLoading ? (
                           <Skeleton width="100px" />
                         ) : (
@@ -145,9 +151,9 @@ function Calculator() {
                     </Box>
                   </Grid>
                   <Grid item xs={12} sm={4} md={4} lg={4}>
-                    <Typography variant="h5">Your sClam Balance</Typography>
+                    <Typography className="metric-title">Your sClam Balance</Typography>
                     <Box component="p" color="text.secondary" className="calculator-card-metrics">
-                      <Typography variant="h4">
+                      <Typography className="metric-body">
                         {isAppLoading ? <Skeleton width="100px" /> : <>{trimmedsClamBalance} sClam</>}
                       </Typography>
                     </Box>
@@ -162,7 +168,7 @@ function Calculator() {
                   <Grid container spacing={3}>
                     <Grid className="calculator-metric-area" item xs={12} sm={6}>
                       <Box className="calculator-card-action-area-inp-wrap">
-                        <Typography variant="h6">sClam Amount</Typography>
+                        <Typography className="box-title">sClam Amount</Typography>
                         <OutlinedInput
                           type="number"
                           placeholder="Amount"
@@ -185,7 +191,7 @@ function Calculator() {
                     </Grid>
                     <Grid className="calculator-metric-area" item xs={12} sm={6}>
                       <Box className="calculator-card-action-area-inp-wrap">
-                        <Typography variant="h6">APY (%)</Typography>
+                        <Typography className="box-title">APY (%)</Typography>
                         <OutlinedInput
                           type="number"
                           placeholder="Amount"
@@ -208,7 +214,7 @@ function Calculator() {
                     </Grid>
                     <Grid className="calculator-metric-area" item xs={12} sm={6}>
                       <Box className="calculator-card-action-area-inp-wrap">
-                        <Typography variant="h6">CLAM price at purchase ($)</Typography>
+                        <Typography className="box-title">CLAM price at purchase ($)</Typography>
                         <OutlinedInput
                           type="number"
                           placeholder="Amount"
@@ -231,7 +237,7 @@ function Calculator() {
                     </Grid>
                     <Grid className="calculator-metric-area" item xs={12} sm={6}>
                       <Box className="calculator-card-action-area-inp-wrap">
-                        <Typography variant="h6">Future CLAM market price ($)</Typography>
+                        <Typography className="box-title">Future CLAM market price ($)</Typography>
                         <OutlinedInput
                           type="number"
                           placeholder="Amount"
@@ -267,7 +273,7 @@ function Calculator() {
                 <Box className="calculator-user-data">
                   <Box className="data-row">
                     <Typography>Your initial investment</Typography>
-                    <Typography>
+                    <Typography className="calculator-result">
                       {isAppLoading ? <Skeleton width="80px" /> : <>{priceFormat(initialInvestment)}</>}
                     </Typography>
                   </Box>
