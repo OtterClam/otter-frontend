@@ -32,9 +32,9 @@ function BondRedeem({ bondKey }: IBondRedeem) {
     //@ts-ignore
     return state.account[bondKey] && state.account[bondKey].interestDue;
   });
-  const balance = useSelector<IReduxState, number>(state => {
+  const sClamBalance = useSelector<IReduxState, string>(state => {
     //@ts-ignore
-    return state.account[bondKey]?.balance;
+    return state.account.balances && state.account.balances.sClam;
   });
   const pendingPayout = useSelector<IReduxState, number>(state => {
     //@ts-ignore
@@ -44,7 +44,7 @@ function BondRedeem({ bondKey }: IBondRedeem) {
 
   const onRedeem = async (autostake: boolean) => {
     let redeemTx: any = await dispatch(redeemBond({ address, bondKey, networkID: chainID, provider, autostake }));
-    if (redeemTx.payload != undefined) {
+    if (redeemTx.payload == true) {
       handleOpenDialog();
     }
   };
@@ -78,14 +78,30 @@ function BondRedeem({ bondKey }: IBondRedeem) {
   return (
     <Box display="flex" flexDirection="column">
       <Box display="flex" justifyContent="space-around" flexWrap="wrap">
-        <ActionButton
-          pendingTransactions={pendingTransactions}
-          type={'redeem_bond_' + bondKey}
-          start="Claim"
-          progress="Claiming..."
-          nonRedeem={bond.autostake && !fullVested}
-          processTx={() => onRedeem(false)}
-        ></ActionButton>
+        {bond.autostake && !fullVested && (
+          <Box
+            className="transaction-button app-otter-button"
+            bgcolor="otter.otterBlue"
+            color="otter.white"
+            onClick={() => {
+              if (bond.autostake && !fullVested) {
+                window.alert('You can only claim (4,4) bond after it fully vested.');
+                return;
+              }
+            }}
+          >
+            <p>Claim</p>
+          </Box>
+        )}
+        {!(bond.autostake && !fullVested) && (
+          <ActionButton
+            pendingTransactions={pendingTransactions}
+            type={'redeem_bond_' + bondKey}
+            start="Claim"
+            progress="Claiming..."
+            processTx={() => onRedeem(false)}
+          ></ActionButton>
+        )}
         {!bond.deprecated && !bond.autostake && (
           <ActionButton
             pendingTransactions={pendingTransactions}
@@ -100,7 +116,7 @@ function BondRedeem({ bondKey }: IBondRedeem) {
         open={open}
         handleClose={handleCloseDialog}
         pendingPayout={trim(pendingPayout, 4)}
-        balance={pendingPayout}
+        balance={trim(sClamBalance, 4)}
       />
       <Slide direction="right" in={true} mountOnEnter unmountOnExit {...{ timeout: 533 }}>
         <Box className="bond-data">

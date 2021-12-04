@@ -281,9 +281,9 @@ export const redeemBond = createAsyncThunk(
     } finally {
       if (redeemTx) {
         dispatch(clearPendingTxn(redeemTx.hash));
+        return true;
       }
     }
-    return redeemTx;
   },
 );
 

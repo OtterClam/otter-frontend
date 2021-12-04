@@ -332,7 +332,7 @@ function Stake() {
                       open={open}
                       handleClose={handleCloseDialog}
                       stakingRebasePercentage={stakingRebasePercentage}
-                      quantity={quantity}
+                      quantity={trim(Number(quantity), 4)}
                       balance={trim(Number(clamBalance), 4)}
                       stakeBalance={new Intl.NumberFormat('en-US').format(Number(trimmedSClamBalance))}
                       nextRewardValue={nextRewardValue}

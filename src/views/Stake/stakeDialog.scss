@@ -9,55 +9,123 @@
   -webkit-backdrop-filter: blur(15px);
   background-color: #55555555;
 
-  .ohm-popover {
-    max-width: 400px;
+  .clam-popover {
+    width: 640px;
+    min-height: 544px;
     display: flex;
     flex-direction: column;
-
+    font-family: Gilroy;
+    font-style: normal;
+    font-weight: bold;
     backdrop-filter: blur(100px);
-  }
+    border-radius: 20px;
 
-  .title {
-    padding: 12px;
-    text-align: center;
-  }
+    .dialog-wrap {
+      margin: 40px 50px;
 
-  .msg {
-    padding: 12px;
-    text-align: center;
-  }
-
-  .icon-wrapper {
-    text-align: center;
-    padding: 20px;
-
-    svg {
-      height: 80px !important;
-      width: 80px !important;
+      @media screen and (max-width: 596px) {
+        margin: 40px 20px;
+      }
     }
-  }
 
-  .close-wrapper {
-    position: fixed;
-    right: 0;
+    .header {
+      .close-wrapper {
+        position: absolute;
+        margin: 30px 30px 0 0;
+        top: 0;
+        right: 0;
 
-    .btn-close {
-      float: right;
-      margin-right: 10px;
-      margin-top: -10px;
+        @media screen and (max-width: 596px) {
+          margin: 24px 24px 0 0;
+        }
+      }
+
+      .title {
+        font-size: 24px;
+        line-height: 36px;
+        text-align: center;
+        margin-bottom: 10px;
+
+        @media screen and (max-width: 596px) {
+          font-size: 20px;
+          line-height: 30px;
+        }
+      }
     }
-  }
 
-  .quantity {
-    color: $clam-pink;
-  }
+    .body {
+      .confirm {
+        font-size: 36px;
+        line-height: 54px;
+        text-align: center;
+        margin-bottom: 40px;
 
-  .rcv {
-    text-align: center;
-    margin: 20px;
-  }
+        @media screen and (max-width: 596px) {
+          font-size: 24px;
+          line-height: 36px;
+        }
+      }
 
-  .details {
-    font-size: 14px;
+      .logo-wrapper {
+        justify-content: center;
+        display: flex;
+        flex-direction: row;
+        margin-bottom: 40px;
+
+        svg {
+          height: 96px !important;
+          width: 96px !important;
+        }
+      }
+
+      .amt-msg {
+        font-size: 24px;
+        line-height: 36px;
+        text-align: center;
+        margin-bottom: 40px;
+
+        @media screen and (max-width: 596px) {
+          font-size: 20px;
+          line-height: 30px;
+        }
+
+        .quantity {
+          color: $clam-pink;
+        }
+      }
+
+      .dtl-container {
+        .dtl-wrap {
+          padding: 20px 40px;
+          border-radius: 20px;
+
+          @media screen and (max-width: 596px) {
+            padding: 20px 20px;
+          }
+
+          .dtl {
+            font-family: Gilroy;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 16px;
+            line-height: 24px;
+            margin: auto;
+
+            @media screen and (max-width: 596px) {
+              font-size: 14px;
+              line-height: 21px;
+            }
+
+            .dtl-value {
+              text-align: right;
+            }
+
+            > div {
+              margin-bottom: 10px;
+            }
+          }
+        }
+      }
+    }
   }
 }

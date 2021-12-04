@@ -1,20 +1,22 @@
 import { Box } from '@material-ui/core';
-import { isPendingTxn, txnButtonText } from '../../store/slices/pending-txns-slice';
-import Loading from '../Loader';
+import { IPendingTxn, isPendingTxn, txnButtonText } from '../../store/slices/pending-txns-slice';
 
-function ActionButton(props: any) {
-  const { pendingTransactions, type, start, progress, processTx, nonRedeem } = props;
+interface ActionButton {
+  pendingTransactions: IPendingTxn[];
+  type: string;
+  start: string;
+  progress: string;
+  processTx: any;
+}
 
-  // return <Loading />;
+function ActionButton(props: ActionButton) {
+  const { pendingTransactions, type, start, progress, processTx } = props;
+
   return (
     <Box
       className="stake-tab-panel-btn transaction-button app-otter-button"
       bgcolor="otter.otterBlue"
       onClick={() => {
-        if (nonRedeem) {
-          window.alert('You can only claim (4,4) bond after it fully vested.');
-          return;
-        }
         if (isPendingTxn(pendingTransactions, progress)) return;
         processTx();
       }}

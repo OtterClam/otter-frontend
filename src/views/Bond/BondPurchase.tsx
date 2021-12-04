@@ -212,7 +212,7 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
           open={open}
           handleClose={handleCloseDialog}
           bond={bond}
-          balance={balance}
+          balance={trim(balance, 4)}
           reserveUnit={bond.reserveUnit}
           bondQuote={trim(bondQuote, 4) || '0'}
           bondDiscount={trim(bondDiscount * 100, 2)}
