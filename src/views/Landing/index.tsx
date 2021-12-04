@@ -2,8 +2,7 @@ import './landing.scss';
 import { useState } from 'react';
 import Header from '../../components/LandingHeader';
 import Stat from './components/Stat';
-import { Backdrop, Button, Link, Paper } from '@material-ui/core';
-import Shell from './shell.png';
+import { Backdrop, Button, Link, Paper, Popper, Typography, Fade, Box, makeStyles, SvgIcon } from '@material-ui/core';
 import SecondSection from './components/SecondSection';
 import Footer from './components/Footer';
 import { DiscordLink, GithubLink, TwitterLink } from 'src/constants';
@@ -16,7 +15,15 @@ import Countdown from './components/Countdown';
 import WhiteList from '../WhiteList';
 
 function Landing() {
+  //Arrange language dropdown
+  const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
+
+  const handleClick = (event: any) => {
+    setAnchorEl(anchorEl ? null : event.currentTarget);
+  };
+
+  const langDropdownOpen = Boolean(anchorEl);
 
   return (
     <div className="landing">
