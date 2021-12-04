@@ -125,20 +125,16 @@ function Calculator() {
               <Box className="calculator-top-metrics">
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={4} md={4} lg={4}>
-                    <Box className="calculator-card-apy">
-                      <Typography variant="h5" color="textSecondary">
-                        CLAM Price
-                      </Typography>
+                    <Typography variant="h5">CLAM Price</Typography>
+                    <Box component="p" color="text.secondary" className="calculator-card-metrics">
                       <Typography variant="h4">
                         {isAppLoading ? <Skeleton width="100px" /> : `$${trimeMarketPrice}`}
                       </Typography>
                     </Box>
                   </Grid>
-                  <Grid item xs={6} sm={4} md={4} lg={4}>
-                    <Box className="calculator-card-tvl">
-                      <Typography variant="h5" color="textSecondary">
-                        Current APY
-                      </Typography>
+                  <Grid item xs={12} sm={4} md={4} lg={4}>
+                    <Typography variant="h5">Current APY</Typography>
+                    <Box component="p" color="text.secondary" className="calculator-card-metrics">
                       <Typography variant="h4">
                         {isAppLoading ? (
                           <Skeleton width="100px" />
@@ -148,11 +144,9 @@ function Calculator() {
                       </Typography>
                     </Box>
                   </Grid>
-                  <Grid item xs={6} sm={4} md={4} lg={4}>
-                    <Box className="calculator-card-index">
-                      <Typography variant="h5" color="textSecondary">
-                        Your sClam Balance
-                      </Typography>
+                  <Grid item xs={12} sm={4} md={4} lg={4}>
+                    <Typography variant="h5">Your sClam Balance</Typography>
+                    <Box component="p" color="text.secondary" className="calculator-card-metrics">
                       <Typography variant="h4">
                         {isAppLoading ? <Skeleton width="100px" /> : <>{trimmedsClamBalance} sClam</>}
                       </Typography>

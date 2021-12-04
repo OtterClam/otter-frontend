@@ -68,9 +68,7 @@
   padding: 0;
   text-align: center;
   margin-top: 10px;
-  .calculator-apy,
-  .calculator-tvl,
-  .calculator-index {
+  .calculator-card-metrics {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -78,6 +76,14 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+
+    h5,
+    h4 {
+      font-weight: 800;
+      font-size: 24px;
+      line-height: 36px;
+      max-width: 300px;
+    }
   }
 }
 .stake-card-action-input-btn {
@@ -353,6 +359,7 @@
 
   p {
     font-style: normal;
+    font-weight: 600;
     font-size: 18px;
   }
 }
@@ -388,6 +395,7 @@
 
     p {
       font-style: normal;
+      font-weight: 600;
       font-size: 18px;
     }
   }
