@@ -202,24 +202,6 @@ function NavContent() {
               </Link>
               <Link
                 component={NavLink}
-                id="migrate-nav"
-                to="/migrate"
-                isActive={(match: any, location: any) => {
-                  return checkPage(location, 'migrate');
-                }}
-                activeClassName="active"
-                className="button-dapp-menu"
-              >
-                <div className="dapp-menu-item">
-                  {checkPage(location, 'migrate') ? <ActiveMenuIcon /> : <InactiveMenuIcon />}
-                  <p>
-                    <Trans i18nKey="common.migrate" />
-                  </p>
-                </div>
-              </Link>
-
-              <Link
-                component={NavLink}
                 id="calculator-nav"
                 to="/calculator"
                 isActive={(match: any, location: any) => {
@@ -232,6 +214,23 @@ function NavContent() {
                   {checkPage(location, 'calculator') ? <ActiveMenuIcon /> : <InactiveMenuIcon />}
                   <p>
                     <Trans i18nKey="common.calculator" />
+                  </p>
+                </div>
+              </Link>
+              <Link
+                component={NavLink}
+                id="migrate-nav"
+                to="/migrate"
+                isActive={(match: any, location: any) => {
+                  return checkPage(location, 'migrate');
+                }}
+                activeClassName="active"
+                className="button-dapp-menu"
+              >
+                <div className="dapp-menu-item">
+                  {checkPage(location, 'migrate') ? <ActiveMenuIcon /> : <InactiveMenuIcon />}
+                  <p>
+                    <Trans i18nKey="common.migrate" />
                   </p>
                 </div>
               </Link>

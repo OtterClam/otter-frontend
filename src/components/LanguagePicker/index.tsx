@@ -30,7 +30,6 @@ function LanguagePicker(props: Props) {
   };
 
   const getStyle = (lng: string) => {
-    console.log(i18n.resolvedLanguage, lng);
     return i18n.resolvedLanguage === lng ? 'bold' : 'normal';
   };
   const id = 'lang-popper';
