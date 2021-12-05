@@ -3,10 +3,10 @@ const English = {
     common: {
       language: 'Language',
       bond: 'Bond',
-      roi: 'ROI',
+      roi: 'ROI', //Return on Investment
       max: 'Max',
-      apy: 'APY',
-      tvl: 'TVL',
+      apy: 'APY', //Annualised Percentage Yield
+      tvl: 'TVL', //Total Value Locked
       amount: 'Amount',
       approve: 'Approve',
       claim: 'Claim',
@@ -157,7 +157,7 @@ const English = {
       stakedBalance: 'Your Staked Balance',
       nextRewardAmount: 'Next Reward Amount',
       nextRewardYield: 'Next Reward Yield',
-      roiFiveDay: 'ROI (5-Day Rate)',
+      roiFiveDay: 'ROI (5-Day Rate)', //Return on Investment
     },
   },
 };

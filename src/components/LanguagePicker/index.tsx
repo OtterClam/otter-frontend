@@ -9,13 +9,6 @@ const lngs: any = {
   de: { nativeName: 'Deutsch' },
 };
 
-const useStyles = makeStyles(theme => ({
-  popperMenu: {
-    '& .MuiButton-containedSecondary': {
-      backgroundColor: '#e9f0f3',
-    },
-  },
-}));
 interface Props {
   border: Boolean;
 }
@@ -36,7 +29,6 @@ function LanguagePicker(props: Props) {
     setAnchorEl(null);
   };
 
-  const styles = useStyles();
   const getStyle = (lng: string) => {
     console.log(i18n.resolvedLanguage, lng);
     return i18n.resolvedLanguage === lng ? 'bold' : 'normal';
@@ -51,17 +43,15 @@ function LanguagePicker(props: Props) {
         <Popper id={id} open={langDropdownOpen} anchorEl={anchorEl} transition>
           {({ TransitionProps }) => (
             <Fade {...TransitionProps} timeout={400}>
-              <Paper className={`${styles.popperMenu} lang-menu`} elevation={1}>
+              <Paper className={`lang-menu`} elevation={1}>
                 <Box component="div" className="buy-tokens">
                   {Object.keys(lngs).map(lng => (
                     <Button
-                      size="large"
-                      variant="text"
                       key={lng}
                       style={{ fontWeight: getStyle(lng) }}
                       type="submit"
                       onClick={e => handleClick(e, lng)}
-                      className="buy-tokens"
+                      className="select-language"
                     >
                       {lngs[lng].nativeName}
                     </Button>

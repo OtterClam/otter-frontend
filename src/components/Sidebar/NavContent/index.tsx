@@ -31,7 +31,7 @@ const useGroupedBonds = () => {
   return groupBy(bonds, bond => (bond.deprecated ? 'deprecated' : 'active'));
 };
 
-type Page = 'dashboard' | 'stake' | 'choose_bond' | 'bonds' | 'migrate';
+type Page = 'dashboard' | 'stake' | 'choose_bond' | 'bonds' | 'migrate' | 'calculator';
 
 type ComputedBond = ReturnType<typeof useBonds>[0];
 
@@ -200,6 +200,22 @@ function NavContent() {
                 <div className="dapp-menu-item">
                   {checkPage(location, 'migrate') ? <ActiveMenuIcon /> : <InactiveMenuIcon />}
                   <p>Migrate</p>
+                </div>
+              </Link>
+
+              <Link
+                component={NavLink}
+                id="calculator-nav"
+                to="/calculator"
+                isActive={(match: any, location: any) => {
+                  return checkPage(location, 'calculator');
+                }}
+                activeClassName="active"
+                className="button-dapp-menu"
+              >
+                <div className="dapp-menu-item">
+                  {checkPage(location, 'calculator') ? <ActiveMenuIcon /> : <InactiveMenuIcon />}
+                  <p>Calculator</p>
                 </div>
               </Link>
             </div>

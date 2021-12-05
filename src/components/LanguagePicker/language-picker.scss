@@ -57,6 +57,17 @@
     width: 100%;
     text-align: left;
     margin-bottom: 4px;
+    .select-language {
+      font-size: 14px;
+      line-height: 1.5;
+    }
+  }
+  .select-language:hover {
+    display: block;
+    width: 100%;
+    text-align: left;
+    margin-bottom: 4px;
+    background-color: #f7f9fb;
   }
 }
 
@@ -79,7 +90,7 @@
     font-size: 16px;
   }
 }
-.lang-button-border-true {
+.lang-button-border-false {
   cursor: pointer;
   margin-right: 20px;
   height: 44px;
