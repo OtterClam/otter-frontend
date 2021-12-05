@@ -31,7 +31,13 @@ i18n
             buy: 'Buy',
             addLiquidity: 'Add Liquidity',
             redeem: 'Redeem',
-            treasury: 'Treasury Balance',
+            treasuryBalance: 'Treasury Balance',
+          },
+          time: {
+            days: 'Days',
+            hours: 'Hours',
+            minutes: 'Minutes',
+            seconds: 'Seconds',
           },
           // src\views\Bond
           bonds: {
@@ -42,6 +48,7 @@ i18n
             bondPrice: 'Bond Price',
             deprecated: 'Deprecated',
             bondDiscount: 'discount!',
+            myBond: 'My Bond',
             advancedSettings: {
               txrevert: 'Transaction may revert if price changes by more than slippage %',
               recipientAddress: 'Choose recipient address. By default, this is your currently connected address',
@@ -80,6 +87,27 @@ i18n
               tagline: 'The first store of value meme',
             },
             appButton: 'Enter APP',
+            footer: {
+              joinOurCommunity: 'Join Our Community',
+              letsMakeIt: "Let's make it",
+              contactUs: 'Contact Us',
+            },
+            splashPage: {
+              howOtterClamWorks: 'How OtterClam Works',
+              treasuryRevenue: 'Treasury Revenue',
+              bondsLPFees: 'Bonds & LP fees',
+              bondSales:
+                "Bond sales and LP Fees increase Otter's Treasury Revenue and lock in liquidity and help control CLAM supply",
+              treasuryGrowth: 'Treasury Growth',
+              otterTreasury: "Otter's Treasury",
+              treasuryInflow:
+                "Treasury inflow is used to increase Otter's Treasury Balance and back outstanding CLAM tokens and regulate staking APY",
+              stakingRewards: 'Staking Rewards',
+              clamToken: 'CLAM Token',
+              compounds: 'Compounds yields automatically through a treasury backed memecoin with intrinsic value',
+              treasuryBalance: 'Treasury Balance',
+              currentApy: 'Current APY',
+            },
           },
         },
       },

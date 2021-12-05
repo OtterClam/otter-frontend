@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { IReduxState } from '../../../../store/slices/state.interface';
 import { trim } from '../../../../helpers';
 import { Skeleton } from '@material-ui/lab';
+import { Trans } from 'react-i18next';
 
 function Stat() {
   const isAppLoading = useSelector<IReduxState, boolean>(state => state.app.loading);
@@ -26,7 +27,9 @@ function Stat() {
         </Grid> */}
         <Grid item xs={12} sm={6} md={6} lg={6}>
           <div className="landing-footer-item-wrap">
-            <p className="landing-footer-item-title">Treasury Balance</p>
+            <p className="landing-footer-item-title">
+              <Trans i18nKey="landing.splashPage.treasuryBalance" />
+            </p>
             <p className="landing-footer-item-value">
               {isAppLoading ? (
                 <Skeleton width="180px" />
@@ -43,7 +46,9 @@ function Stat() {
         </Grid>
         <Grid item xs={12} sm={6} md={6} lg={6}>
           <div className="landing-footer-item-wrap">
-            <p className="landing-footer-item-title">Current APY</p>
+            <p className="landing-footer-item-title">
+              <Trans i18nKey="landing.splashPage.currentApy" />
+            </p>
             <p className="landing-footer-item-value">
               {stakingAPY ? (
                 <>{new Intl.NumberFormat('en-US').format(Number(trimmedStakingAPY))}%</>
