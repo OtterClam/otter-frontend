@@ -23,15 +23,20 @@ i18n
             bond: 'Bond',
             roi: 'ROI',
             max: 'Max',
+            apy: 'APY',
+            tvl: 'TVL',
             amount: 'Amount',
             approve: 'Approve',
             claim: 'Claim',
             clamPrice: 'CLAM Price',
+            connectWallet: 'Connect Wallet',
             price: 'Price',
             buy: 'Buy',
             addLiquidity: 'Add Liquidity',
             redeem: 'Redeem',
             treasuryBalance: 'Treasury Balance',
+            currentIndex: 'Current Index',
+            yourBalance: 'Your Balance',
           },
           time: {
             days: 'Days',
@@ -45,7 +50,6 @@ i18n
             stakingRatio: 'Staking Ratio',
             circulatingSupply: 'Circulating Supply',
             backingPerClam: 'Backing per CLAM',
-            currentIndex: 'Current Index',
             otterKingdom: 'Welcome to Otter Kingdom',
             decentralized: 'The Decentralized Reserve Memecoin',
             clamStaked: 'CLAM Staked',
@@ -57,7 +61,6 @@ i18n
             pol: 'Protocol Owned Liquidity',
             tooltipItems: {
               tvl: 'Total Value Deposited',
-              apy: 'APY',
               current: 'Current',
               lpTreasury: 'LP Treasury',
               marketLP: 'Market LP',
@@ -83,7 +86,6 @@ i18n
             oldClamSupply: 'Old CLAM Supply',
             oldTreasuryReserve: 'Old Treasury Reserve',
             migrationProgress: 'Migration Progress',
-            connectWallet: 'Connect Wallet',
             connectWalletDescription: 'Connect your wallet to migrate your CLAM tokens!',
             steps: 'Steps',
             yourAmount: 'Your amount',
@@ -121,7 +123,7 @@ i18n
               approvalInfo:
                 'Note: The "Approve" transaction is only needed when bonding for the first time; subsequent bonding only requires you to perform the "Bond" transaction.',
               roiFourFourInfo: '* The ROI of (4,4) bond includes 5-days staking reward',
-              balance: 'Your Balance',
+
               youWillGet: 'You Will Get',
               maxBuy: 'Max You Can Buy',
             },
@@ -133,7 +135,6 @@ i18n
               timeUntilFullyVested: 'Time until fully vested',
             },
           },
-
           // src\views\Landing
           landing: {
             description: {
@@ -163,6 +164,17 @@ i18n
               treasuryBalance: 'Treasury Balance',
               currentApy: 'Current APY',
             },
+          },
+          stake: {
+            clamStaking: 'CLAM Staking',
+            connectWalletDescription: 'Connect your wallet to stake CLAM2 tokens!',
+            approvalInfo:
+              'Note: The "Approve" transaction is only needed when staking/unstaking for the first time; subsequent staking/unstaking only requires you to perform the "Stake" or "Unstake" transaction.',
+            balanceInWarmup: 'Your Staked Balance in warmup',
+            stakedBalance: 'Your Staked Balance',
+            nextRewardAmount: 'Next Reward Amount',
+            nextRewardYield: 'Next Reward Yield',
+            roiFiveDay: 'ROI (5-Day Rate)',
           },
         },
       },

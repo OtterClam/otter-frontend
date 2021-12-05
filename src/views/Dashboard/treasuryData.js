@@ -190,7 +190,7 @@ export const tooltipItems = {
   coin: ['MAI', 'FRAX'],
   rfv: ['MAI', 'FRAX'],
   holder: ['CLAMies'],
-  apy: [t('dashboard.tooltipItems.apy')],
+  apy: [t('common.apy')],
   runway: [
     t('dashboard.tooltipItems.current'),
     `7.5K ${t('dashboard.tooltipItems.apy')}`,

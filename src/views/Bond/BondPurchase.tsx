@@ -219,7 +219,7 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
         <Box className="bond-data">
           <div className="data-row">
             <p className="bond-balance-title">
-              <Trans i18nKey="bonds.purchase.balance" />
+              <Trans i18nKey="common.yourBalance" />
             </p>
             <p className="bond-balance-value">
               {isBondLoading ? <Skeleton width="100px" /> : <>{`${trim(balance, 4)} ${bond.reserveUnit}`}</>}

@@ -150,7 +150,7 @@ function Migrate() {
                   <div className="wallet-menu" id="wallet-menu">
                     <Box bgcolor="otter.otterBlue" className="app-otter-button" onClick={connect}>
                       <p>
-                        <Trans i18nKey="migrate.connectWallet" />
+                        <Trans i18nKey="common.connectWallet" />
                       </p>
                     </Box>
                   </div>
@@ -280,7 +280,7 @@ function Migrate() {
                               dispatch(approveMigration({ address, provider, networkID: chainID }));
                             }}
                           >
-                            <p>{txnButtonText(pendingTransactions, 'approve_migration', 'Approve')}</p>
+                            <p>{txnButtonText(pendingTransactions, 'approve_migration', t('common.approve'))}</p>
                           </Box>
                         ))}
                     </div>

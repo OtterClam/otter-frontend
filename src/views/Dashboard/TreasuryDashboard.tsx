@@ -58,7 +58,7 @@ function TreasuryDashboard() {
       value: backingPerClam ? formatCurrency(backingPerClam, 2) : null,
     },
     {
-      title: t('dashboard.currentIndex'),
+      title: t('common.currentIndex'),
       value: currentIndex ? trim(currentIndex, 2) + ' sCLAM' : null,
       info: tooltipInfoMessages.currentIndex,
     },
