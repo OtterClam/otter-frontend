@@ -16,7 +16,7 @@ import WhiteList from '../WhiteList';
 import { useTranslation, Trans } from 'react-i18next';
 
 function Landing() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   //Arrange language dropdown
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
@@ -26,6 +26,10 @@ function Landing() {
   };
 
   const langDropdownOpen = Boolean(anchorEl);
+  const lngs = {
+    en: { nativeName: 'English' },
+    de: { nativeName: 'Deutsch' },
+  };
 
   return (
     <div className="landing">
@@ -70,6 +74,18 @@ function Landing() {
               <Link href={GithubLink} className="community-icon-link">
                 <img src={GithubIcon} />
               </Link>
+              <div>
+                {Object.keys(lngs).map(lng => (
+                  <button
+                    key={lng}
+                    style={{ fontWeight: i18n.resolvedLanguage === lng ? 'bold' : 'normal' }}
+                    type="submit"
+                    onClick={() => i18n.changeLanguage(lng)}
+                  >
+                    {(lng: string) => (lngs: Record<string, any>) => lngs[lng].nativeName}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
           <div className="otter01">

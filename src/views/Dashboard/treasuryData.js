@@ -1,7 +1,6 @@
 import apollo from '../../lib/apolloClient';
 import { useTranslation } from 'react-i18next';
 
-const { t } = useTranslation();
 // TODO: add paramaterization
 export const treasuryDataQuery = `
 query {
@@ -183,33 +182,6 @@ export const bulletpoints = {
       border: '1px solid rgba(118, 130, 153, 1)',
     },
   ],
-};
-
-export const tooltipItems = {
-  tvl: [t('dashboard.tooltipItems.tvl')],
-  coin: ['MAI', 'FRAX'],
-  rfv: ['MAI', 'FRAX'],
-  holder: ['CLAMies'],
-  apy: [t('common.apy')],
-  runway: [
-    t('dashboard.tooltipItems.current'),
-    `7.5K ${t('dashboard.tooltipItems.apy')}`,
-    `5K ${t('dashboard.tooltipItems.apy')}`,
-    `2.5K ${t('dashboard.tooltipItems.apy')}`,
-  ],
-  pol: [t('dashboard.tooltipItems.lpTreasury'), t('dashboard.tooltipItems.marketLP')],
-};
-
-export const tooltipInfoMessages = {
-  tvl: t('dashboard.tooltipInfoMessages.tvl'),
-  mvt: t('dashboard.tooltipInfoMessages.mtv'),
-  rfv: t('dashboard.tooltipInfoMessages.rfv'),
-  pol: t('dashboard.tooltipInfoMessages.pol'),
-  holder: t('dashboard.tooltipInfoMessages.holder'),
-  staked: t('dashboard.tooltipInfoMessages.staked'),
-  apy: t('dashboard.tooltipInfoMessages.apy'),
-  runway: t('dashboard.tooltipInfoMessages.runway'),
-  currentIndex: t('dashboard.tooltipInfoMessages.currentIndex'),
 };
 
 export const itemType = {

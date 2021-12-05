@@ -165,6 +165,7 @@ i18n
               currentApy: 'Current APY',
             },
           },
+          // src\views\Stake
           stake: {
             clamStaking: 'CLAM Staking',
             connectWalletDescription: 'Connect your wallet to stake CLAM2 tokens!',
