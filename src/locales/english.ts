@@ -1,6 +1,7 @@
 const English = {
   translation: {
     common: {
+      //Only change the text on the right in quote marks!
       language: 'Language',
       bond: 'Bond',
       stake: 'Stake',
