@@ -19,6 +19,7 @@ const English = {
       treasuryBalance: 'Treasury Balance',
       currentIndex: 'Current Index',
       yourBalance: 'Your Balance',
+      currentApy: 'Current APY',
     },
     time: {
       days: 'Days',
@@ -144,7 +145,6 @@ const English = {
         clamToken: 'CLAM Token',
         compounds: 'Compounds yields automatically through a treasury backed memecoin with intrinsic value',
         treasuryBalance: 'Treasury Balance',
-        currentApy: 'Current APY',
       },
     },
     // src\views\Stake
@@ -158,6 +158,22 @@ const English = {
       nextRewardAmount: 'Next Reward Amount',
       nextRewardYield: 'Next Reward Yield',
       roiFiveDay: 'ROI (5-Day Rate)', //Return on Investment
+    },
+    // src\views\Calculator
+    calculator: {
+      calculator: 'Calculator',
+      current: 'Current',
+      estimateReturns: 'Estimate your returns',
+      yoursClamBalance: 'Your sCLAM Balance',
+      sClamAmount: 'sCLAM Amount',
+      purchasePrice: 'CLAM Price at Purchase ($)',
+      futurePrice: 'Future CLAM Market Price ($)',
+      results: 'Results',
+      initialInvestment: 'Your initial investment',
+      currentWealth: 'Current wealth',
+      rewardEstimation: 'CLAM rewards estimation',
+      potentialReturn: 'Potential return',
+      potentialPercentageGain: 'Potential percentage gain',
     },
   },
 };

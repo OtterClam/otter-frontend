@@ -16,6 +16,7 @@ import {
 import { trim } from '../../helpers';
 import { Skeleton } from '@material-ui/lab';
 import { IReduxState } from '../../store/slices/state.interface';
+import { useTranslation, Trans } from 'react-i18next';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -129,15 +130,21 @@ function Calculator() {
           <Grid className="calculator-card-grid" container direction="column" spacing={2}>
             <Grid item>
               <Box className="calculator-card-header">
-                <Typography className="calc-head">Calculator</Typography>
-                <Typography className="calc-body">Estimate your returns</Typography>
+                <Typography className="calc-head">
+                  <Trans i18nKey="calculator.calculator" />
+                </Typography>
+                <Typography className="calc-body">
+                  <Trans i18nKey="calculator.estimateReturns" />
+                </Typography>
               </Box>
             </Grid>
             <Grid item>
               <Box className="calculator-top-metrics">
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={4} md={4} lg={4}>
-                    <Typography className="metric-title">CLAM Price</Typography>
+                    <Typography className="metric-title">
+                      <Trans i18nKey="common.clamPrice" />
+                    </Typography>
                     <Box component="p" color="text.secondary" className="calculator-card-metrics">
                       <Typography className="metric-body">
                         {isAppLoading ? <Skeleton width="100px" /> : `$${trimeMarketPrice}`}
@@ -145,7 +152,9 @@ function Calculator() {
                     </Box>
                   </Grid>
                   <Grid item xs={12} sm={4} md={4} lg={4}>
-                    <Typography className="metric-title">Current APY</Typography>
+                    <Typography className="metric-title">
+                      <Trans i18nKey="common.currentApy" />
+                    </Typography>
                     <Box component="p" color="text.secondary" className="calculator-card-metrics">
                       <Typography className="metric-body">
                         {isAppLoading ? (
@@ -157,10 +166,12 @@ function Calculator() {
                     </Box>
                   </Grid>
                   <Grid item xs={12} sm={4} md={4} lg={4}>
-                    <Typography className="metric-title">Your sClam Balance</Typography>
+                    <Typography className="metric-title">
+                      <Trans i18nKey="calculator.yoursClamBalance" />
+                    </Typography>
                     <Box component="p" color="text.secondary" className="calculator-card-metrics">
                       <Typography className="metric-body">
-                        {isAppLoading ? <Skeleton width="100px" /> : <>{trimmedsClamBalance} sClam</>}
+                        {isAppLoading ? <Skeleton width="100px" /> : <>{trimmedsClamBalance} sClAM</>}
                       </Typography>
                     </Box>
                   </Grid>
@@ -174,7 +185,9 @@ function Calculator() {
                   <Grid container spacing={3}>
                     <Grid className="calculator-metric-area" item xs={12} sm={6}>
                       <Box className="calculator-card-action-area-inp-wrap">
-                        <Typography className="box-title">sClam Amount</Typography>
+                        <Typography className="box-title">
+                          <Trans i18nKey="calculator.sClamAmount" />
+                        </Typography>
                         <OutlinedInput
                           type="number"
                           placeholder="Amount"
@@ -188,7 +201,9 @@ function Calculator() {
                                 onClick={() => setsClamAmount(trimmedsClamBalance)}
                                 className="stake-card-action-input-btn"
                               >
-                                <Typography>&nbsp;&nbsp;Max&nbsp;&nbsp; &nbsp;</Typography>
+                                <Typography>
+                                  <Trans i18nKey="common.max" />
+                                </Typography>
                               </div>
                             </InputAdornment>
                           }
@@ -197,7 +212,9 @@ function Calculator() {
                     </Grid>
                     <Grid className="calculator-metric-area" item xs={12} sm={6}>
                       <Box className="calculator-card-action-area-inp-wrap">
-                        <Typography className="box-title">APY (%)</Typography>
+                        <Typography className="box-title">
+                          <Trans i18nKey="common.apy" /> (%)
+                        </Typography>
                         <OutlinedInput
                           type="number"
                           placeholder="Amount"
@@ -211,7 +228,9 @@ function Calculator() {
                                 onClick={() => setRewardYield(trimmedStakingAPY)}
                                 className="stake-card-action-input-btn"
                               >
-                                <Typography>Current</Typography>
+                                <Typography>
+                                  <Trans i18nKey="calculator.current" />
+                                </Typography>
                               </div>
                             </InputAdornment>
                           }
@@ -220,7 +239,9 @@ function Calculator() {
                     </Grid>
                     <Grid className="calculator-metric-area" item xs={12} sm={6}>
                       <Box className="calculator-card-action-area-inp-wrap">
-                        <Typography className="box-title">CLAM price at purchase ($)</Typography>
+                        <Typography className="box-title">
+                          <Trans i18nKey="calculator.purchasePrice" />
+                        </Typography>
                         <OutlinedInput
                           type="number"
                           placeholder="Amount"
@@ -234,7 +255,9 @@ function Calculator() {
                                 onClick={() => setPriceAtPurchase(trimeMarketPrice)}
                                 className="stake-card-action-input-btn"
                               >
-                                <Typography>Current</Typography>
+                                <Typography>
+                                  <Trans i18nKey="calculator.current" />
+                                </Typography>
                               </div>
                             </InputAdornment>
                           }
@@ -243,7 +266,9 @@ function Calculator() {
                     </Grid>
                     <Grid className="calculator-metric-area" item xs={12} sm={6}>
                       <Box className="calculator-card-action-area-inp-wrap">
-                        <Typography className="box-title">Future CLAM market price ($)</Typography>
+                        <Typography className="box-title">
+                          <Trans i18nKey="calculator.purchasePrice" />
+                        </Typography>
                         <OutlinedInput
                           type="number"
                           placeholder="Amount"
@@ -257,7 +282,9 @@ function Calculator() {
                                 onClick={() => setFutureMarketPrice(trimeMarketPrice)}
                                 className="stake-card-action-input-btn"
                               >
-                                <Typography>Current</Typography>
+                                <Typography>
+                                  <Trans i18nKey="calculator.current" />
+                                </Typography>
                               </div>
                             </InputAdornment>
                           }
@@ -277,21 +304,29 @@ function Calculator() {
                   />
                 </Box>
                 <Box className="calculator-user-data">
-                  <Typography className="results">Results</Typography>
+                  <Typography className="results">
+                    <Trans i18nKey="calculator.results" />
+                  </Typography>
                   <Box className="data-row">
-                    <Typography className="data-row-name">Your initial investment</Typography>
+                    <Typography className="data-row-name">
+                      <Trans i18nKey="calculator.initialInvestment" />
+                    </Typography>
                     <Typography className="data-row-value">
                       {isAppLoading ? <Skeleton width="80px" /> : <>{priceFormat(initialInvestment)}</>}
                     </Typography>
                   </Box>
                   <Box className="data-row">
-                    <Typography className="data-row-name">Current wealth</Typography>
+                    <Typography className="data-row-name">
+                      <Trans i18nKey="calculator.currentWealth" />
+                    </Typography>
                     <Typography className="data-row-value">
                       {isAppLoading ? <Skeleton width="80px" /> : <>{priceFormat(calcCurrentWealth())}</>}
                     </Typography>
                   </Box>
                   <Box className="data-row">
-                    <Typography className="data-row-name">CLAM rewards estimation</Typography>
+                    <Typography className="data-row-name">
+                      C<Trans i18nKey="calculator.rewardEstimation" />
+                    </Typography>
                     <Typography className="data-row-value">
                       {isAppLoading ? (
                         <Skeleton width="80px" />
@@ -301,13 +336,17 @@ function Calculator() {
                     </Typography>
                   </Box>
                   <Box className="data-row">
-                    <Typography className="data-row-name">Potential return</Typography>
+                    <Typography className="data-row-name">
+                      <Trans i18nKey="calculator.potentialReturn" />
+                    </Typography>
                     <Typography className="data-row-value">
                       {isAppLoading ? <Skeleton width="80px" /> : <>{priceFormat(potentialReturn)}</>}
                     </Typography>
                   </Box>
                   <Box className="data-row">
-                    <Typography className="data-row-name">Potential percentage gain</Typography>
+                    <Typography className="data-row-name">
+                      <Trans i18nKey="calculator.potentialPercentageGain" />
+                    </Typography>
                     <Typography className="data-row-value">
                       {isAppLoading ? (
                         <Skeleton width="80px" />

@@ -47,7 +47,7 @@ function Stat() {
         <Grid item xs={12} sm={6} md={6} lg={6}>
           <div className="landing-footer-item-wrap">
             <p className="landing-footer-item-title">
-              <Trans i18nKey="landing.splashPage.currentApy" />
+              <Trans i18nKey="common.currentApy" />
             </p>
             <p className="landing-footer-item-value">
               {stakingAPY ? (
