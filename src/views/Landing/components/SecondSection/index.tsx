@@ -4,8 +4,9 @@ import HowItWorks01 from './how_it_works_01.png';
 import HowItWorks02 from './how_it_works_02.png';
 import HowItWorks03 from './how_it_works_03.png';
 import { useTranslation, Trans } from 'react-i18next';
-const { t } = useTranslation();
+
 function SecondSection() {
+  const { t } = useTranslation();
   return (
     <section className={styles.main}>
       <h2 className={styles.title}>
@@ -31,7 +32,7 @@ function SecondSection() {
           num={3}
           title={t('landing.splashPage.stakingRewards')}
           subtitle={t('landing.splashPage.clamToken')}
-          desc={t('landing.splashPage.compounds')}
+          desc={t('landing.splashPage.treasuryInflow')}
           img={HowItWorks03}
         />
       </div>

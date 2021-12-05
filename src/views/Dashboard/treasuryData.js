@@ -1,5 +1,7 @@
 import apollo from '../../lib/apolloClient';
+import { useTranslation } from 'react-i18next';
 
+const { t } = useTranslation();
 // TODO: add paramaterization
 export const treasuryDataQuery = `
 query {
@@ -184,26 +186,30 @@ export const bulletpoints = {
 };
 
 export const tooltipItems = {
-  tvl: ['Total Value Deposited'],
+  tvl: [t('dashboard.tooltipItems.tvl')],
   coin: ['MAI', 'FRAX'],
   rfv: ['MAI', 'FRAX'],
   holder: ['CLAMies'],
-  apy: ['APY'],
-  runway: ['Current', '7.5K APY', '5K APY', '2.5K APY'],
-  pol: ['LP Treasury', 'Market LP'],
+  apy: [t('dashboard.tooltipItems.apy')],
+  runway: [
+    t('dashboard.tooltipItems.current'),
+    `7.5K ${t('dashboard.tooltipItems.apy')}`,
+    `5K ${t('dashboard.tooltipItems.apy')}`,
+    `2.5K ${t('dashboard.tooltipItems.apy')}`,
+  ],
+  pol: [t('dashboard.tooltipItems.lpTreasury'), t('dashboard.tooltipItems.marketLP')],
 };
 
 export const tooltipInfoMessages = {
-  tvl: 'Total Value Deposited, is the dollar amount of all CLAM staked in the protocol. This metric is often used as growth or health indicator in DeFi projects.',
-  mvt: 'Market Value of Treasury Assets, is the sum of the value (in dollars) of all assets held by the treasury.',
-  rfv: 'Risk Free Value, is the amount of funds the treasury guarantees to use for backing CLAM.',
-  pol: 'Protocol Owned Liquidity, is the amount of LP the treasury owns and controls. The more POL the better for the protocol and its users.',
-  holder: 'Holders, represents the total number of otters (sCLAM holders)',
-  staked: 'CLAM Staked, is the ratio of sCLAM to CLAM (staked vs unstaked)',
-  apy: 'Annual Percentage Yield, is the normalized representation of an interest rate, based on a compounding period over one year. Note that APYs provided are rather ballpark level indicators and not so much precise future results.',
-  runway: 'Runway, is the number of days sCLAM emissions can be sustained at a given rate. Lower APY = longer runway',
-  currentIndex:
-    'The current index tracks the amount of sCLAM accumulated since the beginning of staking. Basically, how much sCLAM one would have if they staked and held a single CLAM from day 1.',
+  tvl: t('dashboard.tooltipInfoMessages.tvl'),
+  mvt: t('dashboard.tooltipInfoMessages.mtv'),
+  rfv: t('dashboard.tooltipInfoMessages.rfv'),
+  pol: t('dashboard.tooltipInfoMessages.pol'),
+  holder: t('dashboard.tooltipInfoMessages.holder'),
+  staked: t('dashboard.tooltipInfoMessages.staked'),
+  apy: t('dashboard.tooltipInfoMessages.apy'),
+  runway: t('dashboard.tooltipInfoMessages.runway'),
+  currentIndex: t('dashboard.tooltipInfoMessages.currentIndex'),
 };
 
 export const itemType = {

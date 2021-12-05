@@ -39,6 +39,43 @@ i18n
             minutes: 'Minutes',
             seconds: 'Seconds',
           },
+          // src\views\Dashboard
+          dashboard: {
+            marketCap: 'Market Cap',
+            stakingRatio: 'Staking Ratio',
+            circulatingSupply: 'Circulating Supply',
+            backingPerClam: 'Backing per CLAM',
+            currentIndex: 'Current Index',
+            otterKingdom: 'Welcome to Otter Kingdom',
+            decentralized: 'The Decentralized Reserve Memecoin',
+            clamStaked: 'CLAM Staked',
+            apyOverTime: 'APY over time',
+            runway: 'Runway available',
+            totalValueDepsotied: 'Total Value Deposited',
+            marketValue: 'Market Value of Treasury Assets',
+            riskFree: 'Risk Free Value of Treasury Assets',
+            pol: 'Protocol Owned Liquidity',
+            tooltipItems: {
+              tvl: 'Total Value Deposited',
+              apy: 'APY',
+              current: 'Current',
+              lpTreasury: 'LP Treasury',
+              marketLP: 'Market LP',
+            },
+            tooltipInfoMessages: {
+              tvl: 'Total Value Deposited, is the dollar amount of all CLAM staked in the protocol. This metric is often used as growth or health indicator in DeFi projects.',
+              mvt: 'Market Value of Treasury Assets, is the sum of the value (in dollars) of all assets held by the treasury.',
+              rfv: 'Risk Free Value, is the amount of funds the treasury guarantees to use for backing CLAM.',
+              pol: 'Protocol Owned Liquidity, is the amount of LP the treasury owns and controls. The more POL the better for the protocol and its users.',
+              holder: 'Holders, represents the total number of otters (sCLAM holders)',
+              staked: 'CLAM Staked, is the ratio of sCLAM to CLAM (staked vs unstaked)',
+              apy: 'Annual Percentage Yield, is the normalized representation of an interest rate, based on a compounding period over one year. Note that APYs provided are rather ballpark level indicators and not so much precise future results.',
+              runway:
+                'Runway, is the number of days sCLAM emissions can be sustained at a given rate. Lower APY = longer runway',
+              currentIndex:
+                'The current index tracks the amount of sCLAM accumulated since the beginning of staking. Basically, how much sCLAM one would have if they staked and held a single CLAM from day 1.',
+            },
+          },
           // src\views\Bond
           bonds: {
             debtRatio: 'Debt Ratio',
