@@ -13,8 +13,10 @@ import Otter01 from './images/otter_01.png';
 import CloseIcon from './images/icon_24x24_close.svg';
 import Countdown from './components/Countdown';
 import WhiteList from '../WhiteList';
+import { useTranslation, Trans } from 'react-i18next';
 
 function Landing() {
+  const { t } = useTranslation();
   //Arrange language dropdown
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
@@ -40,15 +42,22 @@ function Landing() {
         <div className="landing__first-section__body">
           <div className="landing__first-section__body__left">
             <div className="landing__first-section__body__title">
-              <p>The Decentralized</p>
-              <p>Reserve Memecoin</p>
+              <p>
+                <Trans i18nKey="landing.description.part1" />
+              </p>
+              <p>
+                {' '}
+                <Trans i18nKey="landing.description.part2" />
+              </p>
             </div>
             <div className="landing__first-section__body__subtitle">
-              <p>The first store of value meme</p>
+              <p>
+                <Trans i18nKey="landing.description.tagline" />
+              </p>
             </div>
             <a className="landing__first-section__body__app-button" href="https://app.otterclam.finance">
               <Button variant="contained" color="primary" size="medium" disableElevation>
-                Enter APP
+                <Trans i18nKey="landing.appButton" />
               </Button>
             </a>
             <div className="community-icons">

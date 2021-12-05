@@ -19,7 +19,14 @@ i18n
     resources: {
       en: {
         translation: {
-          // here we will place our translations...
+          landing: {
+            description: {
+              part1: 'The Decentralized',
+              part2: 'Reserve Memecoin',
+              tagline: 'The first store of value meme',
+            },
+            appButton: 'Enter APP',
+          },
         },
       },
     },
