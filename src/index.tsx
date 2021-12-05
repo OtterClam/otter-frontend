@@ -3,6 +3,7 @@ import Root from './Routes';
 import store from './store/store';
 import { Provider } from 'react-redux';
 import { Web3ContextProvider } from './hooks';
+import './i18n';
 
 ReactDOM.render(
   <Web3ContextProvider>
