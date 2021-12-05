@@ -3,6 +3,8 @@ const English = {
     common: {
       language: 'Language',
       bond: 'Bond',
+      stake: 'Stake',
+      migrate: 'Migrate',
       roi: 'ROI', //Return on Investment
       max: 'Max',
       apy: 'APY', //Annualised Percentage Yield
@@ -20,6 +22,8 @@ const English = {
       currentIndex: 'Current Index',
       yourBalance: 'Your Balance',
       currentApy: 'Current APY',
+      dashboard: 'Dashboard',
+      calculator: 'Calculator',
     },
     time: {
       days: 'Days',
@@ -65,7 +69,6 @@ const English = {
     // src\views\Migrate
     migrate: {
       migration: 'Migration',
-      migrate: 'Migrate',
       oldClamSupply: 'Old CLAM Supply',
       oldTreasuryReserve: 'Old Treasury Reserve',
       migrationProgress: 'Migration Progress',
@@ -161,7 +164,6 @@ const English = {
     },
     // src\views\Calculator
     calculator: {
-      calculator: 'Calculator',
       current: 'Current',
       estimateReturns: 'Estimate your returns',
       yoursClamBalance: 'Your sCLAM Balance',
@@ -174,6 +176,18 @@ const English = {
       rewardEstimation: 'CLAM rewards estimation',
       potentialReturn: 'Potential return',
       potentialPercentageGain: 'Potential percentage gain',
+    },
+    // src\components
+    components: {
+      staked: 'Staked',
+      notStaked: 'Not staked',
+      disconnect: 'Disconnect',
+      buy: 'BUY',
+      buyOnQuickswap: 'Buy On Quickswap',
+      addTokenToWallet: 'ADD TOKEN TO WALLET',
+      toNextHarvest: 'to Next Harvest',
+      harvesting: 'Harvesting',
+      name: 'Name',
     },
   },
 };

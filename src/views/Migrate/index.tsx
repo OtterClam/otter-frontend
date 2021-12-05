@@ -269,7 +269,7 @@ function Migrate() {
                               onMigrate();
                             }}
                           >
-                            <p>{txnButtonText(pendingTransactions, 'migrating', t('migrate.migrate'))}</p>
+                            <p>{txnButtonText(pendingTransactions, 'migrating', t('common.migrate'))}</p>
                           </Box>
                         ) : (
                           <Box

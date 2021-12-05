@@ -131,7 +131,7 @@ function Calculator() {
             <Grid item>
               <Box className="calculator-card-header">
                 <Typography className="calc-head">
-                  <Trans i18nKey="calculator.calculator" />
+                  <Trans i18nKey="common.calculator" />
                 </Typography>
                 <Typography className="calc-body">
                   <Trans i18nKey="calculator.estimateReturns" />

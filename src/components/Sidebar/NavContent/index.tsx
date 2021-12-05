@@ -17,6 +17,7 @@ import AppTitle from './AppTitle';
 import InactiveMenuIcon from './InactiveMenuIcon';
 import ToggleDark from './toggle-dark.png';
 import ToggleLight from './toggle-light.png';
+import { useTranslation, Trans } from 'react-i18next';
 
 const useStyles = makeStyles(theme => ({
   navbar: {
@@ -117,7 +118,9 @@ function NavContent() {
               >
                 <div className="dapp-menu-item">
                   {checkPage(location, 'dashboard') ? <ActiveMenuIcon /> : <InactiveMenuIcon />}
-                  <p>Dashboard</p>
+                  <p>
+                    <Trans i18nKey="common.dashboard" />
+                  </p>
                 </div>
               </Link>
 
@@ -133,7 +136,9 @@ function NavContent() {
               >
                 <div className="dapp-menu-item">
                   {checkPage(location, 'stake') ? <ActiveMenuIcon /> : <InactiveMenuIcon />}
-                  <p>Stake</p>
+                  <p>
+                    <Trans i18nKey="common.stake" />
+                  </p>
                 </div>
               </Link>
 
@@ -149,7 +154,9 @@ function NavContent() {
               >
                 <div className="dapp-menu-item">
                   {checkPage(location, 'bonds') ? <ActiveMenuIcon /> : <InactiveMenuIcon />}
-                  <p>Bond</p>
+                  <p>
+                    <Trans i18nKey="common.bond" />
+                  </p>
                 </div>
               </Link>
 
@@ -157,8 +164,12 @@ function NavContent() {
                 <div className="bond-discounts">
                   <div className="bond-discounts-group">
                     <div className="bond-discounts-group-title bond">
-                      <span>Name</span>
-                      <span className="bond-pair-roi">ROI</span>
+                      <span>
+                        <Trans i18nKey="components.name" />
+                      </span>
+                      <span className="bond-pair-roi">
+                        <Trans i18nKey="common.roi" />
+                      </span>
                     </div>
                     {activeBonds.map((bond, i) => (
                       <Link component={NavLink} to={`/bonds/${bond.value}`} key={i} className={'bond'}>
@@ -184,7 +195,9 @@ function NavContent() {
               >
                 <div className="dapp-menu-item">
                   <InactiveMenuIcon />
-                  <p>Buy CLAM2</p>
+                  <p>
+                    <Trans i18nKey="common.buy" /> CLAM2
+                  </p>
                 </div>
               </Link>
               <Link
@@ -199,7 +212,9 @@ function NavContent() {
               >
                 <div className="dapp-menu-item">
                   {checkPage(location, 'migrate') ? <ActiveMenuIcon /> : <InactiveMenuIcon />}
-                  <p>Migrate</p>
+                  <p>
+                    <Trans i18nKey="common.migrate" />
+                  </p>
                 </div>
               </Link>
 
@@ -215,7 +230,9 @@ function NavContent() {
               >
                 <div className="dapp-menu-item">
                   {checkPage(location, 'calculator') ? <ActiveMenuIcon /> : <InactiveMenuIcon />}
-                  <p>Calculator</p>
+                  <p>
+                    <Trans i18nKey="common.calculator" />
+                  </p>
                 </div>
               </Link>
             </div>

@@ -5,6 +5,7 @@ import './rebasetimer.scss';
 import { Skeleton } from '@material-ui/lab';
 import { useMemo } from 'react';
 import { IReduxState } from '../../store/slices/state.interface';
+import { useTranslation, Trans } from 'react-i18next';
 
 function RebaseTimer() {
   const currentBlockTime = useSelector<IReduxState, number>(state => {
@@ -28,10 +29,12 @@ function RebaseTimer() {
         {currentBlockTime ? (
           timeUntilRebase ? (
             <>
-              <strong>{timeUntilRebase}</strong> to Next Harvest
+              <strong>{timeUntilRebase}</strong> <Trans i18nKey="components.toNextHarvest" />
             </>
           ) : (
-            <strong>Harvesting</strong>
+            <strong>
+              <Trans i18nKey="components.harvesting" />
+            </strong>
           )
         ) : (
           <Skeleton width="200px" />

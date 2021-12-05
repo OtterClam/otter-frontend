@@ -1,6 +1,7 @@
 import { Paper, Box, Typography } from '@material-ui/core';
 import { trim } from '../../helpers';
 import './customtooltip.scss';
+import { useTranslation, Trans } from 'react-i18next';
 
 const renderDate = (index, payload, item) => {
   return index === payload.length - 1 ? (
@@ -29,14 +30,14 @@ const renderTooltipItems = (payload, bulletpointColors, itemNames, itemType, isS
       <Box className="item" display="flex" justifyContent="space-between">
         <Typography variant="body2">
           <span className="tooltip-bulletpoint" style={bulletpointColors[0]}></span>
-          Staked
+          <Trans i18nKey="components.staked" />
         </Typography>
         <Typography>{`${trim(payload[0].value, 2)}%`}</Typography>
       </Box>
       <Box className="item" display="flex" justifyContent="space-between">
         <Typography variant="body2">
           <span className="tooltip-bulletpoint" style={bulletpointColors[1]}></span>
-          Not staked
+          <Trans i18nKey="components.notStaked" />
         </Typography>
         <Typography>{`${trim(100 - payload[0].value, 2)}%`}</Typography>
       </Box>
