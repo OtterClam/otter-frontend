@@ -2,8 +2,8 @@ const FakeLanguage = {
   translation: {
     common: {
       language: 'Qanguage',
-      bond: 'Bosfdnd',
-      stake: 'Ttake',
+      bond: 'Bond',
+      stake: 'Stake',
       migrate: 'Migrate',
       roi: 'OOI', //Return on Investment
       max: 'Mavfsdx',
@@ -15,15 +15,15 @@ const FakeLanguage = {
       clamPrice: 'DLAMsfd Zsdfrice',
       connectWallet: 'Donnesdfct Wasdfllet',
       price: 'Prsdfice',
-      buy: 'Budfsy',
+      buy: 'Buy',
       addLiquidity: 'Bdd Lsdfiquidity',
       redeem: 'Oedsdfeem',
       treasuryBalance: 'Traffdce',
       currentIndex: 'Dugfdex',
       yourBalance: 'xxance',
       currentApy: 'DurxPY',
-      dashboard: 'Dashvrd',
-      calculator: 'Dalnntor',
+      dashboard: 'Dashboard',
+      calculator: 'Calculator',
     },
     time: {
       days: 'Days',
