@@ -13,6 +13,7 @@ import {
 } from '@material-ui/core';
 import { ReactComponent as XIcon } from '../../assets/icons/icon_close.svg';
 import './bondSettings.scss';
+import { useTranslation, Trans } from 'react-i18next';
 
 const useStyles = makeStyles(theme => ({
   modalContent: {
@@ -86,7 +87,9 @@ function AdvancedSettings({
               }
             />
             <div className="help-text">
-              <p className="text-bond-desc">Transaction may revert if price changes by more than slippage %</p>
+              <p className="text-bond-desc">
+                <Trans i18nKey="bonds.advancedSettings.txrevert" />
+              </p>
             </div>
           </FormControl>
 
@@ -103,7 +106,7 @@ function AdvancedSettings({
             />
             <div className="help-text">
               <p className="text-bond-desc">
-                Choose recipient address. By default, this is your currently connected address
+                <Trans i18nKey="bonds.advancedSettings.recipientAddress" />
               </p>
             </div>
           </FormControl>

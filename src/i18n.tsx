@@ -19,6 +19,41 @@ i18n
     resources: {
       en: {
         translation: {
+          common: {
+            bond: 'Bond',
+            roi: 'ROI',
+            max: 'Max',
+            amount: 'Amount',
+            approve: 'Approve',
+          },
+          // src\views\Bond
+          bonds: {
+            advancedSettings: {
+              txrevert: 'Transaction may revert if price changes by more than slippage %',
+              recipientAddress: 'Choose recipient address. By default, this is your currently connected address',
+            },
+            purchase: {
+              noValue: 'Please enter a value!',
+              invalidValue: 'Please enter a valid value!',
+              resetVestingAutostake:
+                'You have an existing bond. Bonding will reset your vesting period. Do you still want to process?',
+              resetVesting:
+                'You have an existing bond. Bonding will reset your vesting period and forfeit rewards. We recommend claiming rewards first or using a fresh wallet. Do you still want to proceed?',
+
+              fourFourInfo:
+                'Note: The (4, 4) bond will stake all CLAMs at the start, so you will earn all rebase rewards during the vesting term. Once fully vested, you will only be able to claim sClam.',
+              approvalInfo:
+                'Note: The "Approve" transaction is only needed when bonding for the first time; subsequent bonding only requires you to perform the "Bond" transaction.',
+              balance: 'Your Balance',
+              youWillGet: 'You Will Get',
+              maxBuy: 'Max You Can Buy',
+              debtRatio: 'Debt Ratio',
+              vestingTerm: 'Vesting Term',
+              recipient: 'Recipient',
+            },
+          },
+
+          // src\views\Landing
           landing: {
             description: {
               part1: 'The Decentralized',
