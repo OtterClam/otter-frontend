@@ -135,6 +135,7 @@
   display: flex;
   width: 100% !important;
   .box-title {
+    margin-left: 8px;
     font-size: 16px;
     font-weight: 600;
     line-height: 1.5;
@@ -225,6 +226,11 @@
   margin: auto;
   padding: 0 5px;
   margin-top: 30px;
+  .results {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.5;
+  }
 }
 
 .calculator-action-row {
@@ -435,17 +441,16 @@
 .calculator-user-data {
   .data-row {
     .data-row-name {
-      font-size: 14px;
+      font-size: 16px;
     }
 
     .data-row-value {
-      font-size: 14px;
-      line-height: 17px;
-      font-weight: normal;
+      font-size: 16px;
+      line-height: 1.5;
+      font-weight: 400;
     }
   }
 }
-
 .calculator-input {
   // background: $light-gray100;
   border: 1px solid;

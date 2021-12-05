@@ -38,6 +38,9 @@ const useStyles = makeStyles(theme => ({
     '& .MuiSlider-thumb': {
       border: `1px ${theme.palette.background.default} solid`,
     },
+    '& .MuiOutlinedInput-inputAdornedEnd': {
+      paddingRight: '200px',
+    },
   },
 }));
 
@@ -66,7 +69,7 @@ function Calculator() {
   });
 
   const trimmedStakingAPY = trim(stakingAPY * 100, 1);
-  const trimmedsClamBalance = trim(Number(sClamBalance), 4);
+  const trimmedsClamBalance = new Intl.NumberFormat('en-US').format(Number(sClamBalance));
   const trimeMarketPrice = trim(marketPrice, 2);
 
   const [sClamAmount, setsClamAmount] = useState(trimmedsClamBalance);
@@ -77,6 +80,7 @@ function Calculator() {
 
   const [rewardsEstimation, setRewardsEstimation] = useState('0');
   const [potentialReturn, setPotentialReturn] = useState('0');
+  const [percentagePotentialReturn, setPotentialPercentageReturn] = useState('0');
 
   const calcInitialInvestment = () => {
     const sClam = Number(sClamAmount) || 0;
@@ -114,6 +118,8 @@ function Calculator() {
     setRewardsEstimation(trim(newBalance, 6));
     const newPotentialReturn = newBalance * (parseFloat(futureMarketPrice) || 0);
     setPotentialReturn(trim(newPotentialReturn, 2));
+    const newPercentageReturn = (newPotentialReturn / parseFloat(initialInvestment)) * 100 - 100;
+    setPotentialPercentageReturn(trim(newPercentageReturn, 2));
   }, [days, rewardYield, futureMarketPrice, sClamAmount]);
 
   return (
@@ -271,28 +277,43 @@ function Calculator() {
                   />
                 </Box>
                 <Box className="calculator-user-data">
+                  <Typography className="results">Results</Typography>
                   <Box className="data-row">
-                    <Typography>Your initial investment</Typography>
-                    <Typography className="calculator-result">
+                    <Typography className="data-row-name">Your initial investment</Typography>
+                    <Typography className="data-row-value">
                       {isAppLoading ? <Skeleton width="80px" /> : <>{priceFormat(initialInvestment)}</>}
                     </Typography>
                   </Box>
                   <Box className="data-row">
-                    <Typography>Current wealth</Typography>
-                    <Typography>
+                    <Typography className="data-row-name">Current wealth</Typography>
+                    <Typography className="data-row-value">
                       {isAppLoading ? <Skeleton width="80px" /> : <>{priceFormat(calcCurrentWealth())}</>}
                     </Typography>
                   </Box>
                   <Box className="data-row">
-                    <Typography>CLAM rewards estimation</Typography>
-                    <Typography>
-                      {isAppLoading ? <Skeleton width="80px" /> : <>{parseFloat(rewardsEstimation).toFixed(4)} CLAM</>}
+                    <Typography className="data-row-name">CLAM rewards estimation</Typography>
+                    <Typography className="data-row-value">
+                      {isAppLoading ? (
+                        <Skeleton width="80px" />
+                      ) : (
+                        <>{new Intl.NumberFormat('en-US').format(Number(rewardsEstimation))} CLAM</>
+                      )}
                     </Typography>
                   </Box>
                   <Box className="data-row">
-                    <Typography>Potential return</Typography>
-                    <Typography>
+                    <Typography className="data-row-name">Potential return</Typography>
+                    <Typography className="data-row-value">
                       {isAppLoading ? <Skeleton width="80px" /> : <>{priceFormat(potentialReturn)}</>}
+                    </Typography>
+                  </Box>
+                  <Box className="data-row">
+                    <Typography className="data-row-name">Potential percentage gain</Typography>
+                    <Typography className="data-row-value">
+                      {isAppLoading ? (
+                        <Skeleton width="80px" />
+                      ) : (
+                        <>+{new Intl.NumberFormat('en-US').format(Number(percentagePotentialReturn))}%</>
+                      )}
                     </Typography>
                   </Box>
                   {/* <Box className="data-row">
