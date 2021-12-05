@@ -76,6 +76,24 @@ i18n
                 'The current index tracks the amount of sCLAM accumulated since the beginning of staking. Basically, how much sCLAM one would have if they staked and held a single CLAM from day 1.',
             },
           },
+          // src\views\Migrate
+          migrate: {
+            migration: 'Migration',
+            migrate: 'Migrate',
+            oldClamSupply: 'Old CLAM Supply',
+            oldTreasuryReserve: 'Old Treasury Reserve',
+            migrationProgress: 'Migration Progress',
+            connectWallet: 'Connect Wallet',
+            connectWalletDescription: 'Connect your wallet to migrate your CLAM tokens!',
+            steps: 'Steps',
+            yourAmount: 'Your amount',
+            claimWarmup: 'Claim Warmup',
+            done: 'DONE',
+            unstakeClam: 'Unstake CLAM',
+            migrateTo: 'Migrate CLAM to CLAM2',
+            estimatedClamTwo: 'Estimated CLAM2 ',
+            yourClamTwoBalance: 'Your CLAM2 Balance',
+          },
           // src\views\Bond
           bonds: {
             debtRatio: 'Debt Ratio',
