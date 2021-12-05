@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import './header.scss';
 import { Link, Popper, Box, Fade, SvgIcon } from '@material-ui/core';
 import HeaderLogo from './header-logo.png';
+import LanguagePicker from '../LanguagePicker';
 import { DiscordLink, DocsLink, GithubLink, TwitterLink, MediumLink } from 'src/constants';
 
 export default function LandingHeader() {
@@ -40,38 +41,8 @@ export default function LandingHeader() {
       <Link href={DiscordLink}>Discord</Link>
       <Link href={GithubLink}>Github</Link>
       <Link href={MediumLink}>Medium</Link>
+      <LanguagePicker border={false} />
       {/* <Link href={DocsLink}>Docs</Link> */}
-      <div className="landing-header-nav-wrap">
-        <Box
-          component="div"
-          onMouseEnter={e => handleClick(e)}
-          onMouseLeave={e => handleClick(e)}
-          id="ohm-menu-button-hover"
-        >
-          <p className="landing-header-nav-text">Social</p>
-          <Popper className="landing-header-poper" open={open} anchorEl={anchorEl} transition>
-            {({ TransitionProps }) => (
-              <Fade {...TransitionProps} timeout={200}>
-                <div className="tooltip">
-                  <Link
-                    className="tooltip-item"
-                    href="https://github.com/Abracadabra-money/wonderland-frontend"
-                    target="_blank"
-                  >
-                    <p>GitHub</p>
-                  </Link>
-                  <Link className="tooltip-item" href="https://twitter.com/wonderland_fi?s=21" target="_blank">
-                    <p>Twitter</p>
-                  </Link>
-                  <Link className="tooltip-item" href="https://t.me/joinchat/6UybL5rJMEhjN2Y5" target="_blank">
-                    <p>Telegram</p>
-                  </Link>
-                </div>
-              </Fade>
-            )}
-          </Popper>
-        </Box>
-      </div>
     </header>
   );
 }

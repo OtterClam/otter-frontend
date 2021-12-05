@@ -45,7 +45,9 @@
     transition: all 0.33s ease-out;
   }
 }
-
+.language-button {
+  padding-left: 20px;
+}
 .connect-button {
   // background: $otter-blue;
   display: flex;

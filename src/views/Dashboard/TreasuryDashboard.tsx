@@ -26,16 +26,16 @@ function TreasuryDashboard() {
     apy: [t('common.apy')],
     runway: [
       t('dashboard.tooltipItems.current'),
-      `7.5K ${t('dashboard.tooltipItems.apy')}`,
-      `5K ${t('dashboard.tooltipItems.apy')}`,
-      `2.5K ${t('dashboard.tooltipItems.apy')}`,
+      `7.5K ${t('common.apy')}`,
+      `5K ${t('common.apy')}`,
+      `2.5K ${t('common.apy')}`,
     ],
     pol: [t('dashboard.tooltipItems.lpTreasury'), t('dashboard.tooltipItems.marketLP')],
   };
 
   const tooltipInfoMessages = {
     tvl: t('dashboard.tooltipInfoMessages.tvl'),
-    mvt: t('dashboard.tooltipInfoMessages.mtv'),
+    mvt: t('dashboard.tooltipInfoMessages.mvt'),
     rfv: t('dashboard.tooltipInfoMessages.rfv'),
     pol: t('dashboard.tooltipInfoMessages.pol'),
     holder: t('dashboard.tooltipInfoMessages.holder'),

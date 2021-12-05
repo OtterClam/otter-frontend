@@ -15,6 +15,7 @@ import {
 import { ReactComponent as ArrowUpIcon } from '../../assets/icons/arrow-up.svg';
 import { ReactComponent as CaretDownIcon } from '../../assets/icons/caret-down.svg';
 import { useWeb3Context } from '../../hooks';
+import LanguagePicker from '../LanguagePicker';
 
 function ConnectMenu() {
   const { connect, disconnect, connected, web3, chainID } = useWeb3Context();
@@ -102,6 +103,10 @@ function ConnectMenu() {
           </Box>
         </Paper>
       </Popper>
+
+      <Box className="language-button">
+        <LanguagePicker border={true} />
+      </Box>
     </div>
   );
 }
