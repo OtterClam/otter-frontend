@@ -26,13 +26,22 @@ i18n
             amount: 'Amount',
             approve: 'Approve',
             claim: 'Claim',
+            clamPrice: 'CLAM Price',
+            price: 'Price',
+            buy: 'Buy',
+            addLiquidity: 'Add Liquidity',
+            redeem: 'Redeem',
+            treasury: 'Treasury Balance',
           },
           // src\views\Bond
           bonds: {
             debtRatio: 'Debt Ratio',
             vestingTerm: 'Vesting Term',
             recipient: 'Recipient',
-            bondPrice: 'Bond Price'
+            purchased: 'Purchased',
+            bondPrice: 'Bond Price',
+            deprecated: 'Deprecated',
+            bondDiscount: 'discount!',
             advancedSettings: {
               txrevert: 'Transaction may revert if price changes by more than slippage %',
               recipientAddress: 'Choose recipient address. By default, this is your currently connected address',
@@ -49,6 +58,7 @@ i18n
                 'Note: The (4, 4) bond will stake all CLAMs at the start, so you will earn all rebase rewards during the vesting term. Once fully vested, you will only be able to claim sClam.',
               approvalInfo:
                 'Note: The "Approve" transaction is only needed when bonding for the first time; subsequent bonding only requires you to perform the "Bond" transaction.',
+              roiFourFourInfo: '* The ROI of (4,4) bond includes 5-days staking reward',
               balance: 'Your Balance',
               youWillGet: 'You Will Get',
               maxBuy: 'Max You Can Buy',

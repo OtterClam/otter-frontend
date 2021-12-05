@@ -9,6 +9,7 @@ import { priceUnits, trim } from '../../helpers';
 import { useWeb3Context } from '../../hooks';
 import { IReduxState } from '../../store/slices/state.interface';
 import './choose-bond.scss';
+import { useTranslation, Trans } from 'react-i18next';
 
 interface IBondProps {
   bondKey: BondKey;
@@ -31,6 +32,7 @@ export function BondDataCard({ bondKey }: IBondProps) {
   const marketPrice = useSelector<IReduxState, string>(state => state.bonding[bondKey]?.marketPrice);
   const fiveDayRate = useSelector<IReduxState, number>(state => state.app.fiveDayRate);
   const priceDiff = (Number(marketPrice) ?? 0) - (bondPrice ?? 0);
+  const { t } = useTranslation();
 
   return (
     <Slide direction="up" in={true}>
@@ -43,7 +45,7 @@ export function BondDataCard({ bondKey }: IBondProps) {
               <div>
                 <Link href={bond.dexUrl} target="_blank">
                   <Box component="p" color="otter.otterBlue" className="bond-lp-add-liquidity">
-                    {bond.type === 'lp' ? 'Add Liquidity' : `Buy ${bond.reserveUnit}`}
+                    {bond.type === 'lp' ? `${t('common.addLiquidity')}` : `${t('common.buy')} ${bond.reserveUnit}`}
                   </Box>
                 </Link>
               </div>
@@ -52,22 +54,28 @@ export function BondDataCard({ bondKey }: IBondProps) {
         </div>
 
         <div className="data-row">
-          <p className="bond-name-title">Price</p>
+          <p className="bond-name-title">
+            <Trans i18nKey="common.price" />
+          </p>
           <p className="bond-price">
             <p className="bond-name-title ">
               {priceUnits(bondKey)}
               {isBondLoading ? <Skeleton width="50px" /> : bond.deprecated ? '-' : trim(bondPrice, 2)}
             </p>
-            {priceDiff > 0 && <StatusChip status={Status.Success} label={`$${trim(priceDiff, 2)} discount!`} />}
+            {priceDiff > 0 && (
+              <StatusChip status={Status.Success} label={`$${trim(priceDiff, 2)} ${t('bonds.bondDiscount')}`} />
+            )}
           </p>
         </div>
 
         <div className="data-row">
-          <p className="bond-name-title">ROI</p>
+          <p className="bond-name-title">
+            <Trans i18nKey="common.roi" />
+          </p>
           <p className="bond-name-title">
             {isBondLoading ? <Skeleton width="50px" /> : bond.deprecated ? '-' : `${trim(bondDiscount * 100, 2)}%`}
             {!bond.deprecated && bond.autostake && (
-              <Tooltip title="* The ROI of (4,4) bond includes 5-days staking reward ">
+              <Tooltip title={`* ${t('bonds.purchase.roiFourFourInfo')} `}>
                 <span>{` + ${trim(fiveDayRate * 100, 2)}%*`}</span>
               </Tooltip>
             )}
@@ -75,7 +83,9 @@ export function BondDataCard({ bondKey }: IBondProps) {
         </div>
 
         <div className="data-row">
-          <p className="bond-name-title">Purchased</p>
+          <p className="bond-name-title">
+            <Trans i18nKey="bonds.purchased" />
+          </p>
           <p className="bond-name-title">
             {isBondLoading ? (
               <Skeleton width="80px" />
@@ -102,7 +112,7 @@ export function BondDataCard({ bondKey }: IBondProps) {
             className="bond-table-btn"
           >
             <p>
-              {bond.deprecated ? 'Redeem' : 'Bond'} {bond.name}
+              {bond.deprecated ? t('common.redeem') : t('common.bond')} {bond.name}
             </p>
           </Box>
         </Link>
@@ -133,6 +143,7 @@ export function BondTableRow({ bondKey }: IBondProps) {
     return state.account[bondKey] && state.account[bondKey].interestDue;
   });
   const priceDiff = (Number(marketPrice) ?? 0) - (bondPrice ?? 0);
+  const { t } = useTranslation();
 
   return (
     <TableRow id={`${bondKey}--bond`}>
@@ -140,12 +151,12 @@ export function BondTableRow({ bondKey }: IBondProps) {
         <div className="bond-name-cell">
           <BondLogo bond={bond} />
           <div className="bond-name">
-            {bond.deprecated && <LabelChip label="Deprecated" className="bond-name-label" />}
+            {bond.deprecated && <LabelChip label={`${t('bonds.deprecated')}`} className="bond-name-label" />}
             <p className="bond-name-title">{bond.name}</p>
             {!bond.deprecated && (
               <Link color="primary" href={bond.dexUrl} target="_blank">
                 <Box component="p" color="otter.otterBlue" className="bond-lp-add-liquidity">
-                  {bond.type === 'lp' ? 'Add Liquidity' : `Buy ${bond.reserveUnit}`}
+                  {bond.type === 'lp' ? `${t('common.addLiquidity')}` : `${t('common.buy')} ${bond.reserveUnit}`}
                 </Box>
               </Link>
             )}
@@ -158,14 +169,16 @@ export function BondTableRow({ bondKey }: IBondProps) {
             <span className="currency-icon">{priceUnits(bondKey)}</span>
             <span>{isBondLoading ? <Skeleton width="50px" /> : bond.deprecated ? '-' : trim(bondPrice, 2)}</span>
           </p>
-          {priceDiff > 0 && <StatusChip status={Status.Success} label={`$${trim(priceDiff, 2)} discount!`} />}
+          {priceDiff > 0 && (
+            <StatusChip status={Status.Success} label={`$${trim(priceDiff, 2)} ${t('bonds.bondDiscount')}`} />
+          )}
         </div>
       </TableCell>
       <TableCell align="right">
         <p className="bond-name-title">
           {isBondLoading ? <Skeleton /> : bond.deprecated ? '-' : `${trim(bondDiscount * 100, 2)}%`}
           {!bond.deprecated && bond.autostake && (
-            <Tooltip title="* The ROI of (4,4) bond includes 5-days staking reward ">
+            <Tooltip title={`* ${t('bonds.purchase.roiFourFourInfo')} `}>
               <span>{` + ${trim(fiveDayRate * 100, 2)}%*`}</span>
             </Tooltip>
           )}
@@ -218,7 +231,9 @@ export function BondTableRow({ bondKey }: IBondProps) {
               height="44px"
               className="bond-table-btn bond-table-btn__redeem"
             >
-              <p>Redeem</p>
+              <p>
+                <Trans i18nKey="common.redeem" />
+              </p>
             </Box>
           </Link>
         </div>

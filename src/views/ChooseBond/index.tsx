@@ -18,6 +18,7 @@ import { useBonds } from '../../hooks';
 import { IReduxState } from '../../store/slices/state.interface';
 import { BondDataCard, BondTableRow } from './BondRow';
 import './choose-bond.scss';
+import { useTranslation, Trans } from 'react-i18next';
 
 function ChooseBond() {
   const bonds = useBonds();
@@ -50,7 +51,9 @@ function ChooseBond() {
           <Grid container item xs={12} style={{ margin: '10px 0px 20px' }} className="bond-hero">
             <Grid item xs={6}>
               <Box textAlign={`${isVerySmallScreen ? 'left' : 'center'}`}>
-                <p className="bond-hero-title">Treasury Balance</p>
+                <p className="bond-hero-title">
+                  <Trans i18nKey="common.treasuryBalance" />
+                </p>
                 <Box component="p" color="text.secondary" className="bond-hero-value">
                   {isAppLoading ? (
                     <Skeleton width="180px" />
@@ -68,7 +71,9 @@ function ChooseBond() {
 
             <Grid item xs={6} className={`ohm-price`}>
               <Box textAlign={`${isVerySmallScreen ? 'right' : 'center'}`}>
-                <p className="bond-hero-title">CLAM Price</p>
+                <p className="bond-hero-title">
+                  <Trans i18nKey="common.clamPrice" />
+                </p>
                 <Box component="p" color="text.secondary" className="bond-hero-value">
                   {isAppLoading ? <Skeleton width="100px" /> : `$${trim(marketPrice, 2)}`}
                 </Box>
@@ -83,19 +88,29 @@ function ChooseBond() {
                   <TableHead>
                     <TableRow>
                       <TableCell align="center">
-                        <p className="bond-table-title">Bond</p>
+                        <p className="bond-table-title">
+                          <Trans i18nKey="common.bond" />
+                        </p>
                       </TableCell>
                       <TableCell align="center">
-                        <p className="bond-table-title">Price</p>
+                        <p className="bond-table-title">
+                          <Trans i18nKey="common.price" />
+                        </p>
                       </TableCell>
                       <TableCell align="center">
-                        <p className="bond-table-title">ROI</p>
+                        <p className="bond-table-title">
+                          <Trans i18nKey="common.roi" />
+                        </p>
                       </TableCell>
                       <TableCell align="right">
-                        <p className="bond-table-title">Purchased</p>
+                        <p className="bond-table-title">
+                          <Trans i18nKey="bonds.purchased" />
+                        </p>
                       </TableCell>
                       <TableCell align="right">
-                        <p className="bond-table-title">My Bond</p>
+                        <p className="bond-table-title">
+                          <Trans i18nKey="bonds.myBond" />
+                        </p>
                       </TableCell>
                       <TableCell align="right"></TableCell>
                     </TableRow>
