@@ -7,6 +7,7 @@ import { useWeb3Context } from '../../hooks';
 import { redeemBond } from '../../store/slices/bond-slice';
 import { IPendingTxn, isPendingTxn, txnButtonText } from '../../store/slices/pending-txns-slice';
 import { IReduxState } from '../../store/slices/state.interface';
+import { useTranslation, Trans } from 'react-i18next';
 
 interface IBondRedeem {
   bondKey: BondKey;
@@ -56,6 +57,7 @@ function BondRedeem({ bondKey }: IBondRedeem) {
     state => state.bonding[bondKey] && state.bonding[bondKey].debtRatio,
   );
 
+  const { t } = useTranslation();
   return (
     <Box display="flex" flexDirection="column">
       <Box display="flex" justifyContent="space-around" flexWrap="wrap">
@@ -65,14 +67,14 @@ function BondRedeem({ bondKey }: IBondRedeem) {
           color="otter.white"
           onClick={() => {
             if (bond.autostake && !fullVested) {
-              window.alert('You can only claim (4,4) bond after it fully vested.');
+              window.alert(t('bonds.redeem.fullyVestedPopup'));
               return;
             }
             if (isPendingTxn(pendingTransactions, 'redeem_bond_' + bondKey)) return;
             onRedeem(false);
           }}
         >
-          <p>{txnButtonText(pendingTransactions, 'redeem_bond_' + bondKey, 'Claim')}</p>
+          <p>{txnButtonText(pendingTransactions, 'redeem_bond_' + bondKey, t('common.claim'))}</p>
         </Box>
         {!bond.deprecated && !bond.autostake && (
           <Box
@@ -84,7 +86,13 @@ function BondRedeem({ bondKey }: IBondRedeem) {
               onRedeem(true);
             }}
           >
-            <p>{txnButtonText(pendingTransactions, 'redeem_bond_' + bondKey + '_autostake', 'Claim and Autostake')}</p>
+            <p>
+              {txnButtonText(
+                pendingTransactions,
+                'redeem_bond_' + bondKey + '_autostake',
+                t('bonds.redeem.claimAndAutostake'),
+              )}
+            </p>
           </Box>
         )}
       </Box>
@@ -92,7 +100,9 @@ function BondRedeem({ bondKey }: IBondRedeem) {
       <Slide direction="right" in={true} mountOnEnter unmountOnExit {...{ timeout: 533 }}>
         <Box className="bond-data">
           <div className="data-row">
-            <p className="bond-balance-title">Pending Rewards</p>
+            <p className="bond-balance-title">
+              <Trans i18nKey="bonds.redeem.pendingRewards" />
+            </p>
             <p className="price-data bond-balance-value">
               {isBondLoading ? (
                 <Skeleton width="100px" />
@@ -105,14 +115,18 @@ function BondRedeem({ bondKey }: IBondRedeem) {
           </div>
           {!bond.autostake && (
             <div className="data-row">
-              <p className="bond-balance-title">Claimable Rewards</p>
+              <p className="bond-balance-title">
+                <Trans i18nKey="bonds.redeem.claimableRewards" />
+              </p>
               <p className="price-data bond-balance-value">
                 {isBondLoading ? <Skeleton width="100px" /> : `${trim(pendingPayout, 4)} CLAM`}
               </p>
             </div>
           )}
           <div className="data-row">
-            <p className="bond-balance-title">Time until fully vested</p>
+            <p className="bond-balance-title">
+              <Trans i18nKey="bonds.redeem.timeUntilFullyVested" />
+            </p>
             <p className="price-data bond-balance-value">
               {isBondLoading ? <Skeleton width="100px" /> : vestingTime()}
             </p>
@@ -120,7 +134,9 @@ function BondRedeem({ bondKey }: IBondRedeem) {
 
           {!bond.deprecated && (
             <div className="data-row">
-              <p className="bond-balance-title">ROI</p>
+              <p className="bond-balance-title">
+                <Trans i18nKey="common.roi" />
+              </p>
               <p className="bond-balance-value">
                 {isBondLoading ? <Skeleton width="100px" /> : `${trim(bondDiscount * 100, 2)}%`}
               </p>
@@ -128,14 +144,18 @@ function BondRedeem({ bondKey }: IBondRedeem) {
           )}
 
           <div className="data-row">
-            <p className="bond-balance-title">Debt Ratio</p>
+            <p className="bond-balance-title">
+              <Trans i18nKey="bonds.debtRatio" />
+            </p>
             <p className="bond-balance-value">
               {isBondLoading ? <Skeleton width="100px" /> : `${trim(debtRatio / 10000000, 2)}%`}
             </p>
           </div>
 
           <div className="data-row">
-            <p className="bond-balance-title">Vesting Term</p>
+            <p className="bond-balance-title">
+              <Trans i18nKey="bonds.vestingTerm" />
+            </p>
             <p className="bond-balance-value">{isBondLoading ? <Skeleton width="100px" /> : vestingPeriod()}</p>
           </div>
         </Box>

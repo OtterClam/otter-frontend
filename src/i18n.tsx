@@ -25,9 +25,14 @@ i18n
             max: 'Max',
             amount: 'Amount',
             approve: 'Approve',
+            claim: 'Claim',
           },
           // src\views\Bond
           bonds: {
+            debtRatio: 'Debt Ratio',
+            vestingTerm: 'Vesting Term',
+            recipient: 'Recipient',
+            bondPrice: 'Bond Price'
             advancedSettings: {
               txrevert: 'Transaction may revert if price changes by more than slippage %',
               recipientAddress: 'Choose recipient address. By default, this is your currently connected address',
@@ -47,9 +52,13 @@ i18n
               balance: 'Your Balance',
               youWillGet: 'You Will Get',
               maxBuy: 'Max You Can Buy',
-              debtRatio: 'Debt Ratio',
-              vestingTerm: 'Vesting Term',
-              recipient: 'Recipient',
+            },
+            redeem: {
+              fullyVestedPopup: 'You can only claim (4,4) bond after it fully vested.',
+              claimAndAutostake: 'Claim and Autostake',
+              pendingRewards: 'Pending Rewards',
+              claimableRewards: 'Claimable Rewards',
+              timeUntilFullyVested: 'Time until fully vested',
             },
           },
 

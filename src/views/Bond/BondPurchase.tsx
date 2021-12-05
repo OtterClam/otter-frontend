@@ -261,7 +261,7 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
 
           <div className="data-row">
             <p className="bond-balance-title">
-              <Trans i18nKey="bonds.purchase.debtRatio" />
+              <Trans i18nKey="bonds.debtRatio" />
             </p>
             <p className="bond-balance-value">
               {isBondLoading ? <Skeleton width="100px" /> : `${trim(debtRatio / 10000000, 2)}%`}
@@ -270,7 +270,7 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
 
           <div className="data-row">
             <p className="bond-balance-title">
-              <Trans i18nKey="bonds.purchase.vestingTerm" />
+              <Trans i18nKey="bonds.vestingTerm" />
             </p>
             <p className="bond-balance-value">{isBondLoading ? <Skeleton width="100px" /> : vestingPeriod()}</p>
           </div>
@@ -278,7 +278,7 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
           {recipientAddress !== address && (
             <div className="data-row">
               <p className="bond-balance-title">
-                <Trans i18nKey="bonds.purchase.recipient" />
+                <Trans i18nKey="bonds.recipient" />
               </p>
               <p className="bond-balance-value">
                 {isBondLoading ? <Skeleton width="100px" /> : shorten(recipientAddress)}
