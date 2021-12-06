@@ -1,6 +1,7 @@
-import { Box, Modal, Paper, SvgIcon, IconButton, makeStyles, Grid } from '@material-ui/core';
+import { Modal, Paper, SvgIcon, IconButton, makeStyles, Grid } from '@material-ui/core';
 import { ReactComponent as XIcon } from '../../assets/icons/icon_close.svg';
 import { getTokenImage } from '../../helpers';
+import StakeGif from './stake.gif';
 
 import './stakeDialog.scss';
 
@@ -69,7 +70,9 @@ function StakeDialog({
             <div className="confirm">
               <span>Your {action === `stake` ? 'stake' : 'unstake'} was successful.</span>
             </div>
-            <div className="logo-wrapper">{action === `stake` ? getTokenImage('sclam') : getTokenImage('clam')}</div>
+            <div className="logo-wrapper">
+              {action === `stake` ? <img src={StakeGif} style={{ width: 200, height: 200 }} /> : getTokenImage('clam')}
+            </div>
             <div className="amt-msg">
               {action === `stake` ? (
                 <div className="rcv">

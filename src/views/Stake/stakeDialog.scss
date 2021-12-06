@@ -20,6 +20,10 @@
     backdrop-filter: blur(100px);
     border-radius: 20px;
 
+    @media screen and (max-width: 596px) {
+      margin: 0 20px;
+    }
+
     .dialog-wrap {
       margin: 40px 50px;
 
