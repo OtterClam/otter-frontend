@@ -1,0 +1,55 @@
+.nft-hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background-image: url('./images/nft-bg-middle.png');
+  background-repeat: no-repeat;
+  background-size: 1178px 583px;
+  background-position: top center;
+  min-height: 583px;
+
+  &__content {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 730px;
+    margin-top: -280px;
+  }
+
+  &__title {
+    font-size: 48px !important;
+    line-height: 72px !important;
+  }
+
+  &__subtitle {
+    font-size: 24px !important;
+    line-height: 36px !important;
+  }
+
+  &:before {
+    content: '';
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    left: 0;
+    background-image: url('./images/nft-bg-left.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    width: 512px;
+    height: 583px;
+  }
+
+  &:after {
+    content: '';
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    right: 0;
+    background-image: url('./images/nft-bg-right.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    width: 645px;
+    height: 583px;
+  }
+}

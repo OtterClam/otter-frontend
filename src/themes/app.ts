@@ -20,6 +20,7 @@ const colorPalette = {
     darkGray100: '#8193B5',
     darkGray200: '#5E6E99',
     darkGray300: '#434E77',
+    highlight: '#FF6854',
     chip: {
       normal: {
         bg: '#DBE6EC',
@@ -41,6 +42,7 @@ const colorPalette = {
     darkGray100: '#8192B4',
     darkGray200: '#A1AEC9',
     darkGray300: '#CCD6E7',
+    highlight: '#FF6854',
     chip: {
       normal: {
         bg: '#303E65',

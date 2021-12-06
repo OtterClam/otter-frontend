@@ -1,3 +1,5 @@
+export const LandingPageLink = 'https://www.otterclam.finance';
+
 export const DiscordLink = 'https://discord.gg/otterclam';
 
 export const TwitterLink = 'https://twitter.com/otterclam';

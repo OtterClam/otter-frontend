@@ -1,0 +1,61 @@
+.nft-cd {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 105px;
+
+  &__title {
+    margin-bottom: 20px !important;
+    font-size: 18px !important;
+    line-height: 27px !important;
+    font-weight: bold !important;
+  }
+
+  &__content {
+    flex: 1 100%;
+    max-width: 730px;
+    padding: 20px;
+    border-radius: 20px;
+  }
+
+  &__numbers {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__number-group {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 78px;
+
+    &:not(:last-child) {
+      margin-right: 20px;
+    }
+  }
+
+  &__number-label {
+    width: 100%;
+    margin-top: 10px !important;
+    font-size: 12px !important;
+    line-height: 21px !important;
+    font-weight: normal !important;
+  }
+
+  &__number {
+    width: 36px;
+    height: 48px;
+    line-height: 48px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:first-child {
+      margin-right: 6px;
+    }
+
+    span {
+      font-size: 24px !important;
+    }
+  }
+}
