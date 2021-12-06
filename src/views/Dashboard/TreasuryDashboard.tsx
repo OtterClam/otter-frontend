@@ -81,7 +81,7 @@ function TreasuryDashboard() {
       staked = staked.filter(pm => pm.staked < 100);
       setStaked(staked);
       // @ts-ignore
-      let runway = metrics.filter(pm => pm.runway10k > 5);
+      let runway = metrics.filter(pm => pm.runway100k > 5);
       setRunway(runway);
       // @ts-ignore
       let apy = r.data.protocolMetrics.map(entry => ({
@@ -317,7 +317,7 @@ function TreasuryDashboard() {
                   <Chart
                     type="multi"
                     data={runway}
-                    dataKey={['runwayCurrent', 'runway7dot5k', 'runway5k', 'runway2dot5k']}
+                    dataKey={['runwayCurrent', 'runway100k', 'runway50k', 'runway10k']}
                     color={theme.palette.text.primary}
                     stroke={[theme.palette.text.primary, '#2EC608', '#49A1F2', '#ff758f']}
                     headerText="Runway Available"

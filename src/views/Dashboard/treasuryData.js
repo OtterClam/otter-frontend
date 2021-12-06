@@ -22,11 +22,8 @@ query {
     treasuryFraxRiskFreeValue
     currentAPY
     runway10k
-    runway20k
     runway50k
-    runway7dot5k
-    runway5k
-    runway2dot5k
+    runway100k
     runwayCurrent
     treasuryClamMaiPOL
   }
@@ -189,7 +186,7 @@ export const tooltipItems = {
   rfv: ['MAI', 'FRAX'],
   holder: ['CLAMies'],
   apy: ['APY'],
-  runway: ['Current', '7.5K APY', '5K APY', '2.5K APY'],
+  runway: ['Current', '100K APY', '50K APY', '10K APY'],
   pol: ['LP Treasury', 'Market LP'],
 };
 
