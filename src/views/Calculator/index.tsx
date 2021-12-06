@@ -105,11 +105,12 @@ function Calculator() {
 
   const calcNewBalance = () => {
     let value = parseFloat(rewardYield) / 100;
-    value = Math.pow(value - 1, 1 / (365 * 3)) - 1 || 0;
+    value = Math.pow(value + 1, 1 / (365 * 3)) - 1 || 0;
     let balance = Number(sClamAmount);
     for (let i = 0; i < days * 3; i++) {
       balance += balance * value;
     }
+    console.log(balance);
     return balance;
   };
 
