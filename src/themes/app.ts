@@ -96,7 +96,7 @@ export const light = responsiveFontSizes(
       overrides: {
         MuiDrawer: {
           paperAnchorLeft: {
-            backgroundColor: colorPalette.dark.white,
+            backgroundColor: colorPalette.light.white,
           },
         },
       },
