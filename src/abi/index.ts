@@ -18,3 +18,5 @@ export { abi as IDOContract } from './OtterClamIDO.json';
 export { abi as ClamCirculatingSupply } from './ClamCirculatingSupply.json';
 
 export { abi as ClamTokenMigrator } from './ClamTokenMigrator.json';
+
+export { abi as OtterNonStableBondDepository } from './OtterNonStableBondDepository.json';
