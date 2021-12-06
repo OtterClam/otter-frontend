@@ -162,6 +162,9 @@
     margin-bottom: 4px;
   }
 }
+#num-box {
+  width: 320px;
+}
 .calculator-action-area {
   display: flex;
   flex-direction: column;
@@ -170,7 +173,7 @@
   justify-content: space-around;
   margin-top: 10px;
   .calculator-card-action-input {
-    width: 100% !important;
+    width: 320px;
     border-radius: 10px;
     outline: none;
 
@@ -477,6 +480,10 @@
 @media screen and (max-width: 417px) {
   .single-calculator-subtitle {
     font-size: 18px !important;
+  }
+
+  #num-box {
+    width: 160px;
   }
 
   .single-calculator-subtitle-value {

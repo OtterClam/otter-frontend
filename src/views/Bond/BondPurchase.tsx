@@ -168,7 +168,7 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
               <InputAdornment position="end">
                 <div className="stake-input-btn" onClick={setMax}>
                   <p>
-                    <Trans i18nKey="bonds.purchase.max" />
+                    <Trans i18nKey="common.max" />
                   </p>
                 </div>
               </InputAdornment>

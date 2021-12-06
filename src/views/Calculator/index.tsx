@@ -39,9 +39,9 @@ const useStyles = makeStyles(theme => ({
     '& .MuiSlider-thumb': {
       border: `1px ${theme.palette.background.default} solid`,
     },
-    '& .MuiOutlinedInput-inputAdornedEnd': {
-      paddingRight: '200px',
-    },
+    // '& .MuiOutlinedInput-inputAdornedEnd': {
+    //   width: '320px',
+    // },
   },
 }));
 
@@ -189,6 +189,7 @@ function Calculator() {
                           <Trans i18nKey="calculator.sClamAmount" />
                         </Typography>
                         <OutlinedInput
+                          id="num-box"
                           type="number"
                           placeholder="Amount"
                           className="calculator-card-action-input"
@@ -202,7 +203,9 @@ function Calculator() {
                                 className="stake-card-action-input-btn"
                               >
                                 <Typography>
+                                  &nbsp;&nbsp;&nbsp;
                                   <Trans i18nKey="common.max" />
+                                  &nbsp;&nbsp;&nbsp;
                                 </Typography>
                               </div>
                             </InputAdornment>
@@ -218,6 +221,7 @@ function Calculator() {
                         <OutlinedInput
                           type="number"
                           placeholder="Amount"
+                          id="num-box"
                           className="calculator-card-action-input"
                           value={rewardYield}
                           onChange={e => setRewardYield(e.target.value)}
@@ -244,6 +248,7 @@ function Calculator() {
                         </Typography>
                         <OutlinedInput
                           type="number"
+                          id="num-box"
                           placeholder="Amount"
                           className="calculator-card-action-input"
                           value={priceAtPurchase}
@@ -271,6 +276,7 @@ function Calculator() {
                         </Typography>
                         <OutlinedInput
                           type="number"
+                          id="num-box"
                           placeholder="Amount"
                           className="calculator-card-action-input"
                           value={futureMarketPrice}
