@@ -3,29 +3,42 @@ import Landing from './Landing';
 import IDO from './IDO';
 import { HashRouter } from 'react-router-dom';
 import { light as lightTheme } from '../themes';
-import { ThemeProvider } from '@material-ui/core';
+import { Theme, ThemeProvider as MuiThemeProvider } from '@material-ui/core';
 import { AppThemeProvider } from 'src/helpers/app-theme-context';
+import { PropsWithChildren } from 'react';
+
+const isApp = (): boolean => {
+  return window.location.host.includes('app');
+};
+
+const isIDO = (): boolean => {
+  return window.location.host.includes('ido');
+};
+
+const DefaultThemeProvider = ({ children }: PropsWithChildren<{}>) => {
+  return <MuiThemeProvider theme={lightTheme}>{children}</MuiThemeProvider>;
+};
 
 function Root() {
-  const isApp = (): boolean => {
-    return window.location.host.includes('app');
-  };
-
-  const isIDO = (): boolean => {
-    return window.location.host.includes('ido');
-  };
+  let Content = Landing;
+  let defaultTheme: Theme | undefined = lightTheme;
+  let ThemeProvider = DefaultThemeProvider;
 
   if (isApp()) {
-    return (
-      <HashRouter>
-        <AppThemeProvider>
-          <App />
-        </AppThemeProvider>
-      </HashRouter>
-    );
+    Content = App;
+    defaultTheme = undefined;
+    ThemeProvider = AppThemeProvider;
+  } else if (isIDO()) {
+    Content = IDO;
   }
 
-  return <ThemeProvider theme={lightTheme}>{isIDO() ? <IDO /> : <Landing />}</ThemeProvider>;
+  return (
+    <HashRouter>
+      <ThemeProvider>
+        <Content />
+      </ThemeProvider>
+    </HashRouter>
+  );
 }
 
 export default Root;
