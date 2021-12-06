@@ -96,7 +96,7 @@ export const changeStake = createAsyncThunk(
       }
       const pendingTxnType = action === 'stake' ? 'staking' : 'unstaking';
       dispatch(fetchPendingTxns({ txnHash: stakeTx.hash, text: getStakingTypeText(action), type: pendingTxnType }));
-      await stakeTx.wait(3);
+      // await stakeTx.wait(3);
     } catch (error: any) {
       if (error.code === -32603 && error.message.indexOf('ds-math-sub-underflow') >= 0) {
         alert('You may be trying to stake more than your balance! Error code: 32603. Message: ds-math-sub-underflow');
@@ -110,7 +110,9 @@ export const changeStake = createAsyncThunk(
       }
     }
     dispatch(getBalances({ address, networkID, provider }));
-    return;
+    if (stakeTx) {
+      return true;
+    }
   },
 );
 

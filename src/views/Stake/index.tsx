@@ -23,6 +23,8 @@ import { useWeb3Context } from '../../hooks';
 import { IPendingTxn, isPendingTxn, txnButtonText } from '../../store/slices/pending-txns-slice';
 import { Skeleton } from '@material-ui/lab';
 import { IReduxState } from '../../store/slices/state.interface';
+import StakeDialog from './StakeDialog';
+import ActionButton from '../../components/Button/ActionButton';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -56,7 +58,10 @@ function Stake() {
   const tabsActions = useRef<TabsActions>(null);
 
   const [view, setView] = useState(0);
-  const [quantity, setQuantity] = useState<string>();
+  const [quantity, setQuantity] = useState<string>('');
+
+  const [open, setOpen] = useState(false);
+  const [action, setAction] = useState<string>('');
 
   const isAppLoading = useSelector<IReduxState, boolean>(state => state.app.loading);
   const currentIndex = useSelector<IReduxState, string>(state => {
@@ -104,6 +109,14 @@ function Stake() {
     }
   };
 
+  const handleOpenDialog = () => {
+    setOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpen(false);
+  };
+
   const onSeekApproval = async (token: string) => {
     await dispatch(changeApproval({ address, token, provider, networkID: chainID }));
   };
@@ -115,7 +128,13 @@ function Stake() {
       // eslint-disable-next-line no-alert
       alert('Please enter a value!');
     } else {
-      await dispatch(changeStake({ address, action, value: String(quantity), provider, networkID: chainID }));
+      setAction(action);
+      let stakeTx: any = await dispatch(
+        changeStake({ address, action, value: String(quantity), provider, networkID: chainID }),
+      );
+      if (stakeTx.payload == true) {
+        handleOpenDialog();
+      }
     }
   };
 
@@ -261,70 +280,64 @@ function Stake() {
                       <TabPanel value={view} index={0} className="stake-tab-panel">
                         <div className="stake-tab-buttons-group">
                           {address && hasAllowance('CLAM') ? (
-                            <Box
-                              className="stake-tab-panel-btn"
-                              bgcolor="otter.otterBlue"
-                              onClick={() => {
-                                if (isPendingTxn(pendingTransactions, 'staking')) return;
-                                onChangeStake('stake');
-                              }}
-                            >
-                              <p>{txnButtonText(pendingTransactions, 'staking', 'Stake')}</p>
-                            </Box>
+                            <ActionButton
+                              pendingTransactions={pendingTransactions}
+                              type="staking"
+                              start="Stake"
+                              progress="Staking..."
+                              processTx={() => onChangeStake('stake')}
+                            ></ActionButton>
                           ) : (
-                            <Box
-                              className="stake-tab-panel-btn"
-                              bgcolor="otter.otterBlue"
-                              onClick={() => {
-                                if (isPendingTxn(pendingTransactions, 'approve_staking')) return;
-                                onSeekApproval('CLAM');
-                              }}
-                            >
-                              <p>{txnButtonText(pendingTransactions, 'approve_staking', 'Approve')}</p>
-                            </Box>
+                            <ActionButton
+                              pendingTransactions={pendingTransactions}
+                              type="approve_staking"
+                              start="Approve"
+                              progress="Approving..."
+                              processTx={() => onSeekApproval('CLAM')}
+                            ></ActionButton>
                           )}
                           {canClaimWarmup && (
-                            <Box
-                              className="stake-tab-panel-btn"
-                              bgcolor="otter.otterBlue"
-                              onClick={() => {
-                                if (isPendingTxn(pendingTransactions, 'claimWarmup')) return;
-                                onClaimWarmup();
-                              }}
-                            >
-                              <p>{txnButtonText(pendingTransactions, 'claimWarmup', 'Claim Warmup')}</p>
-                            </Box>
+                            <ActionButton
+                              pendingTransactions={pendingTransactions}
+                              type="claimWarmup"
+                              start="Claim Warmup"
+                              progress="Claiming..."
+                              processTx={() => onClaimWarmup()}
+                            ></ActionButton>
                           )}
                         </div>
                       </TabPanel>
 
                       <TabPanel value={view} index={1} className="stake-tab-panel">
                         {address && hasAllowance('sCLAM') ? (
-                          <Box
-                            className="stake-tab-panel-btn"
-                            bgcolor="otter.otterBlue"
-                            onClick={() => {
-                              if (isPendingTxn(pendingTransactions, 'unstaking')) return;
-                              onChangeStake('unstake');
-                            }}
-                          >
-                            <p>{txnButtonText(pendingTransactions, 'unstaking', 'Unstake CLAM2')}</p>
-                          </Box>
+                          <ActionButton
+                            pendingTransactions={pendingTransactions}
+                            type="unstaking"
+                            start="Unstake CLAM2"
+                            progress="Unstaking..."
+                            processTx={() => onChangeStake('unstake')}
+                          ></ActionButton>
                         ) : (
-                          <Box
-                            className="stake-tab-panel-btn"
-                            bgcolor="otter.otterBlue"
-                            onClick={() => {
-                              if (isPendingTxn(pendingTransactions, 'approve_unstaking')) return;
-                              onSeekApproval('sCLAM');
-                            }}
-                          >
-                            <p>{txnButtonText(pendingTransactions, 'approve_unstaking', 'Approve')}</p>
-                          </Box>
+                          <ActionButton
+                            pendingTransactions={pendingTransactions}
+                            type="approve_unstaking"
+                            start="Approve"
+                            progress="Approving..."
+                            processTx={() => onSeekApproval('sCLAM')}
+                          ></ActionButton>
                         )}
                       </TabPanel>
                     </Box>
-
+                    <StakeDialog
+                      open={open}
+                      handleClose={handleCloseDialog}
+                      stakingRebasePercentage={stakingRebasePercentage}
+                      quantity={trim(Number(quantity), 4)}
+                      balance={trim(Number(clamBalance), 4)}
+                      stakeBalance={new Intl.NumberFormat('en-US').format(Number(trimmedSClamBalance))}
+                      nextRewardValue={nextRewardValue}
+                      action={action}
+                    />
                     <div className="help-text">
                       {address && ((!hasAllowance('CLAM') && view === 0) || (!hasAllowance('sCLAM') && view === 1)) && (
                         <p className="text-desc">
