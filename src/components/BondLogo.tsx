@@ -6,14 +6,16 @@ interface IBondHeaderProps {
   bond: Bond;
 }
 
-function BondHeader({ bond }: IBondHeaderProps) {
+function BondLogo({ bond }: IBondHeaderProps) {
   const reserveAssetImg = () => {
     if (bond.key.indexOf('clam') >= 0) {
-      return getTokenImage('clam');
+      return getTokenImage('clam', 32);
     } else if (bond.key.indexOf('mai') >= 0) {
-      return getTokenImage('mai');
+      return getTokenImage('mai', 32);
     } else if (bond.key.indexOf('frax') >= 0) {
       return getTokenImage('frax', 32);
+    } else if (bond.key.indexOf('matic') >= 0) {
+      return getTokenImage('wmatic', 32);
     }
   };
 
@@ -24,4 +26,4 @@ function BondHeader({ bond }: IBondHeaderProps) {
   );
 }
 
-export default BondHeader;
+export default BondLogo;

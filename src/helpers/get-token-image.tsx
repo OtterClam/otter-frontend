@@ -3,6 +3,7 @@ import { ReactComponent as CLAM } from '../assets/tokens/CLAM.svg';
 import { ReactComponent as StakedClam } from '../assets/tokens/sCLAM.svg';
 import { ReactComponent as FRAX } from '../assets/tokens/FRAX.svg';
 import { ReactComponent as MAI } from '../assets/tokens/MAI.svg';
+import { ReactComponent as WMATIC } from '../assets/tokens/WMATIC.svg';
 
 export function getMAITokenImage(size: number = 32) {
   const style = { height: size, width: size };
@@ -24,13 +25,19 @@ export function getFRAXTokenImage(size: number = 32) {
   return <SvgIcon component={FRAX} viewBox="0 0 32 32" style={style} />;
 }
 
-export type Token = 'clam' | 'mai' | 'sclam' | 'clam2' | 'sclam2' | 'frax';
+export function getWMATICTokenImage(size: number = 32) {
+  const style = { height: size, width: size };
+  return <SvgIcon component={WMATIC} viewBox="0 0 32 32" style={style} />;
+}
+
+export type Token = 'clam' | 'mai' | 'sclam' | 'clam2' | 'sclam2' | 'frax' | 'wmatic';
 
 export function getTokenImage(name: Token, size: number = 32): JSX.Element {
   if (name === 'mai') return getMAITokenImage(size);
   if (name === 'clam' || name === 'clam2') return getCLAMTokenImage(size);
   if (name === 'sclam' || name === 'sclam2') return getStakedCLAMTokenImage(size);
   if (name === 'frax') return getFRAXTokenImage(size);
+  if (name === 'wmatic') return getWMATICTokenImage(size);
 
   throw Error(`Token image doesn't support: ${name}`);
 }
