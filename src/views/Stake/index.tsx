@@ -25,6 +25,7 @@ import { Skeleton } from '@material-ui/lab';
 import { IReduxState } from '../../store/slices/state.interface';
 import StakeDialog from './StakeDialog';
 import ActionButton from '../../components/Button/ActionButton';
+import apollo from 'src/lib/apolloClient';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -91,12 +92,8 @@ function Stake() {
   const stakingRebase = useSelector<IReduxState, number>(state => {
     return state.app.stakingRebase;
   });
-  const stakingAPY = useSelector<IReduxState, number>(state => {
-    return state.app.stakingAPY;
-  });
-  const stakingTVL = useSelector<IReduxState, number>(state => {
-    return state.app.stakingTVL;
-  });
+  const [stakingAPY, setStakingAPY] = useState<number | null>(null);
+  const [stakingTVL, setStakingTVL] = useState<number | null>(null);
   const pendingTransactions = useSelector<IReduxState, IPendingTxn[]>(state => {
     return state.pendingTransactions;
   });
@@ -167,6 +164,20 @@ function Stake() {
       setTimeout(() => tabsActions?.current?.updateIndicator(), 300);
     }
   }, [tabsActions]);
+
+  useEffect(() => {
+    apollo(`
+query {
+  protocolMetrics(first: 1, orderBy: timestamp, orderDirection: desc) {
+    totalValueLocked
+    currentAPY
+  }
+}`).then(r => {
+      const { totalValueLocked, currentAPY } = (r as any).data.protocolMetrics[0];
+      setStakingTVL(totalValueLocked);
+      setStakingAPY(currentAPY);
+    });
+  });
 
   return (
     <div id="stake-view" className={styles.root}>

@@ -1,16 +1,9 @@
 import { JsonRpcProvider } from '@ethersproject/providers';
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
-import { BigNumber, ethers } from 'ethers';
-import {
-  BondingCalcContract,
-  ClamCirculatingSupply,
-  ClamTokenContract,
-  ClamTokenMigrator,
-  StakedClamContract,
-  StakingContract,
-} from '../../abi';
-import { getAddresses, ReserveKeys } from '../../constants';
-import { addressForReserve, contractForReserve, getMarketPrice, getTokenPrice, setAll } from '../../helpers';
+import { ethers } from 'ethers';
+import { ClamCirculatingSupply, StakedClamContract, StakingContract } from '../../abi';
+import { getAddresses } from '../../constants';
+import { getMarketPrice, getTokenPrice, setAll } from '../../helpers';
 
 const initialState = {
   loading: true,
@@ -18,22 +11,16 @@ const initialState = {
 
 export interface IApp {
   loading: boolean;
-  stakingTVL: number;
   marketPrice: number;
-  marketCap: number;
-  totalSupply: number;
   circSupply: number;
   currentIndex: string;
   currentBlock: number;
   currentBlockTime: number;
   fiveDayRate: number;
-  treasuryBalance: number;
   stakingAPY: number;
   stakingRebase: number;
   networkID: number;
   nextRebase: number;
-  stakingRatio: number;
-  backingPerClam: number;
 }
 
 interface ILoadAppDetails {
@@ -48,12 +35,8 @@ export const loadAppDetails = createAsyncThunk(
     const maiPrice = await getTokenPrice('MAI');
 
     const addresses = getAddresses(networkID);
-    const currentBlock = await provider.getBlockNumber();
-    const currentBlockTime = (await provider.getBlock(currentBlock)).timestamp;
 
-    const clamContract = new ethers.Contract(addresses.CLAM_ADDRESS, ClamTokenContract, provider);
     const sCLAMContract = new ethers.Contract(addresses.sCLAM_ADDRESS, StakedClamContract, provider);
-    const bondCalculator = new ethers.Contract(addresses.CLAM_BONDING_CALC_ADDRESS, BondingCalcContract, provider);
     const clamCirculatingSupply = new ethers.Contract(
       addresses.CLAM_CIRCULATING_SUPPLY,
       ClamCirculatingSupply,
@@ -61,59 +44,34 @@ export const loadAppDetails = createAsyncThunk(
     );
     const stakingContract = new ethers.Contract(addresses.STAKING_ADDRESS, StakingContract, provider);
 
-    let reserveAmount = (
-      await Promise.all(
-        ReserveKeys.map(async key => {
-          const token = contractForReserve(key, networkID, provider);
-          return (await token.balanceOf(addresses.TREASURY_ADDRESS)) / 1e18;
-        }),
-      )
-    ).reduce((prev, value) => prev + value);
+    const currentBlock = await provider.getBlockNumber();
+    const currentBlockTime = (await provider.getBlock(currentBlock)).timestamp;
 
-    const lp = contractForReserve('mai_clam', networkID, provider);
-    const maiClamAmount = await lp.balanceOf(addresses.TREASURY_ADDRESS);
-    const valuation = await bondCalculator.valuation(addressForReserve('mai_clam', networkID), maiClamAmount);
-    const markdown = await bondCalculator.markdown(addressForReserve('mai_clam', networkID));
-    const maiClamUSD = (valuation / 1e9) * (markdown / 1e18);
-
-    const treasuryBalance = reserveAmount + maiClamUSD;
-
-    const stakingBalance = await stakingContract.contractBalance();
-    const circSupply = (await clamCirculatingSupply.CLAMCirculatingSupply()) / 1e9;
-    const totalSupply = (await clamContract.totalSupply()) / 1e9;
-    const epoch = await stakingContract.epoch();
+    const [circSupply, epoch, sClamCirc, currentIndex, rawMarketPrice] = await Promise.all([
+      (await clamCirculatingSupply.CLAMCirculatingSupply()) / 1e9,
+      stakingContract.epoch(),
+      (await sCLAMContract.circulatingSupply()) / 1e9,
+      stakingContract.index(),
+      getMarketPrice(networkID, provider),
+    ]);
     const stakingReward = epoch.distribute / 1e9;
-    const sClamCirc = (await sCLAMContract.circulatingSupply()) / 1e9;
     const stakingRebase = stakingReward / sClamCirc;
     const fiveDayRate = Math.pow(1 + stakingRebase, 5 * 3) - 1;
     const stakingAPY = Math.pow(1 + stakingRebase, 365 * 3) - 1;
-    const stakingRatio = sClamCirc / circSupply;
-    const backingPerClam = treasuryBalance / circSupply;
-
-    const currentIndex = await stakingContract.index();
     const nextRebase = epoch.endTime.toNumber();
 
-    const rawMarketPrice = await getMarketPrice(networkID, provider);
     const marketPrice = Number(((rawMarketPrice.toNumber() / 1e9) * maiPrice).toFixed(2));
-    const stakingTVL = (stakingBalance * marketPrice) / 1e9;
-    const marketCap = circSupply * marketPrice;
 
     return {
       currentIndex: ethers.utils.formatUnits(currentIndex, 'gwei'),
-      totalSupply,
       circSupply,
-      marketCap,
       currentBlock,
       fiveDayRate,
-      treasuryBalance,
       stakingAPY,
-      stakingTVL,
       stakingRebase,
       marketPrice,
       currentBlockTime,
       nextRebase,
-      stakingRatio,
-      backingPerClam,
     };
   },
 );

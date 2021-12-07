@@ -12,7 +12,9 @@ import {
 } from '@material-ui/core';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Skeleton } from '@material-ui/lab';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import apollo from 'src/lib/apolloClient';
 import { getTokenImage, trim } from '../../helpers';
 import { useBonds } from '../../hooks';
 import { IReduxState } from '../../store/slices/state.interface';
@@ -23,14 +25,23 @@ function ChooseBond() {
   const bonds = useBonds();
   const isSmallScreen = useMediaQuery('(max-width: 733px)'); // change to breakpoint query
   const isVerySmallScreen = useMediaQuery('(max-width: 420px)');
+  const [treasuryBalance, setTreasuryBalance] = useState<number | null>(null);
 
   const isAppLoading = useSelector<IReduxState, boolean>(state => state.app.loading);
   const marketPrice = useSelector<IReduxState, number>(state => {
     return state.app.marketPrice;
   });
 
-  const treasuryBalance = useSelector<IReduxState, number>(state => {
-    return state.app.treasuryBalance;
+  useEffect(() => {
+    apollo(`
+query {
+  protocolMetrics(first: 1, orderBy: timestamp, orderDirection: desc) {
+    treasuryMarketValue
+  }
+}`).then(r => {
+      const latestMetrics = (r as any).data.protocolMetrics[0];
+      setTreasuryBalance(latestMetrics.treasuryMarketValue);
+    });
   });
 
   return (
@@ -52,7 +63,7 @@ function ChooseBond() {
               <Box textAlign={`${isVerySmallScreen ? 'left' : 'center'}`}>
                 <p className="bond-hero-title">Treasury Balance</p>
                 <Box component="p" color="text.secondary" className="bond-hero-value">
-                  {isAppLoading ? (
+                  {!treasuryBalance ? (
                     <Skeleton width="180px" />
                   ) : (
                     new Intl.NumberFormat('en-US', {

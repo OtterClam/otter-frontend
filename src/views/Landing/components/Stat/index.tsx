@@ -1,20 +1,26 @@
-import './stat.scss';
 import { Grid } from '@material-ui/core';
-import { useSelector } from 'react-redux';
-import { IReduxState } from '../../../../store/slices/state.interface';
-import { trim } from '../../../../helpers';
 import { Skeleton } from '@material-ui/lab';
+import { useEffect, useState } from 'react';
+import apollo from 'src/lib/apolloClient';
+import './stat.scss';
 
 function Stat() {
-  const isAppLoading = useSelector<IReduxState, boolean>(state => state.app.loading);
-  const stakingAPY = useSelector<IReduxState, number>(state => {
-    return state.app.stakingAPY;
-  });
-  const treasuryBalance = useSelector<IReduxState, number>(state => {
-    return state.app.treasuryBalance;
-  });
+  const [stakingAPY, setStakingAPY] = useState<number | null>(null);
+  const [treasuryBalance, setTreasuryBalance] = useState<number | null>(null);
 
-  const trimmedStakingAPY = trim(stakingAPY * 100, 1);
+  useEffect(() => {
+    apollo(`
+query {
+  protocolMetrics(first: 1, orderBy: timestamp, orderDirection: desc) {
+    treasuryMarketValue
+    currentAPY
+  }
+}`).then(r => {
+      const latestMetrics = (r as any).data.protocolMetrics[0];
+      setTreasuryBalance(latestMetrics.treasuryMarketValue);
+      setStakingAPY(latestMetrics.currentAPY);
+    });
+  });
 
   return (
     <div className="landing-footer">
@@ -28,7 +34,7 @@ function Stat() {
           <div className="landing-footer-item-wrap">
             <p className="landing-footer-item-title">Treasury Balance</p>
             <p className="landing-footer-item-value">
-              {isAppLoading ? (
+              {!treasuryBalance ? (
                 <Skeleton width="180px" />
               ) : (
                 new Intl.NumberFormat('en-US', {
@@ -46,7 +52,7 @@ function Stat() {
             <p className="landing-footer-item-title">Current APY</p>
             <p className="landing-footer-item-value">
               {stakingAPY ? (
-                <>{new Intl.NumberFormat('en-US').format(Number(trimmedStakingAPY))}%</>
+                <>{new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(Number(stakingAPY))}%</>
               ) : (
                 <Skeleton width="150px" />
               )}
