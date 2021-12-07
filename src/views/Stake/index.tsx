@@ -175,7 +175,7 @@ query {
 }`).then(r => {
       const { totalValueLocked, currentAPY } = (r as any).data.protocolMetrics[0];
       setStakingTVL(totalValueLocked);
-      setStakingAPY(currentAPY);
+      setStakingAPY(currentAPY / 100);
     });
   });
 
