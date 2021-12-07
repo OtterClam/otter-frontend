@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import './header.scss';
 import { Link } from '@material-ui/core';
+import { useEffect, useState } from 'react';
+import { DiscordLink, GithubLink, MediumLink, TwitterLink } from 'src/constants';
 import HeaderLogo from './header-logo.png';
-import { DiscordLink, DocsLink, GithubLink, TwitterLink, MediumLink } from 'src/constants';
+import './header.scss';
 
 export default function LandingHeader() {
   const [scrolled, setScrolled] = useState(false);
@@ -31,6 +31,7 @@ export default function LandingHeader() {
       <a href="https://www.otterclam.finance" className="landing-header-logo">
         <img src={HeaderLogo} alt="logo" />
       </a>
+      <Link href="/#/nft">NFT</Link>
       <Link href={TwitterLink}>Twitter</Link>
       <Link href={DiscordLink}>Discord</Link>
       <Link href={GithubLink}>Github</Link>

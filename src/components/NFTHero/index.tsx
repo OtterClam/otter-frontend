@@ -2,7 +2,8 @@ import { Box, Typography } from '@material-ui/core';
 import './hero.scss';
 
 const title = 'NFT Giveaway Party';
-const subtitle = 'OtterClam NFT giveaway party will be held from Dec 1, 2021 0:00 UTC to DEC 2, 2021 23:59 UTC.';
+const subtitle = 'OtterClam NFT giveaway party will be held on';
+const date = 'Dec 24, 2021';
 
 export default function NFTHero() {
   return (
@@ -13,6 +14,8 @@ export default function NFTHero() {
         </Typography>
         <Typography className="nft-hero__subtitle" variant="h2" component="span">
           {subtitle}
+          <br />
+          {date}
         </Typography>
       </div>
     </Box>

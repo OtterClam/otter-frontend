@@ -50,17 +50,8 @@ export default function NFTHeader() {
       <Link className="ntf-header__link" href={DiscordLink}>
         Discord
       </Link>
-      <Link className="ntf-header__link" href={GithubLink}>
-        GitHub
-      </Link>
       <Link className="ntf-header__link" href={MediumLink}>
         Medium
-      </Link>
-      <Link className="ntf-header__link" href={MediumLink}>
-        Medium
-      </Link>
-      <Link className="ntf-header__link" href={DocsLink}>
-        Docs
       </Link>
     </header>
   );

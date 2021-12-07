@@ -2,7 +2,7 @@ import { Box, Typography } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import './countdown.scss';
 
-const PARTY_DATE = new Date(Date.UTC(2022, 1, 1, 0, 0, 0));
+const PARTY_DATE = new Date(Date.UTC(2021, 11, 24, 0, 0, 0));
 
 const getNumber = (num: number, pos: number) => {
   if (pos === 0) {
