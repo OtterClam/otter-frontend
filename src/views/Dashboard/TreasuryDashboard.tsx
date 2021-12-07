@@ -93,14 +93,6 @@ function TreasuryDashboard() {
       const latestMetrics = (r as any).data.protocolMetrics[0];
       setBackingPerClam(latestMetrics.treasuryMarketValue / latestMetrics.clamCirculatingSupply);
     });
-    // apollo(rebasesDataQuery).then(r => {
-    //   let apy = r.data.rebases.map(entry => ({
-    //     apy: Math.pow(parseFloat(entry.percentage) + 1, 365 * 3) * 100,
-    //     timestamp: entry.timestamp,
-    //   }));
-    //   apy = apy.filter(pm => pm.apy < 300000);
-    //   setApy(apy);
-    // });
   }, []);
 
   return (
