@@ -20,15 +20,15 @@ function TreasuryDashboard() {
   const [apy, setApy] = useState(null);
   const [runway, setRunway] = useState(null);
   const [staked, setStaked] = useState(null);
-  const [circSupply, setCircSupply] = useState<number | null>(null);
-  const [totalSupply, setTotalSupply] = useState<number | null>(null);
-  const [marketCap, setMarketCap] = useState<number | null>(null);
-  const [stakingRatio, setStakingRatio] = useState<number | null>(null);
   const [backingPerClam, setBackingPerClam] = useState<number | null>(null);
   const theme = useTheme();
   const smallerScreen = useMediaQuery('(max-width: 650px)');
   const verySmallScreen = useMediaQuery('(max-width: 379px)');
 
+  const circSupply = useSelector<IReduxState, number>(state => state.app.circSupply);
+  const totalSupply = useSelector<IReduxState, number>(state => state.app.totalSupply);
+  const stakingRatio = useSelector<IReduxState, number>(state => state.app.stakingRatio);
+  const marketCap = useSelector<IReduxState, number>(state => state.app.marketCap);
   const marketPrice = useSelector<IReduxState, number>(state => state.app.marketPrice);
   const currentIndex = useSelector<IReduxState, string>(state => state.app.currentIndex);
 
@@ -91,10 +91,6 @@ function TreasuryDashboard() {
       setApy(apy);
 
       const latestMetrics = (r as any).data.protocolMetrics[0];
-      setTotalSupply(latestMetrics.totalSupply);
-      setCircSupply(latestMetrics.clamCirculatingSupply);
-      setMarketCap(latestMetrics.marketCap);
-      setStakingRatio(latestMetrics.sClamCirculatingSupply / latestMetrics.clamCirculatingSupply);
       setBackingPerClam(latestMetrics.treasuryMarketValue / latestMetrics.clamCirculatingSupply);
     });
     // apollo(rebasesDataQuery).then(r => {

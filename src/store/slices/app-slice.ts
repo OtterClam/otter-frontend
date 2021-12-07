@@ -1,7 +1,7 @@
 import { JsonRpcProvider } from '@ethersproject/providers';
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
 import { ethers } from 'ethers';
-import { ClamCirculatingSupply, StakedClamContract, StakingContract } from '../../abi';
+import { ClamCirculatingSupply, ClamTokenContract, StakedClamContract, StakingContract } from '../../abi';
 import { getAddresses } from '../../constants';
 import { getMarketPrice, getTokenPrice, setAll } from '../../helpers';
 
@@ -12,7 +12,10 @@ const initialState = {
 export interface IApp {
   loading: boolean;
   marketPrice: number;
+  marketCap: number;
   circSupply: number;
+  totalSupply: number;
+  stakingRatio: number;
   currentIndex: string;
   currentBlock: number;
   currentBlockTime: number;
@@ -37,6 +40,7 @@ export const loadAppDetails = createAsyncThunk(
 
     const addresses = getAddresses(networkID);
 
+    const clamContract = new ethers.Contract(addresses.CLAM_ADDRESS, ClamTokenContract, provider);
     const sCLAMContract = new ethers.Contract(addresses.sCLAM_ADDRESS, StakedClamContract, provider);
     const clamCirculatingSupply = new ethers.Contract(
       addresses.CLAM_CIRCULATING_SUPPLY,
@@ -48,8 +52,9 @@ export const loadAppDetails = createAsyncThunk(
     const currentBlock = await provider.getBlockNumber();
     const currentBlockTime = (await provider.getBlock(currentBlock)).timestamp;
 
-    const [circSupply, epoch, sClamCirc, currentIndex, rawMarketPrice] = await Promise.all([
+    const [circSupply, totalSupply, epoch, sClamCirc, currentIndex, rawMarketPrice] = await Promise.all([
       (await clamCirculatingSupply.CLAMCirculatingSupply()) / 1e9,
+      (await clamContract.totalSupply()) / 1e9,
       stakingContract.epoch(),
       (await sCLAMContract.circulatingSupply()) / 1e9,
       stakingContract.index(),
@@ -63,15 +68,20 @@ export const loadAppDetails = createAsyncThunk(
 
     const marketPrice = Number(((rawMarketPrice.toNumber() / 1e9) * maiPrice).toFixed(2));
     const stakingTVL = sClamCirc * marketPrice;
+    const marketCap = circSupply * marketPrice;
+    const stakingRatio = sClamCirc / circSupply;
 
     return {
       currentIndex: ethers.utils.formatUnits(currentIndex, 'gwei'),
       circSupply,
+      totalSupply,
       currentBlock,
       fiveDayRate,
       stakingAPY,
       stakingRebase,
+      stakingRatio,
       marketPrice,
+      marketCap,
       currentBlockTime,
       nextRebase,
       stakingTVL,
