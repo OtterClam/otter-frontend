@@ -24,6 +24,16 @@
     font-weight: 600;
     font-size: 16px;
   }
+
+  &__new {
+    background: $clam-pink;
+    color: white;
+    font-size: 12px;
+    font-weight: 500;
+    margin-left: 10px;
+    padding: 5px;
+    border-radius: 4px;
+  }
 }
 
 .button-dapp-menu {

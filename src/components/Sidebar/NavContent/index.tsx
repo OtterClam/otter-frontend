@@ -4,6 +4,7 @@ import groupBy from 'lodash/groupBy';
 import { useCallback, useContext } from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink, useLocation } from 'react-router-dom';
+import { LabelChip } from 'src/components/Chip';
 import { DEFAULT_NETWORK, getAddresses } from 'src/constants';
 import { AppThemeContext } from 'src/helpers/app-theme-context';
 import { IReduxState } from 'src/store/slices/state.interface';
@@ -175,6 +176,18 @@ function NavContent() {
                   </div>
                 </div>
               </div>
+              <Link
+                href={'https://www.otterclam.finance/#/nft'}
+                target="_blank"
+                rel="noreferrer"
+                className="button-dapp-menu"
+              >
+                <div className="dapp-menu-item">
+                  <InactiveMenuIcon />
+                  <p>NFT</p>
+                  <div className="dapp-menu-item__new">NEW!</div>
+                </div>
+              </Link>
 
               <Link
                 href={'https://quickswap.exchange/#/swap?outputCurrency=' + CLAM_ADDRESS}
