@@ -2,7 +2,7 @@ import { ethers, constants, BigNumber } from 'ethers';
 import { getMarketPrice, contractForBond, contractForReserve, getTokenPrice } from '../../helpers';
 import { calculateUserBondDetails, getBalances } from './account-slice';
 import { BondKey, getAddresses, getBond } from '../../constants';
-import { BondingCalcContract } from '../../abi';
+import { BondingCalcContract, AggregatorV3InterfaceABI } from '../../abi';
 import { fetchPendingTxns, clearPendingTxn } from './pending-txns-slice';
 import { createSlice, createSelector, createAsyncThunk } from '@reduxjs/toolkit';
 import { JsonRpcProvider } from '@ethersproject/providers';
@@ -184,8 +184,12 @@ export const calcBondDetails = createAsyncThunk(
       const markdown = await bondCalcContract.markdown(bond.reserve);
       purchased = await bondCalcContract.valuation(bond.reserve, purchased);
       purchased = (markdown / 1e18) * (purchased / 1e9);
-    } else {
+    } else if (bond.stable) {
       purchased = purchased / 1e18;
+    } else {
+      const priceFeed = new ethers.Contract(bond.oracle!, AggregatorV3InterfaceABI, provider);
+      const latestRoundData = await priceFeed.latestRoundData();
+      purchased = (purchased / 1e18) * (latestRoundData.answer / 1e8);
     }
 
     return {
