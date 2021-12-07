@@ -6,15 +6,10 @@ import NFT2 from './images/nft2.jpg';
 
 const nfts = [
   {
-    name: 'Diamond-Hand Otter',
+    name: 'Safe-Hand Otter',
     description:
-      'Awarded for staking the full amount of CLAM from IDO or launch date (11/3, with a minimum of 20 sCLAM) to drop date',
-    image: NFTBack,
-  },
-  {
-    name: 'Stone-Hand Otter',
-    description: 'Awarded to wallets with over 56 sCLAM that have staked from 11/9 to drop date.',
-    image: NFTBack,
+      'Awarded to every Otter who has staked for a minimum of 2 weeks with greater than 4 sCLAM on the drop date.',
+    image: NFT1,
   },
   {
     name: 'Furry-Hand Otter',
@@ -23,10 +18,15 @@ const nfts = [
     image: NFT2,
   },
   {
-    name: 'Safe-Hand Otter',
+    name: 'Stone-Hand Otter',
+    description: 'Awarded to wallets with over 56 sCLAM that have staked from 11/9 to drop date.',
+    image: NFTBack,
+  },
+  {
+    name: 'Diamond-Hand Otter',
     description:
-      'Awarded to every Otter who has staked for a minimum of 2 weeks with greater than 4 sCLAM on the drop date.',
-    image: NFT1,
+      'Awarded for staking the full amount of CLAM from IDO or launch date (11/3, with a minimum of 20 sCLAM) to drop date',
+    image: NFTBack,
   },
 ];
 
