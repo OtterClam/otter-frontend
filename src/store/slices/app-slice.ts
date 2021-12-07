@@ -18,6 +18,7 @@ export interface IApp {
   currentBlockTime: number;
   fiveDayRate: number;
   stakingAPY: number;
+  stakingTVL: number;
   stakingRebase: number;
   networkID: number;
   nextRebase: number;
@@ -61,6 +62,7 @@ export const loadAppDetails = createAsyncThunk(
     const nextRebase = epoch.endTime.toNumber();
 
     const marketPrice = Number(((rawMarketPrice.toNumber() / 1e9) * maiPrice).toFixed(2));
+    const stakingTVL = sClamCirc * marketPrice;
 
     return {
       currentIndex: ethers.utils.formatUnits(currentIndex, 'gwei'),
@@ -72,6 +74,7 @@ export const loadAppDetails = createAsyncThunk(
       marketPrice,
       currentBlockTime,
       nextRebase,
+      stakingTVL,
     };
   },
 );

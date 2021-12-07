@@ -1,31 +1,30 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import {
-  Grid,
   Box,
-  Paper,
   FormControl,
+  Grid,
   InputAdornment,
   InputLabel,
+  makeStyles,
   OutlinedInput,
+  Paper,
   Tab,
   Tabs,
   TabsActions,
   Zoom,
-  makeStyles,
 } from '@material-ui/core';
+import { Skeleton } from '@material-ui/lab';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import ActionButton from '../../components/Button/ActionButton';
 import RebaseTimer from '../../components/RebaseTimer/RebaseTimer';
 import TabPanel from '../../components/TabPanel';
 import { trim } from '../../helpers';
-import { changeStake, changeApproval, claimWarmup } from '../../store/slices/stake-thunk';
-import './stake.scss';
 import { useWeb3Context } from '../../hooks';
-import { IPendingTxn, isPendingTxn, txnButtonText } from '../../store/slices/pending-txns-slice';
-import { Skeleton } from '@material-ui/lab';
+import { IPendingTxn } from '../../store/slices/pending-txns-slice';
+import { changeApproval, changeStake, claimWarmup } from '../../store/slices/stake-thunk';
 import { IReduxState } from '../../store/slices/state.interface';
+import './stake.scss';
 import StakeDialog from './StakeDialog';
-import ActionButton from '../../components/Button/ActionButton';
-import apollo from 'src/lib/apolloClient';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -92,8 +91,8 @@ function Stake() {
   const stakingRebase = useSelector<IReduxState, number>(state => {
     return state.app.stakingRebase;
   });
-  const [stakingAPY, setStakingAPY] = useState<number | null>(null);
-  const [stakingTVL, setStakingTVL] = useState<number | null>(null);
+  const stakingAPY = useSelector<IReduxState, number>(state => state.app.stakingAPY);
+  const stakingTVL = useSelector<IReduxState, number>(state => state.app.stakingTVL);
   const pendingTransactions = useSelector<IReduxState, IPendingTxn[]>(state => {
     return state.pendingTransactions;
   });
@@ -164,20 +163,6 @@ function Stake() {
       setTimeout(() => tabsActions?.current?.updateIndicator(), 300);
     }
   }, [tabsActions]);
-
-  useEffect(() => {
-    apollo(`
-query {
-  protocolMetrics(first: 1, orderBy: timestamp, orderDirection: desc) {
-    totalValueLocked
-    currentAPY
-  }
-}`).then(r => {
-      const { totalValueLocked, currentAPY } = (r as any).data.protocolMetrics[0];
-      setStakingTVL(totalValueLocked);
-      setStakingAPY(currentAPY / 100);
-    });
-  });
 
   return (
     <div id="stake-view" className={styles.root}>
