@@ -2,7 +2,7 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import English from './locales/english';
-import FakeLanguage from './locales/demo';
+import Norwegian from './locales/norwegian';
 
 i18n
   // detect user language
@@ -20,7 +20,7 @@ i18n
     },
     resources: {
       en: English,
-      de: FakeLanguage,
+      no: Norwegian,
     },
   });
 

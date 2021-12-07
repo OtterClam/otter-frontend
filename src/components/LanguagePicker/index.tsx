@@ -6,7 +6,7 @@ import './language-picker.scss';
 //Add new translations to the dropdown here!
 const lngs: any = {
   en: { nativeName: 'English' },
-  de: { nativeName: 'Fake Language' },
+  no: { nativeName: 'Norsk' },
 };
 
 interface Props {
