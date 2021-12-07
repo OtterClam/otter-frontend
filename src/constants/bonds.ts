@@ -58,7 +58,7 @@ export function listBonds(chainId: number): BondMap {
     matic: {
       key: 'matic',
       name: 'WMATIC',
-      address: '0x53E4DAFF2073f848DC3F7a8D7CC95b3607212A73',
+      address: '0xf57Fb38f57D2a4Fca0ee074A3F3b4e5C570959E4',
       reserve: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
       reserveUnit: 'WMATIC',
       type: 'token',
