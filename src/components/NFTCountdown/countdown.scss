@@ -15,6 +15,7 @@
     max-width: 730px;
     padding: 20px;
     border-radius: 20px;
+    margin: 0 20px;
   }
 
   &__numbers {
@@ -44,7 +45,6 @@
   &__number {
     width: 36px;
     height: 48px;
-    line-height: 48px;
     border-radius: 8px;
     display: flex;
     align-items: center;
@@ -56,6 +56,31 @@
 
     span {
       font-size: 24px !important;
+    }
+  }
+
+  @media screen and (max-width: 512px) {
+    &__number-group {
+      width: 54px;
+    }
+
+    &__number-label {
+      font-size: 12px !important;
+      line-height: 18px !important;
+    }
+
+    &__number {
+      width: 24px;
+      height: 36px;
+
+      span {
+        font-size: 20px !important;
+      }
+    }
+
+    &__title {
+      font-size: 16px !important;
+      line-height: 24px !important;
     }
   }
 }

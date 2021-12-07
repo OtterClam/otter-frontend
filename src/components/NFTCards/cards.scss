@@ -1,8 +1,8 @@
 .nft-cards {
   position: relative;
   z-index: 0;
-  margin-top: -250px;
-  margin-bottom: 60px;
+  margin-top: -280px;
+  margin-bottom: 30px;
 
   &__title {
     margin-bottom: 24px !important;
@@ -11,14 +11,20 @@
   &__list {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  @media screen and (max-width: 768px) {
+    margin-top: 50px;
   }
 }
 
 .nft-card {
+  flex: 1 254px;
   border-radius: 10px;
   overflow: hidden;
   max-width: 254px;
-  margin: 0 15px;
+  margin: 0 15px 30px;
   padding: 16px;
 
   &__image {
@@ -30,6 +36,7 @@
 
   &__title {
     font-size: 20px !important;
+    line-height: 30px !important;
     font-weight: bold !important;
     margin-bottom: 6px !important;
   }
@@ -37,5 +44,18 @@
   &__description {
     font-size: 14px !important;
     line-height: 21px !important;
+  }
+
+  @media screen and (max-width: 768px) {
+    max-width: 355px;
+
+    &__title {
+      font-size: 24px !important;
+      line-height: 36px !important;
+    }
+  }
+
+  @media screen and (max-width: 512px) {
+    max-width: unset;
   }
 }

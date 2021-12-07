@@ -23,4 +23,8 @@
   &__link {
     margin-left: 40px !important;
   }
+
+  @media screen and (max-width: 1124px) {
+    display: none;
+  }
 }
