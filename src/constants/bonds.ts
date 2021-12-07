@@ -45,6 +45,7 @@ export interface Bond {
   deprecated: boolean;
   autostake: boolean;
   stable: boolean;
+  oracle?: string;
 }
 
 type BondMap = {
@@ -65,6 +66,7 @@ export function listBonds(chainId: number): BondMap {
       deprecated: false,
       autostake: true,
       stable: false,
+      oracle: '0xAB594600376Ec9fD91F8e885dADF0CE036862dE0',
     },
     frax: {
       key: 'frax',
