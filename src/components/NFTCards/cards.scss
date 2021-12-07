@@ -28,10 +28,51 @@
   padding: 16px;
 
   &__image {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    margin: 0;
     width: 100%;
     height: auto;
-    border-radius: 10px;
     margin-bottom: 18px;
+    box-shadow: 0 5px 10px rgb(0 0 0 / 80%);
+    transform-origin: center top;
+    transform-style: preserve-3d;
+    transform: translateZ(0);
+    transition: 0.3s;
+
+    img {
+      width: 100%;
+      min-height: 100%;
+      display: block;
+    }
+
+    &:hover,
+    &:focus,
+    &:active {
+      box-shadow: 0 8px 16px 3px rgba(0, 0, 0, 0.6);
+      transform: translateY(-3px) scale(1.05) rotateX(15deg);
+
+      &::after {
+        transform: rotate(25deg);
+        top: -40%;
+        opacity: 0.15;
+      }
+    }
+
+    &::after {
+      position: absolute;
+      content: '';
+      z-index: 10;
+      width: 200%;
+      height: 100%;
+      top: -90%;
+      left: -20px;
+      opacity: 0.1;
+      transform: rotate(45deg);
+      background: linear-gradient(to top, transparent, #fff 15%, rgba(255, 255, 255, 0.5));
+      transition: 0.3s;
+    }
   }
 
   &__title {

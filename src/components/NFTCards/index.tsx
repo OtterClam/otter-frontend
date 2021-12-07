@@ -49,7 +49,9 @@ export default function NFTCards() {
       <div className="nft-cards__list">
         {nfts.map((nft, index) => (
           <Box bgcolor="mode.lightGray200" className="nft-card" key={index}>
-            <img src={nft.image} className="nft-card__image" />
+            <figure className="nft-card__image">
+              <img src={nft.image} />
+            </figure>
             <Typography style={highlightStyle} className="nft-card__title" component="h4" variant="h5">
               {nft.name}
             </Typography>
