@@ -12,7 +12,6 @@ import DiscordIcon from './images/icon_discord.svg';
 import GithubIcon from './images/icon_github.svg';
 import Otter01 from './images/otter_01.png';
 import CloseIcon from './images/icon_24x24_close.svg';
-import Countdown from './components/Countdown';
 import WhiteList from '../WhiteList';
 
 function Landing() {
