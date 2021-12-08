@@ -20,6 +20,7 @@ query {
     treasuryMaiMarketValue
     treasuryFraxMarketValue
     treasuryFraxRiskFreeValue
+    treasuryWmaticMarketValue
     currentAPY
     runway10k
     runway50k
@@ -32,7 +33,6 @@ query {
 
 export const treasuryData = () => apollo(treasuryDataQuery).then(r => r.data.protocolMetrics);
 
-// export default treasuryData;
 export const bulletpoints = {
   tvl: [
     {
@@ -55,7 +55,7 @@ export const bulletpoints = {
     {
       right: 29,
       top: -12,
-      background: 'linear-gradient(180deg, #DC30EB -10%, #EA98F1 100%)',
+      background: 'linear-gradient(180deg, #2891F9 0%, rgba(40, 145, 249, 0.5) 100%)',
     },
     {
       right: 29,
@@ -173,7 +173,7 @@ export const bulletpoints = {
 
 export const tooltipItems = {
   tvl: ['Total Value Deposited'],
-  coin: ['MAI', 'FRAX'],
+  coin: ['MAI', 'FRAX', 'WMATIC'],
   rfv: ['MAI', 'FRAX'],
   holder: ['CLAMies'],
   apy: ['APY'],

@@ -164,13 +164,13 @@ function TreasuryDashboard() {
                   <Chart
                     type="stack"
                     data={data}
-                    dataKey={['treasuryMaiMarketValue', 'treasuryFraxMarketValue']}
+                    dataKey={['treasuryMaiMarketValue', 'treasuryFraxMarketValue', 'treasuryWmaticMarketValue']}
                     stopColor={[
                       ['#EE4B4E', 'rgba(219, 55, 55, 0.5)'],
                       ['#8F5AE8', 'rgba(143, 90, 232, 0.5)'],
+                      ['#2891F9', 'rgba(40, 145, 249, 0.5)'],
                       // ['#DC30EB', '#EA98F1'],
                       // ['#8BFF4D', '#4C8C2A'],
-                      // ['#ff758f', '#c9184a'],
                     ]}
                     headerText="Market Value of Treasury Assets"
                     // @ts-ignore
