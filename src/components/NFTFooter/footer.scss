@@ -29,4 +29,15 @@
   &__social-link:not(:last-child) {
     margin-right: 20px;
   }
+
+  @media screen and (max-width: 768px) {
+    &__otter {
+      max-width: 300px;
+      width: calc(100% - 40px);
+      margin-left: 20px;
+      margin-right: 20px;
+      height: auto;
+      transform: unset;
+    }
+  }
 }
