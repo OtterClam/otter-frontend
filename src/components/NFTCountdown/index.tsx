@@ -83,7 +83,7 @@ export default function NFTCountdown() {
             <Number value={getNumber(cd.hours, 0)} />
             <Number value={getNumber(cd.hours, 1)} />
             <Typography component="span" className="nft-cd__number-label">
-              Minutes
+              Hours
             </Typography>
           </div>
 
@@ -91,7 +91,7 @@ export default function NFTCountdown() {
             <Number value={getNumber(cd.minutes, 0)} />
             <Number value={getNumber(cd.minutes, 1)} />
             <Typography component="span" className="nft-cd__number-label">
-              Hours
+              Minutes
             </Typography>
           </div>
 
