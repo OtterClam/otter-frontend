@@ -107,7 +107,7 @@ function Migrate() {
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={4} md={4} lg={4}>
                     <div className="stake-apy">
-                      <p className="single-stake-subtitle">{t('migrate.oldClamSupply"')}</p>
+                      <p className="single-stake-subtitle">{t('migrate.oldClamSupply')}</p>
                       <Box component="p" color="text.secondary" className="single-stake-subtitle-value">
                         {oldClamTotalSupply ? trim(oldClamTotalSupply, 0) : <Skeleton width="150px" />}
                       </Box>
@@ -125,7 +125,7 @@ function Migrate() {
 
                   <Grid item xs={12} sm={4} md={4} lg={4}>
                     <div className="stake-index">
-                      <p className="single-stake-subtitle">{t('migrate.migrationProgress"')}</p>
+                      <p className="single-stake-subtitle">{t('migrate.migrationProgress')}</p>
                       <Box component="p" color="text.secondary" className="single-stake-subtitle-value">
                         {migrateProgress ? (
                           Intl.NumberFormat('en', { style: 'percent' }).format(migrateProgress)
@@ -144,7 +144,7 @@ function Migrate() {
                 <div className="stake-wallet-notification">
                   <div className="wallet-menu" id="wallet-menu">
                     <Box bgcolor="otter.otterBlue" className="app-otter-button" onClick={connect}>
-                      <p>{t('common.connectWallet"')}</p>
+                      <p>{t('common.connectWallet')}</p>
                     </Box>
                   </div>
                   <p className="desc-text">{t('migrate.connectWalletDescription')}</p>
