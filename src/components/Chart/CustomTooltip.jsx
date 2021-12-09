@@ -26,7 +26,7 @@ const renderDate = (index, payload, item) => {
       {new Date(item.payload.timestamp * 1000).toLocaleString(localeString, { month: 'long' }).slice(1)}
       &nbsp;
       {new Date(item.payload.timestamp * 1000).getDate().toLocaleString(localeString)},{' '}
-      {new Date(item.payload.timestamp * 1000).getFullYear().toLocaleString(localeString)}
+      {new Date(item.payload.timestamp * 1000).getFullYear()}
     </div>
   ) : (
     ''
