@@ -192,6 +192,18 @@ const BahasaIndonesia = {
       harvesting: 'Memanen',
       name: 'Nama',
     },
+    // src\components\NFT
+    nft: {
+      which: 'Mana ',
+      willYouGet: ' yang akan anda dapat?',
+      safehandDescription:
+        'Diberikan kepada setiap Otter yang sudah menjalani staking selama setidaknya 2 minggu dengan jumlah lebih dari 4 sCLAM pada saat tanggal pemberitahuan.',
+      furryhandDescription:
+        'Diberikan kepada setiap Otter yang sudah menjalani staking selama setidaknya 2 minggu dengan jumlah lebih dari 40 sCLAM pada saat tanggal pemberitahuan.',
+      stonehandDescription: 'Diberikan kepada pemegang Wallet yang memiliki lebih dari 56 sCLAM dan sudah menjalani staking dari 9 November 2021 hingga tanggal pemberitahuan.',
+      diamondhandDescription:
+        'Diberikan karena telah menjalani staking dengan seluruh jumlah CLAM yang dimiliki sejak IDO maupun tanggal rilis (3 November 2021, dengan jumlah minimal 20 sCLAM) sampai pada tanggal pemberitahuan.',
+    },
   },
 };
 export default BahasaIndonesia;
