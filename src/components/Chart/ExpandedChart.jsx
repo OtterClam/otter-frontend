@@ -2,6 +2,7 @@ import { Backdrop, Box, Fade, Modal, Paper, SvgIcon, Typography, useMediaQuery }
 import { ResponsiveContainer } from 'recharts';
 import { ReactComponent as XIcon } from '../../assets/icons/x.svg';
 import InfoTooltip from '../InfoTooltip/InfoTooltip';
+import { useTranslation } from 'react-i18next';
 
 function ExpandedChart({
   open,
@@ -14,7 +15,7 @@ function ExpandedChart({
   runwayExtraInfo,
 }) {
   const verySmallScreen = useMediaQuery('(max-width: 379px)');
-
+  const { t } = useTranslation();
   return (
     <Modal open={open} onClose={handleClose}>
       <Backdrop open={true}>
@@ -49,7 +50,7 @@ function ExpandedChart({
                 </Typography>
                 {runwayExtraInfo}
                 <Typography variant="h4" color="secondary" style={{ fontWeight: 500 }}>
-                  Today
+                  {t('time.today')}
                 </Typography>
               </Box>
             </div>

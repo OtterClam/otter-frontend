@@ -90,7 +90,7 @@ const BahasaIndonesia = {
       recipient: 'Penerima',
       purchased: 'Dibeli',
       bondPrice: 'Harga Bond',
-      deprecated: 'Usang',
+      deprecated: 'Depresiasi',
       bondDiscount: 'diskon!',
       myBond: 'Bond Saya',
       advancedSettings: {
@@ -139,7 +139,7 @@ const BahasaIndonesia = {
       splashPage: {
         howOtterClamWorks: 'Bagaimana Cara Kerja OtterClam',
         treasuryRevenue: 'Pemasukan Kas',
-        bondsLPFees: 'Tarif Bonds & LP',
+        bondsLPFees: 'Tarif Bond & LP',
         bondSales:
           'Penjualan Bond dan Tarif LP meningkatkan Pemasukan Kas Otter, mengunci likuiditas, dan membantu mengontrol suplai CLAM',
         treasuryGrowth: 'Pertumbuhan Kas',

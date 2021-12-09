@@ -343,9 +343,9 @@ function TreasuryDashboard() {
                     dataKey={['runwayCurrent', 'runway100k', 'runway50k', 'runway10k']}
                     color={theme.palette.text.primary}
                     stroke={[theme.palette.text.primary, '#2EC608', '#49A1F2', '#ff758f']}
-                    headerText="Runway Available"
+                    headerText={t('dashboard.runway')}
                     // @ts-ignore
-                    headerSubText={`${data && trim(data[0].runwayCurrent, 1)} Days`}
+                    headerSubText={`${data && trim(data[0].runwayCurrent, 1)} ${t('time.days')}`}
                     dataFormat="days"
                     bulletpointColors={
                       theme.palette.text.primary == '#1D2654' ? bulletpoints.runway : bulletpoints.runway_darktheme

@@ -17,6 +17,7 @@ const English = {
       connectWallet: 'Connect Wallet',
       price: 'Price',
       buy: 'Buy',
+      buyThing: 'Buy ', //e.g. "Buy CLAM", "Buy sCLAM"
       addLiquidity: 'Add Liquidity',
       redeem: 'Redeem',
       treasuryBalance: 'Treasury Balance',
@@ -31,6 +32,7 @@ const English = {
       hours: 'Hours',
       minutes: 'Minutes',
       seconds: 'Seconds',
+      today: 'Today',
     },
     // src\views\Dashboard
     dashboard: {
