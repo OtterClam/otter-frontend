@@ -20,6 +20,7 @@ function LanguagePicker(props: Props) {
 
   const handleClick = (event: any, lng: string) => {
     i18n.changeLanguage(lng);
+    i18n.reloadResources();
   };
   const handleMouseOver = (event: any) => {
     setlangDropdownOpen(true);

@@ -73,7 +73,6 @@
 
 .wallet-menu {
   display: flex;
-  margin-bottom: 10px;
 }
 .lang-button-border-true {
   cursor: pointer;
@@ -101,5 +100,11 @@
 
   p {
     font-size: 16px;
+  }
+}
+
+@media screen and (max-width: 417px) {
+  .wallet-menu {
+    margin-top: 10px;
   }
 }

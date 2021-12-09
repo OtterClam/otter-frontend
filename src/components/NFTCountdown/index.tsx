@@ -1,6 +1,7 @@
 import { Box, Typography } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import './countdown.scss';
+import { useTranslation, Trans } from 'react-i18next';
 
 const PARTY_DATE = new Date(Date.UTC(2021, 11, 24, 0, 0, 0));
 
@@ -57,6 +58,7 @@ const Number = ({ value }: { value: number }) => {
 
 export default function NFTCountdown() {
   const cd = useCountdown();
+  const { t } = useTranslation();
 
   return (
     <section className="nft-cd">
@@ -75,7 +77,7 @@ export default function NFTCountdown() {
             <Number value={getNumber(cd.days, 0)} />
             <Number value={getNumber(cd.days, 1)} />
             <Typography component="span" className="nft-cd__number-label">
-              Days
+              {t('time.days')}
             </Typography>
           </div>
 
@@ -83,7 +85,7 @@ export default function NFTCountdown() {
             <Number value={getNumber(cd.hours, 0)} />
             <Number value={getNumber(cd.hours, 1)} />
             <Typography component="span" className="nft-cd__number-label">
-              Hours
+              {t('time.hours')}
             </Typography>
           </div>
 
@@ -91,7 +93,7 @@ export default function NFTCountdown() {
             <Number value={getNumber(cd.minutes, 0)} />
             <Number value={getNumber(cd.minutes, 1)} />
             <Typography component="span" className="nft-cd__number-label">
-              Minutes
+              {t('time.minutes')}
             </Typography>
           </div>
 
@@ -99,7 +101,7 @@ export default function NFTCountdown() {
             <Number value={getNumber(cd.seconds, 0)} />
             <Number value={getNumber(cd.seconds, 1)} />
             <Typography component="span" className="nft-cd__number-label">
-              Seconds
+              {t('time.seconds')}
             </Typography>
           </div>
         </div>
