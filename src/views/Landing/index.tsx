@@ -12,7 +12,7 @@ import GithubIcon from './images/icon_github.svg';
 import Otter01 from './images/otter_01.png';
 import CloseIcon from './images/icon_24x24_close.svg';
 import WhiteList from '../WhiteList';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 function Landing() {
   const { t, i18n } = useTranslation();
@@ -33,22 +33,15 @@ function Landing() {
         <div className="landing__first-section__body">
           <div className="landing__first-section__body__left">
             <div className="landing__first-section__body__title">
-              <p>
-                <Trans i18nKey="landing.description.part1" />
-              </p>
-              <p>
-                {' '}
-                <Trans i18nKey="landing.description.part2" />
-              </p>
+              <p>{t('landing.description.part1')}</p>
+              <p> {t('landing.description.part2')}</p>
             </div>
             <div className="landing__first-section__body__subtitle">
-              <p>
-                <Trans i18nKey="landing.description.tagline" />
-              </p>
+              <p>{t('landing.description.tagline')}</p>
             </div>
             <a className="landing__first-section__body__app-button" href="https://app.otterclam.finance">
               <Button variant="contained" color="primary" size="medium" disableElevation>
-                <Trans i18nKey="landing.appButton" />
+                {t('landing.appButton')}
               </Button>
             </a>
             <div className="community-icons">

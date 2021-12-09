@@ -174,8 +174,7 @@ function Stake() {
             <Grid item>
               <div className="card-header">
                 <p className="single-stake-title">
-                  <Trans i18nKey="stake.clamStaking" /> ({String.fromCodePoint(0x1f9a6)},{' '}
-                  {String.fromCodePoint(0x1f9a6)})
+                  {t('stake.clamStaking')} ({String.fromCodePoint(0x1f9a6)}, {String.fromCodePoint(0x1f9a6)})
                 </p>
                 <RebaseTimer />
               </div>
@@ -186,9 +185,7 @@ function Stake() {
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={4} md={4} lg={4}>
                     <div className="stake-apy">
-                      <p className="single-stake-subtitle">
-                        <Trans i18nKey="common.apy" />
-                      </p>
+                      <p className="single-stake-subtitle">{t('common.apy')}</p>
                       <Box component="p" color="text.secondary" className="single-stake-subtitle-value">
                         {stakingAPY ? (
                           new Intl.NumberFormat('en-US', {
@@ -203,9 +200,7 @@ function Stake() {
 
                   <Grid item xs={12} sm={4} md={4} lg={4}>
                     <div className="stake-tvl">
-                      <p className="single-stake-subtitle">
-                        <Trans i18nKey="common.tvl" />
-                      </p>
+                      <p className="single-stake-subtitle">{t('common.tvl')}</p>
                       <Box component="p" color="text.secondary" className="single-stake-subtitle-value">
                         {stakingTVL ? (
                           new Intl.NumberFormat('en-US', {
@@ -223,9 +218,7 @@ function Stake() {
 
                   <Grid item xs={12} sm={4} md={4} lg={4}>
                     <div className="stake-index">
-                      <p className="single-stake-subtitle">
-                        <Trans i18nKey="common.currentIndex" />
-                      </p>
+                      <p className="single-stake-subtitle">{t('common.currentIndex')}</p>
                       <Box component="p" color="text.secondary" className="single-stake-subtitle-value">
                         {currentIndex ? <>{trim(Number(currentIndex), 3)} sCLAM2</> : <Skeleton width="150px" />}
                       </Box>
@@ -240,14 +233,10 @@ function Stake() {
                 <div className="stake-wallet-notification">
                   <div className="wallet-menu" id="wallet-menu">
                     <Box bgcolor="otter.otterBlue" className="app-otter-button" onClick={connect}>
-                      <p>
-                        <Trans i18nKey="common.connectWallet" />
-                      </p>
+                      <p>{t('common.connectWallet')}</p>
                     </Box>
                   </div>
-                  <p className="desc-text">
-                    <Trans i18nKey="stake.connectWalletDescription" />
-                  </p>
+                  <p className="desc-text">{t('stake.connectWalletDescription')}</p>
                 </div>
               ) : (
                 <>
@@ -279,9 +268,7 @@ function Stake() {
                           endAdornment={
                             <InputAdornment position="end">
                               <div onClick={setMax} className="stake-input-btn">
-                                <p>
-                                  <Trans i18nKey="common.max" />
-                                </p>
+                                <p>{t('common.max')}</p>
                               </div>
                             </InputAdornment>
                           }
@@ -351,9 +338,7 @@ function Stake() {
                     />
                     <div className="help-text">
                       {address && ((!hasAllowance('CLAM') && view === 0) || (!hasAllowance('sCLAM') && view === 1)) && (
-                        <p className="text-desc">
-                          <Trans i18nKey="stake.approvalInfo" />
-                        </p>
+                        <p className="text-desc">{t('stake.approvalInfo')}</p>
                       )}
                     </div>
                   </Box>
@@ -361,9 +346,7 @@ function Stake() {
                   <div className={`stake-user-data`}>
                     {Number(warmupBalance) > 0 && (
                       <div className="data-row">
-                        <p className="data-row-name-warmup">
-                          <Trans i18nKey="stake.balanceInWarmup" />
-                        </p>
+                        <p className="data-row-name-warmup">{t('stake.balanceInWarmup')}</p>
                         <p className="data-row-value">
                           {isAppLoading ? <Skeleton width="80px" /> : <>{trim(Number(warmupBalance), 4)} CLAM2</>}
                         </p>
@@ -371,17 +354,13 @@ function Stake() {
                     )}
 
                     <div className="data-row">
-                      <p className="data-row-name">
-                        <Trans i18nKey="common.yourBalance" />
-                      </p>
+                      <p className="data-row-name">{t('common.yourBalance')}</p>
                       <p className="data-row-value">
                         {isAppLoading ? <Skeleton width="80px" /> : <>{trim(Number(clamBalance), 4)} CLAM2</>}
                       </p>
                     </div>
                     <div className="data-row">
-                      <p className="data-row-name">
-                        <Trans i18nKey="stake.stakedBalance" />
-                      </p>
+                      <p className="data-row-name">{t('stake.stakedBalance')}</p>
                       <p className="data-row-value">
                         {isAppLoading ? (
                           <Skeleton width="80px" />
@@ -392,27 +371,21 @@ function Stake() {
                     </div>
 
                     <div className="data-row">
-                      <p className="data-row-name">
-                        <Trans i18nKey="stake.nextRewardAmount" />
-                      </p>
+                      <p className="data-row-name">{t('stake.nextRewardAmount')}</p>
                       <p className="data-row-value">
                         {isAppLoading ? <Skeleton width="80px" /> : <>{nextRewardValue} sCLAM2</>}
                       </p>
                     </div>
 
                     <div className="data-row">
-                      <p className="data-row-name">
-                        <Trans i18nKey="stake.nextRewardYield" />
-                      </p>
+                      <p className="data-row-name">{t('stake.nextRewardYield')}</p>
                       <p className="data-row-value">
                         {isAppLoading ? <Skeleton width="80px" /> : <>{stakingRebasePercentage}%</>}
                       </p>
                     </div>
 
                     <div className="data-row">
-                      <p className="data-row-name">
-                        <Trans i18nKey="stake.roiFiveDay" />
-                      </p>
+                      <p className="data-row-name">{t('stake.roiFiveDay')}</p>
                       <p className="data-row-value">
                         {isAppLoading ? <Skeleton width="80px" /> : <>{trim(Number(fiveDayRate) * 100, 4)}%</>}
                       </p>

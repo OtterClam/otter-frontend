@@ -9,7 +9,7 @@ import { priceUnits, trim } from '../../helpers';
 import { useWeb3Context } from '../../hooks';
 import { IReduxState } from '../../store/slices/state.interface';
 import './choose-bond.scss';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 interface IBondProps {
   bondKey: BondKey;
@@ -54,9 +54,7 @@ export function BondDataCard({ bondKey }: IBondProps) {
         </div>
 
         <div className="data-row">
-          <p className="bond-name-title">
-            <Trans i18nKey="common.price" />
-          </p>
+          <p className="bond-name-title">{t('common.price')}</p>
           <p className="bond-price">
             <p className="bond-name-title ">
               {priceUnits(bondKey)}
@@ -69,9 +67,7 @@ export function BondDataCard({ bondKey }: IBondProps) {
         </div>
 
         <div className="data-row">
-          <p className="bond-name-title">
-            <Trans i18nKey="common.roi" />
-          </p>
+          <p className="bond-name-title">{t('common.roi')}</p>
           <p className="bond-name-title">
             {isBondLoading ? <Skeleton width="50px" /> : bond.deprecated ? '-' : `${trim(bondDiscount * 100, 2)}%`}
             {!bond.deprecated && bond.autostake && (
@@ -83,9 +79,7 @@ export function BondDataCard({ bondKey }: IBondProps) {
         </div>
 
         <div className="data-row">
-          <p className="bond-name-title">
-            <Trans i18nKey="bonds.purchased" />
-          </p>
+          <p className="bond-name-title">{t('bonds.purchased')}</p>
           <p className="bond-name-title">
             {isBondLoading ? (
               <Skeleton width="80px" />
@@ -231,9 +225,7 @@ export function BondTableRow({ bondKey }: IBondProps) {
               height="44px"
               className="bond-table-btn bond-table-btn__redeem"
             >
-              <p>
-                <Trans i18nKey="common.redeem" />
-              </p>
+              <p>{t('common.redeem')}</p>
             </Box>
           </Link>
         </div>

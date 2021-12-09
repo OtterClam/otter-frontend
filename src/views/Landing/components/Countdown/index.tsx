@@ -1,7 +1,8 @@
 import styles from './countdown.module.scss';
-import { Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 export default function Countdown() {
+  const { t } = useTranslation();
   return (
     <div className={styles.main}>
       <div className={styles.container}>
@@ -13,9 +14,7 @@ export default function Countdown() {
             <p id="day-2">0</p>
           </div>
         </div>
-        <p className={styles.desc}>
-          <Trans i18nKey="time.days" />
-        </p>
+        <p className={styles.desc}>{t('time.days')}</p>
       </div>
 
       <div className={styles.container}>
@@ -27,9 +26,7 @@ export default function Countdown() {
             <p id="hour-2">0</p>
           </div>
         </div>
-        <p className={styles.desc}>
-          <Trans i18nKey="time.hours" />
-        </p>
+        <p className={styles.desc}>{t('time.hours')}</p>
       </div>
 
       <div className={styles.container}>
@@ -41,9 +38,7 @@ export default function Countdown() {
             <p id="minute-2">0</p>
           </div>
         </div>
-        <p className={styles.desc}>
-          <Trans i18nKey="time.minutes" />
-        </p>
+        <p className={styles.desc}>{t('time.minutes')}</p>
       </div>
 
       <div className={styles.container}>
@@ -55,9 +50,7 @@ export default function Countdown() {
             <p id="second-2">0</p>
           </div>
         </div>
-        <p className={styles.desc}>
-          <Trans i18nKey="time.seconds" />
-        </p>
+        <p className={styles.desc}>{t('time.seconds')}</p>
       </div>
     </div>
   );

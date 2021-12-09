@@ -18,7 +18,7 @@ import AppTitle from './AppTitle';
 import InactiveMenuIcon from './InactiveMenuIcon';
 import ToggleDark from './toggle-dark.png';
 import ToggleLight from './toggle-light.png';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const useStyles = makeStyles(theme => ({
   navbar: {
@@ -38,6 +38,7 @@ type Page = 'dashboard' | 'stake' | 'choose_bond' | 'bonds' | 'migrate' | 'calcu
 type ComputedBond = ReturnType<typeof useBonds>[0];
 
 function BondROI({ bond }: { bond: ComputedBond }) {
+  const { t } = useTranslation();
   const theme = useTheme();
   const fiveDayRate = useSelector<IReduxState, number>(state => state.app.fiveDayRate);
   const bondPrice = useSelector<IReduxState, number>(state => {
@@ -47,12 +48,13 @@ function BondROI({ bond }: { bond: ComputedBond }) {
   const priceDiff = (Number(marketPrice) ?? 0) - (bondPrice ?? 0);
   const dotColor = theme.palette.mode.chip.status.success;
   const dot = <span className="bond-pair-roi-dot" style={{ background: dotColor }} />;
+  const roiString = t('bonds.purchase.roiFourFourInfo');
   return (
     <span className="bond-pair-roi">
       <span className="bond-pair-roi-value">
         {priceDiff > 0 && dot}
         {bond.autostake ? (
-          <Tooltip title="* The ROI of (4,4) bond includes 5-days staking reward">
+          <Tooltip title={roiString}>
             <span>{bond.discount && trim((bond.discount + fiveDayRate) * 100, 2)}%*</span>
           </Tooltip>
         ) : (
@@ -72,6 +74,7 @@ function BondROI({ bond }: { bond: ComputedBond }) {
 }
 
 function NavContent() {
+  const { t } = useTranslation();
   const styles = useStyles();
   const { active: activeBonds = [] } = useGroupedBonds();
   const location = useLocation();
@@ -119,9 +122,7 @@ function NavContent() {
               >
                 <div className="dapp-menu-item">
                   {checkPage(location, 'dashboard') ? <ActiveMenuIcon /> : <InactiveMenuIcon />}
-                  <p>
-                    <Trans i18nKey="common.dashboard" />
-                  </p>
+                  <p>{t('common.dashboard')}</p>
                 </div>
               </Link>
 
@@ -137,9 +138,7 @@ function NavContent() {
               >
                 <div className="dapp-menu-item">
                   {checkPage(location, 'stake') ? <ActiveMenuIcon /> : <InactiveMenuIcon />}
-                  <p>
-                    <Trans i18nKey="common.stake" />
-                  </p>
+                  <p>{t('common.stake')}</p>
                 </div>
               </Link>
 
@@ -155,9 +154,7 @@ function NavContent() {
               >
                 <div className="dapp-menu-item">
                   {checkPage(location, 'bonds') ? <ActiveMenuIcon /> : <InactiveMenuIcon />}
-                  <p>
-                    <Trans i18nKey="common.bond" />
-                  </p>
+                  <p>{t('common.bond')}</p>
                 </div>
               </Link>
 
@@ -165,12 +162,8 @@ function NavContent() {
                 <div className="bond-discounts">
                   <div className="bond-discounts-group">
                     <div className="bond-discounts-group-title bond">
-                      <span>
-                        <Trans i18nKey="components.name" />
-                      </span>
-                      <span className="bond-pair-roi">
-                        <Trans i18nKey="common.roi" />
-                      </span>
+                      <span>{t('components.name')}</span>
+                      <span className="bond-pair-roi">{t('common.roi')}</span>
                     </div>
                     {activeBonds.map((bond, i) => (
                       <Link component={NavLink} to={`/bonds/${bond.value}`} key={i} className={'bond'}>
@@ -208,9 +201,7 @@ function NavContent() {
               >
                 <div className="dapp-menu-item">
                   <InactiveMenuIcon />
-                  <p>
-                    <Trans i18nKey="common.buy" /> CLAM2
-                  </p>
+                  <p>{t('common.buy')} CLAM2</p>
                 </div>
               </Link>
               <Link
@@ -225,9 +216,7 @@ function NavContent() {
               >
                 <div className="dapp-menu-item">
                   {checkPage(location, 'calculator') ? <ActiveMenuIcon /> : <InactiveMenuIcon />}
-                  <p>
-                    <Trans i18nKey="common.calculator" />
-                  </p>
+                  <p>{t('common.calculator')}</p>
                 </div>
               </Link>
               <Link
@@ -242,9 +231,7 @@ function NavContent() {
               >
                 <div className="dapp-menu-item">
                   {checkPage(location, 'migrate') ? <ActiveMenuIcon /> : <InactiveMenuIcon />}
-                  <p>
-                    <Trans i18nKey="common.migrate" />
-                  </p>
+                  <p>{t('common.migrate')}</p>
                 </div>
               </Link>
             </div>

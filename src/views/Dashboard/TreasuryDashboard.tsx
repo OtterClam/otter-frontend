@@ -128,12 +128,8 @@ function TreasuryDashboard() {
       <div className="hero">
         <Box component="div" color="text.primary">
           <p>Wen (3,3) becomes (🦦,🦦)</p>
-          <h1>
-            <Trans i18nKey="dashboard.otterKingdom" />
-          </h1>
-          <h3>
-            <Trans i18nKey="dashboard.decentralized" />
-          </h3>
+          <h1>{t('dashboard.otterKingdom')}</h1>
+          <h3>{t('dashboard.decentralized')}</h3>
         </Box>
         <img src={OtterKing} />
       </div>

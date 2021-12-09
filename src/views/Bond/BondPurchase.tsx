@@ -9,7 +9,7 @@ import { Skeleton } from '@material-ui/lab';
 import { IReduxState } from '../../store/slices/state.interface';
 import { BondKey, getBond } from 'src/constants';
 import { ethers } from 'ethers';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import BondPurchaseDialog from './BondPurchaseDialog';
 import ActionButton from '../../components/Button/ActionButton';
 
@@ -185,9 +185,7 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
             endAdornment={
               <InputAdornment position="end">
                 <div className="stake-input-btn" onClick={setMax}>
-                  <p>
-                    <Trans i18nKey="common.max" />
-                  </p>
+                  <p>{t('common.max')}</p>
                 </div>
               </InputAdornment>
             }
@@ -225,9 +223,7 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
       {hasAllowance() ? (
         bond.autostake && (
           <div className="help-text">
-            <p className="help-text-desc">
-              <Trans i18nKey="bonds.purchase.fourFourInfo" />
-            </p>
+            <p className="help-text-desc">{t('bonds.purchase.fourFourInfo')}</p>
           </div>
         )
       ) : (
@@ -239,36 +235,28 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
       <Slide direction="left" in={true} mountOnEnter unmountOnExit {...{ timeout: 533 }}>
         <Box className="bond-data">
           <div className="data-row">
-            <p className="bond-balance-title">
-              <Trans i18nKey="common.yourBalance" />
-            </p>
+            <p className="bond-balance-title">{t('common.yourBalance')}</p>
             <p className="bond-balance-value">
               {isBondLoading ? <Skeleton width="100px" /> : <>{`${trim(balance, 4)} ${bond.reserveUnit}`}</>}
             </p>
           </div>
 
           <div className={`data-row`}>
-            <p className="bond-balance-title">
-              <Trans i18nKey="bonds.purchase.youWillGet" />
-            </p>
+            <p className="bond-balance-title">{t('bonds.purchase.youWillGet')}</p>
             <p className="price-data bond-balance-value">
               {isBondLoading ? <Skeleton width="100px" /> : `${trim(bondQuote, 4) || '0'} ${bondUnit}`}
             </p>
           </div>
 
           <div className={`data-row`}>
-            <p className="bond-balance-title">
-              <Trans i18nKey="bonds.purchase.maxBuy" />
-            </p>
+            <p className="bond-balance-title">{t('bonds.purchase.maxBuy')}</p>
             <p className="price-data bond-balance-value">
               {isBondLoading ? <Skeleton width="100px" /> : `${trim(maxPayout, 4) || '0'} ${bondUnit}`}
             </p>
           </div>
 
           <div className="data-row">
-            <p className="bond-balance-title">
-              <Trans i18nKey="common.roi" />
-            </p>
+            <p className="bond-balance-title">{t('common.roi')}</p>
             <p className="bond-balance-value">
               {isBondLoading ? (
                 <Skeleton width="100px" />
@@ -281,26 +269,20 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
           </div>
 
           <div className="data-row">
-            <p className="bond-balance-title">
-              <Trans i18nKey="bonds.debtRatio" />
-            </p>
+            <p className="bond-balance-title">{t('bonds.debtRatio')}</p>
             <p className="bond-balance-value">
               {isBondLoading ? <Skeleton width="100px" /> : `${trim(debtRatio / 10000000, 2)}%`}
             </p>
           </div>
 
           <div className="data-row">
-            <p className="bond-balance-title">
-              <Trans i18nKey="bonds.vestingTerm" />
-            </p>
+            <p className="bond-balance-title">{t('bonds.vestingTerm')}</p>
             <p className="bond-balance-value">{isBondLoading ? <Skeleton width="100px" /> : vestingPeriod()}</p>
           </div>
 
           {recipientAddress !== address && (
             <div className="data-row">
-              <p className="bond-balance-title">
-                <Trans i18nKey="bonds.recipient" />
-              </p>
+              <p className="bond-balance-title">{t('bonds.recipient')}</p>
               <p className="bond-balance-value">
                 {isBondLoading ? <Skeleton width="100px" /> : shorten(recipientAddress)}
               </p>

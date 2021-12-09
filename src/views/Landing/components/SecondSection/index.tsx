@@ -3,15 +3,13 @@ import styles from './style.module.scss';
 import HowItWorks01 from './how_it_works_01.png';
 import HowItWorks02 from './how_it_works_02.png';
 import HowItWorks03 from './how_it_works_03.png';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 function SecondSection() {
   const { t } = useTranslation();
   return (
     <section className={styles.main}>
-      <h2 className={styles.title}>
-        <Trans i18nKey="landing.splashPage.howOtterClamWorks" />
-      </h2>
+      <h2 className={styles.title}>{t('landing.splashPage.howOtterClamWorks')}</h2>
       <div className={styles.body}>
         <Card
           num={1}

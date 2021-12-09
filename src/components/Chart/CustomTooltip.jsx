@@ -30,14 +30,14 @@ const renderTooltipItems = (payload, bulletpointColors, itemNames, itemType, isS
       <Box className="item" display="flex" justifyContent="space-between">
         <Typography variant="body2">
           <span className="tooltip-bulletpoint" style={bulletpointColors[0]}></span>
-          <Trans i18nKey="components.staked" />
+          {t('components.staked')}
         </Typography>
         <Typography>{`${trim(payload[0].value, 2)}%`}</Typography>
       </Box>
       <Box className="item" display="flex" justifyContent="space-between">
         <Typography variant="body2">
           <span className="tooltip-bulletpoint" style={bulletpointColors[1]}></span>
-          <Trans i18nKey="components.notStaked" />
+          {t('components.notStaked')}
         </Typography>
         <Typography>{`${trim(100 - payload[0].value, 2)}%`}</Typography>
       </Box>

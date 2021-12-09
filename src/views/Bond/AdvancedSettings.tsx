@@ -13,7 +13,7 @@ import {
 } from '@material-ui/core';
 import { ReactComponent as XIcon } from '../../assets/icons/icon_close.svg';
 import './bondSettings.scss';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const useStyles = makeStyles(theme => ({
   modalContent: {
@@ -54,6 +54,7 @@ function AdvancedSettings({
   onSlippageChange,
 }: IAdvancedSettingsProps) {
   const styles = useStyles();
+  const { t } = useTranslation();
   return (
     <Modal id="hades" open={open} onClose={handleClose} hideBackdrop>
       <Paper className={`${styles.modalContent} ohm-card ohm-popover`}>
@@ -87,9 +88,7 @@ function AdvancedSettings({
               }
             />
             <div className="help-text">
-              <p className="text-bond-desc">
-                <Trans i18nKey="bonds.advancedSettings.txrevert" />
-              </p>
+              <p className="text-bond-desc">{t('bonds.advancedSettings.txrevert')}</p>
             </div>
           </FormControl>
 
@@ -105,9 +104,7 @@ function AdvancedSettings({
               type="text"
             />
             <div className="help-text">
-              <p className="text-bond-desc">
-                <Trans i18nKey="bonds.advancedSettings.recipientAddress" />
-              </p>
+              <p className="text-bond-desc">{t('bonds.advancedSettings.recipientAddress')}</p>
             </div>
           </FormControl>
         </Box>

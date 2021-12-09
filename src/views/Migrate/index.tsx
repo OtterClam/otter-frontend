@@ -107,9 +107,7 @@ function Migrate() {
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={4} md={4} lg={4}>
                     <div className="stake-apy">
-                      <p className="single-stake-subtitle">
-                        <Trans i18nKey="migrate.oldClamSupply" />
-                      </p>
+                      <p className="single-stake-subtitle">{t('migrate.oldClamSupply"')}</p>
                       <Box component="p" color="text.secondary" className="single-stake-subtitle-value">
                         {oldClamTotalSupply ? trim(oldClamTotalSupply, 0) : <Skeleton width="150px" />}
                       </Box>
@@ -118,9 +116,7 @@ function Migrate() {
 
                   <Grid item xs={12} sm={4} md={4} lg={4}>
                     <div className="stake-index">
-                      <p className="single-stake-subtitle">
-                        <Trans i18nKey="migrate.oldTreasuryReserve" />
-                      </p>
+                      <p className="single-stake-subtitle">{t('migrate.oldTreasuryReserve')}</p>
                       <Box component="p" color="text.secondary" className="single-stake-subtitle-value">
                         {oldTreasuryBalance ? formatCurrency(oldTreasuryBalance, 0) : <Skeleton width="150px" />}
                       </Box>
@@ -129,9 +125,7 @@ function Migrate() {
 
                   <Grid item xs={12} sm={4} md={4} lg={4}>
                     <div className="stake-index">
-                      <p className="single-stake-subtitle">
-                        <Trans i18nKey="migrate.migrationProgress" />
-                      </p>
+                      <p className="single-stake-subtitle">{t('migrate.migrationProgress"')}</p>
                       <Box component="p" color="text.secondary" className="single-stake-subtitle-value">
                         {migrateProgress ? (
                           Intl.NumberFormat('en', { style: 'percent' }).format(migrateProgress)
@@ -150,41 +144,27 @@ function Migrate() {
                 <div className="stake-wallet-notification">
                   <div className="wallet-menu" id="wallet-menu">
                     <Box bgcolor="otter.otterBlue" className="app-otter-button" onClick={connect}>
-                      <p>
-                        <Trans i18nKey="common.connectWallet" />
-                      </p>
+                      <p>{t('common.connectWallet"')}</p>
                     </Box>
                   </div>
-                  <p className="desc-text">
-                    <Trans i18nKey="migrate.connectWalletDescription" />
-                  </p>
+                  <p className="desc-text">{t('migrate.connectWalletDescription')}</p>
                 </div>
               ) : (
                 <div className="migrate-table">
                   <div className="data-row">
                     <div style={{ width: '24px' }} />
-                    <div className="data-row-title">
-                      <Trans i18nKey="migrate.steps" />
-                    </div>
-                    <div className="data-row-title">
-                      <Trans i18nKey="migrate.yourAmount" />
-                    </div>
+                    <div className="data-row-title">{t('migrate.steps')}</div>
+                    <div className="data-row-title">{t('migrate.yourAmount')}</div>
                     <div className="data-row-action" />
                   </div>
                   <div className="data-row">
                     <div className="step">1</div>
-                    <div className="data-row-name data-row-expand">
-                      <Trans i18nKey="migrate.claimWarmup" />
-                    </div>
+                    <div className="data-row-name data-row-expand">{t('migrate.claimWarmup')}</div>
                     <div className="data-row-value data-row-expand">
                       {isAppLoading ? <Skeleton width="80px" /> : <>{trim(Number(oldWarmupBalance), 4)} sCLAM</>}
                     </div>
                     <div className="data-row-action">
-                      {Number(oldWarmupBalance) === 0 && (
-                        <Box className="migrate-done">
-                          <Trans i18nKey="migrate.done" />
-                        </Box>
-                      )}
+                      {Number(oldWarmupBalance) === 0 && <Box className="migrate-done">{t('migrate.done')}</Box>}
                       {canClaimWarmup && (
                         <ActionButton
                           pendingTransactions={pendingTransactions}
@@ -199,18 +179,12 @@ function Migrate() {
 
                   <div className="data-row">
                     <div className="step">2</div>
-                    <div className="data-row-name data-row-expand">
-                      <Trans i18nKey="migrate.unstakeClam" />
-                    </div>
+                    <div className="data-row-name data-row-expand">{t('migrate.unstakeClam')}</div>
                     <div className="data-row-value data-row-expand">
                       {isAppLoading ? <Skeleton width="80px" /> : <>{trim(Number(oldSClamBalance), 4)} sCLAM</>}
                     </div>
                     <div className="data-row-action">
-                      {+oldSClamBalance === 0 && (
-                        <Box className="migrate-done">
-                          <Trans i18nKey="migrate.done" />
-                        </Box>
-                      )}
+                      {+oldSClamBalance === 0 && <Box className="migrate-done">{t('migrate.done')}</Box>}
                       {+oldSClamBalance > 0 &&
                         (sCLAMAllowance > 0 ? (
                           <ActionButton
@@ -235,12 +209,8 @@ function Migrate() {
                   <div className="data-row">
                     <div className="step">3</div>
                     <div className="data-row-name data-row-expand">
-                      <div>
-                        <Trans i18nKey="migrate.migrateTo" />
-                      </div>
-                      <div className="estimated-clam2">
-                        <Trans i18nKey="migrate.estimatedClamTwo" />
-                      </div>
+                      <div>{t('migrate.migrateTo')}</div>
+                      <div className="estimated-clam2">{t('migrate.estimatedClamTwo')}</div>
                     </div>
                     <div className="data-row-value data-row-expand">
                       <div>
@@ -274,9 +244,7 @@ function Migrate() {
 
                   <Box className="data-row" bgcolor="mode.lightGray100">
                     <div />
-                    <p className="data-row-name data-row-expand">
-                      <Trans i18nKey="migrate.yourClamTwoBalance" />
-                    </p>
+                    <p className="data-row-name data-row-expand">{t('migrate.yourClamTwoBalance')}</p>
                     <p />
                     <p className="data-row-value data-row-action">
                       {isAppLoading ? <Skeleton width="80px" /> : <>{trim(Number(clamBalance), 4)} CLAM2</>}
