@@ -190,6 +190,18 @@ const English = {
       harvesting: 'Harvesting',
       name: 'Name',
     },
+    // src\components\NFT
+    nft: {
+      which: 'Which ',
+      willYouGet: ' will you get?',
+      safehandDescription:
+        'Awarded to every Otter who has staked for a minimum of 2 weeks with greater than 4 sCLAM on the drop date.',
+      furryhandDescription:
+        'Awarded to every Otter who has staked for a minimum of 2 weeks with more than 40 sCLAM on the drop date',
+      stonehandDescription: 'Awarded to wallets with over 56 sCLAM that have staked from 11/9 to drop date.',
+      diamondhandDescription:
+        'Awarded for staking the full amount of CLAM from IDO or launch date (11/3, with a minimum of 20 sCLAM) to drop date',
+    },
   },
 };
 export default English;
