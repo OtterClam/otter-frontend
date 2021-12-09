@@ -45,7 +45,7 @@ export function BondDataCard({ bondKey }: IBondProps) {
               <div>
                 <Link href={bond.dexUrl} target="_blank">
                   <Box component="p" color="otter.otterBlue" className="bond-lp-add-liquidity">
-                    {bond.type === 'lp' ? `${t('common.addLiquidity')}` : `${t('common.buy')} ${bond.reserveUnit}`}
+                    {bond.type === 'lp' ? `${t('common.addLiquidity')}` : `${t('common.buyThing')} ${bond.reserveUnit}`}
                   </Box>
                 </Link>
               </div>
@@ -150,7 +150,7 @@ export function BondTableRow({ bondKey }: IBondProps) {
             {!bond.deprecated && (
               <Link color="primary" href={bond.dexUrl} target="_blank">
                 <Box component="p" color="otter.otterBlue" className="bond-lp-add-liquidity">
-                  {bond.type === 'lp' ? `${t('common.addLiquidity')}` : `${t('common.buy')} ${bond.reserveUnit}`}
+                  {bond.type === 'lp' ? `${t('common.addLiquidity')}` : `${t('common.buyThing')}${bond.reserveUnit}`}
                 </Box>
               </Link>
             )}

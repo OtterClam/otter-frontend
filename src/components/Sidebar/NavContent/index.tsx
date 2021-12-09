@@ -201,7 +201,7 @@ function NavContent() {
               >
                 <div className="dapp-menu-item">
                   <InactiveMenuIcon />
-                  <p>{t('common.buy')} CLAM2</p>
+                  <p>{t('common.buyThing')}CLAM2</p>
                 </div>
               </Link>
               <Link

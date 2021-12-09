@@ -25,6 +25,7 @@ const renderItem = (type, item) => {
 };
 
 const renderTooltipItems = (payload, bulletpointColors, itemNames, itemType, isStaked = false, isPOL = false) => {
+  const { t } = useTranslation();
   return isStaked ? (
     <Box>
       <Box className="item" display="flex" justifyContent="space-between">
