@@ -32,6 +32,7 @@ const English = {
       hours: 'Hours',
       minutes: 'Minutes',
       seconds: 'Seconds',
+      today: 'Today',
     },
     // src\views\Dashboard
     dashboard: {

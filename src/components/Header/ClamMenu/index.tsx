@@ -89,7 +89,7 @@ function ClamMenu() {
       id="ohm-menu-button-hover"
     >
       <Box color="text.primary" className="ohm-button">
-        <p>{t('components.buyThing')}CLAM2</p>
+        <p>{t('common.buyThing')}CLAM2</p>
       </Box>
 
       <Popper id={id} open={open} anchorEl={anchorEl} transition>
