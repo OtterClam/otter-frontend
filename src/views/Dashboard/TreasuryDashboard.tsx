@@ -20,7 +20,7 @@ function TreasuryDashboard() {
   const { t } = useTranslation();
   const tooltipItems = {
     tvl: [t('dashboard.tooltipItems.tvl')],
-    coin: ['MAI', 'FRAX'],
+    coin: ['MAI', 'FRAX', 'MATIC'],
     rfv: ['MAI', 'FRAX'],
     holder: ['CLAMies'],
     apy: [t('common.apy')],
