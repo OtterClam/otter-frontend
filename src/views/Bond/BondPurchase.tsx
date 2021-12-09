@@ -9,6 +9,7 @@ import { Skeleton } from '@material-ui/lab';
 import { IReduxState } from '../../store/slices/state.interface';
 import { BondKey, getBond } from 'src/constants';
 import { ethers } from 'ethers';
+import { useTranslation } from 'react-i18next';
 import BondPurchaseDialog from './BondPurchaseDialog';
 import ActionButton from '../../components/Button/ActionButton';
 
@@ -89,6 +90,7 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
   const vestingPeriod = () => {
     return prettifySeconds(vestingTerm, 'day');
   };
+  const { t } = useTranslation();
 
   const handleOpenDialog = () => {
     setOpen(true);
@@ -100,15 +102,13 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
 
   async function onBond() {
     if (quantity === '') {
-      alert('Please enter a value!');
+      alert(t('bonds.purchase.noValue'));
       //@ts-ignore
     } else if (isNaN(quantity)) {
-      alert('Please enter a valid value!');
+      alert(t('bonds.purchase.invalidValue'));
     } else if (interestDue > 0 || pendingPayout > 0) {
       const shouldProceed = window.confirm(
-        bond.autostake
-          ? 'You have an existing bond. Bonding will reset your vesting period. Do you still want to process?'
-          : 'You have an existing bond. Bonding will reset your vesting period and forfeit rewards. We recommend claiming rewards first or using a fresh wallet. Do you still want to proceed?',
+        bond.autostake ? t('bonds.purchase.resetVestingAutostake') : t('bonds.purchase.resetVesting'),
       );
       if (shouldProceed) {
         let bondTx: any = await dispatch(
@@ -175,7 +175,7 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
         <FormControl className="ohm-input" variant="outlined" color="primary" fullWidth>
           <InputLabel htmlFor="outlined-adornment-amount"></InputLabel>
           <OutlinedInput
-            placeholder={`${bond.reserveUnit} Amount`}
+            placeholder={`${bond.reserveUnit} ${t('common.amount')}`}
             id="outlined-adornment-amount"
             type="number"
             value={quantity}
@@ -185,7 +185,7 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
             endAdornment={
               <InputAdornment position="end">
                 <div className="stake-input-btn" onClick={setMax}>
-                  <p>Max</p>
+                  <p>{t('common.max')}</p>
                 </div>
               </InputAdornment>
             }
@@ -223,46 +223,40 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
       {hasAllowance() ? (
         bond.autostake && (
           <div className="help-text">
-            <p className="help-text-desc">
-              Note: The (4, 4) bond will stake all CLAMs at the start, so you will earn all rebase rewards during the
-              vesting term. Once fully vested, you will only be able to claim sClam.
-            </p>
+            <p className="help-text-desc">{t('bonds.purchase.fourFourInfo')}</p>
           </div>
         )
       ) : (
         <div className="help-text">
-          <p className="help-text-desc">
-            Note: The "Approve" transaction is only needed when bonding for the first time; subsequent bonding only
-            requires you to perform the "Bond" transaction.
-          </p>
+          <p className="help-text-desc"></p>
         </div>
       )}
 
       <Slide direction="left" in={true} mountOnEnter unmountOnExit {...{ timeout: 533 }}>
         <Box className="bond-data">
           <div className="data-row">
-            <p className="bond-balance-title">Your Balance</p>
+            <p className="bond-balance-title">{t('common.yourBalance')}</p>
             <p className="bond-balance-value">
               {isBondLoading ? <Skeleton width="100px" /> : <>{`${trim(balance, 4)} ${bond.reserveUnit}`}</>}
             </p>
           </div>
 
           <div className={`data-row`}>
-            <p className="bond-balance-title">You Will Get</p>
+            <p className="bond-balance-title">{t('bonds.purchase.youWillGet')}</p>
             <p className="price-data bond-balance-value">
               {isBondLoading ? <Skeleton width="100px" /> : `${trim(bondQuote, 4) || '0'} ${bondUnit}`}
             </p>
           </div>
 
           <div className={`data-row`}>
-            <p className="bond-balance-title">Max You Can Buy</p>
+            <p className="bond-balance-title">{t('bonds.purchase.maxBuy')}</p>
             <p className="price-data bond-balance-value">
               {isBondLoading ? <Skeleton width="100px" /> : `${trim(maxPayout, 4) || '0'} ${bondUnit}`}
             </p>
           </div>
 
           <div className="data-row">
-            <p className="bond-balance-title">ROI</p>
+            <p className="bond-balance-title">{t('common.roi')}</p>
             <p className="bond-balance-value">
               {isBondLoading ? (
                 <Skeleton width="100px" />
@@ -275,20 +269,20 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
           </div>
 
           <div className="data-row">
-            <p className="bond-balance-title">Debt Ratio</p>
+            <p className="bond-balance-title">{t('bonds.debtRatio')}</p>
             <p className="bond-balance-value">
               {isBondLoading ? <Skeleton width="100px" /> : `${trim(debtRatio / 10000000, 2)}%`}
             </p>
           </div>
 
           <div className="data-row">
-            <p className="bond-balance-title">Vesting Term</p>
+            <p className="bond-balance-title">{t('bonds.vestingTerm')}</p>
             <p className="bond-balance-value">{isBondLoading ? <Skeleton width="100px" /> : vestingPeriod()}</p>
           </div>
 
           {recipientAddress !== address && (
             <div className="data-row">
-              <p className="bond-balance-title">Recipient</p>
+              <p className="bond-balance-title">{t('bonds.recipient')}</p>
               <p className="bond-balance-value">
                 {isBondLoading ? <Skeleton width="100px" /> : shorten(recipientAddress)}
               </p>

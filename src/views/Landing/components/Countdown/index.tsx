@@ -1,6 +1,8 @@
 import styles from './countdown.module.scss';
+import { useTranslation } from 'react-i18next';
 
 export default function Countdown() {
+  const { t } = useTranslation();
   return (
     <div className={styles.main}>
       <div className={styles.container}>
@@ -12,7 +14,7 @@ export default function Countdown() {
             <p id="day-2">0</p>
           </div>
         </div>
-        <p className={styles.desc}>Days</p>
+        <p className={styles.desc}>{t('time.days')}</p>
       </div>
 
       <div className={styles.container}>
@@ -24,7 +26,7 @@ export default function Countdown() {
             <p id="hour-2">0</p>
           </div>
         </div>
-        <p className={styles.desc}>Hours</p>
+        <p className={styles.desc}>{t('time.hours')}</p>
       </div>
 
       <div className={styles.container}>
@@ -36,7 +38,7 @@ export default function Countdown() {
             <p id="minute-2">0</p>
           </div>
         </div>
-        <p className={styles.desc}>Minutes</p>
+        <p className={styles.desc}>{t('time.minutes')}</p>
       </div>
 
       <div className={styles.container}>
@@ -48,7 +50,7 @@ export default function Countdown() {
             <p id="second-2">0</p>
           </div>
         </div>
-        <p className={styles.desc}>Seconds</p>
+        <p className={styles.desc}>{t('time.seconds')}</p>
       </div>
     </div>
   );

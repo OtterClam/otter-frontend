@@ -20,8 +20,10 @@ import { useBonds } from '../../hooks';
 import { IReduxState } from '../../store/slices/state.interface';
 import { BondDataCard, BondTableRow } from './BondRow';
 import './choose-bond.scss';
+import { useTranslation, Trans } from 'react-i18next';
 
 function ChooseBond() {
+  const { t } = useTranslation();
   const bonds = useBonds();
   const isSmallScreen = useMediaQuery('(max-width: 733px)'); // change to breakpoint query
   const isVerySmallScreen = useMediaQuery('(max-width: 420px)');
@@ -50,7 +52,7 @@ query {
         <Paper className="ohm-card">
           <Box className="card-header">
             <p className="bond-title">
-              Bond (
+              {t('common.bond')} (
               <span className="bond-title-span">
                 {getTokenImage('clam', 24)},{getTokenImage('clam', 24)}
               </span>
@@ -61,7 +63,7 @@ query {
           <Grid container item xs={12} style={{ margin: '10px 0px 20px' }} className="bond-hero">
             <Grid item xs={6}>
               <Box textAlign={`${isVerySmallScreen ? 'left' : 'center'}`}>
-                <p className="bond-hero-title">Treasury Balance</p>
+                <p className="bond-hero-title">{t('common.treasuryBalance')}</p>
                 <Box component="p" color="text.secondary" className="bond-hero-value">
                   {!treasuryBalance ? (
                     <Skeleton width="180px" />
@@ -79,7 +81,7 @@ query {
 
             <Grid item xs={6} className={`ohm-price`}>
               <Box textAlign={`${isVerySmallScreen ? 'right' : 'center'}`}>
-                <p className="bond-hero-title">CLAM Price</p>
+                <p className="bond-hero-title">{t('common.clamPrice')}</p>
                 <Box component="p" color="text.secondary" className="bond-hero-value">
                   {isAppLoading ? <Skeleton width="100px" /> : `$${trim(marketPrice, 2)}`}
                 </Box>
@@ -94,19 +96,19 @@ query {
                   <TableHead>
                     <TableRow>
                       <TableCell align="center">
-                        <p className="bond-table-title">Bond</p>
+                        <p className="bond-table-title">{t('common.bond')}</p>
                       </TableCell>
                       <TableCell align="center">
-                        <p className="bond-table-title">Price</p>
+                        <p className="bond-table-title">{t('common.price')}</p>
                       </TableCell>
                       <TableCell align="center">
-                        <p className="bond-table-title">ROI</p>
+                        <p className="bond-table-title">{t('common.roi')}</p>
                       </TableCell>
                       <TableCell align="right">
-                        <p className="bond-table-title">Purchased</p>
+                        <p className="bond-table-title">{t('bonds.purchased')}</p>
                       </TableCell>
                       <TableCell align="right">
-                        <p className="bond-table-title">My Bond</p>
+                        <p className="bond-table-title">{t('bonds.myBond')}</p>
                       </TableCell>
                       <TableCell align="right"></TableCell>
                     </TableRow>

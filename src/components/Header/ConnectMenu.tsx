@@ -15,8 +15,11 @@ import {
 import { ReactComponent as ArrowUpIcon } from '../../assets/icons/arrow-up.svg';
 import { ReactComponent as CaretDownIcon } from '../../assets/icons/caret-down.svg';
 import { useWeb3Context } from '../../hooks';
+import LanguagePicker from '../LanguagePicker';
+import { useTranslation } from 'react-i18next';
 
 function ConnectMenu() {
+  const { t } = useTranslation();
   const { connect, disconnect, connected, web3, chainID } = useWeb3Context();
   const [anchorEl, setAnchorEl] = useState(null);
   const [isConnected, setConnected] = useState(connected);
@@ -97,11 +100,15 @@ function ConnectMenu() {
           <Box className="add-tokens">
             <Divider color="secondary" />
             <Button variant="text" color="secondary" onClick={disconnect} style={{ marginBottom: '0px' }}>
-              <Typography>Disconnect</Typography>
+              <Typography>{t('components.disconnect')}</Typography>
             </Button>
           </Box>
         </Paper>
       </Popper>
+
+      <Box className="language-button">
+        <LanguagePicker border={true} />
+      </Box>
     </div>
   );
 }

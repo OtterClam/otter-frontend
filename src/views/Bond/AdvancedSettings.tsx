@@ -13,6 +13,7 @@ import {
 } from '@material-ui/core';
 import { ReactComponent as XIcon } from '../../assets/icons/icon_close.svg';
 import './bondSettings.scss';
+import { useTranslation } from 'react-i18next';
 
 const useStyles = makeStyles(theme => ({
   modalContent: {
@@ -53,6 +54,7 @@ function AdvancedSettings({
   onSlippageChange,
 }: IAdvancedSettingsProps) {
   const styles = useStyles();
+  const { t } = useTranslation();
   return (
     <Modal id="hades" open={open} onClose={handleClose} hideBackdrop>
       <Paper className={`${styles.modalContent} ohm-card ohm-popover`}>
@@ -86,7 +88,7 @@ function AdvancedSettings({
               }
             />
             <div className="help-text">
-              <p className="text-bond-desc">Transaction may revert if price changes by more than slippage %</p>
+              <p className="text-bond-desc">{t('bonds.advancedSettings.txrevert')}</p>
             </div>
           </FormControl>
 
@@ -102,9 +104,7 @@ function AdvancedSettings({
               type="text"
             />
             <div className="help-text">
-              <p className="text-bond-desc">
-                Choose recipient address. By default, this is your currently connected address
-              </p>
+              <p className="text-bond-desc">{t('bonds.advancedSettings.recipientAddress')}</p>
             </div>
           </FormControl>
         </Box>

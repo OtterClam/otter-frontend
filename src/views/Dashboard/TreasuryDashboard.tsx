@@ -10,12 +10,40 @@ import { formatCurrency, getTokenImage, trim } from '../../helpers';
 import apollo from '../../lib/apolloClient';
 import OtterKing from './otterking.png';
 import './treasury-dashboard.scss';
-import { bulletpoints, itemType, tooltipInfoMessages, tooltipItems, treasuryDataQuery } from './treasuryData.js';
+import { useTranslation, Trans } from 'react-i18next';
+import { bulletpoints, itemType, treasuryDataQuery } from './treasuryData.js';
 
 const percentFormatter = Intl.NumberFormat('en', { style: 'percent', minimumFractionDigits: 2 });
 const numberFormatter = Intl.NumberFormat('en', { maximumFractionDigits: 0 });
 
 function TreasuryDashboard() {
+  const { t } = useTranslation();
+  const tooltipItems = {
+    tvl: [t('dashboard.tooltipItems.tvl')],
+    coin: ['MAI', 'FRAX'],
+    rfv: ['MAI', 'FRAX'],
+    holder: ['CLAMies'],
+    apy: [t('common.apy')],
+    runway: [
+      t('dashboard.tooltipItems.current'),
+      `7.5K ${t('common.apy')}`,
+      `5K ${t('common.apy')}`,
+      `2.5K ${t('common.apy')}`,
+    ],
+    pol: [t('dashboard.tooltipItems.lpTreasury'), t('dashboard.tooltipItems.marketLP')],
+  };
+
+  const tooltipInfoMessages = {
+    tvl: t('dashboard.tooltipInfoMessages.tvl'),
+    mvt: t('dashboard.tooltipInfoMessages.mvt'),
+    rfv: t('dashboard.tooltipInfoMessages.rfv'),
+    pol: t('dashboard.tooltipInfoMessages.pol'),
+    holder: t('dashboard.tooltipInfoMessages.holder'),
+    staked: t('dashboard.tooltipInfoMessages.staked'),
+    apy: t('dashboard.tooltipInfoMessages.apy'),
+    runway: t('dashboard.tooltipInfoMessages.runway'),
+    currentIndex: t('dashboard.tooltipInfoMessages.currentIndex'),
+  };
   const [data, setData] = useState<any>(null);
   const [apy, setApy] = useState(null);
   const [runway, setRunway] = useState(null);
@@ -34,29 +62,29 @@ function TreasuryDashboard() {
 
   const displayData = [
     {
-      title: 'Market Cap',
+      title: t('dashboard.marketCap'),
       value: marketCap ? formatCurrency(marketCap, 0) : null,
     },
     {
-      title: 'CLAM Price',
+      title: t('common.clamPrice'),
       value: marketPrice ? formatCurrency(marketPrice, 2) : null,
       image: getTokenImage('clam'),
     },
     {
-      title: 'Staking Ratio',
+      title: t('dashboard.stakingRatio'),
       value: stakingRatio ? percentFormatter.format(stakingRatio) : null,
       info: tooltipInfoMessages.staked,
     },
     {
-      title: 'Circulating Supply',
+      title: t('dashboard.circulatingSupply'),
       value: circSupply ? `${numberFormatter.format(circSupply)} / ${numberFormatter.format(totalSupply!)}` : null,
     },
     {
-      title: 'Backing per CLAM',
+      title: t('dashboard.backingPerClam'),
       value: backingPerClam ? formatCurrency(backingPerClam, 2) : null,
     },
     {
-      title: 'Current Index',
+      title: t('common.currentIndex'),
       value: currentIndex ? trim(currentIndex, 2) + ' sCLAM' : null,
       info: tooltipInfoMessages.currentIndex,
     },
@@ -100,8 +128,8 @@ function TreasuryDashboard() {
       <div className="hero">
         <Box component="div" color="text.primary">
           <p>Wen (3,3) becomes (🦦,🦦)</p>
-          <h1>Welcome to Otter Kingdom</h1>
-          <h3>The Decentralized Reserve Memecoin</h3>
+          <h1>{t('dashboard.otterKingdom')}</h1>
+          <h3>{t('dashboard.decentralized')}</h3>
         </Box>
         <img src={OtterKing} />
       </div>
@@ -144,7 +172,7 @@ function TreasuryDashboard() {
                     data={data}
                     dataKey={['totalValueLocked']}
                     stopColor={[['#FFACA1', 'rgba(255, 172, 161, 0.5)']]}
-                    headerText="Total Value Deposited"
+                    headerText={t('dashboard.totalValueDeposited')}
                     // @ts-ignore
                     headerSubText={`${data && formatCurrency(data[0].totalValueLocked)}`}
                     bulletpointColors={bulletpoints.tvl}
@@ -172,7 +200,7 @@ function TreasuryDashboard() {
                       // ['#DC30EB', '#EA98F1'],
                       // ['#8BFF4D', '#4C8C2A'],
                     ]}
-                    headerText="Market Value of Treasury Assets"
+                    headerText={t('dashboard.marketValue')}
                     // @ts-ignore
                     headerSubText={`${data && formatCurrency(data[0].treasuryMarketValue)}`}
                     bulletpointColors={bulletpoints.coin}
@@ -201,7 +229,7 @@ function TreasuryDashboard() {
                       // ['#000', '#fff'],
                       // ['#000', '#fff'],
                     ]}
-                    headerText="Risk Free Value of Treasury Assets"
+                    headerText={t('dashboard.riskFree')}
                     // @ts-ignore
                     headerSubText={`${data && formatCurrency(data[0].treasuryRiskFreeValue)}`}
                     bulletpointColors={bulletpoints.rfv}
@@ -223,7 +251,7 @@ function TreasuryDashboard() {
                     data={data}
                     dataKey={['treasuryClamMaiPOL']}
                     stopColor={[['rgba(128, 204, 131, 1)', 'rgba(128, 204, 131, 0.5)']]}
-                    headerText="Protocol Owned Liquidity CLAM-MAI"
+                    headerText={t('dashboard.pol') + ' CLAM-MAI'}
                     // @ts-ignore
                     headerSubText={`${data && trim(data[0].treasuryClamMaiPOL, 2)}% `}
                     dataFormat="percent"
@@ -267,7 +295,7 @@ function TreasuryDashboard() {
                     data={staked}
                     dataKey={['staked']}
                     stopColor={[['rgba(255, 220, 119, 1)', 'rgba(255, 220, 119, 0.5)']]}
-                    headerText="CLAM Staked"
+                    headerText={t('dashboard.clamStaked')}
                     dataFormat="percent"
                     // @ts-ignore
                     headerSubText={`${staked && trim(staked[0].staked, 2)}% `}
@@ -291,7 +319,7 @@ function TreasuryDashboard() {
                     dataKey={['apy']}
                     color={theme.palette.text.primary}
                     stroke={[theme.palette.text.primary]}
-                    headerText="APY over time"
+                    headerText={t('dashboard.apyOverTime')}
                     dataFormat="percent"
                     // @ts-ignore
                     headerSubText={`${apy && trim(apy[0].apy, 2)}%`}

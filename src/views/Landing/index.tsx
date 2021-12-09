@@ -2,8 +2,7 @@ import './landing.scss';
 import { useState } from 'react';
 import Header from '../../components/LandingHeader';
 import Stat from './components/Stat';
-import { Backdrop, Button, Link, Paper } from '@material-ui/core';
-import Shell from './shell.png';
+import { Backdrop, Button, Link, Paper, Popper, Typography, Fade, Box, makeStyles, SvgIcon } from '@material-ui/core';
 import SecondSection from './components/SecondSection';
 import Footer from './components/Footer';
 import { DiscordLink, GithubLink, TwitterLink } from 'src/constants';
@@ -13,8 +12,10 @@ import GithubIcon from './images/icon_github.svg';
 import Otter01 from './images/otter_01.png';
 import CloseIcon from './images/icon_24x24_close.svg';
 import WhiteList from '../WhiteList';
+import { useTranslation } from 'react-i18next';
 
 function Landing() {
+  const { t, i18n } = useTranslation();
   const [open, setOpen] = useState(false);
 
   return (
@@ -32,15 +33,15 @@ function Landing() {
         <div className="landing__first-section__body">
           <div className="landing__first-section__body__left">
             <div className="landing__first-section__body__title">
-              <p>The Decentralized</p>
-              <p>Reserve Memecoin</p>
+              <p>{t('landing.description.part1')}</p>
+              <p> {t('landing.description.part2')}</p>
             </div>
             <div className="landing__first-section__body__subtitle">
-              <p>The first store of value meme</p>
+              <p>{t('landing.description.tagline')}</p>
             </div>
             <a className="landing__first-section__body__app-button" href="https://app.otterclam.finance">
               <Button variant="contained" color="primary" size="medium" disableElevation>
-                Enter APP
+                {t('landing.appButton')}
               </Button>
             </a>
             <div className="community-icons">

@@ -54,4 +54,14 @@ Once you submit a PR, our CI will generate a temporary testing URL where you can
 **Pull Requests**:
 Each PR into master will get its own custom URL that is visible on the PR page. QA & validate changes on that URL before merging into the deploy branch.
 
-_**NOTE**_: For big changes associated with feature releases/milestones, they will be merged onto the `develop` branch for more thorough QA before a final merge to `master`
+*__NOTE__*: For big changes associated with feature releases/milestones, they will be merged onto the `develop` branch for more thorough QA before a final merge to `master`
+
+## 🌏 Adding Translations
+
+Thank you for helping to bring the OtterClam project to a wider community! 🦦
+
+To add a new language to the supported list, the following steps are required:
+
+- Add a translation file to the [locales](https://github.com/OtterClam/otter-frontend/tree/main/src/locales)
+- Import the new locale file in [i18n.tsx](https://github.com/OtterClam/otter-frontend/tree/main/src/i18n.tsx) and add it to the `resources`
+- Include the new language in the [LanguagePicker](https://github.com/OtterClam/otter-frontend/tree/main/src/components/LanguagePicker/index.tsx) dropdown menu.

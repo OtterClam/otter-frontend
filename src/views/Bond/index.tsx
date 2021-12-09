@@ -13,6 +13,7 @@ import './bond.scss';
 import BondHeader from './BondHeader';
 import BondPurchase from './BondPurchase';
 import BondRedeem from './BondRedeem';
+import { useTranslation } from 'react-i18next';
 
 function a11yProps(index: number) {
   return {
@@ -59,6 +60,7 @@ function Bond({ bondKey }: IBondProps) {
   const changeView = (event: any, newView: number) => {
     setView(newView);
   };
+  const { t } = useTranslation();
 
   return (
     <Fade in={true} mountOnEnter unmountOnExit>
@@ -76,7 +78,7 @@ function Bond({ bondKey }: IBondProps) {
               {!bond.deprecated && (
                 <Box className="bond-price-data-row">
                   <div className="bond-price-data">
-                    <p className="bond-price-data-title">Bond Price</p>
+                    <p className="bond-price-data-title">{t('bonds.bondPrice')}</p>
                     <Box component="p" color="text.secondary" className="bond-price-data-value">
                       {isBondLoading ? (
                         <Skeleton />
@@ -88,10 +90,12 @@ function Bond({ bondKey }: IBondProps) {
                         `${trim(bondPrice, 2)} ${bond.reserveUnit}`
                       )}
                     </Box>
-                    {priceDiff > 0 && <StatusChip status={Status.Success} label={`$${trim(priceDiff, 2)} discount!`} />}
+                    {priceDiff > 0 && (
+                      <StatusChip status={Status.Success} label={`$${trim(priceDiff, 2)} ${t('bonds.bondDiscount')}`} />
+                    )}
                   </div>
                   <div className="bond-price-data">
-                    <p className="bond-price-data-title">CLAM Price</p>
+                    <p className="bond-price-data-title">{t('common.clamPrice')}</p>
                     <Box component="p" color="text.secondary" className="bond-price-data-value">
                       {isBondLoading ? <Skeleton /> : `$${trim(marketPrice, 2)}`}
                     </Box>

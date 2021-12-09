@@ -8,7 +8,7 @@ import DocIcon from '../../images/icon_doc.svg';
 import HeaderLogo from 'src/assets/images/header-logo.png';
 import PolygonLogo from './polygon-logo.png';
 import XIcon from './x-icon.svg';
-
+import { useTranslation } from 'react-i18next';
 interface LinkButtonProps {
   name: string;
   href: string;
@@ -29,23 +29,24 @@ export interface Props {
 }
 
 export default function Footer({ backgroundColor }: Props) {
+  const { t } = useTranslation();
   return (
     <footer className={styles.footer} style={{ backgroundColor }}>
-      <h2 className={styles.title}>Join Our Community</h2>
+      <h2 className={styles.title}>{t('landing.footer.joinOurCommunity')}</h2>
       <div className={styles.buttonList}>
         <LinkButton name="Twitter" href={TwitterLink} image={TwitterIcon} />
         <LinkButton name="Discord" href={DiscordLink} image={DiscordIcon} />
         <LinkButton name="Github" href={GithubLink} image={GithubIcon} />
         <LinkButton name="Docs" href={DocsLink} image={DocIcon} />
       </div>
-      <p className={styles.makeit}>Let's make it (🦦,🦦)</p>
+      <p className={styles.makeit}>{t('landing.footer.letsMakeIt')} (🦦,🦦)</p>
       <div className={styles.logos}>
         <img src={HeaderLogo} alt="logo" />
         <img src={XIcon} alt="x" style={{ width: 20, height: 20 }} />
         <img src={PolygonLogo} alt="logo" />
       </div>
       <div className="contact-us">
-        <Link href="mailto:dev@otterclam.finance">Contact Us</Link>
+        <Link href="mailto:dev@otterclam.finance">{t('landing.footer.contactUs')} </Link>
       </div>
     </footer>
   );

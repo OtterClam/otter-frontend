@@ -23,6 +23,7 @@ import { useWeb3Context } from '../../hooks';
 import { IPendingTxn } from '../../store/slices/pending-txns-slice';
 import { changeApproval, changeStake, claimWarmup } from '../../store/slices/stake-thunk';
 import { IReduxState } from '../../store/slices/state.interface';
+import { useTranslation, Trans } from 'react-i18next';
 import './stake.scss';
 import StakeDialog from './StakeDialog';
 
@@ -52,6 +53,7 @@ function a11yProps(index: number) {
 }
 
 function Stake() {
+  const { t } = useTranslation();
   const styles = useStyles();
   const dispatch = useDispatch();
   const { provider, address, connect, chainID } = useWeb3Context();
@@ -172,7 +174,7 @@ function Stake() {
             <Grid item>
               <div className="card-header">
                 <p className="single-stake-title">
-                  CLAM Staking ({String.fromCodePoint(0x1f9a6)}, {String.fromCodePoint(0x1f9a6)})
+                  {t('stake.clamStaking')} ({String.fromCodePoint(0x1f9a6)}, {String.fromCodePoint(0x1f9a6)})
                 </p>
                 <RebaseTimer />
               </div>
@@ -183,7 +185,7 @@ function Stake() {
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={4} md={4} lg={4}>
                     <div className="stake-apy">
-                      <p className="single-stake-subtitle">APY</p>
+                      <p className="single-stake-subtitle">{t('common.apy')}</p>
                       <Box component="p" color="text.secondary" className="single-stake-subtitle-value">
                         {stakingAPY ? (
                           new Intl.NumberFormat('en-US', {
@@ -198,7 +200,7 @@ function Stake() {
 
                   <Grid item xs={12} sm={4} md={4} lg={4}>
                     <div className="stake-tvl">
-                      <p className="single-stake-subtitle">TVL</p>
+                      <p className="single-stake-subtitle">{t('common.tvl')}</p>
                       <Box component="p" color="text.secondary" className="single-stake-subtitle-value">
                         {stakingTVL ? (
                           new Intl.NumberFormat('en-US', {
@@ -216,7 +218,7 @@ function Stake() {
 
                   <Grid item xs={12} sm={4} md={4} lg={4}>
                     <div className="stake-index">
-                      <p className="single-stake-subtitle">Current Index</p>
+                      <p className="single-stake-subtitle">{t('common.currentIndex')}</p>
                       <Box component="p" color="text.secondary" className="single-stake-subtitle-value">
                         {currentIndex ? <>{trim(Number(currentIndex), 3)} sCLAM2</> : <Skeleton width="150px" />}
                       </Box>
@@ -231,10 +233,10 @@ function Stake() {
                 <div className="stake-wallet-notification">
                   <div className="wallet-menu" id="wallet-menu">
                     <Box bgcolor="otter.otterBlue" className="app-otter-button" onClick={connect}>
-                      <p>Connect Wallet</p>
+                      <p>{t('common.connectWallet')}</p>
                     </Box>
                   </div>
-                  <p className="desc-text">Connect your wallet to stake CLAM2 tokens!</p>
+                  <p className="desc-text">{t('stake.connectWalletDescription')}</p>
                 </div>
               ) : (
                 <>
@@ -266,7 +268,7 @@ function Stake() {
                           endAdornment={
                             <InputAdornment position="end">
                               <div onClick={setMax} className="stake-input-btn">
-                                <p>Max</p>
+                                <p>{t('common.max')}</p>
                               </div>
                             </InputAdornment>
                           }
@@ -336,11 +338,7 @@ function Stake() {
                     />
                     <div className="help-text">
                       {address && ((!hasAllowance('CLAM') && view === 0) || (!hasAllowance('sCLAM') && view === 1)) && (
-                        <p className="text-desc">
-                          Note: The "Approve" transaction is only needed when staking/unstaking for the first time;
-                          subsequent staking/unstaking only requires you to perform the "Stake" or "Unstake"
-                          transaction.
-                        </p>
+                        <p className="text-desc">{t('stake.approvalInfo')}</p>
                       )}
                     </div>
                   </Box>
@@ -348,7 +346,7 @@ function Stake() {
                   <div className={`stake-user-data`}>
                     {Number(warmupBalance) > 0 && (
                       <div className="data-row">
-                        <p className="data-row-name-warmup">Your Staked Balance in warmup</p>
+                        <p className="data-row-name-warmup">{t('stake.balanceInWarmup')}</p>
                         <p className="data-row-value">
                           {isAppLoading ? <Skeleton width="80px" /> : <>{trim(Number(warmupBalance), 4)} CLAM2</>}
                         </p>
@@ -356,13 +354,13 @@ function Stake() {
                     )}
 
                     <div className="data-row">
-                      <p className="data-row-name">Your Balance</p>
+                      <p className="data-row-name">{t('common.yourBalance')}</p>
                       <p className="data-row-value">
                         {isAppLoading ? <Skeleton width="80px" /> : <>{trim(Number(clamBalance), 4)} CLAM2</>}
                       </p>
                     </div>
                     <div className="data-row">
-                      <p className="data-row-name">Your Staked Balance</p>
+                      <p className="data-row-name">{t('stake.stakedBalance')}</p>
                       <p className="data-row-value">
                         {isAppLoading ? (
                           <Skeleton width="80px" />
@@ -373,21 +371,21 @@ function Stake() {
                     </div>
 
                     <div className="data-row">
-                      <p className="data-row-name">Next Reward Amount</p>
+                      <p className="data-row-name">{t('stake.nextRewardAmount')}</p>
                       <p className="data-row-value">
                         {isAppLoading ? <Skeleton width="80px" /> : <>{nextRewardValue} sCLAM2</>}
                       </p>
                     </div>
 
                     <div className="data-row">
-                      <p className="data-row-name">Next Reward Yield</p>
+                      <p className="data-row-name">{t('stake.nextRewardYield')}</p>
                       <p className="data-row-value">
                         {isAppLoading ? <Skeleton width="80px" /> : <>{stakingRebasePercentage}%</>}
                       </p>
                     </div>
 
                     <div className="data-row">
-                      <p className="data-row-name">ROI (5-Day Rate)</p>
+                      <p className="data-row-name">{t('stake.roiFiveDay')}</p>
                       <p className="data-row-value">
                         {isAppLoading ? <Skeleton width="80px" /> : <>{trim(Number(fiveDayRate) * 100, 4)}%</>}
                       </p>

@@ -1,5 +1,6 @@
 import { Grid } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
+import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import apollo from 'src/lib/apolloClient';
 import './stat.scss';
@@ -24,6 +25,7 @@ query {
       setTvl(latestMetrics.totalValueLocked);
     });
   });
+  const { t } = useTranslation();
 
   return (
     <div className="landing-footer">
@@ -47,7 +49,7 @@ query {
         </Grid>
         <Grid item xs={12} sm={4} md={4} lg={4}>
           <div className="landing-footer-item-wrap">
-            <p className="landing-footer-item-title">Treasury Balance</p>
+            <p className="landing-footer-item-title">{t('landing.splashPage.treasuryBalance')}</p>
             <p className="landing-footer-item-value">
               {!treasuryBalance ? (
                 <Skeleton width="180px" />
@@ -64,7 +66,7 @@ query {
         </Grid>
         <Grid item xs={12} sm={4} md={4} lg={4}>
           <div className="landing-footer-item-wrap">
-            <p className="landing-footer-item-title">Current APY</p>
+            <p className="landing-footer-item-title">{t('common.currentApy')}</p>
             <p className="landing-footer-item-value">
               {stakingAPY ? (
                 <>{new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(Number(stakingAPY))}%</>

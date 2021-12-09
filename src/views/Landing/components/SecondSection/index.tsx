@@ -3,32 +3,34 @@ import styles from './style.module.scss';
 import HowItWorks01 from './how_it_works_01.png';
 import HowItWorks02 from './how_it_works_02.png';
 import HowItWorks03 from './how_it_works_03.png';
+import { useTranslation } from 'react-i18next';
 
 function SecondSection() {
+  const { t } = useTranslation();
   return (
     <section className={styles.main}>
-      <h2 className={styles.title}>How OtterClam Works</h2>
+      <h2 className={styles.title}>{t('landing.splashPage.howOtterClamWorks')}</h2>
       <div className={styles.body}>
         <Card
           num={1}
-          title="Treasury Revenue"
-          subtitle="Bonds & LP fees"
-          desc="Bond sales and LP Fees increase Otter's Treasury Revenue and lock in liquidity and help control CLAM supply"
+          title={t('landing.splashPage.treasuryRevenue')}
+          subtitle={t('landing.splashPage.bondsLPFees')}
+          desc={t('landing.splashPage.bondSales')}
           img={HowItWorks01}
         />
         <Card
           num={2}
-          title="Treasury Growth"
-          subtitle="Otter's Treasury"
-          desc="Treasury inflow is used to increase Otter's Treasury Balance and back outstanding CLAM tokens and regulate staking APY"
+          title={t('landing.splashPage.treasuryGrowth')}
+          subtitle={t('landing.splashPage.otterTreasury')}
+          desc={t('landing.splashPage.treasuryInflow')}
           img={HowItWorks02}
           reverse
         />
         <Card
           num={3}
-          title="Staking Rewards"
-          subtitle="CLAM Token"
-          desc="Compounds yields automatically through a treasury backed memecoin with intrinsic value"
+          title={t('landing.splashPage.stakingRewards')}
+          subtitle={t('landing.splashPage.clamToken')}
+          desc={t('landing.splashPage.treasuryInflow')}
           img={HowItWorks03}
         />
       </div>

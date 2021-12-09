@@ -1,8 +1,9 @@
-import { Link } from '@material-ui/core';
 import { useEffect, useState } from 'react';
-import { DiscordLink, GithubLink, MediumLink, TwitterLink } from 'src/constants';
-import HeaderLogo from './header-logo.png';
 import './header.scss';
+import { Link, Popper, Box, Fade, SvgIcon } from '@material-ui/core';
+import HeaderLogo from './header-logo.png';
+import LanguagePicker from '../LanguagePicker';
+import { DiscordLink, DocsLink, GithubLink, TwitterLink, MediumLink } from 'src/constants';
 
 export default function LandingHeader() {
   const [scrolled, setScrolled] = useState(false);
@@ -39,6 +40,7 @@ export default function LandingHeader() {
       <Link href={DiscordLink}>Discord</Link>
       <Link href={GithubLink}>Github</Link>
       <Link href={MediumLink}>Medium</Link>
+      <LanguagePicker border={false} />
       {/* <Link href={DocsLink}>Docs</Link> */}
     </header>
   );

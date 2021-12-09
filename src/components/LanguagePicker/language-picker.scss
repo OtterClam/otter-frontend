@@ -1,6 +1,4 @@
-@import 'styles/_colors.scss';
-
-#ohm-menu-button {
+#lang-menu-button {
   padding: 12px;
   svg {
     margin-right: 3px;
@@ -12,18 +10,21 @@
   font-weight: 700;
 }
 
-#ohm-popper,
-#ohm-popper-pending {
-  z-index: 5;
+#lang-popper,
+#lang-popper-pending {
+  z-index: 9999;
   backdrop-filter: blur(33px);
   -webkit-backdrop-filter: blur(33px);
+  margin-top: 10px;
   border-radius: 10px;
-  .MuiPaper-root.ohm-menu {
+
+  .MuiPaper-root.lang-menu {
     padding: 16px 6px;
     display: flex;
     flex-direction: column;
     width: 200px;
     max-width: 200px;
+    border-radius: 10px;
     button {
       display: block;
       width: 100%;
@@ -47,19 +48,48 @@
     > p {
       margin: 15px 0px;
       text-align: center;
-
       font-size: 12px;
     }
   }
 
   .buy-tokens {
-    padding-bottom: 8px;
+    display: block;
+    width: 100%;
+    text-align: left;
+    margin-bottom: 4px;
+    .select-language {
+      font-size: 14px;
+      line-height: 1.5;
+    }
+  }
+  .select-language:hover {
+    display: block;
+    width: 100%;
+    text-align: left;
+    margin-bottom: 4px;
+    background-color: #f7f9fb;
   }
 }
 
-.ohm-button {
+.wallet-menu {
+  display: flex;
+}
+.lang-button-border-true {
+  cursor: pointer;
+  margin-right: 20px;
+  height: 44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 30px;
   border: 2px solid;
   border-radius: 10px;
+
+  p {
+    font-size: 16px;
+  }
+}
+.lang-button-border-false {
   cursor: pointer;
   margin-right: 20px;
   height: 44px;
@@ -70,5 +100,11 @@
 
   p {
     font-size: 16px;
+  }
+}
+
+@media screen and (max-width: 417px) {
+  .wallet-menu {
+    margin-top: 10px;
   }
 }

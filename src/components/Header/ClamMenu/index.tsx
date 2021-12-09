@@ -18,6 +18,7 @@ import { ReactComponent as ArrowUpIcon } from '../../../assets/icons/arrow-up.sv
 import './clam-menu.scss';
 import { IReduxState } from '../../../store/slices/state.interface';
 import { getTokenUrl, Token } from '../../../helpers';
+import { useTranslation } from 'react-i18next';
 
 const addTokenToWallet = (tokenSymbol: string, tokenAddress: string) => async () => {
   const tokenImage = getTokenUrl(tokenSymbol.toLowerCase() as Token);
@@ -51,6 +52,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function ClamMenu() {
+  const { t } = useTranslation();
   const styles = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const isEthereumAPIAvailable = window.ethereum;
@@ -74,7 +76,7 @@ function ClamMenu() {
     return (
       <Link href={'https://quickswap.exchange/#/swap?outputCurrency=' + CLAM_ADDRESS} target="_blank" rel="noreferrer">
         <Box color="text.primary" className="ohm-button">
-          <p>BUY</p>
+          <p>{t('components.buy')}</p>
         </Box>
       </Link>
     );
@@ -87,7 +89,7 @@ function ClamMenu() {
       id="ohm-menu-button-hover"
     >
       <Box color="text.primary" className="ohm-button">
-        <p>BUY CLAM2</p>
+        <p>{t('components.buy')} CLAM2</p>
       </Box>
 
       <Popper id={id} open={open} anchorEl={anchorEl} transition>
@@ -103,7 +105,7 @@ function ClamMenu() {
                   >
                     <Button size="large" variant="text" color="primary" fullWidth>
                       <Typography className="buy-text" align="left">
-                        Buy on QuickSwap <SvgIcon component={ArrowUpIcon} htmlColor="#A3A3A3" />
+                        {t('components.buyOnQuickswap')} <SvgIcon component={ArrowUpIcon} htmlColor="#A3A3A3" />
                       </Typography>
                     </Button>
                   </Link>
@@ -112,7 +114,7 @@ function ClamMenu() {
                 {isEthereumAPIAvailable ? (
                   <Box className="add-tokens">
                     <Divider color="secondary" />
-                    <p>ADD TOKEN TO WALLET</p>
+                    <p>{t('components.addTokenToWallet')}</p>
                     <Button
                       size="large"
                       variant="text"
