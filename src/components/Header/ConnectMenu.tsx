@@ -107,9 +107,9 @@ function ConnectMenu() {
         </Paper>
       </Popper>
 
-      {/* <Box className="language-button">
+      <Box className="language-button">
         <LanguagePicker border={true} />
-      </Box> */}
+      </Box>
     </div>
   );
 }

@@ -40,7 +40,7 @@ export default function LandingHeader() {
       <Link href={DiscordLink}>Discord</Link>
       <Link href={GithubLink}>Github</Link>
       <Link href={MediumLink}>Medium</Link>
-      {/* <LanguagePicker border={false} /> */}
+      <LanguagePicker border={false} />
       {/* <Link href={DocsLink}>Docs</Link> */}
     </header>
   );
