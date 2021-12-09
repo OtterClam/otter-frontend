@@ -21,6 +21,9 @@ function LanguagePicker(props: Props) {
   const handleClick = (event: any, lng: string) => {
     i18n.changeLanguage(lng);
     i18n.reloadResources();
+    //translations aren't reloading correctly for all components,
+    //force reload
+    window.location.reload();
   };
   const handleMouseOver = (event: any) => {
     setlangDropdownOpen(true);
