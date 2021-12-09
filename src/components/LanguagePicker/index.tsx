@@ -7,6 +7,7 @@ import './language-picker.scss';
 const lngs: any = {
   en: { nativeName: 'English' },
   no: { nativeName: 'Norsk' },
+  id: { nativeName: 'Bahasa' },
 };
 
 interface Props {

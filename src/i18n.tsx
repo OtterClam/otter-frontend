@@ -3,6 +3,7 @@ import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import English from './locales/english';
 import Norwegian from './locales/norwegian';
+import BahasaIndonesia from './locales/indonesian';
 
 i18n
   // detect user language
@@ -21,6 +22,7 @@ i18n
     resources: {
       en: English,
       no: Norwegian,
+      id: BahasaIndonesia,
     },
   });
 

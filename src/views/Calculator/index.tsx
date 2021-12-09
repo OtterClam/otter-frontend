@@ -172,7 +172,7 @@ function Calculator() {
                     </Typography>
                     <Box component="p" color="text.secondary" className="calculator-card-metrics">
                       <Typography className="metric-body">
-                        {isAppLoading ? <Skeleton width="100px" /> : <>{trimmedsClamBalance} sClAM</>}
+                        {isAppLoading ? <Skeleton width="100px" /> : <>{trimmedsClamBalance} sCLAM</>}
                       </Typography>
                     </Box>
                   </Grid>
