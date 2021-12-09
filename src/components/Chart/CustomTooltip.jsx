@@ -1,7 +1,7 @@
 import { Paper, Box, Typography } from '@material-ui/core';
 import { trim } from '../../helpers';
 import './customtooltip.scss';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const renderDate = (index, payload, item) => {
   return index === payload.length - 1 ? (
@@ -25,6 +25,7 @@ const renderItem = (type, item) => {
 };
 
 const renderTooltipItems = (payload, bulletpointColors, itemNames, itemType, isStaked = false, isPOL = false) => {
+  const { t } = useTranslation();
   return isStaked ? (
     <Box>
       <Box className="item" display="flex" justifyContent="space-between">
