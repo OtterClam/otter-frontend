@@ -48,17 +48,17 @@ function TreasuryDashboard() {
   const [apy, setApy] = useState(null);
   const [runway, setRunway] = useState(null);
   const [staked, setStaked] = useState(null);
+  const [backingPerClam, setBackingPerClam] = useState<number | null>(null);
   const theme = useTheme();
   const smallerScreen = useMediaQuery('(max-width: 650px)');
   const verySmallScreen = useMediaQuery('(max-width: 379px)');
 
-  const marketPrice = useSelector<IReduxState, number>(state => state.app.marketPrice);
   const circSupply = useSelector<IReduxState, number>(state => state.app.circSupply);
   const totalSupply = useSelector<IReduxState, number>(state => state.app.totalSupply);
-  const marketCap = useSelector<IReduxState, number>(state => state.app.marketCap);
-  const currentIndex = useSelector<IReduxState, string>(state => state.app.currentIndex);
-  const backingPerClam = useSelector<IReduxState, number>(state => state.app.backingPerClam);
   const stakingRatio = useSelector<IReduxState, number>(state => state.app.stakingRatio);
+  const marketCap = useSelector<IReduxState, number>(state => state.app.marketCap);
+  const marketPrice = useSelector<IReduxState, number>(state => state.app.marketPrice);
+  const currentIndex = useSelector<IReduxState, string>(state => state.app.currentIndex);
 
   const displayData = [
     {
@@ -77,7 +77,7 @@ function TreasuryDashboard() {
     },
     {
       title: t('dashboard.circulatingSupply'),
-      value: circSupply ? `${numberFormatter.format(circSupply)} / ${numberFormatter.format(totalSupply)}` : null,
+      value: circSupply ? `${numberFormatter.format(circSupply)} / ${numberFormatter.format(totalSupply!)}` : null,
     },
     {
       title: t('dashboard.backingPerClam'),
@@ -109,7 +109,7 @@ function TreasuryDashboard() {
       staked = staked.filter(pm => pm.staked < 100);
       setStaked(staked);
       // @ts-ignore
-      let runway = metrics.filter(pm => pm.runway10k > 5);
+      let runway = metrics.filter(pm => pm.runway100k > 5);
       setRunway(runway);
       // @ts-ignore
       let apy = r.data.protocolMetrics.map(entry => ({
@@ -117,15 +117,10 @@ function TreasuryDashboard() {
         timestamp: entry.timestamp,
       }));
       setApy(apy);
+
+      const latestMetrics = (r as any).data.protocolMetrics[0];
+      setBackingPerClam(latestMetrics.treasuryMarketValue / latestMetrics.clamCirculatingSupply);
     });
-    // apollo(rebasesDataQuery).then(r => {
-    //   let apy = r.data.rebases.map(entry => ({
-    //     apy: Math.pow(parseFloat(entry.percentage) + 1, 365 * 3) * 100,
-    //     timestamp: entry.timestamp,
-    //   }));
-    //   apy = apy.filter(pm => pm.apy < 300000);
-    //   setApy(apy);
-    // });
   }, []);
 
   return (
@@ -201,13 +196,13 @@ function TreasuryDashboard() {
                   <Chart
                     type="stack"
                     data={data}
-                    dataKey={['treasuryMaiMarketValue', 'treasuryFraxMarketValue']}
+                    dataKey={['treasuryMaiMarketValue', 'treasuryFraxMarketValue', 'treasuryWmaticMarketValue']}
                     stopColor={[
                       ['#EE4B4E', 'rgba(219, 55, 55, 0.5)'],
                       ['#8F5AE8', 'rgba(143, 90, 232, 0.5)'],
+                      ['#2891F9', 'rgba(40, 145, 249, 0.5)'],
                       // ['#DC30EB', '#EA98F1'],
                       // ['#8BFF4D', '#4C8C2A'],
-                      // ['#ff758f', '#c9184a'],
                     ]}
                     headerText={t('dashboard.marketValue')}
                     // @ts-ignore
@@ -349,7 +344,7 @@ function TreasuryDashboard() {
                   <Chart
                     type="multi"
                     data={runway}
-                    dataKey={['runwayCurrent', 'runway7dot5k', 'runway5k', 'runway2dot5k']}
+                    dataKey={['runwayCurrent', 'runway100k', 'runway50k', 'runway10k']}
                     color={theme.palette.text.primary}
                     stroke={[theme.palette.text.primary, '#2EC608', '#49A1F2', '#ff758f']}
                     headerText="Runway Available"

@@ -111,7 +111,6 @@ function Calculator() {
     for (let i = 0; i < days * 3; i++) {
       balance += balance * value;
     }
-    console.log(balance);
     return balance;
   };
 

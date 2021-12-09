@@ -6,14 +6,6 @@ import LanguagePicker from '../LanguagePicker';
 import { DiscordLink, DocsLink, GithubLink, TwitterLink, MediumLink } from 'src/constants';
 
 export default function LandingHeader() {
-  const [anchorEl, setAnchorEl] = useState(null);
-
-  const handleClick = (event: any) => {
-    setAnchorEl(anchorEl ? null : event.currentTarget);
-  };
-
-  const open = Boolean(anchorEl);
-
   const [scrolled, setScrolled] = useState(false);
   const handleScroll = () => {
     const offset = window.scrollY;
@@ -26,6 +18,9 @@ export default function LandingHeader() {
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
   let navbarClasses = ['landing-header'];
   if (scrolled) {
@@ -37,6 +32,10 @@ export default function LandingHeader() {
       <a href="https://www.otterclam.finance" className="landing-header-logo">
         <img src={HeaderLogo} alt="logo" />
       </a>
+      <Link href="/#/nft">
+        NFT
+        <span className="landing-header__new">NEW!</span>
+      </Link>
       <Link href={TwitterLink}>Twitter</Link>
       <Link href={DiscordLink}>Discord</Link>
       <Link href={GithubLink}>Github</Link>

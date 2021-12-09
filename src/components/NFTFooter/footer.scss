@@ -1,0 +1,43 @@
+.nft-footer {
+  position: relative;
+  padding: 80px 0 78px;
+  text-align: center;
+
+  &:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin-top: -25px;
+    height: 25px;
+    background-image: url('./images/wave.svg');
+  }
+  
+  &__otter {
+    height: 40px;
+    width: auto;
+    transform: translateX(-16px);
+    margin-top: 45px;
+  }
+
+  &__social-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  &__social-link:not(:last-child) {
+    margin-right: 20px;
+  }
+
+  @media screen and (max-width: 768px) {
+    &__otter {
+      max-width: 300px;
+      width: calc(100% - 40px);
+      margin-left: 20px;
+      margin-right: 20px;
+      height: auto;
+      transform: unset;
+    }
+  }
+}

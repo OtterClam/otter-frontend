@@ -21,31 +21,19 @@ query {
     treasuryMaiMarketValue
     treasuryFraxMarketValue
     treasuryFraxRiskFreeValue
+    treasuryWmaticMarketValue
     currentAPY
     runway10k
-    runway20k
     runway50k
-    runway7dot5k
-    runway5k
-    runway2dot5k
+    runway100k
     runwayCurrent
     treasuryClamMaiPOL
   }
 }
 `;
 
-export const rebasesDataQuery = `
-query {
-  rebases(where: {contract: "0xfd31c7d00ca47653c6ce64af53c1571f9c36566a"}, orderBy: timestamp, first: 1000, orderDirection: desc) {
-    percentage
-    timestamp
-  }
-}
-`;
-
 export const treasuryData = () => apollo(treasuryDataQuery).then(r => r.data.protocolMetrics);
 
-// export default treasuryData;
 export const bulletpoints = {
   tvl: [
     {
@@ -68,7 +56,7 @@ export const bulletpoints = {
     {
       right: 29,
       top: -12,
-      background: 'linear-gradient(180deg, #DC30EB -10%, #EA98F1 100%)',
+      background: 'linear-gradient(180deg, #2891F9 0%, rgba(40, 145, 249, 0.5) 100%)',
     },
     {
       right: 29,

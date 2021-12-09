@@ -1,27 +1,21 @@
-import { useEffect, useCallback } from 'react';
-import { useDispatch } from 'react-redux';
-import { useWeb3Context } from '../hooks';
-import { loadAppDetails } from '../store/slices/app-slice';
+import { ThemeProvider } from '@material-ui/core';
+import { Route, Switch } from 'react-router-dom';
+import { dark as darkTheme } from 'src/themes/app';
+import { NFT } from 'src/views';
 import Landing from '../views/Landing';
 import './style.scss';
 
 function App() {
-  const dispatch = useDispatch();
-
-  const { readOnlyProvider, chainID, connected } = useWeb3Context();
-
-  const loadApp = useCallback(
-    loadProvider => {
-      dispatch(loadAppDetails({ networkID: chainID, provider: loadProvider }));
-    },
-    [connected],
+  return (
+    <Switch>
+      <Route exact path="/nft">
+        <ThemeProvider theme={darkTheme}>
+          <NFT />
+        </ThemeProvider>
+      </Route>
+      <Route component={Landing} />
+    </Switch>
   );
-
-  useEffect(() => {
-    loadApp(readOnlyProvider);
-  }, []);
-
-  return <Landing />;
 }
 
 export default App;

@@ -10,6 +10,8 @@ import { IReduxState } from '../../store/slices/state.interface';
 import { BondKey, getBond } from 'src/constants';
 import { ethers } from 'ethers';
 import { useTranslation, Trans } from 'react-i18next';
+import BondPurchaseDialog from './BondPurchaseDialog';
+import ActionButton from '../../components/Button/ActionButton';
 
 const useStyles = makeStyles(theme => ({
   input: {
@@ -41,6 +43,8 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
   const bond = getBond(bondKey, chainID);
   const [recipientAddress, setRecipientAddress] = useState(address);
   const [quantity, setQuantity] = useState('');
+
+  const [open, setOpen] = useState(false);
 
   const isBondLoading = useSelector<IReduxState, boolean>(state => state.bonding.loading ?? true);
   const vestingTerm = useSelector<IReduxState, number>(state => {
@@ -88,6 +92,14 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
   };
   const { t } = useTranslation();
 
+  const handleOpenDialog = () => {
+    setOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpen(false);
+  };
+
   async function onBond() {
     if (quantity === '') {
       alert(t('bonds.purchase.noValue'));
@@ -99,7 +111,7 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
         bond.autostake ? t('bonds.purchase.resetVestingAutostake') : t('bonds.purchase.resetVesting'),
       );
       if (shouldProceed) {
-        await dispatch(
+        let bondTx: any = await dispatch(
           bondAsset({
             value: quantity,
             slippage,
@@ -109,9 +121,12 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
             address: recipientAddress || address,
           }),
         );
+        if (bondTx.payload == true) {
+          handleOpenDialog();
+        }
       }
     } else {
-      await dispatch(
+      let bondTx: any = await dispatch(
         //@ts-ignore
         bondAsset({
           value: quantity,
@@ -122,6 +137,9 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
           address: recipientAddress || address,
         }),
       );
+      if (bondTx.payload == true) {
+        handleOpenDialog();
+      }
     }
   }
 
@@ -176,30 +194,33 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
           />
         </FormControl>
         {hasAllowance() ? (
-          <Box
-            className="transaction-button app-otter-button"
-            bgcolor="otter.otterBlue"
-            color="otter.white"
-            onClick={async () => {
-              if (isPendingTxn(pendingTransactions, 'bond_' + bond)) return;
-              await onBond();
-            }}
-          >
-            <p>{txnButtonText(pendingTransactions, 'bond_' + bond, t('common.bond'))}</p>
-          </Box>
+          <ActionButton
+            pendingTransactions={pendingTransactions}
+            type={'bond_' + bond.key}
+            start="Bond"
+            progress="Bonding..."
+            processTx={() => onBond()}
+          ></ActionButton>
         ) : (
-          <Box
-            className="transaction-button app-otter-button"
-            bgcolor="otter.otterBlue"
-            color="otter.white"
-            onClick={async () => {
-              if (isPendingTxn(pendingTransactions, 'approve_' + bond)) return;
-              await onSeekApproval();
-            }}
-          >
-            <p>{txnButtonText(pendingTransactions, 'approve_' + bond, t('common.approve'))}</p>
-          </Box>
+          <ActionButton
+            pendingTransactions={pendingTransactions}
+            type={'approve_' + bond.key}
+            start="Approve"
+            progress="Approving..."
+            processTx={() => onSeekApproval()}
+          ></ActionButton>
         )}
+        <BondPurchaseDialog
+          open={open}
+          handleClose={handleCloseDialog}
+          bond={bond}
+          balance={trim(balance, 4)}
+          reserveUnit={bond.reserveUnit}
+          bondQuote={trim(bondQuote, 4) || '0'}
+          bondDiscount={trim(bondDiscount * 100, 2)}
+          autoStake={trim(fiveDayRate * 100, 2)}
+          vestingTerm={vestingTerm}
+        />
       </div>
       {hasAllowance() ? (
         bond.autostake && (

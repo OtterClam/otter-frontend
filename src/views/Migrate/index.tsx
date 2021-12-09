@@ -15,6 +15,7 @@ import {
 } from '../../store/slices/migrate-slice';
 import { IPendingTxn, isPendingTxn, txnButtonText } from '../../store/slices/pending-txns-slice';
 import { IReduxState } from '../../store/slices/state.interface';
+import ActionButton from '../../components/Button/ActionButton';
 import './migrate.scss';
 import { useTranslation, Trans } from 'react-i18next';
 
@@ -185,16 +186,13 @@ function Migrate() {
                         </Box>
                       )}
                       {canClaimWarmup && (
-                        <Box
-                          className="migrate-btn"
-                          bgcolor="otter.otterBlue"
-                          onClick={() => {
-                            if (isPendingTxn(pendingTransactions, 'claimWarmup')) return;
-                            onClaimWarmup();
-                          }}
-                        >
-                          <p>{txnButtonText(pendingTransactions, 'claimWarmup', t('migrate.claimWarmup'))}</p>
-                        </Box>
+                        <ActionButton
+                          pendingTransactions={pendingTransactions}
+                          type="claimWarmup"
+                          start={t('migrate.claimWarmup')}
+                          progress="Claiming..."
+                          processTx={() => onClaimWarmup()}
+                        ></ActionButton>
                       )}
                     </div>
                   </div>
@@ -215,27 +213,21 @@ function Migrate() {
                       )}
                       {+oldSClamBalance > 0 &&
                         (sCLAMAllowance > 0 ? (
-                          <Box
-                            className="migrate-btn"
-                            bgcolor="otter.otterBlue"
-                            onClick={() => {
-                              if (isPendingTxn(pendingTransactions, 'unstaking')) return;
-                              onUnstake();
-                            }}
-                          >
-                            <p>{txnButtonText(pendingTransactions, 'unstaking', t('migrate.unstakeClam'))}</p>
-                          </Box>
+                          <ActionButton
+                            pendingTransactions={pendingTransactions}
+                            type="unstaking"
+                            start={t('migrate.unstakeClam')}
+                            progress="Unstaking..."
+                            processTx={() => onUnstake()}
+                          ></ActionButton>
                         ) : (
-                          <Box
-                            className="migrate-btn"
-                            bgcolor="otter.otterBlue"
-                            onClick={() => {
-                              if (isPendingTxn(pendingTransactions, 'approve_unstaking')) return;
-                              dispatch(approveUnstaking({ address, provider, networkID: chainID }));
-                            }}
-                          >
-                            <p>{txnButtonText(pendingTransactions, 'approve_unstaking', t('common.approve'))}</p>
-                          </Box>
+                          <ActionButton
+                            pendingTransactions={pendingTransactions}
+                            type="approve_unstaking"
+                            start={t('common.approve')}
+                            progress="Approving..."
+                            processTx={() => dispatch(approveUnstaking({ address, provider, networkID: chainID }))}
+                          ></ActionButton>
                         ))}
                     </div>
                   </div>
@@ -261,27 +253,21 @@ function Migrate() {
                     <div className="data-row-action">
                       {+oldClamBalance > 0 &&
                         (clamAllowance >= +oldClamBalance ? (
-                          <Box
-                            className="migrate-btn"
-                            bgcolor="otter.otterBlue"
-                            onClick={() => {
-                              if (isPendingTxn(pendingTransactions, 'migrating')) return;
-                              onMigrate();
-                            }}
-                          >
-                            <p>{txnButtonText(pendingTransactions, 'migrating', t('common.migrate'))}</p>
-                          </Box>
+                          <ActionButton
+                            pendingTransactions={pendingTransactions}
+                            type="migrating"
+                            start={t('common.migrate')}
+                            progress="Migrating..."
+                            processTx={() => onMigrate()}
+                          ></ActionButton>
                         ) : (
-                          <Box
-                            className="migrate-btn"
-                            bgcolor="otter.otterBlue"
-                            onClick={() => {
-                              if (isPendingTxn(pendingTransactions, 'approve_migration')) return;
-                              dispatch(approveMigration({ address, provider, networkID: chainID }));
-                            }}
-                          >
-                            <p>{txnButtonText(pendingTransactions, 'approve_migration', t('common.approve'))}</p>
-                          </Box>
+                          <ActionButton
+                            pendingTransactions={pendingTransactions}
+                            type="approve_migration"
+                            start={t('common.approve')}
+                            progress="Approving..."
+                            processTx={() => dispatch(approveMigration({ address, provider, networkID: chainID }))}
+                          ></ActionButton>
                         ))}
                     </div>
                   </div>
