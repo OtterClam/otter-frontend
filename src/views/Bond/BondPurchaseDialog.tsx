@@ -73,19 +73,19 @@ function BondPurchaseDialog({
 
           <div className="body">
             <div className="confirm">
-              <span>Your bond was successful.</span>
+              <span>{t('bonds.purchaseDialog.bondSuccessful')}</span>
             </div>
             <div className="logo-wrapper">
               <BondLogo bond={bond} />
             </div>
             <div className="amt-msg">
-              You will get <span className="quantity">{bondQuote}</span> sCLAM!
+              {t('bonds.purchase.youWillGet')} <span className="quantity">{bondQuote}</span> sCLAM!
             </div>
             <div className="dtl-container">
               <div className={`${styles.detailContent} dtl-wrap`}>
                 <Grid container className="dtl">
                   <Grid item xs={6} md={6}>
-                    <div>Your Balance</div>
+                    <div>{t('common.yourBalance')}</div>
                   </Grid>
                   <Grid item xs={6} md={6} className="dtl-value">
                     <div>
@@ -93,15 +93,15 @@ function BondPurchaseDialog({
                     </div>
                   </Grid>
                   <Grid item xs={6} md={6}>
-                    <div>ROI</div>
+                    <div>{t('common.roi')}</div>
                   </Grid>
                   <Grid item xs={6} md={6} className="dtl-value">
                     <div>
-                      {bondDiscount}% + staking {autoStake}%
+                      {bondDiscount}% + {t('common.staking')} {autoStake}%
                     </div>
                   </Grid>
                   <Grid item xs={6} md={6}>
-                    <div>Vesting Term</div>
+                    <div>{t('bonds.vestingTerm')}</div>
                   </Grid>
                   <Grid item xs={6} md={6} className="dtl-value">
                     <div>{prettifySeconds(t, vestingTerm, 'day')}</div>

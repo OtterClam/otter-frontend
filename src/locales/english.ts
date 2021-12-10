@@ -5,6 +5,7 @@ const English = {
       language: 'Language',
       bond: 'Bond',
       stake: 'Stake',
+      staking: 'staking',
       migrate: 'Migrate',
       roi: 'ROI', //Return on Investment
       max: 'Max',
@@ -119,6 +120,9 @@ const English = {
 
         youWillGet: 'You Will Get',
         maxBuy: 'Max You Can Buy',
+      },
+      purchaseDialog: {
+        bondSuccessful: 'Your bond was successful.',
       },
       redeem: {
         fullyVestedPopup: 'You can only claim (4,4) bond after it fully vested.',
