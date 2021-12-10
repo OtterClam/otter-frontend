@@ -44,7 +44,7 @@ function LanguagePicker(props: Props) {
   return (
     <Box onMouseEnter={e => handleMouseOver(e)} onMouseLeave={() => handleMouseExit()} id="lang-menu-button-hover">
       <Box className={`lang-button-border-${props.border.toString()}`} color="text.primary">
-        <p>{t('common.language')}</p>
+        {t('common.language')}
         <Popper id={id} open={langDropdownOpen} anchorEl={anchorEl} transition>
           {({ TransitionProps }) => (
             <Fade {...TransitionProps} timeout={400}>

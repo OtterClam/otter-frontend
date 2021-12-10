@@ -140,7 +140,7 @@ function Calculator() {
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={4} md={4} lg={4}>
                     <Typography className="metric-title">{t('common.clamPrice')}</Typography>
-                    <Box component="p" color="text.secondary" className="calculator-card-metrics">
+                    <Box color="text.secondary" className="calculator-card-metrics">
                       <Typography className="metric-body">
                         {isAppLoading ? <Skeleton width="100px" /> : `$${trimeMarketPrice}`}
                       </Typography>
@@ -148,7 +148,7 @@ function Calculator() {
                   </Grid>
                   <Grid item xs={12} sm={4} md={4} lg={4}>
                     <Typography className="metric-title">{t('common.currentApy')}</Typography>
-                    <Box component="p" color="text.secondary" className="calculator-card-metrics">
+                    <Box color="text.secondary" className="calculator-card-metrics">
                       <Typography className="metric-body">
                         {isAppLoading ? (
                           <Skeleton width="100px" />
@@ -160,10 +160,12 @@ function Calculator() {
                   </Grid>
                   <Grid item xs={12} sm={4} md={4} lg={4}>
                     <Typography className="metric-title">{t('calculator.yoursClamBalance')}</Typography>
-                    <Box component="p" color="text.secondary" className="calculator-card-metrics">
-                      <Typography className="metric-body">
-                        {isAppLoading ? <Skeleton width="100px" /> : <>{trimmedsClamBalance} sCLAM</>}
-                      </Typography>
+                    <Box color="text.secondary" className="calculator-card-metrics">
+                      {isAppLoading ? (
+                        <Skeleton width="100px" />
+                      ) : (
+                        <Typography className="metric-body">{trimmedsClamBalance} sCLAM</Typography>
+                      )}
                     </Box>
                   </Grid>
                 </Grid>
@@ -186,16 +188,12 @@ function Calculator() {
                           onChange={e => setsClamAmount(e.target.value)}
                           labelWidth={0}
                           endAdornment={
-                            <InputAdornment position="end">
+                            <InputAdornment className="adornment" position="end">
                               <div
                                 onClick={() => setsClamAmount(trimmedsClamBalance)}
                                 className="stake-card-action-input-btn"
                               >
-                                <Typography>
-                                  &nbsp;&nbsp;&nbsp;
-                                  {t('common.max')}
-                                  &nbsp;&nbsp;&nbsp;
-                                </Typography>
+                                <Typography>{t('common.max')}</Typography>
                               </div>
                             </InputAdornment>
                           }
@@ -214,7 +212,7 @@ function Calculator() {
                           onChange={e => setRewardYield(e.target.value)}
                           labelWidth={0}
                           endAdornment={
-                            <InputAdornment position="end">
+                            <InputAdornment className="adornment" position="end">
                               <div
                                 onClick={() => setRewardYield(trimmedStakingAPY)}
                                 className="stake-card-action-input-btn"
@@ -238,7 +236,7 @@ function Calculator() {
                           onChange={e => setPriceAtPurchase(e.target.value)}
                           labelWidth={0}
                           endAdornment={
-                            <InputAdornment position="end">
+                            <InputAdornment className="adornment" position="end">
                               <div
                                 onClick={() => setPriceAtPurchase(trimeMarketPrice)}
                                 className="stake-card-action-input-btn"
@@ -262,7 +260,7 @@ function Calculator() {
                           onChange={e => setFutureMarketPrice(e.target.value)}
                           labelWidth={0}
                           endAdornment={
-                            <InputAdornment position="end">
+                            <InputAdornment className="adornment" position="end">
                               <div
                                 onClick={() => setFutureMarketPrice(trimeMarketPrice)}
                                 className="stake-card-action-input-btn"
