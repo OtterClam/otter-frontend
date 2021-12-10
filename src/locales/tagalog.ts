@@ -25,7 +25,7 @@ const Tagalog = {
       yourBalance: 'Iyong Balanse',
       currentApy: 'Kasalukuyang Porsyento ng Interes kada taon',
       dashboard: 'Dashboard',
-      calculator: 'kalkulador',
+      calculator: 'Kalkulador',
     },
     time: {
       days: 'araw',
