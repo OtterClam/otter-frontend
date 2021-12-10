@@ -19,6 +19,9 @@ const renderDate = (index, payload, item) => {
     case 'tl':
       localeString = 'tl-PH';
       break;
+    case 'fr':
+      localeString = 'fr-FR';
+      break;
     default:
       localeString = 'default';
       break;

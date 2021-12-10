@@ -9,6 +9,7 @@ const lngs: any = {
   no: { nativeName: 'Norsk' },
   id: { nativeName: 'Bahasa' },
   tl: { nativeName: 'Tagalog' },
+  fr: { nativeName: 'Français' },
 };
 const useStyles = makeStyles(theme => ({
   popperMenu: {
