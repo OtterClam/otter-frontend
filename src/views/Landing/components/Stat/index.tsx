@@ -19,10 +19,14 @@ query {
     totalValueLocked
   }
 }`).then(r => {
-      const latestMetrics = (r as any).data.protocolMetrics[0];
-      setTreasuryBalance(latestMetrics.treasuryMarketValue);
-      setStakingAPY(latestMetrics.currentAPY);
-      setTvl(latestMetrics.totalValueLocked);
+      //Wrap in try-catch for when data fails to load
+      //TODO: Better error handling, e.g. replace strings to show error
+      try {
+        const latestMetrics = (r as any).data.protocolMetrics[0];
+        setTreasuryBalance(latestMetrics.treasuryMarketValue);
+        setStakingAPY(latestMetrics.currentAPY);
+        setTvl(latestMetrics.totalValueLocked);
+      } catch {}
     });
   });
   const { t } = useTranslation();

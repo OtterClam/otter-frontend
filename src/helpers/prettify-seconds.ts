@@ -1,6 +1,4 @@
-import { useTranslation } from 'react-i18next';
-
-export const prettifySeconds = (seconds?: number, resolution?: string) => {
+export const prettifySeconds = (t: any, seconds?: number, resolution?: string) => {
   if (seconds !== 0 && !seconds) {
     return '';
   }
@@ -8,7 +6,6 @@ export const prettifySeconds = (seconds?: number, resolution?: string) => {
   const d = Math.floor(seconds / (3600 * 24));
   const h = Math.floor((seconds % (3600 * 24)) / 3600);
   const m = Math.floor((seconds % 3600) / 60);
-  const { t } = useTranslation();
   if (resolution === 'day') {
     return d + (d == 1 ? ` ${t('time.day')}` : ` ${t('time.days')}`);
   }

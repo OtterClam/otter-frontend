@@ -2,7 +2,7 @@ import { Box, Modal, Paper, SvgIcon, IconButton, makeStyles, Grid } from '@mater
 import { ReactComponent as XIcon } from '../../assets/icons/icon_close.svg';
 import BondLogo from '../../components/BondLogo';
 import { Bond } from 'src/constants';
-
+import { useTranslation } from 'react-i18next';
 import { prettifySeconds } from '../../helpers';
 
 import './bondDialog.scss';
@@ -55,6 +55,7 @@ function BondPurchaseDialog({
   vestingTerm,
 }: BondDialogProps) {
   const styles = useStyles();
+  const { t } = useTranslation();
   return (
     <Modal id="bdialog" open={open} onClose={handleClose} hideBackdrop>
       <Paper className={`${styles.modalContent} clam-popover`}>
@@ -103,7 +104,7 @@ function BondPurchaseDialog({
                     <div>Vesting Term</div>
                   </Grid>
                   <Grid item xs={6} md={6} className="dtl-value">
-                    <div>{prettifySeconds(vestingTerm, 'day')}</div>
+                    <div>{prettifySeconds(t, vestingTerm, 'day')}</div>
                   </Grid>
                 </Grid>
               </div>

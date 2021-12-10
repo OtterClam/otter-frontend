@@ -50,14 +50,15 @@ function BondRedeem({ bondKey }: IBondRedeem) {
     }
   };
 
+  const { t } = useTranslation();
   const vestingTime = () => {
-    return prettyVestingPeriod(currentBlockTime, bondMaturationTime);
+    return prettyVestingPeriod(t, currentBlockTime, bondMaturationTime);
   };
 
   const fullVested = currentBlockTime > bondMaturationTime;
 
   const vestingPeriod = () => {
-    return prettifySeconds(vestingTerm, 'day');
+    return prettifySeconds(t, vestingTerm, 'day');
   };
 
   const handleOpenDialog = () => {
@@ -76,7 +77,6 @@ function BondRedeem({ bondKey }: IBondRedeem) {
     state => state.bonding[bondKey] && state.bonding[bondKey].debtRatio,
   );
 
-  const { t } = useTranslation();
   return (
     <Box display="flex" flexDirection="column">
       <Box display="flex" justifyContent="space-around" flexWrap="wrap">

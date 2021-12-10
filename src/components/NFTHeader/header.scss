@@ -9,7 +9,7 @@
   padding: 0 10%;
   align-items: center;
   justify-content: flex-end;
-  transition: background-color .2s, box-shadow .2s;
+  transition: background-color 0.2s, box-shadow 0.2s;
 
   &__logo {
     flex: 1;
@@ -27,4 +27,41 @@
   @media screen and (max-width: 1124px) {
     display: none;
   }
+
+  #lang-picker {
+    #lang-popper,
+    #lang-popper-pending {
+      z-index: 9999;
+      backdrop-filter: blur(33px);
+      -webkit-backdrop-filter: blur(33px);
+      margin-top: 10px;
+      border-radius: 10px;
+      .MuiPaper-root.lang-menu {
+        padding: 16px 6px;
+        display: flex;
+        flex-direction: column;
+        width: 200px;
+        max-width: 200px;
+        border-radius: 10px;
+      }
+    }
+
+    .lang-button-border-false {
+      cursor: pointer;
+      margin-right: 20px;
+      height: 44px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0 30px;
+
+      p {
+        font-size: 16px;
+      }
+    }
+  }
+}
+
+#lang-popper {
+  width: 200px;
 }

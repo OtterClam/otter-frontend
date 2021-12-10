@@ -208,6 +208,8 @@ const English = {
       stonehandDescription: 'Awarded to wallets with over 56 sCLAM that have staked from 11/9 to drop date.',
       diamondhandDescription:
         'Awarded for staking the full amount of CLAM from IDO or launch date (11/3, with a minimum of 20 sCLAM) to drop date',
+      giveawayParty: 'Giveaway Party',
+      giveawayPartyHeld: 'giveaway party will be held on',
     },
   },
 };

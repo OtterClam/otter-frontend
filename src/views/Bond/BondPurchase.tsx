@@ -86,11 +86,11 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
   const pendingTransactions = useSelector<IReduxState, IPendingTxn[]>(state => {
     return state.pendingTransactions;
   });
+  const { t } = useTranslation();
   const maxUserCanBuy = useSelector<IReduxState, string>(state => state.bonding[bondKey]?.maxUserCanBuy);
   const vestingPeriod = () => {
-    return prettifySeconds(vestingTerm, 'day');
+    return prettifySeconds(t, vestingTerm, 'day');
   };
-  const { t } = useTranslation();
 
   const handleOpenDialog = () => {
     setOpen(true);

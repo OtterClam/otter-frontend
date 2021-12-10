@@ -3,6 +3,8 @@ import { Link } from '@material-ui/core';
 import { useCallback, useEffect, useState } from 'react';
 import { LandingPageLink, DiscordLink, DocsLink, GithubLink, TwitterLink, MediumLink } from 'src/constants';
 import HeaderLogo from './header-logo.png';
+import LanguagePicker from '../LanguagePicker';
+import { useTranslation } from 'react-i18next';
 import './header.scss';
 
 const useScrolled = () => {
@@ -34,10 +36,10 @@ const useContainerStyle = () => {
 };
 
 export default function NFTHeader() {
-  const containerStyle = useContainerStyle();
+  // const containerStyle = useContainerStyle();
 
   return (
-    <header style={containerStyle} className="ntf-header">
+    <header className="ntf-header">
       <a href={LandingPageLink} className="ntf-header__logo">
         <img src={HeaderLogo} alt="logo" className="ntf-header__logo-image" />
       </a>
@@ -53,6 +55,9 @@ export default function NFTHeader() {
       <Link className="ntf-header__link" href={MediumLink}>
         Medium
       </Link>
+      <div id="lang-picker">
+        <LanguagePicker border={false} />
+      </div>
     </header>
   );
 }

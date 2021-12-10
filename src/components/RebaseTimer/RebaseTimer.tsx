@@ -20,7 +20,7 @@ function RebaseTimer() {
   const timeUntilRebase = useMemo(() => {
     if (currentBlockTime && nextRebase) {
       const seconds = nextRebase - currentBlockTime;
-      return prettifySeconds(seconds);
+      return prettifySeconds(t, seconds);
     }
   }, [currentBlockTime, nextRebase]);
 

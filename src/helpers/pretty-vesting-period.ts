@@ -1,6 +1,6 @@
 import { prettifySeconds } from './prettify-seconds';
 
-export const prettyVestingPeriod = (currentBlockTime: number, vestingTime: number) => {
+export const prettyVestingPeriod = (t: any, currentBlockTime: number, vestingTime: number) => {
   if (vestingTime === 0) {
     return '';
   }
@@ -9,5 +9,5 @@ export const prettyVestingPeriod = (currentBlockTime: number, vestingTime: numbe
   if (seconds < 0) {
     return 'Fully Vested';
   }
-  return prettifySeconds(seconds);
+  return prettifySeconds(t, seconds);
 };
