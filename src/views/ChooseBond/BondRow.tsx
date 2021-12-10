@@ -55,7 +55,7 @@ export function BondDataCard({ bondKey }: IBondProps) {
 
         <div className="data-row">
           <p className="bond-name-title">{t('common.price')}</p>
-          <p className="bond-price">
+          <div className="bond-price">
             <p className="bond-name-title ">
               {priceUnits(bondKey)}
               {isBondLoading ? <Skeleton width="50px" /> : bond.deprecated ? '-' : trim(bondPrice, 2)}
@@ -63,7 +63,7 @@ export function BondDataCard({ bondKey }: IBondProps) {
             {priceDiff > 0 && (
               <StatusChip status={Status.Success} label={`$${trim(priceDiff, 2)} ${t('bonds.bondDiscount')}`} />
             )}
-          </p>
+          </div>
         </div>
 
         <div className="data-row">

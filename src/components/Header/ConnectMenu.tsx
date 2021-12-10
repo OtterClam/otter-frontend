@@ -16,6 +16,7 @@ import { ReactComponent as ArrowUpIcon } from '../../assets/icons/arrow-up.svg';
 import { ReactComponent as CaretDownIcon } from '../../assets/icons/caret-down.svg';
 import { useWeb3Context } from '../../hooks';
 import LanguagePicker from '../LanguagePicker';
+import ClamMenu from './ClamMenu';
 import { useTranslation } from 'react-i18next';
 
 function ConnectMenu() {
@@ -71,6 +72,7 @@ function ConnectMenu() {
 
   return (
     <div className="wallet-menu" id="wallet-menu">
+      <ClamMenu />
       <Box
         className="connect-button"
         bgcolor="otter.otterBlue"
@@ -87,7 +89,7 @@ function ConnectMenu() {
         )}
       </Box>
 
-      <Popper id={id} open={open} anchorEl={anchorEl} placement="bottom-end">
+      <Popper id={id} open={open} anchorEl={anchorEl}>
         <Paper className="ohm-menu" elevation={1}>
           {pendingTransactions.map((x: any) => (
             <Link key={x.txnHash} href={getEtherscanUrl(x.txnHash)} color="primary" target="_blank" rel="noreferrer">
