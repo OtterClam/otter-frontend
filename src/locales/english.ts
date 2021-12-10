@@ -5,6 +5,7 @@ const English = {
       language: 'Language',
       bond: 'Bond',
       stake: 'Stake',
+      unstake: 'Unstake',
       staking: 'staking',
       migrate: 'Migrate',
       roi: 'ROI', //Return on Investment
@@ -74,22 +75,6 @@ const English = {
           'The current index tracks the amount of sCLAM accumulated since the beginning of staking. Basically, how much sCLAM one would have if they staked and held a single CLAM from day 1.',
       },
     },
-    // src\views\Migrate
-    migrate: {
-      migration: 'Migration',
-      oldClamSupply: 'Old CLAM Supply',
-      oldTreasuryReserve: 'Old Treasury Reserve',
-      migrationProgress: 'Migration Progress',
-      connectWalletDescription: 'Connect your wallet to migrate your CLAM tokens!',
-      steps: 'Steps',
-      yourAmount: 'Your amount',
-      claimWarmup: 'Claim Warmup',
-      done: 'DONE',
-      unstakeClam: 'Unstake CLAM',
-      migrateTo: 'Migrate CLAM to CLAM2',
-      estimatedClamTwo: 'Estimated CLAM2 ',
-      yourClamTwoBalance: 'Your CLAM2 Balance',
-    },
     // src\views\Bond
     bonds: {
       debtRatio: 'Debt Ratio',
@@ -118,7 +103,7 @@ const English = {
           'Note: The "Approve" transaction is only needed when bonding for the first time; subsequent bonding only requires you to perform the "Bond" transaction.',
         roiFourFourInfo: '* The ROI of (4,4) bond includes 5-days staking reward',
 
-        youWillGet: 'You Will Get',
+        youWillGet: 'You Will Get ',
         maxBuy: 'Max You Can Buy',
       },
       purchaseDialog: {
@@ -164,6 +149,7 @@ const English = {
     },
     // src\views\Stake
     stake: {
+      stake: 'Stake',
       clamStaking: 'CLAM Staking',
       connectWalletDescription: 'Connect your wallet to stake CLAM2 tokens!',
       approvalInfo:
@@ -173,6 +159,9 @@ const English = {
       nextRewardAmount: 'Next Reward Amount',
       nextRewardYield: 'Next Reward Yield',
       roiFiveDay: 'ROI (5-Day Rate)', //Return on Investment
+      stakeSuccessful: 'Your stake was successful',
+      unstakeSuccessful: 'Your unstake was successful',
+      youReceived: 'You just received ',
     },
     // src\views\Calculator
     calculator: {
