@@ -10,13 +10,13 @@ const lngs: any = {
   id: { nativeName: 'Bahasa' },
   tl: { nativeName: 'Tagalog' },
 };
-// const useStyles = makeStyles(theme => ({
-//   popperMenu: {
-//     '& .MuiButton-containedSecondary': {
-//       backgroundColor: theme.palette.mode.lightGray200,
-//     },
-//   },
-// }));
+const useStyles = makeStyles(theme => ({
+  popperMenu: {
+    '& .select-language:hover': {
+      backgroundColor: theme.palette.mode.lightGray200,
+    },
+  },
+}));
 interface Props {
   border: Boolean;
 }
@@ -41,7 +41,7 @@ function LanguagePicker(props: Props) {
     setAnchorEl(null);
   };
 
-  // const styles = useStyles();
+  const styles = useStyles();
   const getStyle = (lng: string) => {
     return i18n.resolvedLanguage === lng ? 'bold' : 'normal';
   };
@@ -52,7 +52,13 @@ function LanguagePicker(props: Props) {
     <Box onMouseEnter={e => handleMouseOver(e)} onMouseLeave={() => handleMouseExit()} id="lang-menu-button-hover">
       <Box className={`lang-button-border-${props.border.toString()}`} color="text.primary">
         {t('common.language')}
-        <Popper className={`ohm-menu`} id={id} open={langDropdownOpen} anchorEl={anchorEl} transition>
+        <Popper
+          className={`${styles.popperMenu} ohm-menu`}
+          id={id}
+          open={langDropdownOpen}
+          anchorEl={anchorEl}
+          transition
+        >
           {({ TransitionProps }) => (
             <Fade {...TransitionProps} timeout={400}>
               <Paper className={`lang-menu`} elevation={1}>

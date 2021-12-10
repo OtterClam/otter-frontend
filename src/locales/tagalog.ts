@@ -71,7 +71,7 @@ const Tagalog = {
     // src\views\Migrate
     migrate: {
       migration: 'Migrasyon',
-      oldClamSupply: 'Lumang Suplay ng Clam',
+      oldClamSupply: 'Lumang Suplay ng CLAM',
       oldTreasuryReserve: 'Lumang reserba ng Treasury',
       migrationProgress: 'Progreso ng Migrasyon',
       connectWalletDescription: 'Ikonekta ang Iyong Pitaka para Ma-migrate ang Iyong CLAM tokens!',
@@ -82,7 +82,7 @@ const Tagalog = {
       unstakeClam: 'Unstake CLAM',
       migrateTo: 'Migrate CLAM to CLAM2',
       estimatedClamTwo: 'Estimated CLAM2 ',
-      yourClamTwoBalance: 'Balanse ng Iyong Clam2',
+      yourClamTwoBalance: 'Balanse ng Iyong CLAM2',
     },
     // src\views\Bond
     bonds: {
