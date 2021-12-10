@@ -69,11 +69,7 @@ function Header({ handleDrawerToggle, drawe }: IHeader) {
             >
               <SvgIcon component={MenuIcon} color="primary" />
             </Button>
-
-            <Box display="flex">
-              {/* {!isVerySmallScreen && <ClamMenu />} */}
-              <ConnectMenu />
-            </Box>
+            <ConnectMenu />
           </Toolbar>
         </AppBar>
       </div>

@@ -64,10 +64,40 @@
   }
 }
 
-// @media screen and (max-width: 417px) {
-//   #wallet-menu {
-//     display: inline-block;
-//     justify-content: center;
-//     align-items: center;
-//   }
-// }
+@media screen and (max-width: 512px) {
+  #wallet-menu {
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    margin-right: auto;
+    .language-button {
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+    .connect-button {
+      margin-bottom: 5px;
+    }
+  }
+}
+
+@media screen and (max-width: 398px) {
+  #wallet-menu {
+    display: inline-block;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    margin-right: auto;
+    margin-left: auto;
+    .language-button {
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+    .connect-button {
+      margin-bottom: 5px;
+    }
+  }
+}

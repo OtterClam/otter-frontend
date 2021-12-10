@@ -60,6 +60,7 @@ function ConnectMenu() {
     return chainID === 4 ? 'https://rinkeby.etherscan.io/tx/' + txnHash : 'https://polygonscan.com/tx/' + txnHash;
   };
 
+  const isVerySmallScreen = useMediaQuery('(max-width: 512px)');
   useEffect(() => {
     if (pendingTransactions.length === 0) {
       setAnchorEl(null);
@@ -72,7 +73,8 @@ function ConnectMenu() {
 
   return (
     <div className="wallet-menu" id="wallet-menu">
-      <ClamMenu />
+      {!isVerySmallScreen && <ClamMenu />}
+
       <Box
         className="connect-button"
         bgcolor="otter.otterBlue"
