@@ -16,6 +16,9 @@ const renderDate = (index, payload, item) => {
     case 'id':
       localeString = 'in-ID';
       break;
+    case 'tl':
+      localeString = 'tl-PH';
+      break;
     default:
       localeString = 'default';
       break;

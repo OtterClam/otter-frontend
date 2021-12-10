@@ -65,3 +65,4 @@ To add a new language to the supported list, the following steps are required:
 - Add a translation file to the [locales](https://github.com/OtterClam/otter-frontend/tree/main/src/locales)
 - Import the new locale file in [i18n.tsx](https://github.com/OtterClam/otter-frontend/tree/main/src/i18n.tsx) and add it to the `resources`
 - Include the new language in the [LanguagePicker](https://github.com/OtterClam/otter-frontend/tree/main/src/components/LanguagePicker/index.tsx) dropdown menu.
+- Add the corect Date formatting [Locale String](https://stackoverflow.com/questions/3191664/list-of-all-locales-and-their-short-codes) in the `renderDate()` function in the file [CustomTooltip.jsx](https://github.com/OtterClam/otter-frontend/tree/main/src/components/Chart/CustomTooltip.jsx)

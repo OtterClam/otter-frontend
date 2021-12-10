@@ -29,9 +29,13 @@ const English = {
     },
     time: {
       days: 'Days',
+      day: 'Day',
       hours: 'Hours',
+      hour: 'Hour',
       minutes: 'Minutes',
+      minute: 'Minute',
       seconds: 'Seconds',
+      second: 'Second',
       today: 'Today',
     },
     // src\views\Dashboard
@@ -151,6 +155,7 @@ const English = {
         clamToken: 'CLAM Token',
         compounds: 'Compounds yields automatically through a treasury backed memecoin with intrinsic value',
         treasuryBalance: 'Treasury Balance',
+        totalStaked: 'Total Staked',
       },
     },
     // src\views\Stake

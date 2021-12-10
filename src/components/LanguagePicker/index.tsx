@@ -8,6 +8,7 @@ const lngs: any = {
   en: { nativeName: 'English' },
   no: { nativeName: 'Norsk' },
   id: { nativeName: 'Bahasa' },
+  tl: { nativeName: 'Tagalog' },
 };
 
 interface Props {

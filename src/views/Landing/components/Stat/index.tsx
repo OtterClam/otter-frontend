@@ -32,7 +32,7 @@ query {
       <Grid container spacing={1}>
         <Grid item xs={12} sm={4} md={4} lg={4}>
           <div className="landing-footer-item-wrap">
-            <p className="landing-footer-item-title">Total Staked</p>
+            <p className="landing-footer-item-title">{t('landing.splashPage.totalStaked')}</p>
             <p className="landing-footer-item-value">
               {!tvl ? (
                 <Skeleton width="180px" />
