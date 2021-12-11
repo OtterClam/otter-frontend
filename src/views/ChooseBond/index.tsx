@@ -71,7 +71,7 @@ query {
           </Box>
 
           <Grid container item xs={12} style={{ margin: '10px 0px 20px' }} className="bond-hero">
-            <Grid item xs={6} className={`bond-hero-block ${styles.root}`}>
+            <Grid className={`bond-hero-block ${styles.root}`}>
               <Box textAlign={`${isVerySmallScreen ? 'left' : 'center'}`}>
                 <p className="bond-hero-title">{t('common.treasuryBalance')}</p>
                 <Box component="p" color="text.secondary" className="bond-hero-value">

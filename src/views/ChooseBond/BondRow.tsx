@@ -159,6 +159,7 @@ export function BondTableRow({ bondKey }: IBondProps) {
 
   return (
     <TableRow id={`${bondKey}--bond`}>
+      {/* <Link className="bond-table-action-button" component={NavLink} to={`/bonds/${bondKey}?action=bond`}> */}
       <TableCell align="left">
         <div className="bond-name-cell">
           <BondLogo bond={bond} />
@@ -219,7 +220,7 @@ export function BondTableRow({ bondKey }: IBondProps) {
       </TableCell>
       <TableCell>
         <div className="bond-table-actions">
-          {!bond.deprecated && !vestingTime() && (
+          {/* {!bond.deprecated && !vestingTime() && (
             <Link className="bond-table-action-button" component={NavLink} to={`/bonds/${bondKey}?action=bond`}>
               <Box
                 bgcolor="otter.otterBlue"
@@ -233,7 +234,7 @@ export function BondTableRow({ bondKey }: IBondProps) {
                 <p>{t('common.bond')}</p>
               </Box>
             </Link>
-          )}
+          )} */}
           {fullyVested && (
             <Link className="bond-table-action-button" component={NavLink} to={`/bonds/${bondKey}?action=redeem`}>
               <Box
@@ -248,10 +249,11 @@ export function BondTableRow({ bondKey }: IBondProps) {
               </Box>
             </Link>
           )}
-
-          {vestingTime() && !fullyVested && <p>Hi</p>}
+          {vestingTime() && !fullyVested && <p>{vestingTime()}</p>}
+          {!fullyVested && !vestingTime() && <p className="bond-name-title">-</p>}
         </div>
       </TableCell>
+      {/* </Link> */}
     </TableRow>
   );
 }
