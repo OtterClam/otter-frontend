@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 import { LabelChip, Status, StatusChip } from 'src/components/Chip';
 import { BondKey, getBond } from 'src/constants';
 import BondLogo from '../../components/BondLogo';
-import { priceUnits, trim, prettifySeconds } from '../../helpers';
+import { priceUnits, trim, prettifySeconds, prettyVestingPeriod } from '../../helpers';
 import { useWeb3Context } from '../../hooks';
 import { IReduxState } from '../../store/slices/state.interface';
 import './choose-bond.scss';
@@ -18,13 +18,6 @@ interface IBondProps {
 export function BondDataCard({ bondKey }: IBondProps) {
   const { chainID } = useWeb3Context();
   const bond = getBond(bondKey, chainID);
-  const vestingTerm = useSelector<IReduxState, number>(state => {
-    return state.bonding[bondKey] && state.bonding[bondKey].vestingTerm;
-  });
-
-  const vestingPeriod = () => {
-    return prettifySeconds(t, vestingTerm, 'day');
-  };
 
   const isBondLoading = useSelector<IReduxState, boolean>(state => !state.bonding[bondKey]?.bondPrice ?? true);
   const bondPrice = useSelector<IReduxState, number | undefined>(state => {
@@ -145,6 +138,24 @@ export function BondTableRow({ bondKey }: IBondProps) {
   });
   const priceDiff = (Number(marketPrice) ?? 0) - (bondPrice ?? 0);
   const { t } = useTranslation();
+  const currentBlockTime = useSelector<IReduxState, number>(state => state.app.currentBlockTime);
+  const bondMaturationTime = useSelector<IReduxState, number>(state => {
+    //@ts-ignore
+    return state.account[bondKey] && state.account[bondKey].bondMaturationTime;
+  });
+  const vestingTime = () => {
+    return prettyVestingPeriod(t, currentBlockTime, bondMaturationTime);
+  };
+
+  const fullyVested = currentBlockTime > bondMaturationTime && bondMaturationTime > 0;
+
+  const vestingTerm = useSelector<IReduxState, number>(state => {
+    return state.bonding[bondKey] && state.bonding[bondKey].vestingTerm;
+  });
+
+  const vestingPeriod = () => {
+    return prettifySeconds(t, vestingTerm, 'day');
+  };
 
   return (
     <TableRow id={`${bondKey}--bond`}>
@@ -208,7 +219,7 @@ export function BondTableRow({ bondKey }: IBondProps) {
       </TableCell>
       <TableCell>
         <div className="bond-table-actions">
-          {!bond.deprecated && (
+          {!bond.deprecated && !vestingTime() && (
             <Link className="bond-table-action-button" component={NavLink} to={`/bonds/${bondKey}?action=bond`}>
               <Box
                 bgcolor="otter.otterBlue"
@@ -219,22 +230,26 @@ export function BondTableRow({ bondKey }: IBondProps) {
                 height="44px"
                 className="bond-table-btn"
               >
-                <p>Bond</p>
+                <p>{t('common.bond')}</p>
               </Box>
             </Link>
           )}
-          <Link className="bond-table-action-button" component={NavLink} to={`/bonds/${bondKey}?action=redeem`}>
-            <Box
-              color="otter.otterBlue"
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              height="44px"
-              className="bond-table-btn bond-table-btn__redeem"
-            >
-              <p>{t('common.redeem')}</p>
-            </Box>
-          </Link>
+          {fullyVested && (
+            <Link className="bond-table-action-button" component={NavLink} to={`/bonds/${bondKey}?action=redeem`}>
+              <Box
+                color="otter.otterBlue"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                height="44px"
+                className="bond-table-btn bond-table-btn__redeem"
+              >
+                <p>{t('common.redeem')}</p>
+              </Box>
+            </Link>
+          )}
+
+          {vestingTime() && !fullyVested && <p>Hi</p>}
         </div>
       </TableCell>
     </TableRow>
