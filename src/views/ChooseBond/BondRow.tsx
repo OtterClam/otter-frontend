@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 import { LabelChip, Status, StatusChip } from 'src/components/Chip';
 import { BondKey, getBond } from 'src/constants';
 import BondLogo from '../../components/BondLogo';
-import { priceUnits, trim } from '../../helpers';
+import { priceUnits, trim, prettifySeconds } from '../../helpers';
 import { useWeb3Context } from '../../hooks';
 import { IReduxState } from '../../store/slices/state.interface';
 import './choose-bond.scss';
@@ -18,6 +18,13 @@ interface IBondProps {
 export function BondDataCard({ bondKey }: IBondProps) {
   const { chainID } = useWeb3Context();
   const bond = getBond(bondKey, chainID);
+  const vestingTerm = useSelector<IReduxState, number>(state => {
+    return state.bonding[bondKey] && state.bonding[bondKey].vestingTerm;
+  });
+
+  const vestingPeriod = () => {
+    return prettifySeconds(t, vestingTerm, 'day');
+  };
 
   const isBondLoading = useSelector<IReduxState, boolean>(state => !state.bonding[bondKey]?.bondPrice ?? true);
   const bondPrice = useSelector<IReduxState, number | undefined>(state => {

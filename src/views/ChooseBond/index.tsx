@@ -25,7 +25,7 @@ import { useTranslation } from 'react-i18next';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    '& .MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6': {
+    '& .bond-hero-block': {
       backgroundColor: 'red', //theme.palette.mode.lightGray200,
     },
   },
@@ -71,7 +71,7 @@ query {
           </Box>
 
           <Grid container item xs={12} style={{ margin: '10px 0px 20px' }} className="bond-hero">
-            <Grid item xs={6} className="bond-hero-block">
+            <Grid item xs={6} className={`bond-hero-block ${styles.root}`}>
               <Box textAlign={`${isVerySmallScreen ? 'left' : 'center'}`}>
                 <p className="bond-hero-title">{t('common.treasuryBalance')}</p>
                 <Box component="p" color="text.secondary" className="bond-hero-value">

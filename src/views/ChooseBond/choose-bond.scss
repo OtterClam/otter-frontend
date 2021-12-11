@@ -11,6 +11,10 @@
   justify-content: center;
   flex-direction: column;
   overflow: hidden;
+
+  .MuiGrid-container {
+    flex-wrap: unset !important;
+  }
   .MuiPaper-root {
     background-color: unset;
   }
@@ -92,12 +96,13 @@
   }
 
   .MuiTableCell-root {
-    width: 160px;
+    width: 140px;
     padding: 12px;
 
     text-align: center;
     p {
       align-items: center;
+      font-size: 16px;
       // justify-content: space-evenly;
       white-space: nowrap;
       img {
@@ -133,7 +138,6 @@
     }
     div.bond-name {
       width: 60%;
-      margin-left: 20px !important;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -175,7 +179,9 @@
   grid-column-gap: 10% !important;
 
   .bond-hero-block {
-    margin: 0 40px;
+    margin: auto;
+    // background-color: red;
+    padding: 10px 0;
   }
 
   .MuiGrid-root {
@@ -183,7 +189,6 @@
   }
   .bond-hero-title {
     font-weight: 600;
-    font-size: 16px;
     line-height: 24px;
   }
 
@@ -205,11 +210,12 @@
     background-color: aqua;
     display: flex;
     align-items: center;
-    cursor: pointer;
+    border: 1px solid transparent;
+    transition: 0.2s ease-in-out;
   }
   .MuiTableRow-root:hover {
     border: 1px solid grey;
-    border-radius: 20px !important;
+    border-radius: 20px;
     box-shadow: 4px 4px 1px 2px rgba(0, 0, 0, 0.2);
   }
 }
@@ -223,9 +229,6 @@
     margin-left: auto;
     margin-right: 0;
   }
-}
-.MuiGrid-container {
-  flex-wrap: unset !important;
 }
 
 .bond-name-title {
@@ -289,17 +292,34 @@
     border: 2px solid $otter-blue;
   }
 }
+@media screen and (max-width: 733px) {
+  #choose-bond-view {
+    .MuiGrid-container {
+      flex-wrap: wrap !important;
+    }
+    .bond-hero-title {
+      font-size: 14px !important;
+    }
 
-@media screen and (max-width: 417px) {
-  .bond-hero-title {
-    font-size: 14px !important;
-  }
-
-  .bond-hero-value {
-    font-size: 16px !important;
+    .bond-hero-value {
+      font-size: 16px !important;
+    }
   }
 }
+@media screen and (max-width: 417px) {
+  #choose-bond-view {
+    .MuiGrid-container {
+      flex-wrap: wrap !important;
+    }
+    .bond-hero-title {
+      font-size: 14px !important;
+    }
 
+    .bond-hero-value {
+      font-size: 16px !important;
+    }
+  }
+}
 .ohm-card-container {
   width: 100%;
 }
