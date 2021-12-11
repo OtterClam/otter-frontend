@@ -20,6 +20,17 @@ npm run start
 The site is now running at `http://localhost:3000`!
 Open the source code and start editing!
 
+### Run the app
+
+Add this line to `/etc/hosts`
+
+```
+127.0.0.1 app.otterclam.local
+```
+
+Go to http://app.otterclam.local:3000
+You can see the app now!
+
 ### Start a local node forked from Polygon
 
 To test web3 integration, you can setup a local node forked from Polygon. Interact with local fork can test the contract interaction behavior without actually spend token on the Mainnet.
@@ -54,7 +65,7 @@ Once you submit a PR, our CI will generate a temporary testing URL where you can
 **Pull Requests**:
 Each PR into master will get its own custom URL that is visible on the PR page. QA & validate changes on that URL before merging into the deploy branch.
 
-*__NOTE__*: For big changes associated with feature releases/milestones, they will be merged onto the `develop` branch for more thorough QA before a final merge to `master`
+_**NOTE**_: For big changes associated with feature releases/milestones, they will be merged onto the `develop` branch for more thorough QA before a final merge to `master`
 
 ## 🌏 Adding Translations
 
