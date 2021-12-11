@@ -252,7 +252,7 @@ function Calculator() {
                     </Grid>
                     <Grid className="calculator-metric-area" item xs={12} sm={6}>
                       <Box className="calculator-card-action-area-inp-wrap">
-                        <Typography className="box-title">{t('calculator.purchasePrice')}</Typography>
+                        <Typography className="box-title">{t('calculator.futurePrice')}</Typography>
                         <OutlinedInput
                           type="number"
                           id="num-box"
