@@ -9,6 +9,7 @@ import {
   TableHead,
   TableRow,
   Zoom,
+  makeStyles,
 } from '@material-ui/core';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Skeleton } from '@material-ui/lab';
@@ -20,7 +21,15 @@ import { useBonds } from '../../hooks';
 import { IReduxState } from '../../store/slices/state.interface';
 import { BondDataCard, BondTableRow } from './BondRow';
 import './choose-bond.scss';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    '& .MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6': {
+      backgroundColor: 'red', //theme.palette.mode.lightGray200,
+    },
+  },
+}));
 
 function ChooseBond() {
   const { t } = useTranslation();
@@ -46,6 +55,7 @@ query {
     });
   });
 
+  const styles = useStyles();
   return (
     <div id="choose-bond-view">
       <Zoom in={true}>
@@ -61,7 +71,7 @@ query {
           </Box>
 
           <Grid container item xs={12} style={{ margin: '10px 0px 20px' }} className="bond-hero">
-            <Grid item xs={6}>
+            <Grid item xs={6} className="bond-hero-block">
               <Box textAlign={`${isVerySmallScreen ? 'left' : 'center'}`}>
                 <p className="bond-hero-title">{t('common.treasuryBalance')}</p>
                 <Box component="p" color="text.secondary" className="bond-hero-value">
@@ -79,7 +89,7 @@ query {
               </Box>
             </Grid>
 
-            <Grid item xs={6} className={`ohm-price`}>
+            <Grid item xs={6} className={`bond-hero-block ohm-price`}>
               <Box textAlign={`${isVerySmallScreen ? 'right' : 'center'}`}>
                 <p className="bond-hero-title">{t('common.clamPrice')}</p>
                 <Box component="p" color="text.secondary" className="bond-hero-value">
