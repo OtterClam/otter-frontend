@@ -85,6 +85,7 @@ const English = {
       deprecated: 'Deprecated',
       bondDiscount: 'discount!',
       myBond: 'My Bond',
+      fullyVestedAt: 'Fully Vested At',
       advancedSettings: {
         txrevert: 'Transaction may revert if price changes by more than slippage %',
         recipientAddress: 'Choose recipient address. By default, this is your currently connected address',

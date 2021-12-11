@@ -49,7 +49,7 @@ query {
   return (
     <div id="choose-bond-view">
       <Zoom in={true}>
-        <Paper className="ohm-card">
+        <Paper>
           <Box className="card-header">
             <p className="bond-title">
               {t('common.bond')} (
@@ -110,7 +110,9 @@ query {
                       <TableCell align="right">
                         <p className="bond-table-title">{t('bonds.myBond')}</p>
                       </TableCell>
-                      <TableCell align="right"></TableCell>
+                      <TableCell align="center">
+                        <p className="bond-table-title">{t('bonds.fullyVestedAt')}</p>
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
