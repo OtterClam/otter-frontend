@@ -73,12 +73,12 @@ function Stake() {
     return state.app.currentIndex;
   });
   const fiveDayRate = useSelector<IReduxState, number>(state => state.app.fiveDayRate);
-  const clamBalance = useSelector<IReduxState, string>(state => state.account.balances.clam);
-  const sClamBalance = useSelector<IReduxState, string>(state => state.account.balances.sClam);
-  const stakeAllowance = useSelector<IReduxState, number>(state => state.account.staking.clamStake);
-  const unstakeAllowance = useSelector<IReduxState, number>(state => state.account.staking.sClamUnstake);
-  const warmupBalance = useSelector<IReduxState, string>(state => state.account.staking.warmup);
-  const canClaimWarmup = useSelector<IReduxState, boolean>(state => state.account.staking.canClaimWarmup);
+  const clamBalance = useSelector<IReduxState, string>(state => state.account.balances?.clam);
+  const sClamBalance = useSelector<IReduxState, string>(state => state.account.balances?.sClam);
+  const stakeAllowance = useSelector<IReduxState, number>(state => state.account.staking?.clamStake);
+  const unstakeAllowance = useSelector<IReduxState, number>(state => state.account.staking?.sClamUnstake);
+  const warmupBalance = useSelector<IReduxState, string>(state => state.account.staking?.warmup);
+  const canClaimWarmup = useSelector<IReduxState, boolean>(state => state.account.staking?.canClaimWarmup);
   const stakingRebase = useSelector<IReduxState, number>(state => state.app.stakingRebase);
   const stakingAPY = useSelector<IReduxState, number>(state => state.app.stakingAPY);
   const stakingTVL = useSelector<IReduxState, number>(state => state.app.stakingTVL);
