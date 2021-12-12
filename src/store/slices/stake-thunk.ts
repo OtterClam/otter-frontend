@@ -45,7 +45,7 @@ export const changeApproval = createAsyncThunk(
 
         approvedPromise = new Promise(resolve => {
           const event = sCLAMContract.filters.Approval(address, addresses.STAKING_ADDRESS);
-          const action = (owner: string, allowance: BigNumber) => {
+          const action = (owner: string, spender: string, allowance: BigNumber) => {
             sCLAMContract.off(event, action);
             resolve(allowance);
           };
