@@ -1,11 +1,10 @@
-import { ethers } from 'ethers';
-import { BondKey, getAddresses, getBond } from '../../constants';
-import { ClamTokenContract, StakedClamContract, MAIContract, StakingContract } from '../../abi/';
-import { contractForBond, contractForReserve, setAll } from '../../helpers';
-
-import { createSlice, createSelector, createAsyncThunk } from '@reduxjs/toolkit';
 import { JsonRpcProvider } from '@ethersproject/providers';
+import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
+import { ethers } from 'ethers';
 import _ from 'lodash';
+import { ClamTokenContract, MAIContract, StakedClamContract } from '../../abi/';
+import { BondKey, getAddresses, getBond } from '../../constants';
+import { contractForBond, contractForReserve, setAll } from '../../helpers';
 
 interface IState {
   [key: string]: any;
@@ -70,20 +69,14 @@ export const loadAccountDetails = createAsyncThunk(
     const maiContract = new ethers.Contract(addresses.MAI_ADDRESS, MAIContract, provider);
     const clamContract = new ethers.Contract(addresses.CLAM_ADDRESS, ClamTokenContract, provider);
     const sClamContract = new ethers.Contract(addresses.sCLAM_ADDRESS, StakedClamContract, provider);
-    const stakingContract = new ethers.Contract(addresses.STAKING_ADDRESS, StakingContract, provider);
 
-    const [maiBalance, clamBalance, stakeAllowance, sClamBalance, unstakeAllowance, warmup, epoch] = await Promise.all([
+    const [maiBalance, clamBalance, stakeAllowance, sClamBalance, unstakeAllowance] = await Promise.all([
       maiContract.balanceOf(address),
       clamContract.balanceOf(address),
       clamContract.allowance(address, addresses.STAKING_HELPER_ADDRESS),
       sClamContract.balanceOf(address),
       sClamContract.allowance(address, addresses.STAKING_ADDRESS),
-      stakingContract.warmupInfo(address),
-      stakingContract.epoch(),
     ]);
-
-    const gons = warmup[1];
-    const warmupBalance = await sClamContract.balanceForGons(gons);
 
     return {
       balances: {
@@ -94,8 +87,8 @@ export const loadAccountDetails = createAsyncThunk(
       staking: {
         clamStake: +stakeAllowance,
         sClamUnstake: +unstakeAllowance,
-        warmup: ethers.utils.formatUnits(warmupBalance, 9),
-        canClaimWarmup: warmup[0].gt(0) && epoch[1].gte(warmup[2]),
+        warmup: '0',
+        canClaimWarmup: false,
       },
     };
   },

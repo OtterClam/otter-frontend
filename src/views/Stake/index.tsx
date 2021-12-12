@@ -146,7 +146,7 @@ function Stake() {
       if (token === 'sCLAM') return unstakeAllowance > 0;
       return 0;
     },
-    [stakeAllowance],
+    [stakeAllowance, unstakeAllowance],
   );
 
   const changeView = (event: any, newView: number) => {
