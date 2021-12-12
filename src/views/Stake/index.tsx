@@ -26,6 +26,9 @@ import { IReduxState } from '../../store/slices/state.interface';
 import { useTranslation, Trans } from 'react-i18next';
 import './stake.scss';
 import StakeDialog from './StakeDialog';
+import { ethers } from 'ethers';
+import { getAddresses } from 'src/constants';
+import { ClamTokenContract } from 'src/abi';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -69,35 +72,17 @@ function Stake() {
   const currentIndex = useSelector<IReduxState, string>(state => {
     return state.app.currentIndex;
   });
-  const fiveDayRate = useSelector<IReduxState, number>(state => {
-    return state.app.fiveDayRate;
-  });
-  const clamBalance = useSelector<IReduxState, string>(state => {
-    return state.account.balances && state.account.balances.clam;
-  });
-  const sClamBalance = useSelector<IReduxState, string>(state => {
-    return state.account.balances && state.account.balances.sClam;
-  });
-  const stakeAllowance = useSelector<IReduxState, number>(state => {
-    return state.account.staking && state.account.staking.clamStake;
-  });
-  const unstakeAllowance = useSelector<IReduxState, number>(state => {
-    return state.account.staking && state.account.staking.sClamUnstake;
-  });
-  const warmupBalance = useSelector<IReduxState, string>(state => {
-    return state.account.staking && state.account.staking.warmup;
-  });
-  const canClaimWarmup = useSelector<IReduxState, boolean>(state => {
-    return state.account.staking && state.account.staking.canClaimWarmup;
-  });
-  const stakingRebase = useSelector<IReduxState, number>(state => {
-    return state.app.stakingRebase;
-  });
+  const fiveDayRate = useSelector<IReduxState, number>(state => state.app.fiveDayRate);
+  const clamBalance = useSelector<IReduxState, string>(state => state.account.balances.clam);
+  const sClamBalance = useSelector<IReduxState, string>(state => state.account.balances.sClam);
+  const stakeAllowance = useSelector<IReduxState, number>(state => state.account.staking.clamStake);
+  const unstakeAllowance = useSelector<IReduxState, number>(state => state.account.staking.sClamUnstake);
+  const warmupBalance = useSelector<IReduxState, string>(state => state.account.staking.warmup);
+  const canClaimWarmup = useSelector<IReduxState, boolean>(state => state.account.staking.canClaimWarmup);
+  const stakingRebase = useSelector<IReduxState, number>(state => state.app.stakingRebase);
   const stakingAPY = useSelector<IReduxState, number>(state => state.app.stakingAPY);
   const stakingTVL = useSelector<IReduxState, number>(state => state.app.stakingTVL);
-  const pendingTransactions = useSelector<IReduxState, IPendingTxn[]>(state => {
-    return state.pendingTransactions;
-  });
+  const pendingTransactions = useSelector<IReduxState, IPendingTxn[]>(state => state.pendingTransactions);
 
   const setMax = () => {
     if (view === 0) {
