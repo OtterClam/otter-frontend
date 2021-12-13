@@ -85,6 +85,7 @@ const English = {
       deprecated: 'Deprecated',
       bondDiscount: 'discount!',
       myBond: 'My Bond',
+      fullyVested: 'Fully Vested',
       fullyVestedAt: 'Fully Vested At',
       advancedSettings: {
         txrevert: 'Transaction may revert if price changes by more than slippage %',

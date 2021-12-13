@@ -24,9 +24,9 @@ import './choose-bond.scss';
 import { useTranslation } from 'react-i18next';
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    '& .bond-hero-block': {
-      backgroundColor: 'red', //theme.palette.mode.lightGray200,
+  white: {
+    '& ': {
+      backgroundColor: theme.palette.mode.white,
     },
   },
 }));
@@ -71,7 +71,7 @@ query {
           </Box>
 
           <Grid container item xs={12} style={{ margin: '10px 0px 20px' }} className="bond-hero">
-            <Grid className={`bond-hero-block ${styles.root}`}>
+            <Grid item xs={4} className={`bond-hero-block ${styles.white}`}>
               <Box textAlign={`${isVerySmallScreen ? 'left' : 'center'}`}>
                 <p className="bond-hero-title">{t('common.treasuryBalance')}</p>
                 <Box component="p" color="text.secondary" className="bond-hero-value">
@@ -89,11 +89,11 @@ query {
               </Box>
             </Grid>
 
-            <Grid item xs={6} className={`bond-hero-block ohm-price`}>
+            <Grid item xs={4} className={`bond-hero-block ${styles.white}`}>
               <Box textAlign={`${isVerySmallScreen ? 'right' : 'center'}`}>
                 <p className="bond-hero-title">{t('common.clamPrice')}</p>
                 <Box component="p" color="text.secondary" className="bond-hero-value">
-                  {isAppLoading ? <Skeleton width="100px" /> : `$${trim(marketPrice, 2)}`}
+                  {isAppLoading ? <Skeleton width="180px" /> : `$${trim(marketPrice, 2)}`}
                 </Box>
               </Box>
             </Grid>

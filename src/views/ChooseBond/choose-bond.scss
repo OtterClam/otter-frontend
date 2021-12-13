@@ -1,7 +1,7 @@
 @import 'styles/_colors.scss';
-// ::-webkit-scrollbar {
-//   display: block;
-// }
+::-webkit-scrollbar {
+  display: block;
+}
 #choose-bond-view {
   overflow-y: hidden !important;
   // display: flex;
@@ -211,16 +211,16 @@
     // height: 120px;
     border-radius: 20px !important;
     justify-content: space-between;
-    background-color: aqua;
     display: flex;
     align-items: center;
     border: 1px solid transparent;
     transition: 0.2s ease-in-out;
+    cursor: pointer;
   }
   .MuiTableRow-root:hover {
     border: 1px solid grey;
     border-radius: 20px;
-    box-shadow: 4px 4px 1px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.2);
   }
 }
 
@@ -262,10 +262,20 @@
 }
 
 .bond-table-actions {
+  display: inline-flex;
+  flex-wrap: normal;
+  align-items: center;
+  text-align: center;
+  line-height: 24px;
+
   .bond-table-action-button {
     display: block;
     margin-bottom: 8px;
   }
+}
+.pad-right {
+  margin-right: 20px;
+  margin-left: -20px;
 }
 
 .bond-table-container {

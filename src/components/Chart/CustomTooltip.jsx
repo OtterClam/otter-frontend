@@ -1,35 +1,17 @@
 import { Paper, Box, Typography } from '@material-ui/core';
-import { trim } from '../../helpers';
+import { trim, localeString } from '../../helpers';
 import './customtooltip.scss';
 import { useTranslation } from 'react-i18next';
 
 const renderDate = (index, payload, item) => {
   const { t, i18n } = useTranslation();
-  var localeString = 'en-US';
-  switch (i18n.language) {
-    case 'en':
-      localeString = 'en-US';
-      break;
-    case 'no':
-      localeString = 'no-NO';
-      break;
-    case 'id':
-      localeString = 'in-ID';
-      break;
-    case 'tl':
-      localeString = 'tl-PH';
-      break;
-    case 'fr':
-      localeString = 'fr-FR';
-      break;
-    default:
-      localeString = 'default';
-      break;
-  }
   return index === payload.length - 1 ? (
     <div className="tooltip-date">
-      {new Date(item.payload.timestamp * 1000).toLocaleString(localeString, { month: 'long' }).charAt(0).toUpperCase()}
-      {new Date(item.payload.timestamp * 1000).toLocaleString(localeString, { month: 'long' }).slice(1)}
+      {new Date(item.payload.timestamp * 1000)
+        .toLocaleString(localeString(), { month: 'long' })
+        .charAt(0)
+        .toUpperCase()}
+      {new Date(item.payload.timestamp * 1000).toLocaleString(localeString(), { month: 'long' }).slice(1)}
       &nbsp;
       {new Date(item.payload.timestamp * 1000).getDate().toLocaleString(localeString)},{' '}
       {new Date(item.payload.timestamp * 1000).getFullYear()}

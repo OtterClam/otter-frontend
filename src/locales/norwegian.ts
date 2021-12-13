@@ -17,7 +17,7 @@ const Norwegian = {
       connectWallet: 'Koble til Wallet',
       price: 'Pris',
       buy: 'Kjøp',
-      buyThing: 'Kjøp', //e.g. "Buy CLAM", "Buy sCLAM"
+      buyThing: 'Kjøp ', //e.g. "Buy CLAM", "Buy sCLAM"
       addLiquidity: 'Legg til likviditet',
       redeem: 'Løse inn',
       treasuryBalance: 'Saldo på verdireservene',

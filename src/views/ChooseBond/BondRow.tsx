@@ -1,16 +1,23 @@
-import { Box, Link, Paper, Slide, TableCell, TableRow, Tooltip } from '@material-ui/core';
+import { Box, Link, Paper, Slide, TableCell, TableRow, Tooltip, makeStyles } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { LabelChip, Status, StatusChip } from 'src/components/Chip';
 import { BondKey, getBond } from 'src/constants';
 import BondLogo from '../../components/BondLogo';
-import { priceUnits, trim, prettifySeconds, prettyVestingPeriod } from '../../helpers';
+import { priceUnits, trim, prettifySeconds, prettyShortVestingPeriod, localeString } from '../../helpers';
 import { useWeb3Context } from '../../hooks';
 import { IReduxState } from '../../store/slices/state.interface';
 import './choose-bond.scss';
 import { useTranslation } from 'react-i18next';
 
+const useStyles = makeStyles(theme => ({
+  white: {
+    '& ': {
+      backgroundColor: theme.palette.mode.white,
+    },
+  },
+}));
 interface IBondProps {
   bondKey: BondKey;
 }
@@ -144,83 +151,83 @@ export function BondTableRow({ bondKey }: IBondProps) {
     return state.account[bondKey] && state.account[bondKey].bondMaturationTime;
   });
   const vestingTime = () => {
-    return prettyVestingPeriod(t, currentBlockTime, bondMaturationTime);
+    return prettyShortVestingPeriod(t, currentBlockTime, bondMaturationTime);
   };
 
   const fullyVested = currentBlockTime > bondMaturationTime && bondMaturationTime > 0;
+  const timeRemaining = currentBlockTime - bondMaturationTime;
 
-  const vestingTerm = useSelector<IReduxState, number>(state => {
-    return state.bonding[bondKey] && state.bonding[bondKey].vestingTerm;
-  });
+  const styles = useStyles();
 
-  const vestingPeriod = () => {
-    return prettifySeconds(t, vestingTerm, 'day');
-  };
+  const redeemable = fullyVested ? 'redeem' : 'bond';
 
   return (
-    <TableRow id={`${bondKey}--bond`}>
-      {/* <Link className="bond-table-action-button" component={NavLink} to={`/bonds/${bondKey}?action=bond`}> */}
-      <TableCell align="left">
-        <div className="bond-name-cell">
-          <BondLogo bond={bond} />
-          <div className="bond-name">
-            {bond.deprecated && <LabelChip label={`${t('bonds.deprecated')}`} className="bond-name-label" />}
-            <p className="bond-name-title">{bond.name}</p>
-            {!bond.deprecated && (
-              <Link color="primary" href={bond.dexUrl} target="_blank">
-                <Box component="p" color="otter.otterBlue" className="bond-lp-add-liquidity">
-                  {bond.type === 'lp' ? `${t('common.addLiquidity')}` : `${t('common.buyThing')}${bond.reserveUnit}`}
-                </Box>
-              </Link>
-            )}
-          </div>
-        </div>
-      </TableCell>
-      <TableCell align="center">
-        <div className="bond-name-container">
-          <p className="bond-name-title ">
-            <span className="currency-icon">{priceUnits(bondKey)}</span>
-            <span>{isBondLoading ? <Skeleton width="50px" /> : bond.deprecated ? '-' : trim(bondPrice, 2)}</span>
-          </p>
-          {priceDiff > 0 && (
-            <StatusChip status={Status.Success} label={`$${trim(priceDiff, 2)} ${t('bonds.bondDiscount')}`} />
-          )}
-        </div>
-      </TableCell>
-      <TableCell align="right">
-        <p className="bond-name-title">
-          {isBondLoading ? <Skeleton /> : bond.deprecated ? '-' : `${trim(bondDiscount * 100, 2)}%`}
-          {!bond.deprecated && bond.autostake && (
-            <Tooltip title={`* ${t('bonds.purchase.roiFourFourInfo')} `}>
-              <span>{` + ${trim(fiveDayRate * 100, 2)}%*`}</span>
-            </Tooltip>
-          )}
-        </p>
-      </TableCell>
-      <TableCell align="right">
-        <p className="bond-name-title">
-          {isBondLoading ? (
-            <Skeleton />
-          ) : bond.deprecated ? (
-            '-'
-          ) : (
-            new Intl.NumberFormat('en-US', {
-              style: 'currency',
-              currency: 'USD',
-              maximumFractionDigits: 0,
-              minimumFractionDigits: 0,
-            }).format(bondPurchased)
-          )}
-        </p>
-      </TableCell>
-      <TableCell>
-        <p className="bond-name-title">
-          {myBalance ? `${trim(myBalance, 2)} ${bond.autostake ? 'sCLAM' : 'CLAM'}` : '-'}
-        </p>
-      </TableCell>
-      <TableCell>
-        <div className="bond-table-actions">
-          {/* {!bond.deprecated && !vestingTime() && (
+    <tr>
+      <Link className="bond-table-action-button" component={NavLink} to={`/bonds/${bondKey}?action=${redeemable}`}>
+        <TableRow id={`${bondKey}--bond`} className={`${styles.white}`}>
+          <TableCell align="left">
+            <div className="bond-name-cell">
+              <BondLogo bond={bond} />
+              <div className="bond-name">
+                {bond.deprecated && <LabelChip label={`${t('bonds.deprecated')}`} className="bond-name-label" />}
+                <p className="bond-table-actions">{bond.name}</p>
+                {!bond.deprecated && (
+                  <Link color="primary" href={bond.dexUrl} target="_blank">
+                    <Box component="p" color="otter.otterBlue" className="bond-lp-add-liquidity">
+                      {bond.type === 'lp'
+                        ? `${t('common.addLiquidity')}`
+                        : `${t('common.buyThing')}${bond.reserveUnit}`}
+                    </Box>
+                  </Link>
+                )}
+              </div>
+            </div>
+          </TableCell>
+          <TableCell align="center">
+            <div className="bond-name-container">
+              <p className="bond-table-actions">
+                <span className="currency-icon">{priceUnits(bondKey)}</span>
+                <span>{isBondLoading ? <Skeleton width="50px" /> : bond.deprecated ? '-' : trim(bondPrice, 2)}</span>
+              </p>
+              {priceDiff > 0 && (
+                <StatusChip status={Status.Success} label={`$${trim(priceDiff, 2)} ${t('bonds.bondDiscount')}`} />
+              )}
+            </div>
+          </TableCell>
+          <TableCell align="right">
+            <p className="bond-table-actions">
+              {isBondLoading ? <Skeleton /> : bond.deprecated ? '-' : `${trim(bondDiscount * 100, 2)}%`}
+              {!bond.deprecated && bond.autostake && (
+                <Tooltip title={`* ${t('bonds.purchase.roiFourFourInfo')} `}>
+                  <span>{` + ${trim(fiveDayRate * 100, 2)}%*`}</span>
+                </Tooltip>
+              )}
+            </p>
+          </TableCell>
+          <TableCell align="right">
+            <p className="bond-table-actions">
+              {isBondLoading ? (
+                <Skeleton />
+              ) : bond.deprecated ? (
+                '-'
+              ) : (
+                new Intl.NumberFormat('en-US', {
+                  style: 'currency',
+                  currency: 'USD',
+                  maximumFractionDigits: 0,
+                  minimumFractionDigits: 0,
+                }).format(bondPurchased)
+              )}
+            </p>
+          </TableCell>
+          <TableCell>
+            <p className="bond-table-actions">
+              {myBalance ? `${trim(myBalance, 2)} ${bond.autostake ? 'sCLAM' : 'CLAM'}` : '-'}
+            </p>
+          </TableCell>
+          <TableCell className="pad-right">
+            <div className="bond-table-actions">
+              {/* {!bond.deprecated && !vestingTime() && (
             <Link className="bond-table-action-button" component={NavLink} to={`/bonds/${bondKey}?action=bond`}>
               <Box
                 bgcolor="otter.otterBlue"
@@ -235,25 +242,39 @@ export function BondTableRow({ bondKey }: IBondProps) {
               </Box>
             </Link>
           )} */}
-          {fullyVested && (
-            <Link className="bond-table-action-button" component={NavLink} to={`/bonds/${bondKey}?action=redeem`}>
-              <Box
-                color="otter.otterBlue"
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                height="44px"
-                className="bond-table-btn bond-table-btn__redeem"
-              >
-                <p>{t('common.redeem')}</p>
-              </Box>
-            </Link>
-          )}
-          {vestingTime() && !fullyVested && <p>{vestingTime()}</p>}
-          {!fullyVested && !vestingTime() && <p className="bond-name-title">-</p>}
-        </div>
-      </TableCell>
-      {/* </Link> */}
-    </TableRow>
+              {fullyVested && (
+                <Link className="bond-table-action-button" component={NavLink} to={`/bonds/${bondKey}?action=redeem`}>
+                  <Box
+                    color="otter.otterBlue"
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    height="44px"
+                    className="bond-table-btn bond-table-btn__redeem"
+                  >
+                    <p>{t('common.redeem')}</p>
+                  </Box>
+                </Link>
+              )}
+              {vestingTime() && !fullyVested && (
+                <div>
+                  <p>
+                    {new Date(Date.now() + timeRemaining * 1000).toLocaleString(localeString(), {
+                      year: 'numeric',
+                      month: 'numeric',
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}
+                  </p>
+                  <p>{vestingTime()}</p>
+                </div>
+              )}
+              {!fullyVested && !vestingTime() && <p className="bond-name-title">-</p>}
+            </div>
+          </TableCell>
+        </TableRow>
+      </Link>
+    </tr>
   );
 }
