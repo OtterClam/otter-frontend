@@ -4,6 +4,7 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import English from './locales/english';
 import Norwegian from './locales/norwegian';
 import BahasaIndonesia from './locales/indonesian';
+import German from './locales/german';
 
 i18n
   // detect user language
@@ -23,6 +24,7 @@ i18n
       en: English,
       no: Norwegian,
       id: BahasaIndonesia,
+      de: German,
     },
   });
 
