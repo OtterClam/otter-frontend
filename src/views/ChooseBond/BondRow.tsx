@@ -161,12 +161,11 @@ export function BondTableRow({ bondKey }: IBondProps) {
 
   const redeemable = fullyVested ? 'redeem' : 'bond';
   const history = useHistory();
-  const test = () => {
+  const redirect = () => {
     history.push(`/bonds/${bondKey}?action=${redeemable}`);
   };
   return (
-    // <Link component={NavLink} to={`/bonds/${bondKey}?action=${redeemable}`}>
-    <TableRow onClick={test} id={`${bondKey}--bond`} className={`${styles.white}`}>
+    <TableRow onClick={redirect} id={`${bondKey}--bond`} className={`${styles.white}`}>
       <TableCell align="left" className="extra-wide">
         <div className="bond-name-cell">
           <BondLogo bond={bond} />
@@ -184,7 +183,6 @@ export function BondTableRow({ bondKey }: IBondProps) {
         </div>
       </TableCell>
 
-      {/* <Link component={NavLink} to={`/bonds/${bondKey}?action=${redeemable}`}> */}
       <TableCell align="center">
         <div className="bond-name-container">
           <p className="bond-table-actions">
@@ -229,21 +227,6 @@ export function BondTableRow({ bondKey }: IBondProps) {
       </TableCell>
       <TableCell className="extra-wide">
         <div className="bond-table-actions">
-          {/* {!bond.deprecated && !vestingTime() && (
-            <Link className="bond-table-action-button" component={NavLink} to={`/bonds/${bondKey}?action=bond`}>
-              <Box
-                bgcolor="otter.otterBlue"
-                color="otter.white"
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                height="44px"
-                className="bond-table-btn"
-              >
-                <p>{t('common.bond')}</p>
-              </Box>
-            </Link>
-          )} */}
           {fullyVested && (
             <Link className="bond-table-action-button" component={NavLink} to={`/bonds/${bondKey}?action=redeem`}>
               <Box
