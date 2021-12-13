@@ -93,7 +93,7 @@ function ClamMenu() {
         <SvgIcon
           component={ClamIcon}
           htmlColor="primary"
-          style={{ marginRight: '10px', marginLeft: '-20px', width: '100%' }}
+          style={{ marginRight: '10px', marginLeft: '-20px', width: '24px', height: '24px' }}
         />
         <p>{t('common.buyThing')}CLAM2</p>
       </Box>

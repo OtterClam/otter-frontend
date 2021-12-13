@@ -85,7 +85,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 30px;
+  width: 88px;
   border: 2px solid;
   border-radius: 10px;
 
@@ -95,11 +95,13 @@
 }
 .lang-button-border-false {
   cursor: pointer;
-  height: 44px;
+  width: 88px;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0 30px;
+  width: 44px;
+  border: 0px transparent !important;
 
   p {
     font-size: 16px;
@@ -109,5 +111,21 @@
 @media screen and (max-width: 417px) {
   .wallet-menu {
     margin-top: 10px;
+  }
+  .lang-button-border-true,
+  .lang-button-border-false {
+    width: 44px;
+    svg {
+      margin-left: 10px;
+    }
+  }
+  #wallet-menu {
+    .language-button {
+      display: flex;
+      margin: auto;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 5px;
+    }
   }
 }

@@ -87,7 +87,7 @@ function ConnectMenu() {
         <SvgIcon
           component={MetamaskIcon}
           htmlColor="primary"
-          style={{ marginRight: '10px', marginLeft: '-20px', width: 'auto' }}
+          style={{ marginRight: '10px', marginLeft: '-20px', width: '24px', height: '24px' }}
         />
         <p>{buttonText}</p>
         {pendingTransactions.length > 0 && (

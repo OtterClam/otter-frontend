@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useState, useContext } from 'react';
-import { Link, Popper, Box, Fade, Button, makeStyles, Paper, SvgIcon } from '@material-ui/core';
+import { Link, Popper, Box, Fade, Button, makeStyles, Paper, SvgIcon, useMediaQuery } from '@material-ui/core';
 import { AppThemeContext } from 'src/helpers/app-theme-context';
 import './language-picker.scss';
 import { ReactComponent as IntlIcon } from '../../assets/icons/intl.svg';
@@ -44,6 +44,8 @@ function LanguagePicker(props: Props) {
   }));
   const styles = useStyles();
 
+  const isSmallScreen = useMediaQuery('(max-width: 417px)');
+
   const getStyle = (lng: string) => {
     return i18n.resolvedLanguage === lng ? 'bold' : 'normal';
   };
@@ -52,13 +54,13 @@ function LanguagePicker(props: Props) {
 
   return (
     <Box onMouseEnter={e => handleMouseOver(e)} onMouseLeave={() => handleMouseExit()} id="lang-menu-button-hover">
-      <Box className={`lang-button-border-${props.border.toString()}`} color="text.primary">
+      <Box className={`lang-button-border-${props.border.toString()} ohm-button`} color="text.primary">
         <SvgIcon
           component={IntlIcon}
           htmlColor="primary"
-          style={{ marginRight: '10px', marginLeft: '-20px', width: '24px', height: '24px' }}
+          style={{ marginRight: '10px', width: '24px', height: '24px' }}
         />
-        {i18n.resolvedLanguage.toUpperCase()}
+        {!isSmallScreen && i18n.resolvedLanguage.toUpperCase()}
         <Popper
           className={`${styles.popperMenu} ohm-menu`}
           id={id}
