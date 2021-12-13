@@ -1,23 +1,19 @@
-import { useTranslation, Trans } from 'react-i18next';
-import { useState } from 'react';
-import { Link, Popper, Box, Fade, Button, makeStyles, Paper } from '@material-ui/core';
+import { useTranslation } from 'react-i18next';
+import { useState, useContext } from 'react';
+import { Link, Popper, Box, Fade, Button, makeStyles, Paper, SvgIcon } from '@material-ui/core';
+import { AppThemeContext } from 'src/helpers/app-theme-context';
 import './language-picker.scss';
+import { ReactComponent as IntlIcon } from '../../assets/icons/intl.svg';
 
 //Add new translations to the dropdown here!
 const lngs: any = {
   en: { nativeName: 'English' },
-  no: { nativeName: 'Norsk' },
-  id: { nativeName: 'Bahasa' },
-  tl: { nativeName: 'Tagalog' },
   fr: { nativeName: 'Français' },
+  id: { nativeName: 'Bahasa' },
+  no: { nativeName: 'Norsk' },
+  tl: { nativeName: 'Tagalog' },
 };
-const useStyles = makeStyles(theme => ({
-  popperMenu: {
-    '& .select-language:hover': {
-      backgroundColor: theme.palette.mode.lightGray200,
-    },
-  },
-}));
+
 interface Props {
   border: Boolean;
 }
@@ -29,9 +25,6 @@ function LanguagePicker(props: Props) {
   const handleClick = (event: any, lng: string) => {
     i18n.changeLanguage(lng);
     i18n.reloadResources();
-    //translations aren't reloading correctly for all components,
-    //force reload
-    window.location.reload();
   };
   const handleMouseOver = (event: any) => {
     setlangDropdownOpen(true);
@@ -41,8 +34,16 @@ function LanguagePicker(props: Props) {
     setlangDropdownOpen(false);
     setAnchorEl(null);
   };
-
+  const currentTheme = useContext(AppThemeContext);
+  const useStyles = makeStyles(theme => ({
+    popperMenu: {
+      '& .select-language:hover': {
+        backgroundColor: currentTheme.theme.palette.mode.lightGray200,
+      },
+    },
+  }));
   const styles = useStyles();
+
   const getStyle = (lng: string) => {
     return i18n.resolvedLanguage === lng ? 'bold' : 'normal';
   };
@@ -52,7 +53,12 @@ function LanguagePicker(props: Props) {
   return (
     <Box onMouseEnter={e => handleMouseOver(e)} onMouseLeave={() => handleMouseExit()} id="lang-menu-button-hover">
       <Box className={`lang-button-border-${props.border.toString()}`} color="text.primary">
-        {t('common.language')}
+        <SvgIcon
+          component={IntlIcon}
+          htmlColor="primary"
+          style={{ marginRight: '10px', marginLeft: '-20px', width: '24px', height: '24px' }}
+        />
+        {i18n.resolvedLanguage.toUpperCase()}
         <Popper
           className={`${styles.popperMenu} ohm-menu`}
           id={id}

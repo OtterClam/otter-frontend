@@ -17,6 +17,7 @@ import { ReactComponent as CaretDownIcon } from '../../assets/icons/caret-down.s
 import { useWeb3Context } from '../../hooks';
 import LanguagePicker from '../LanguagePicker';
 import ClamMenu from './ClamMenu';
+import { ReactComponent as MetamaskIcon } from '../../assets/icons/metamask.svg';
 import { useTranslation } from 'react-i18next';
 
 function ConnectMenu() {
@@ -83,6 +84,11 @@ function ConnectMenu() {
         onMouseLeave={() => setIsHovering(false)}
         onClick={clickFunc}
       >
+        <SvgIcon
+          component={MetamaskIcon}
+          htmlColor="primary"
+          style={{ marginRight: '10px', marginLeft: '-20px', width: 'auto' }}
+        />
         <p>{buttonText}</p>
         {pendingTransactions.length > 0 && (
           <Slide direction="left" in={isHovering} {...{ timeout: 333 }}>
