@@ -2,6 +2,7 @@ import { SvgIcon } from '@material-ui/core';
 import { ReactComponent as CLAM } from '../assets/tokens/CLAM.svg';
 import { ReactComponent as FRAX } from '../assets/tokens/FRAX.svg';
 import { ReactComponent as MAI } from '../assets/tokens/MAI.svg';
+import { ReactComponent as MATIC } from '../assets/tokens/WMATIC.svg';
 
 const iconStyle = {
   height: '32px',
@@ -29,6 +30,15 @@ export function getPairImage(name: string) {
       <>
         <SvgIcon component={CLAM} viewBox="0 0 32 32" style={iconStyle} />
         <SvgIcon component={FRAX} viewBox="0 0 32 32" style={secondIconStyle} />
+      </>
+    );
+  }
+
+  if (name.indexOf('matic') >= 0) {
+    return (
+      <>
+        <SvgIcon component={CLAM} viewBox="0 0 32 32" style={iconStyle} />
+        <SvgIcon component={MATIC} viewBox="0 0 32 32" style={secondIconStyle} />
       </>
     );
   }

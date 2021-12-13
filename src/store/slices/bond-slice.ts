@@ -52,12 +52,24 @@ export const changeApproval = createAsyncThunk(
     const signer = provider.getSigner();
     const reserveContract = contractForReserve(bondKey, networkID, signer);
     const bond = getBond(bondKey, networkID);
+    let allowance = 0;
 
     let approveTx;
     try {
+      const approvedPromise = new Promise<BigNumber>(resolve => {
+        const event = reserveContract.filters.Approval(address, bond.address);
+        const action = (owner: string, spender: string, allowance: BigNumber) => {
+          reserveContract.off(event, action);
+          resolve(allowance);
+        };
+        reserveContract.on(event, action);
+      });
       approveTx = await reserveContract.approve(bond.address, constants.MaxUint256);
-      dispatch(fetchPendingTxns({ txnHash: approveTx.hash, text: 'Approving ' + bond.name, type: 'approve_' + bond }));
-      await approveTx.wait();
+      dispatch(
+        fetchPendingTxns({ txnHash: approveTx.hash, text: 'Approving ' + bond.name, type: 'approve_' + bond.key }),
+      );
+
+      allowance = +(await approvedPromise);
     } catch (error: any) {
       alert(error.message);
     } finally {
@@ -66,14 +78,13 @@ export const changeApproval = createAsyncThunk(
       }
     }
 
-    const allowance = await reserveContract.allowance(address, bond.address);
     const rawBalance = (await reserveContract.balanceOf(address)).toString();
     const balance = ethers.utils.formatEther(rawBalance);
 
     return dispatch(
       fetchAccountSuccess({
         [bondKey]: {
-          allowance: +allowance,
+          allowance,
           balance: +balance,
           rawBalance,
         },
@@ -274,7 +285,7 @@ export const redeemBond = createAsyncThunk(
     let redeemTx;
     try {
       redeemTx = await bondContract.redeem(address, autostake === true);
-      const pendingTxnType = 'redeem_bond_' + bond + (autostake === true ? '_autostake' : '');
+      const pendingTxnType = 'redeem_bond_' + bond.key + (autostake === true ? '_autostake' : '');
       dispatch(fetchPendingTxns({ txnHash: redeemTx.hash, text: 'Redeeming ' + bond.name, type: pendingTxnType }));
       await redeemTx.wait();
       await dispatch(calculateUserBondDetails({ address, bondKey, networkID, provider }));
