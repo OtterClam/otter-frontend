@@ -110,6 +110,9 @@
       }
     }
   }
+  .extra-wide {
+    width: 180px;
+  }
 
   .MuiTableBody-root .MuiTableRow-root .MuiTableCell-alignLeft {
     justify-content: space-between;
@@ -272,10 +275,6 @@
     display: block;
     margin-bottom: 8px;
   }
-}
-.pad-right {
-  margin-right: 20px;
-  margin-left: -20px;
 }
 
 .bond-table-container {

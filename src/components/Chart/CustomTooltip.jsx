@@ -8,12 +8,12 @@ const renderDate = (index, payload, item) => {
   return index === payload.length - 1 ? (
     <div className="tooltip-date">
       {new Date(item.payload.timestamp * 1000)
-        .toLocaleString(localeString(), { month: 'long' })
+        .toLocaleString(localeString(i18n), { month: 'long' })
         .charAt(0)
         .toUpperCase()}
-      {new Date(item.payload.timestamp * 1000).toLocaleString(localeString(), { month: 'long' }).slice(1)}
+      {new Date(item.payload.timestamp * 1000).toLocaleString(localeString(i18n), { month: 'long' }).slice(1)}
       &nbsp;
-      {new Date(item.payload.timestamp * 1000).getDate().toLocaleString(localeString)},{' '}
+      {new Date(item.payload.timestamp * 1000).getDate().toLocaleString(localeString(i18n))},{' '}
       {new Date(item.payload.timestamp * 1000).getFullYear()}
     </div>
   ) : (
@@ -22,10 +22,11 @@ const renderDate = (index, payload, item) => {
 };
 
 const renderItem = (type, item) => {
+  const { t, i18n } = useTranslation();
   return type === '$' ? (
-    <Typography variant="body2">{`${type}${Math.round(item).toLocaleString('en-US')}`}</Typography>
+    <Typography variant="body2">{`${type}${Math.round(item).toLocaleString(i18n)}`}</Typography>
   ) : (
-    <Typography variant="body2">{`${Math.round(item).toLocaleString('en-US')}${type}`}</Typography>
+    <Typography variant="body2">{`${Math.round(item).toLocaleString(i18n)}${type}`}</Typography>
   );
 };
 

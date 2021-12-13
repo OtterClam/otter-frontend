@@ -105,7 +105,7 @@ query {
                 <Table aria-label="Available bonds">
                   <TableHead>
                     <TableRow>
-                      <TableCell align="center">
+                      <TableCell className="extra-wide" align="center">
                         <p className="bond-table-title">{t('common.bond')}</p>
                       </TableCell>
                       <TableCell align="center">
@@ -120,7 +120,7 @@ query {
                       <TableCell align="right">
                         <p className="bond-table-title">{t('bonds.myBond')}</p>
                       </TableCell>
-                      <TableCell align="center">
+                      <TableCell className="extra-wide" align="center">
                         <p className="bond-table-title">{t('bonds.fullyVestedAt')}</p>
                       </TableCell>
                     </TableRow>

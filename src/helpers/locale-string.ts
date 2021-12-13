@@ -1,7 +1,4 @@
-import { useTranslation } from 'react-i18next';
-
-export const localeString = (): string => {
-  const { t, i18n } = useTranslation();
+export const localeString = (i18n: any): string => {
   var ls = 'en-US';
   switch (i18n.language) {
     case 'en':
