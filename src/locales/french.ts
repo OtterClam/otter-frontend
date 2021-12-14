@@ -3,7 +3,7 @@ const French = {
     common: {
       //Only change the text on the right in quote marks!
       language: 'Language',
-      bond: 'Obligation',
+      bond: 'Bond',
       stake: 'Stake',
       migrate: 'Migrer',
       roi: 'ROI', //Return on Investment
@@ -89,10 +89,10 @@ const French = {
       vestingTerm: "Durée d'acquisition",
       recipient: 'Destinataire',
       purchased: 'Achetés',
-      bondPrice: "Prix de l'obligation",
+      bondPrice: "Prix de l'bond",
       deprecated: 'Obsolète',
       bondDiscount: 'rabais!',
-      myBond: 'Mes Obligations',
+      myBond: 'Mes Bonds',
       advancedSettings: {
         txrevert: 'La Transaction peut être inversée si le prix change plus que le taux de slippage autorisé',
         recipientAddress:
@@ -102,13 +102,13 @@ const French = {
         noValue: 'Veuillez indiquer une valeur!',
         invalidValue: 'Veuillez indiquer une valeur valide!',
         resetVestingAutostake:
-          "Vous avez actuellement une obligation en cours d'acquisition. Si vous achetez une nouvelle obligation, la période d'acquisition sera remise à zéro. Êtes-vous certain(e) de vouloir continuer?",
+          "Vous avez actuellement une bond en cours d'acquisition. Si vous achetez une nouvelle bond, la période d'acquisition sera remise à zéro. Êtes-vous certain(e) de vouloir continuer?",
         resetVesting:
-          "Vous avez actuellement une obligation en cours d'acquisition. Si vous achetez une nouvelle obligation, la période d'acquisition et les potentielles récompenses seront remises à zéro. Nous vous recommandons de commencer par réclamer vos récompenses, ou d'utiliser un autre portefeuille. Êtes-vous certain(e) de vouloir continuer?",
+          "Vous avez actuellement une bond en cours d'acquisition. Si vous achetez une nouvelle bond, la période d'acquisition et les potentielles récompenses seront remises à zéro. Nous vous recommandons de commencer par réclamer vos récompenses, ou d'utiliser un autre portefeuille. Êtes-vous certain(e) de vouloir continuer?",
         fourFourInfo:
-          "Note: L'obligation (4,4) va staker vos CLAMs dès le début, de façon à vous faire gagner les récompenses de staking tout au long de la période d'acquisition. Une vois complètement acquises, vous n'aurez qu'à réclamer vos sClam.",
+          "Note: L'bond (4,4) va staker vos CLAMs dès le début, de façon à vous faire gagner les récompenses de staking tout au long de la période d'acquisition. Une vois complètement acquises, vous n'aurez qu'à réclamer vos sClam.",
         approvalInfo:
-          'Note: La transaction "Approuver" est seulement nécessaire lors de la première acquisition d\'obligations; l\'achat d\'obligations subséquent ne nécessitera qu\'une unique transaction de "Obligation".',
+          'Note: La transaction "Approuver" est seulement nécessaire lors de la première acquisition d\'bonds; l\'achat d\'bonds subséquent ne nécessitera qu\'une unique transaction de "Bond".',
         roiFourFourInfo:
           '* Le Retour sur Investissement des oblications (4,4) inclut les récompenses de staking sur 5 jours',
 
@@ -116,8 +116,7 @@ const French = {
         maxBuy: 'Max que vous puissiez acheter',
       },
       redeem: {
-        fullyVestedPopup:
-          "Vous ne pouvez réclamer vos obligations (4,4) qu'une fois la période d'acquisition complétée.",
+        fullyVestedPopup: "Vous ne pouvez réclamer vos bonds (4,4) qu'une fois la période d'acquisition complétée.",
         claimAndAutostake: 'Réclamer et Staker automatiquement',
         pendingRewards: 'Récompenses en Attente',
         claimableRewards: 'Récompenses Réclamables',
@@ -140,9 +139,9 @@ const French = {
       splashPage: {
         howOtterClamWorks: 'Comment fonctionne OtterClam',
         treasuryRevenue: 'Revenus de la Trésorerie',
-        bondsLPFees: "Frais d'obligations et de jetons LP",
+        bondsLPFees: "Frais d'bonds et de jetons LP",
         bondSales:
-          "La vente d'obligations et les frais liés aux jetons de liquidité permettent d'accroître la trésorerie, et permettent de contrôler la liquidité et l'offre des CLAMs",
+          "La vente d'bonds et les frais liés aux jetons de liquidité permettent d'accroître la trésorerie, et permettent de contrôler la liquidité et l'offre des CLAMs",
         treasuryGrowth: 'Croissance de la trésorerie',
         otterTreasury: 'Trésorerie des Loutres',
         treasuryInflow:

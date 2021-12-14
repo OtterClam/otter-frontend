@@ -9,6 +9,7 @@ import { ReactComponent as IntlIcon } from '../../assets/icons/intl.svg';
 const lngs: any = {
   en: { nativeName: 'English' },
   fr: { nativeName: 'Français' },
+  it: { nativeName: 'Italiano' },
   id: { nativeName: 'Bahasa' },
   no: { nativeName: 'Norsk' },
   tl: { nativeName: 'Tagalog' },
@@ -44,6 +45,11 @@ function LanguagePicker(props: Props) {
         backgroundColor: currentTheme.theme.palette.mode.lightGray200,
       },
     },
+    colour: {
+      '& path': {
+        fill: `${currentTheme.theme.palette.primary.main} !important`,
+      },
+    },
   }));
   const styles = useStyles();
 
@@ -60,8 +66,12 @@ function LanguagePicker(props: Props) {
       <Box className={`lang-button-border-${props.border.toString()} ohm-button`} color="text.primary">
         <SvgIcon
           component={IntlIcon}
-          htmlColor="primary"
-          style={{ marginRight: '10px', width: '24px', height: '24px' }}
+          className={`${styles.colour}`}
+          style={{
+            marginRight: '10px',
+            width: '24px',
+            height: '24px',
+          }}
         />
         {!isSmallScreen && i18n.resolvedLanguage.toUpperCase()}
         <Popper

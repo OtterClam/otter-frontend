@@ -6,6 +6,7 @@ import Norwegian from './locales/norwegian';
 import BahasaIndonesia from './locales/indonesian';
 import Tagalog from './locales/tagalog';
 import French from './locales/french';
+import Italian from './locales/italian';
 
 i18n
   // detect user language
@@ -24,6 +25,7 @@ i18n
     resources: {
       en: English,
       fr: French,
+      it: Italian,
       no: Norwegian,
       id: BahasaIndonesia,
       tl: Tagalog,
