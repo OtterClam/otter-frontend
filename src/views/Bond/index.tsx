@@ -24,10 +24,9 @@ function a11yProps(index: number) {
 
 interface IBondProps {
   bondKey: BondKey;
-  menuToggle: any;
 }
 
-function Bond({ bondKey, menuToggle }: IBondProps) {
+function Bond({ bondKey }: IBondProps) {
   const { provider, address, chainID } = useWeb3Context();
 
   const [slippage, setSlippage] = useState(0.5);
@@ -62,8 +61,6 @@ function Bond({ bondKey, menuToggle }: IBondProps) {
     setView(newView);
   };
   const { t } = useTranslation();
-
-  menuToggle(false);
 
   return (
     <Fade in={true} mountOnEnter unmountOnExit>

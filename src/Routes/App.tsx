@@ -184,7 +184,7 @@ function App() {
               {BondKeys.map(bondKey => {
                 return (
                   <Route exact key={bondKey} path={`/bonds/${bondKey}`}>
-                    <Bond bondKey={bondKey} menuToggle={setMobileOpen} />
+                    <Bond bondKey={bondKey} />
                   </Route>
                 );
               })}

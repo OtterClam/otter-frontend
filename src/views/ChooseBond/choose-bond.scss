@@ -196,6 +196,7 @@
   .bond-hero-title {
     font-weight: 600;
     line-height: 24px;
+    text-align: center;
   }
 
   .bond-hero-value {
@@ -319,6 +320,12 @@
 
     .bond-hero-value {
       font-size: 16px !important;
+    }
+    .bond-table-btn {
+      font-size: 14px !important;
+    }
+    .extra-wide {
+      width: unset;
     }
   }
 }
