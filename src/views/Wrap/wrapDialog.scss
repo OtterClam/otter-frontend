@@ -1,0 +1,136 @@
+@import '../../styles/colors';
+
+#wdialog {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  background-color: #55555555;
+
+  .clam-popover {
+    width: 640px;
+    min-height: 544px;
+    display: flex;
+    flex-direction: column;
+    font-family: Gilroy;
+    font-style: normal;
+    font-weight: bold;
+    backdrop-filter: blur(100px);
+    border-radius: 20px;
+
+    @media screen and (max-width: 596px) {
+      margin: 0 20px;
+    }
+
+    .dialog-wrap {
+      margin: 40px 50px;
+
+      @media screen and (max-width: 596px) {
+        margin: 40px 20px;
+      }
+    }
+
+    .header {
+      position: relative;
+
+      .close-wrapper {
+        position: absolute;
+        top: 0;
+        right: 0;
+
+        button {
+          padding: 0;
+        }
+      }
+
+      .title {
+        font-size: 24px;
+        line-height: 36px;
+        text-align: center;
+        margin-bottom: 10px;
+
+        @media screen and (max-width: 596px) {
+          font-size: 20px;
+          line-height: 30px;
+        }
+      }
+    }
+
+    .body {
+      .confirm {
+        font-size: 36px;
+        line-height: 54px;
+        text-align: center;
+        margin-bottom: 40px;
+
+        @media screen and (max-width: 596px) {
+          font-size: 24px;
+          line-height: 36px;
+        }
+      }
+
+      .logo-wrapper {
+        justify-content: center;
+        display: flex;
+        flex-direction: row;
+        margin-bottom: 40px;
+
+        svg {
+          height: 96px !important;
+          width: 96px !important;
+        }
+      }
+
+      .amt-msg {
+        font-size: 24px;
+        line-height: 36px;
+        text-align: center;
+        margin-bottom: 40px;
+
+        @media screen and (max-width: 596px) {
+          font-size: 20px;
+          line-height: 30px;
+        }
+
+        .quantity {
+          color: $clam-pink;
+        }
+      }
+
+      .dtl-container {
+        .dtl-wrap {
+          padding: 20px 40px;
+          border-radius: 20px;
+
+          @media screen and (max-width: 596px) {
+            padding: 20px 20px;
+          }
+
+          .dtl {
+            font-family: Gilroy;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 16px;
+            line-height: 24px;
+            margin: auto;
+
+            @media screen and (max-width: 596px) {
+              font-size: 14px;
+              line-height: 21px;
+            }
+
+            .dtl-value {
+              text-align: right;
+            }
+
+            > div {
+              margin-bottom: 10px;
+            }
+          }
+        }
+      }
+    }
+  }
+}

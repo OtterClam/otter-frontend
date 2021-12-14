@@ -2,7 +2,7 @@ import { JsonRpcProvider } from '@ethersproject/providers';
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
 import { ethers } from 'ethers';
 import _ from 'lodash';
-import { ClamTokenContract, MAIContract, StakedClamContract } from '../../abi/';
+import { ClamTokenContract, MAIContract, StakedClamContract, PearlTokenContract } from '../../abi/';
 import { BondKey, getAddresses, getBond } from '../../constants';
 import { contractForBond, contractForReserve, setAll } from '../../helpers';
 
@@ -35,12 +35,16 @@ export interface IAccount {
     mai: string;
     sClam: string;
     clam: string;
+    pearl: string;
   };
   staking: {
     clamStake: number;
     sClamUnstake: number;
     warmup: string;
     canClaimWarmup: boolean;
+  };
+  wrapping: {
+    sClamWrap: number;
   };
 }
 
@@ -52,10 +56,13 @@ export const getBalances = createAsyncThunk(
     const sClamBalance = await sClamContract.balanceOf(address);
     const clamContract = new ethers.Contract(addresses.CLAM_ADDRESS, ClamTokenContract, provider);
     const clamBalance = await clamContract.balanceOf(address);
+    const pearlContract = new ethers.Contract(addresses.PEARL_ADDRESS, PearlTokenContract, provider);
+    const pearlBalance = await pearlContract.balanceOf(address);
     return {
       balances: {
         sClam: ethers.utils.formatUnits(sClamBalance, 9),
         clam: ethers.utils.formatUnits(clamBalance, 9),
+        pearl: ethers.utils.formatEther(pearlBalance),
       },
     };
   },
@@ -69,26 +76,34 @@ export const loadAccountDetails = createAsyncThunk(
     const maiContract = new ethers.Contract(addresses.MAI_ADDRESS, MAIContract, provider);
     const clamContract = new ethers.Contract(addresses.CLAM_ADDRESS, ClamTokenContract, provider);
     const sClamContract = new ethers.Contract(addresses.sCLAM_ADDRESS, StakedClamContract, provider);
+    const pearlContract = new ethers.Contract(addresses.PEARL_ADDRESS, PearlTokenContract, provider);
 
-    const [maiBalance, clamBalance, stakeAllowance, sClamBalance, unstakeAllowance] = await Promise.all([
-      maiContract.balanceOf(address),
-      clamContract.balanceOf(address),
-      clamContract.allowance(address, addresses.STAKING_HELPER_ADDRESS),
-      sClamContract.balanceOf(address),
-      sClamContract.allowance(address, addresses.STAKING_ADDRESS),
-    ]);
+    const [maiBalance, clamBalance, sClamBalance, pearlBalance, stakeAllowance, unstakeAllowance, wrapAllowance] =
+      await Promise.all([
+        maiContract.balanceOf(address),
+        clamContract.balanceOf(address),
+        sClamContract.balanceOf(address),
+        pearlContract.balanceOf(address),
+        clamContract.allowance(address, addresses.STAKING_HELPER_ADDRESS),
+        sClamContract.allowance(address, addresses.STAKING_ADDRESS),
+        sClamContract.allowance(address, addresses.PEARL_ADDRESS),
+      ]);
 
     return {
       balances: {
         sClam: ethers.utils.formatUnits(sClamBalance, 9),
         clam: ethers.utils.formatUnits(clamBalance, 9),
         mai: ethers.utils.formatEther(maiBalance),
+        pearl: ethers.utils.formatEther(pearlBalance),
       },
       staking: {
         clamStake: +stakeAllowance,
         sClamUnstake: +unstakeAllowance,
         warmup: '0',
         canClaimWarmup: false,
+      },
+      wrapping: {
+        sClamWrap: +wrapAllowance,
       },
     };
   },

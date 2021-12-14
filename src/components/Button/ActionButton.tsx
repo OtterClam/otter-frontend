@@ -14,7 +14,7 @@ function ActionButton(props: ActionButton) {
 
   return (
     <Box
-      className="stake-tab-panel-btn transaction-button app-otter-button"
+      className="wrap-tab-panel-btn stake-tab-panel-btn transaction-button app-otter-button"
       bgcolor="otter.otterBlue"
       onClick={() => {
         if (isPendingTxn(pendingTransactions, progress)) return;
