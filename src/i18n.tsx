@@ -9,7 +9,6 @@ import French from './locales/french';
 import Italian from './locales/italian';
 import German from './locales/german';
 import { i18nextPlugin } from 'translation-check';
-import { showTranslations } from 'translation-check';
 
 i18n
   // detect user language

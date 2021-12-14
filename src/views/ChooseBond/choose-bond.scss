@@ -19,7 +19,7 @@
     background-color: unset;
   }
   .ohm-card .bond-hero h4 {
-    font-weight: 600 !important;
+    // font-weight: 600 !important;
 
     .MuiSkeleton-root {
       margin: auto;
@@ -166,7 +166,8 @@
 
 .bond-title {
   font-weight: 600;
-  font-size: 20px;
+  font-size: 24px;
+  margin-bottom: 5px;
   display: flex;
   align-items: center;
 
@@ -182,21 +183,26 @@
 .bond-hero {
   border-radius: 10px;
   // display: inline-flex;
-  grid-column-gap: 10% !important;
+  grid-column-gap: 5% !important;
+  width: 100%;
 
   .bond-hero-block {
     margin: auto;
+    width: 100%;
     // background-color: red;
-    padding: 10px 0;
+    padding: 10px 0 10px 20px;
+    margin-top: 10px;
   }
 
   .MuiGrid-root {
     border-radius: 10px;
   }
   .bond-hero-title {
-    font-weight: 600;
-    line-height: 24px;
-    text-align: center;
+    font-weight: 700;
+    font-size: 18px;
+
+    // line-height: 24px;
+    text-align: left;
   }
 
   .bond-hero-value {
@@ -205,8 +211,8 @@
     font-size: 24px;
     line-height: 36px;
     display: flex;
+    text-align: left;
     align-items: center;
-    flex-direction: column;
   }
 }
 .MuiTableBody-root {
@@ -222,15 +228,14 @@
     cursor: pointer;
   }
   .MuiTableRow-root:hover {
-    border: 1px solid grey;
+    border: 2px solid rgb(163, 163, 163, 0.8);
     border-radius: 20px;
-    box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.2);
   }
 }
 
 .MuiTableCell-head {
   .bond-table-title {
-    font-weight: 600;
+    font-weight: 700;
     font-size: 18px;
     line-height: 17px;
     text-align: center;
@@ -272,6 +277,7 @@
   display: inline-flex;
   flex-wrap: normal;
   align-items: center;
+  font-weight: 600;
   text-align: center;
   line-height: 24px;
 
@@ -326,6 +332,9 @@
     }
     .extra-wide {
       width: unset;
+    }
+    .bond-hero-block {
+      margin-bottom: 10px;
     }
   }
 }
