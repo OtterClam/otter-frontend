@@ -15,6 +15,7 @@ import {
   useMediaQuery,
 } from '@material-ui/core';
 import { ReactComponent as ArrowUpIcon } from '../../../assets/icons/arrow-up.svg';
+import { ReactComponent as ClamIcon } from '../../../assets/icons/CLAM.svg';
 import './clam-menu.scss';
 import { IReduxState } from '../../../store/slices/state.interface';
 import { getTokenUrl, Token } from '../../../helpers';
@@ -89,6 +90,11 @@ function ClamMenu() {
       id="ohm-menu-button-hover"
     >
       <Box color="text.primary" className="ohm-button">
+        <SvgIcon
+          component={ClamIcon}
+          htmlColor="primary"
+          style={{ marginRight: '10px', marginLeft: '-20px', width: '24px', height: '24px' }}
+        />
         <p>{t('common.buyThing')}CLAM2</p>
       </Box>
 

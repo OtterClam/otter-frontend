@@ -1,4 +1,4 @@
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import { getAddresses } from '../../constants';
 import { StakingHelperContract, ClamTokenContract, StakedClamContract, StakingContract } from '../../abi';
 import { clearPendingTxn, fetchPendingTxns, getStakingTypeText } from './pending-txns-slice';
@@ -21,27 +21,43 @@ export const changeApproval = createAsyncThunk(
       return;
     }
     const addresses = getAddresses(networkID);
-
     const signer = provider.getSigner();
     const clamContract = new ethers.Contract(addresses.CLAM_ADDRESS, ClamTokenContract, signer);
     const sCLAMContract = new ethers.Contract(addresses.sCLAM_ADDRESS, StakedClamContract, signer);
 
     let approveTx;
+    let approvedPromise: Promise<BigNumber> = Promise.resolve(BigNumber.from(0));
+    let allowance: number;
+
     try {
       if (token === 'CLAM') {
+        approvedPromise = new Promise(resolve => {
+          const event = clamContract.filters.Approval(address, addresses.STAKING_HELPER_ADDRESS);
+          const action = (owner: string, allowance: BigNumber) => {
+            clamContract.off(event, action);
+            resolve(allowance);
+          };
+          clamContract.on(event, action);
+        });
         approveTx = await clamContract.approve(addresses.STAKING_HELPER_ADDRESS, ethers.constants.MaxUint256);
-      }
-
-      if (token === 'sCLAM') {
+      } else if (token === 'sCLAM') {
         approveTx = await sCLAMContract.approve(addresses.STAKING_ADDRESS, ethers.constants.MaxUint256);
+
+        approvedPromise = new Promise(resolve => {
+          const event = sCLAMContract.filters.Approval(address, addresses.STAKING_ADDRESS);
+          const action = (owner: string, spender: string, allowance: BigNumber) => {
+            sCLAMContract.off(event, action);
+            resolve(allowance);
+          };
+          sCLAMContract.on(event, action);
+        });
       }
 
       const text = 'Approve ' + (token === 'CLAM' ? 'Staking' : 'Unstaking');
       const pendingTxnType = token === 'CLAM' ? 'approve_staking' : 'approve_unstaking';
 
       dispatch(fetchPendingTxns({ txnHash: approveTx.hash, text, type: pendingTxnType }));
-
-      await approveTx.wait();
+      allowance = +(await approvedPromise);
     } catch (error: any) {
       alert(error.message);
       return;
@@ -51,17 +67,23 @@ export const changeApproval = createAsyncThunk(
       }
     }
 
-    const stakeAllowance = await clamContract.allowance(address, addresses.STAKING_HELPER_ADDRESS);
-    const unstakeAllowance = await sCLAMContract.allowance(address, addresses.STAKING_ADDRESS);
-
-    return dispatch(
-      fetchAccountSuccess({
-        staking: {
-          clamStake: +stakeAllowance,
-          sCLAMUnstake: +unstakeAllowance,
-        },
-      }),
-    );
+    if (token === 'CLAM') {
+      return dispatch(
+        fetchAccountSuccess({
+          staking: {
+            clamStake: allowance,
+          },
+        }),
+      );
+    } else {
+      return dispatch(
+        fetchAccountSuccess({
+          staking: {
+            sClamUnstake: allowance,
+          },
+        }),
+      );
+    }
   },
 );
 

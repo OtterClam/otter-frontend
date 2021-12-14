@@ -7,6 +7,7 @@ export type BondKey =
   | 'mai'
   | 'mai44'
   | 'matic'
+  | 'matic_clam'
   | 'mai_clam44'
   | 'mai_clam'
   | 'mai-v1'
@@ -19,6 +20,7 @@ export const BondKeys: BondKey[] = [
   'frax_clam',
   'mai',
   'matic',
+  'matic_clam',
   'mai44',
   'mai_clam',
   'mai_clam44',
@@ -63,6 +65,19 @@ export function listBonds(chainId: number): BondMap {
       reserveUnit: 'WMATIC',
       type: 'token',
       dexUrl: `https://quickswap.exchange/#/swap?outputCurrency=0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270`,
+      deprecated: false,
+      autostake: true,
+      stable: false,
+      oracle: '0xAB594600376Ec9fD91F8e885dADF0CE036862dE0',
+    },
+    matic_clam: {
+      key: 'matic_clam',
+      name: 'WMATIC-CLAM (4,4)',
+      address: '0x1dAc605bDD4e8F3ab23da9B360e672f4e973A196',
+      reserve: '0x3fCc446c70489610462BE9d61528C51151aCA49f',
+      reserveUnit: '',
+      type: 'lp',
+      dexUrl: `https://quickswap.exchange/#/add/0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270/${CLAM_ADDRESS}`,
       deprecated: false,
       autostake: true,
       stable: false,
