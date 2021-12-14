@@ -73,15 +73,15 @@ function ClamMenu() {
 
   const open = Boolean(anchorEl);
   const id = 'ohm-popper';
-  if (isSmallScreen) {
-    return (
-      <Link href={'https://quickswap.exchange/#/swap?outputCurrency=' + CLAM_ADDRESS} target="_blank" rel="noreferrer">
-        <Box color="text.primary" className="ohm-button">
-          <p>{t('components.buy')}</p>
-        </Box>
-      </Link>
-    );
-  }
+  // if (isSmallScreen) {
+  //   return (
+  //     <Link href={'https://quickswap.exchange/#/swap?outputCurrency=' + CLAM_ADDRESS} target="_blank" rel="noreferrer">
+  //       <Box color="text.primary" className="ohm-button">
+  //         <p>{t('components.buy')}</p>
+  //       </Box>
+  //     </Link>
+  //   );
+  // }
   return (
     <Box
       component="div"
@@ -89,7 +89,7 @@ function ClamMenu() {
       onMouseLeave={e => handleClick(e)}
       id="ohm-menu-button-hover"
     >
-      <Box color="text.primary" className="ohm-button">
+      <Box id="buy-button" color="text.primary" className="ohm-button">
         <SvgIcon
           component={ClamIcon}
           htmlColor="primary"

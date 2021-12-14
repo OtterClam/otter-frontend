@@ -8,6 +8,7 @@ import { ReactComponent as IntlIcon } from '../../assets/icons/intl.svg';
 //Add new translations to the dropdown here!
 const lngs: any = {
   en: { nativeName: 'English' },
+  de: { nativeName: 'Deutsch' },
   fr: { nativeName: 'Français' },
   it: { nativeName: 'Italiano' },
   id: { nativeName: 'Bahasa' },
@@ -53,8 +54,6 @@ function LanguagePicker(props: Props) {
   }));
   const styles = useStyles();
 
-  const isSmallScreen = useMediaQuery('(max-width: 417px)');
-
   const getStyle = (lng: string) => {
     return i18n.resolvedLanguage === lng ? 'bold' : 'normal';
   };
@@ -73,7 +72,7 @@ function LanguagePicker(props: Props) {
             height: '24px',
           }}
         />
-        {!isSmallScreen && i18n.resolvedLanguage.toUpperCase()}
+        {i18n.resolvedLanguage.toUpperCase()}
         <Popper
           className={`${styles.popperMenu} ohm-menu`}
           id={id}

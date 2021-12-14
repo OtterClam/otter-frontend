@@ -74,8 +74,9 @@ function ConnectMenu() {
 
   return (
     <div className="wallet-menu" id="wallet-menu">
-      {!isVerySmallScreen && <ClamMenu />}
-
+      <Box className="connect-button">
+        <ClamMenu />
+      </Box>
       <Box
         className="connect-button"
         bgcolor="otter.otterBlue"
