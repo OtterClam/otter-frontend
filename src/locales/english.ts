@@ -28,6 +28,7 @@ const English = {
       currentApy: 'Current APY',
       dashboard: 'Dashboard',
       calculator: 'Calculator',
+      helpTranslate: 'Help us Translate',
     },
     time: {
       days: 'Days',

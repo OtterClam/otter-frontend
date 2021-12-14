@@ -1,9 +1,10 @@
 import { useTranslation } from 'react-i18next';
 import { useState, useContext } from 'react';
-import { Link, Popper, Box, Fade, Button, makeStyles, Paper, SvgIcon, useMediaQuery } from '@material-ui/core';
+import { Link, Popper, Box, Fade, Button, makeStyles, Paper, SvgIcon, useMediaQuery, Divider } from '@material-ui/core';
 import { AppThemeContext } from 'src/helpers/app-theme-context';
 import './language-picker.scss';
 import { ReactComponent as IntlIcon } from '../../assets/icons/intl.svg';
+import { showTranslations } from 'translation-check';
 
 //Add new translations to the dropdown here!
 const lngs: any = {
@@ -95,6 +96,11 @@ function LanguagePicker(props: Props) {
                       {lngs[lng].nativeName}
                     </Button>
                   ))}
+
+                  <Divider color="secondary" />
+                  <Button className="select-language" onClick={e => showTranslations(i18n)}>
+                    {t('common.helpTranslate')}
+                  </Button>
                 </Box>
               </Paper>
             </Fade>
