@@ -19,10 +19,14 @@ query {
     totalValueLocked
   }
 }`).then(r => {
-      const latestMetrics = (r as any).data.protocolMetrics[0];
-      setTreasuryBalance(latestMetrics.treasuryMarketValue);
-      setStakingAPY(latestMetrics.currentAPY);
-      setTvl(latestMetrics.totalValueLocked);
+      //Wrap in try-catch for when data fails to load
+      //TODO: Better error handling, e.g. replace strings to show error
+      try {
+        const latestMetrics = (r as any).data.protocolMetrics[0];
+        setTreasuryBalance(latestMetrics.treasuryMarketValue);
+        setStakingAPY(latestMetrics.currentAPY);
+        setTvl(latestMetrics.totalValueLocked);
+      } catch {}
     });
   });
   const { t } = useTranslation();
@@ -32,7 +36,7 @@ query {
       <Grid container spacing={1}>
         <Grid item xs={12} sm={4} md={4} lg={4}>
           <div className="landing-footer-item-wrap">
-            <p className="landing-footer-item-title">Total Staked</p>
+            <p className="landing-footer-item-title">{t('landing.splashPage.totalStaked')}</p>
             <p className="landing-footer-item-value">
               {!tvl ? (
                 <Skeleton width="180px" />

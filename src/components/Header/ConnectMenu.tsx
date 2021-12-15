@@ -16,6 +16,8 @@ import { ReactComponent as ArrowUpIcon } from '../../assets/icons/arrow-up.svg';
 import { ReactComponent as CaretDownIcon } from '../../assets/icons/caret-down.svg';
 import { useWeb3Context } from '../../hooks';
 import LanguagePicker from '../LanguagePicker';
+import ClamMenu from './ClamMenu';
+import { ReactComponent as MetamaskIcon } from '../../assets/icons/metamask.svg';
 import { useTranslation } from 'react-i18next';
 
 function ConnectMenu() {
@@ -59,6 +61,7 @@ function ConnectMenu() {
     return chainID === 4 ? 'https://rinkeby.etherscan.io/tx/' + txnHash : 'https://polygonscan.com/tx/' + txnHash;
   };
 
+  const isVerySmallScreen = useMediaQuery('(max-width: 512px)');
   useEffect(() => {
     if (pendingTransactions.length === 0) {
       setAnchorEl(null);
@@ -71,6 +74,9 @@ function ConnectMenu() {
 
   return (
     <div className="wallet-menu" id="wallet-menu">
+      <Box className="connect-button">
+        <ClamMenu />
+      </Box>
       <Box
         className="connect-button"
         bgcolor="otter.otterBlue"
@@ -79,6 +85,11 @@ function ConnectMenu() {
         onMouseLeave={() => setIsHovering(false)}
         onClick={clickFunc}
       >
+        <SvgIcon
+          component={MetamaskIcon}
+          htmlColor="primary"
+          style={{ marginRight: '10px', marginLeft: '-20px', width: '24px', height: '24px' }}
+        />
         <p>{buttonText}</p>
         {pendingTransactions.length > 0 && (
           <Slide direction="left" in={isHovering} {...{ timeout: 333 }}>
@@ -87,7 +98,7 @@ function ConnectMenu() {
         )}
       </Box>
 
-      <Popper id={id} open={open} anchorEl={anchorEl} placement="bottom-end">
+      <Popper id={id} open={open} anchorEl={anchorEl}>
         <Paper className="ohm-menu" elevation={1}>
           {pendingTransactions.map((x: any) => (
             <Link key={x.txnHash} href={getEtherscanUrl(x.txnHash)} color="primary" target="_blank" rel="noreferrer">

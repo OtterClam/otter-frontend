@@ -45,6 +45,7 @@
     transition: all 0.33s ease-out;
   }
 }
+
 .language-button {
   padding-left: 20px;
 }
@@ -58,8 +59,75 @@
   padding: 0 30px;
   cursor: pointer;
 
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.ohm-button {
+  border: 2px solid;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-right: 20px;
+  height: 44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 30px;
+
   p {
+    font-size: 16px;
     font-weight: 600;
-    font-size: 18px;
+  }
+}
+
+// @media screen and (max-width: 512px) {
+//   #wallet-menu {
+//     justify-content: center;
+//     align-items: center;
+//     margin-top: 10px;
+//     margin-right: auto;
+//     .language-button {
+//       width: 100%;
+//       justify-content: center;
+//       align-items: center;
+//       margin-bottom: 5px;
+//     }
+//     .connect-button {
+//       margin-bottom: 5px;
+//     }
+//   }
+// }
+
+@media screen and (max-width: 512px) {
+  #wallet-menu {
+    display: inline-block;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    margin-right: auto;
+    margin-left: auto;
+    .language-button {
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+    .connect-button {
+      margin-bottom: 5px;
+    }
+  }
+}
+@media screen and (max-width: 512px) {
+  #choose-bond-view {
+    .MuiGrid-container {
+      flex-wrap: wrap !important;
+    }
+    .bond-hero-title {
+      font-size: 14px !important;
+    }
+
+    .bond-hero-value {
+      font-size: 16px !important;
+    }
   }
 }

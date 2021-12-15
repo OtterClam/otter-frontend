@@ -4,6 +4,11 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import English from './locales/english';
 import Norwegian from './locales/norwegian';
 import BahasaIndonesia from './locales/indonesian';
+import Tagalog from './locales/tagalog';
+import French from './locales/french';
+import Italian from './locales/italian';
+import German from './locales/german';
+import { i18nextPlugin } from 'translation-check';
 
 i18n
   // detect user language
@@ -11,18 +16,24 @@ i18n
   .use(LanguageDetector)
   // pass the i18n instance to react-i18next.
   .use(initReactI18next)
+  .use(i18nextPlugin)
   // init i18next
   // for all options read: https://www.i18next.com/overview/configuration-options
   .init({
-    debug: true,
+    // debug: false,
+
     fallbackLng: 'en',
     interpolation: {
       escapeValue: false, // not needed for react as it escapes by default
     },
     resources: {
       en: English,
+      de: German,
+      fr: French,
+      it: Italian,
       no: Norwegian,
       id: BahasaIndonesia,
+      tl: Tagalog,
     },
   });
 

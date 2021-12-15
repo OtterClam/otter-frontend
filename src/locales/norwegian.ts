@@ -13,10 +13,11 @@ const Norwegian = {
       amount: 'Beløp',
       approve: 'Godkjenn',
       claim: 'Krev inn',
-      clamPrice: 'Pris på CLAM',
+      clamPrice: 'Pris per CLAM',
       connectWallet: 'Koble til Wallet',
       price: 'Pris',
       buy: 'Kjøp',
+      buyThing: 'Kjøp ', //e.g. "Buy CLAM", "Buy sCLAM"
       addLiquidity: 'Legg til likviditet',
       redeem: 'Løse inn',
       treasuryBalance: 'Saldo på verdireservene',
@@ -31,19 +32,20 @@ const Norwegian = {
       hours: 'Timer',
       minutes: 'Minutter',
       seconds: 'Sekunder',
+      today: 'I dag',
     },
     // src\views\Dashboard
     dashboard: {
       marketCap: 'Markedsverdi',
-      stakingRatio: 'Staking Forhold',
+      stakingRatio: 'Prosent staket',
       circulatingSupply: 'Antall tokens i omløp',
-      backingPerClam: 'Reserver per CLAM',
+      backingPerClam: 'Dollarverdi som støtter hver CLAM',
       otterKingdom: 'Velkommen til Oter-riket',
       decentralized: 'Den desentraliserte cryptovalutastandarden',
       clamStaked: 'CLAM Staket',
       apyOverTime: 'APY over tid',
       runway: 'Runway tilgjengelig',
-      totalValueDeposited: 'Totalverdi deponert',
+      totalValueDeposited: 'Totalverdi staket',
       marketValue: 'Markedsverdi på verdireservene',
       riskFree: 'Risikofri verdi på verdireservene',
       pol: 'Protokolleid likviditet',
@@ -59,9 +61,9 @@ const Norwegian = {
         rfv: 'Risikofri verdi på verdireservene er formueverdien i dollar på alle aktiva i verdireservene som man kan garantere støtter opp CLAM.',
         pol: 'Protokolleid likviditet er mengden LP (Liquidity pools) som eies og kontrolleres av protokollen. The more POL the better for the protocol and its users.',
         holder: 'Holdere, er det totale antalle Oters (sCLAM holdere)',
-        staked: 'CLAM Staket, er forholdet mellom sCLAM og CLAM (Mengde staket per ustakede tokens)',
-        apy: 'Annual Percentage Yield (APY), er den årlige prosentvise avkastningen, med andre ord så er det rentesrente over et helt år. Merk deg at det er med antagelsene om at mengden du får vet hver rebase-justering ikke forandrer seg.',
-        runway: 'Runway, er antall dager nåværende justeringsutslipp på sCLAM kan vedvare. Lavere APY = lenger runway',
+        staked: 'Prosent staket, er forholdet mellom sCLAM og CLAM (Mengde staket per ustakede tokens)',
+        apy: 'Annual Percentage Yield (APY), er den årlige prosentvise avkastningen, med andre ord så er det rentesrente over et helt år. Merk deg at det er med antagelsene om at mengden du får vet hver rebase ikke forandrer seg.',
+        runway: 'Runway er antall dager nåværende justeringsutslipp på sCLAM kan vedvare. Lavere APY = lenger runway',
         currentIndex:
           'Nåværende index sporer mengden sCLAM som er akumulert siden stakingen begynte. Altså hvor mange sCLAM man ville hatt hvis man staket en stk CLAM fra første stund.',
       },
@@ -69,7 +71,7 @@ const Norwegian = {
     // src\views\Migrate
     migrate: {
       migration: 'Migrering',
-      oldClamSupply: 'Gammel CLAM omløpsmengde',
+      oldClamSupply: 'Gammel CLAM i omløp',
       oldTreasuryReserve: 'Gamle Verdireserver',
       migrationProgress: 'Migrasjonsfremgang',
       connectWalletDescription: 'Koble din crypto-wallet for å migrere dine gamle CLAM token!',
@@ -105,7 +107,7 @@ const Norwegian = {
           'Du har en aktiv obligasjon. En ny obligasjon vil tilbakestille forfallstiden din og gå glipp av belønningne. Vi anbefaler at du først krever inn belønningene eller bruke en annen crypto-wallet. Vil du fortsette?',
 
         fourFourInfo:
-          'NB: Den såkalte (4, 4) obligasjonen vil stake alle CLAM fra begynnelsen av, så du vil tjene på alle rebase-justeringer under forfallstiden. Når obligasjonen er forfalt så kan du kreve inn sClam belønningene som da har vokst.',
+          'NB: Den såkalte (4, 4) obligasjonen vil stake alle CLAM fra begynnelsen av, så du vil tjene på alle rebase under forfallstiden. Når obligasjonen er forfalt så kan du kreve inn sClam belønningene som da har vokst.',
         approvalInfo:
           'NB: Du behøver kun å trykke "Godkjenn" når du kjøper en obligasjon den første gangen. Neste gangene så krever det kun at du trykker "kjøp".',
         roiFourFourInfo: '* avkastningen (ROI) av (4,4) obligasjoner inkluderer 5-dagers stakinggevinst',
@@ -158,8 +160,8 @@ const Norwegian = {
         'NB: Du behøver kun å trykke "Godkjenn" når du staker eller avstaker for første gang. Alle andre ganger du gjør det så behøver du kun å "Stake" eller "Avstake".',
       balanceInWarmup: 'Din stakede saldo i warmup modus',
       stakedBalance: 'Din stakede saldo',
-      nextRewardAmount: 'Neste rebase-justering gevinst',
-      nextRewardYield: 'Neste rebase-justering prosentvis gevinst',
+      nextRewardAmount: 'Neste rebase gevinst',
+      nextRewardYield: 'Neste rebase prosentvis gevinst',
       roiFiveDay: 'ROI (5-Dagers rate)', ////Avkastning på Investering
     },
     // src\views\Calculator
@@ -188,6 +190,16 @@ const Norwegian = {
       toNextHarvest: 'til neste justering',
       harvesting: 'Justering',
       name: 'Navn',
+    },
+    // src\components\NFT
+    nft: {
+      which: 'Hvilken ',
+      willYouGet: ' kommer du til å få?',
+      safehandDescription: 'Gis til alle Otere som har staket over 4 sCLAM i minst to uker på airdrop datoen.',
+      furryhandDescription: 'Gis til alle Otere som har staket over 40 sCLAM i minst to uker på airdrop datoen',
+      stonehandDescription: 'Gis til alle Otere som har staket over 56 sCLAM fra 11/9 frem til airdrop datoen.',
+      diamondhandDescription:
+        'Gis til alle Otere som har staket CLAM fra IDO eller startdatoen, 11/3, med minimum 20 sCLAM frem til airdrop datoen.',
     },
   },
 };

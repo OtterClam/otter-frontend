@@ -1,13 +1,25 @@
 @import 'styles/_colors.scss';
-
+::-webkit-scrollbar {
+  display: block;
+}
 #choose-bond-view {
-  display: flex;
-  align-items: center;
+  overflow-y: hidden !important;
+  // display: flex;
+  // align-items: center;
+  max-width: unset;
+  padding: 0 20px 0 30px;
   justify-content: center;
   flex-direction: column;
   overflow: hidden;
+
+  .MuiGrid-container {
+    flex-wrap: unset !important;
+  }
+  .MuiPaper-root {
+    background-color: unset;
+  }
   .ohm-card .bond-hero h4 {
-    font-weight: 600 !important;
+    // font-weight: 600 !important;
 
     .MuiSkeleton-root {
       margin: auto;
@@ -28,7 +40,7 @@
     .bond-pair {
       display: flex !important;
       align-items: center;
-      justify-content: left;
+      justify-content: center;
       margin-bottom: 15px;
       .MuiBox-root {
         margin-right: 20px;
@@ -76,23 +88,30 @@
   }
 
   .MuiTableRow-head {
-    .MuiTableCell-alignLeft {
-      padding-left: 20px;
-    }
+    display: inline-flex;
+    justify-content: space-between;
+    width: 100%;
+    text-align: center;
+    margin: auto;
   }
 
   .MuiTableCell-root {
+    min-width: 120px;
     padding: 12px;
+
+    text-align: center;
     p {
-      margin: 0 !important;
-      display: flex !important;
       align-items: center;
-      justify-content: space-evenly;
+      font-size: 16px;
+      // justify-content: space-evenly;
       white-space: nowrap;
       img {
         margin-right: 3px;
       }
     }
+  }
+  .extra-wide {
+    width: 180px;
   }
 
   .MuiTableBody-root .MuiTableRow-root .MuiTableCell-alignLeft {
@@ -122,11 +141,10 @@
     }
     div.bond-name {
       width: 60%;
-      margin-left: 20px !important;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      text-align: left;
+      text-align: center;
       align-items: flex-start;
       p {
         margin-bottom: unset !important;
@@ -138,6 +156,9 @@
       }
     }
     .bond-name-cell {
+      p {
+        font-size: 1.2em !important;
+      }
       display: flex;
     }
   }
@@ -145,7 +166,8 @@
 
 .bond-title {
   font-weight: 600;
-  font-size: 20px;
+  font-size: 24px;
+  margin-bottom: 5px;
   display: flex;
   align-items: center;
 
@@ -159,10 +181,28 @@
 }
 
 .bond-hero {
+  border-radius: 10px;
+  // display: inline-flex;
+  grid-column-gap: 5% !important;
+  width: 100%;
+
+  .bond-hero-block {
+    margin: auto;
+    width: 100%;
+    // background-color: red;
+    padding: 10px 0 10px 20px;
+    margin-top: 10px;
+  }
+
+  .MuiGrid-root {
+    border-radius: 10px;
+  }
   .bond-hero-title {
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 24px;
+    font-weight: 700;
+    font-size: 18px;
+
+    // line-height: 24px;
+    text-align: left;
   }
 
   .bond-hero-value {
@@ -171,20 +211,44 @@
     font-size: 24px;
     line-height: 36px;
     display: flex;
+    text-align: left;
     align-items: center;
-    flex-direction: column;
+  }
+}
+.MuiTableBody-root {
+  .MuiTableRow-root {
+    margin-bottom: 20px;
+    // height: 120px;
+    border-radius: 20px !important;
+    justify-content: space-between;
+    display: flex;
+    align-items: center;
+    border: 1px solid transparent;
+    transition: 0.2s ease-in-out;
+    cursor: pointer;
+  }
+  .MuiTableRow-root:hover {
+    border: 2px solid rgb(163, 163, 163, 0.8);
+    border-radius: 20px;
   }
 }
 
-.bond-table-title {
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 17px;
+.MuiTableCell-head {
+  .bond-table-title {
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 17px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: 0;
+  }
 }
 
 .bond-name-title {
-  display: flex;
+  display: inline-flex;
+  flex-wrap: normal;
   align-items: center;
+  text-align: center;
   font-weight: 600;
   font-size: 14px;
   line-height: 24px;
@@ -197,7 +261,7 @@
 .bond-name-container {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .bond-lp-add-liquidity {
@@ -205,8 +269,18 @@
   font-size: 14px;
   font-weight: 600;
 }
+.bond-lp-add-liquidity:hover {
+  text-decoration: underline;
+}
 
 .bond-table-actions {
+  display: inline-flex;
+  flex-wrap: normal;
+  align-items: center;
+  font-weight: 600;
+  text-align: center;
+  line-height: 24px;
+
   .bond-table-action-button {
     display: block;
     margin-bottom: 8px;
@@ -214,9 +288,15 @@
 }
 
 .bond-table-container {
-  margin-left: -18px;
-  margin-right: -18px;
-  width: unset !important;
+  // margin-left: -18px;
+  // margin-right: -18px;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  tr {
+    padding: 20px;
+  }
 }
 
 .bond-table-btn {
@@ -235,17 +315,43 @@
     border: 2px solid $otter-blue;
   }
 }
+@media screen and (max-width: 733px) {
+  #choose-bond-view {
+    .MuiGrid-container {
+      flex-wrap: wrap !important;
+    }
+    .bond-hero-title {
+      font-size: 14px !important;
+    }
 
-@media screen and (max-width: 417px) {
-  .bond-hero-title {
-    font-size: 14px !important;
-  }
-
-  .bond-hero-value {
-    font-size: 16px !important;
+    .bond-hero-value {
+      font-size: 16px !important;
+    }
+    .bond-table-btn {
+      font-size: 14px !important;
+    }
+    .extra-wide {
+      width: unset;
+    }
+    .bond-hero-block {
+      margin-bottom: 10px;
+    }
   }
 }
+// @media screen and (max-width: 417px) {
+//   #choose-bond-view {
+//     .MuiGrid-container {
+//       flex-wrap: wrap !important;
+//     }
+//     .bond-hero-title {
+//       font-size: 14px !important;
+//     }
 
+//     .bond-hero-value {
+//       font-size: 16px !important;
+//     }
+//   }
+// }
 .ohm-card-container {
   width: 100%;
 }

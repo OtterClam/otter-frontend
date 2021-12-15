@@ -5,6 +5,8 @@ const English = {
       language: 'Language',
       bond: 'Bond',
       stake: 'Stake',
+      unstake: 'Unstake',
+      staking: 'staking',
       migrate: 'Migrate',
       roi: 'ROI', //Return on Investment
       max: 'Max',
@@ -26,12 +28,17 @@ const English = {
       currentApy: 'Current APY',
       dashboard: 'Dashboard',
       calculator: 'Calculator',
+      helpTranslate: 'Help us Translate',
     },
     time: {
       days: 'Days',
+      day: 'Day',
       hours: 'Hours',
+      hour: 'Hour',
       minutes: 'Minutes',
+      minute: 'Minute',
       seconds: 'Seconds',
+      second: 'Second',
       today: 'Today',
     },
     // src\views\Dashboard
@@ -69,22 +76,6 @@ const English = {
           'The current index tracks the amount of sCLAM accumulated since the beginning of staking. Basically, how much sCLAM one would have if they staked and held a single CLAM from day 1.',
       },
     },
-    // src\views\Migrate
-    migrate: {
-      migration: 'Migration',
-      oldClamSupply: 'Old CLAM Supply',
-      oldTreasuryReserve: 'Old Treasury Reserve',
-      migrationProgress: 'Migration Progress',
-      connectWalletDescription: 'Connect your wallet to migrate your CLAM tokens!',
-      steps: 'Steps',
-      yourAmount: 'Your amount',
-      claimWarmup: 'Claim Warmup',
-      done: 'DONE',
-      unstakeClam: 'Unstake CLAM',
-      migrateTo: 'Migrate CLAM to CLAM2',
-      estimatedClamTwo: 'Estimated CLAM2 ',
-      yourClamTwoBalance: 'Your CLAM2 Balance',
-    },
     // src\views\Bond
     bonds: {
       debtRatio: 'Debt Ratio',
@@ -95,6 +86,8 @@ const English = {
       deprecated: 'Deprecated',
       bondDiscount: 'discount!',
       myBond: 'My Bond',
+      fullyVested: 'Fully Vested',
+      fullyVestedAt: 'Fully Vested At',
       advancedSettings: {
         txrevert: 'Transaction may revert if price changes by more than slippage %',
         recipientAddress: 'Choose recipient address. By default, this is your currently connected address',
@@ -113,8 +106,11 @@ const English = {
           'Note: The "Approve" transaction is only needed when bonding for the first time; subsequent bonding only requires you to perform the "Bond" transaction.',
         roiFourFourInfo: '* The ROI of (4,4) bond includes 5-days staking reward',
 
-        youWillGet: 'You Will Get',
+        youWillGet: 'You Will Get ',
         maxBuy: 'Max You Can Buy',
+      },
+      purchaseDialog: {
+        bondSuccessful: 'Your bond was successful.',
       },
       redeem: {
         fullyVestedPopup: 'You can only claim (4,4) bond after it fully vested.',
@@ -151,10 +147,12 @@ const English = {
         clamToken: 'CLAM Token',
         compounds: 'Compounds yields automatically through a treasury backed memecoin with intrinsic value',
         treasuryBalance: 'Treasury Balance',
+        totalStaked: 'Total Staked',
       },
     },
     // src\views\Stake
     stake: {
+      stake: 'Stake',
       clamStaking: 'CLAM Staking',
       connectWalletDescription: 'Connect your wallet to stake CLAM2 tokens!',
       approvalInfo:
@@ -164,6 +162,9 @@ const English = {
       nextRewardAmount: 'Next Reward Amount',
       nextRewardYield: 'Next Reward Yield',
       roiFiveDay: 'ROI (5-Day Rate)', //Return on Investment
+      stakeSuccessful: 'Your stake was successful',
+      unstakeSuccessful: 'Your unstake was successful',
+      youReceived: 'You just received ',
     },
     // src\views\Calculator
     calculator: {
@@ -203,6 +204,8 @@ const English = {
       stonehandDescription: 'Awarded to wallets with over 56 sCLAM that have staked from 11/9 to drop date.',
       diamondhandDescription:
         'Awarded for staking the full amount of CLAM from IDO or launch date (11/3, with a minimum of 20 sCLAM) to drop date',
+      giveawayParty: 'Giveaway Party',
+      giveawayPartyHeld: 'giveaway party will be held on',
     },
   },
 };

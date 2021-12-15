@@ -9,6 +9,8 @@ import {
   TableHead,
   TableRow,
   Zoom,
+  makeStyles,
+  Typography,
 } from '@material-ui/core';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Skeleton } from '@material-ui/lab';
@@ -20,7 +22,15 @@ import { useBonds } from '../../hooks';
 import { IReduxState } from '../../store/slices/state.interface';
 import { BondDataCard, BondTableRow } from './BondRow';
 import './choose-bond.scss';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
+
+const useStyles = makeStyles(theme => ({
+  white: {
+    '& ': {
+      backgroundColor: theme.palette.mode.white,
+    },
+  },
+}));
 
 function ChooseBond() {
   const { t } = useTranslation();
@@ -46,10 +56,11 @@ query {
     });
   });
 
+  const styles = useStyles();
   return (
     <div id="choose-bond-view">
       <Zoom in={true}>
-        <Paper className="ohm-card">
+        <Paper>
           <Box className="card-header">
             <p className="bond-title">
               {t('common.bond')} (
@@ -61,9 +72,12 @@ query {
           </Box>
 
           <Grid container item xs={12} style={{ margin: '10px 0px 20px' }} className="bond-hero">
-            <Grid item xs={6}>
+            <Grid item className={`bond-hero-block ${styles.white}`}>
               <Box textAlign={`${isVerySmallScreen ? 'left' : 'center'}`}>
-                <p className="bond-hero-title">{t('common.treasuryBalance')}</p>
+                <Typography className="bond-hero-title" variant="h4" color="secondary">
+                  {t('common.treasuryBalance')}
+                </Typography>
+
                 <Box component="p" color="text.secondary" className="bond-hero-value">
                   {!treasuryBalance ? (
                     <Skeleton width="180px" />
@@ -79,11 +93,13 @@ query {
               </Box>
             </Grid>
 
-            <Grid item xs={6} className={`ohm-price`}>
+            <Grid item className={`bond-hero-block ${styles.white}`}>
               <Box textAlign={`${isVerySmallScreen ? 'right' : 'center'}`}>
-                <p className="bond-hero-title">{t('common.clamPrice')}</p>
+                <Typography className="bond-hero-title" variant="h4" color="secondary">
+                  {t('common.clamPrice')}
+                </Typography>
                 <Box component="p" color="text.secondary" className="bond-hero-value">
-                  {isAppLoading ? <Skeleton width="100px" /> : `$${trim(marketPrice, 2)}`}
+                  {isAppLoading ? <Skeleton width="180px" /> : `$${trim(marketPrice, 2)}`}
                 </Box>
               </Box>
             </Grid>
@@ -95,22 +111,36 @@ query {
                 <Table aria-label="Available bonds">
                   <TableHead>
                     <TableRow>
-                      <TableCell align="center">
-                        <p className="bond-table-title">{t('common.bond')}</p>
+                      <TableCell className="extra-wide" align="center">
+                        <Typography className="bond-table-title" variant="h4" color="secondary">
+                          {t('common.bond')}
+                        </Typography>
                       </TableCell>
                       <TableCell align="center">
-                        <p className="bond-table-title">{t('common.price')}</p>
+                        <Typography className="bond-table-title" variant="h4" color="secondary">
+                          {t('common.price')}
+                        </Typography>
                       </TableCell>
                       <TableCell align="center">
-                        <p className="bond-table-title">{t('common.roi')}</p>
+                        <Typography className="bond-table-title" variant="h4" color="secondary">
+                          {t('common.roi')}
+                        </Typography>
                       </TableCell>
                       <TableCell align="right">
-                        <p className="bond-table-title">{t('bonds.purchased')}</p>
+                        <Typography className="bond-table-title" variant="h4" color="secondary">
+                          {t('bonds.purchased')}
+                        </Typography>
                       </TableCell>
                       <TableCell align="right">
-                        <p className="bond-table-title">{t('bonds.myBond')}</p>
+                        <Typography className="bond-table-title" variant="h4" color="secondary">
+                          {t('bonds.myBond')}
+                        </Typography>
                       </TableCell>
-                      <TableCell align="right"></TableCell>
+                      <TableCell className="extra-wide" align="center">
+                        <Typography className="bond-table-title" variant="h4" color="secondary">
+                          {t('bonds.fullyVestedAt')}
+                        </Typography>
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>

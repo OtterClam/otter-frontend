@@ -163,7 +163,7 @@
   }
 }
 #num-box {
-  width: 320px;
+  width: 280px;
 }
 .calculator-action-area {
   display: flex;
@@ -474,6 +474,14 @@
     p {
       font-size: 18px;
     }
+  }
+}
+
+.adornment {
+  .stake-card-action-input-btn {
+    width: 100px;
+    padding-right: auto;
+    text-align: right;
   }
 }
 

@@ -2,6 +2,7 @@ import { Modal, Paper, SvgIcon, IconButton, makeStyles, Grid } from '@material-u
 import { ReactComponent as XIcon } from '../../assets/icons/icon_close.svg';
 import { getTokenImage } from '../../helpers';
 import StakeGif from './stake.gif';
+import { useTranslation } from 'react-i18next';
 
 import './stakeDialog.scss';
 
@@ -50,6 +51,7 @@ function StakeDialog({
   nextRewardValue,
   action,
 }: StakeDialogProps) {
+  const { t } = useTranslation();
   const styles = useStyles();
   return (
     <Modal id="sdialog" open={open} onClose={handleClose} hideBackdrop>
@@ -68,7 +70,7 @@ function StakeDialog({
 
           <div className="body">
             <div className="confirm">
-              <span>Your {action === `stake` ? 'stake' : 'unstake'} was successful.</span>
+              <span>{action === `stake` ? t('stake.stakeSuccessful') : t('stake.unstakeSuccessful')} </span>
             </div>
             <div className="logo-wrapper">
               {action === `stake` ? <img src={StakeGif} style={{ width: 200, height: 200 }} /> : getTokenImage('clam')}
@@ -76,11 +78,12 @@ function StakeDialog({
             <div className="amt-msg">
               {action === `stake` ? (
                 <div className="rcv">
-                  You will get <span className="quantity">{quantity}</span> sCLAM2!
+                  {t('bonds.purchase.youWillGet')}
+                  <span className="quantity">{quantity}</span> sCLAM2!
                 </div>
               ) : (
                 <div className="rcv">
-                  You just received <span className="quantity">{quantity}</span> CLAM2!
+                  {t('stake.youReceived')} <span className="quantity">{quantity}</span> CLAM2!
                 </div>
               )}
             </div>
@@ -88,25 +91,25 @@ function StakeDialog({
               <div className={`${styles.detailContent} dtl-wrap`}>
                 <Grid container className="dtl">
                   <Grid item xs={6} md={6}>
-                    <div>Your Balance</div>
+                    <div>{t('common.yourBalance')}</div>
                   </Grid>
                   <Grid item xs={6} md={6} className="dtl-value">
                     <div>{balance} CLAM2</div>
                   </Grid>
                   <Grid item xs={6} md={6}>
-                    <div>Your Staked Balance</div>
+                    <div>{t('stake.stakedBalance')}</div>
                   </Grid>
                   <Grid item xs={6} md={6} className="dtl-value">
                     <div>{stakeBalance} sCLAM2</div>
                   </Grid>
                   <Grid item xs={6} md={6}>
-                    <div>Next Reward Amount</div>
+                    <div>{t('stake.nextRewardAmount')}</div>
                   </Grid>
                   <Grid item xs={6} md={6} className="dtl-value">
                     <div>{nextRewardValue} sCLAM2</div>
                   </Grid>
                   <Grid item xs={6} md={6}>
-                    <div>Next Reward Yield</div>
+                    <div>{t('stake.nextRewardYield')}</div>
                   </Grid>
                   <Grid item xs={6} md={6} className="dtl-value">
                     <div>{stakingRebasePercentage}%</div>

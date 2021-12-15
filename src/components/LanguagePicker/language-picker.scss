@@ -62,12 +62,17 @@
       line-height: 1.5;
     }
   }
+  .select-language {
+    display: block;
+    width: 100%;
+    text-align: left;
+    margin-bottom: 4px;
+  }
   .select-language:hover {
     display: block;
     width: 100%;
     text-align: left;
     margin-bottom: 4px;
-    background-color: #f7f9fb;
   }
 }
 
@@ -76,12 +81,11 @@
 }
 .lang-button-border-true {
   cursor: pointer;
-  margin-right: 20px;
   height: 44px;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 30px;
+  width: 88px;
   border: 2px solid;
   border-radius: 10px;
 
@@ -91,20 +95,37 @@
 }
 .lang-button-border-false {
   cursor: pointer;
-  margin-right: 20px;
-  height: 44px;
+  width: 88px;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0 30px;
+  width: 44px;
+  border: 0px transparent !important;
 
   p {
     font-size: 16px;
   }
 }
 
-@media screen and (max-width: 417px) {
+@media screen and (max-width: 512px) {
   .wallet-menu {
     margin-top: 10px;
+  }
+  .lang-button-border-true,
+  .lang-button-border-false {
+    // width: 44px;
+    svg {
+      margin-left: 0px;
+    }
+  }
+  #wallet-menu {
+    .language-button {
+      display: flex;
+      margin: auto;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 5px;
+    }
   }
 }

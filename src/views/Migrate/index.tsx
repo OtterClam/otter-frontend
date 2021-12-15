@@ -17,7 +17,7 @@ import { IPendingTxn, isPendingTxn, txnButtonText } from '../../store/slices/pen
 import { IReduxState } from '../../store/slices/state.interface';
 import ActionButton from '../../components/Button/ActionButton';
 import './migrate.scss';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const useStyles = makeStyles(theme => ({
   root: {

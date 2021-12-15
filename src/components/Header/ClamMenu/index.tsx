@@ -15,6 +15,7 @@ import {
   useMediaQuery,
 } from '@material-ui/core';
 import { ReactComponent as ArrowUpIcon } from '../../../assets/icons/arrow-up.svg';
+import { ReactComponent as ClamIcon } from '../../../assets/icons/CLAM.svg';
 import './clam-menu.scss';
 import { IReduxState } from '../../../store/slices/state.interface';
 import { getTokenUrl, Token } from '../../../helpers';
@@ -72,15 +73,15 @@ function ClamMenu() {
 
   const open = Boolean(anchorEl);
   const id = 'ohm-popper';
-  if (isSmallScreen) {
-    return (
-      <Link href={'https://quickswap.exchange/#/swap?outputCurrency=' + CLAM_ADDRESS} target="_blank" rel="noreferrer">
-        <Box color="text.primary" className="ohm-button">
-          <p>{t('components.buy')}</p>
-        </Box>
-      </Link>
-    );
-  }
+  // if (isSmallScreen) {
+  //   return (
+  //     <Link href={'https://quickswap.exchange/#/swap?outputCurrency=' + CLAM_ADDRESS} target="_blank" rel="noreferrer">
+  //       <Box color="text.primary" className="ohm-button">
+  //         <p>{t('components.buy')}</p>
+  //       </Box>
+  //     </Link>
+  //   );
+  // }
   return (
     <Box
       component="div"
@@ -88,7 +89,12 @@ function ClamMenu() {
       onMouseLeave={e => handleClick(e)}
       id="ohm-menu-button-hover"
     >
-      <Box color="text.primary" className="ohm-button">
+      <Box id="buy-button" color="text.primary" className="ohm-button">
+        <SvgIcon
+          component={ClamIcon}
+          htmlColor="primary"
+          style={{ marginRight: '10px', marginLeft: '-20px', width: '24px', height: '24px' }}
+        />
         <p>{t('common.buyThing')}CLAM2</p>
       </Box>
 
