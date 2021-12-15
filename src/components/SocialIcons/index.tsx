@@ -11,30 +11,56 @@ import styles from './styles.module.scss';
 export type Color = 'blue' | 'gray';
 
 export interface Props {
+  size?: number;
   color: Color;
 }
 
-export default function SocialIcons({ color }: Props) {
+export default function SocialIcons({ color, size = 32 }: Props) {
   const fillColor = color === 'blue' ? '#3B4BD8' : '#8193B5';
   return (
     <div className={styles.communityIcons}>
       <Link href={DiscordLink} className="community-icon-link">
-        <SvgIcon component={DiscordIcon} style={{ width: 32, height: 32 }} viewBox="0 0 32 32" htmlColor={fillColor} />
+        <SvgIcon
+          component={DiscordIcon}
+          style={{ width: size, height: size }}
+          viewBox="0 0 32 32"
+          htmlColor={fillColor}
+        />
       </Link>
       <Link href={TelegramLink} className="community-icon-link">
-        <SvgIcon component={TelegramIcon} style={{ width: 32, height: 32 }} viewBox="0 0 32 32" htmlColor={fillColor} />
+        <SvgIcon
+          component={TelegramIcon}
+          style={{ width: size, height: size }}
+          viewBox="0 0 32 32"
+          htmlColor={fillColor}
+        />
       </Link>
       <Link href={TwitterLink} className="community-icon-link">
-        <SvgIcon component={TwitterIcon} style={{ width: 32, height: 32 }} viewBox="0 0 32 32" htmlColor={fillColor} />
+        <SvgIcon
+          component={TwitterIcon}
+          style={{ width: size, height: size }}
+          viewBox="0 0 32 32"
+          htmlColor={fillColor}
+        />
       </Link>
       <Link href={GithubLink} className="community-icon-link">
-        <SvgIcon component={GithubIcon} style={{ width: 32, height: 32 }} viewBox="0 0 32 32" htmlColor={fillColor} />
+        <SvgIcon
+          component={GithubIcon}
+          style={{ width: size, height: size }}
+          viewBox="0 0 32 32"
+          htmlColor={fillColor}
+        />
       </Link>
       <Link href={DocsLink} className="community-icon-link">
-        <SvgIcon component={DocIcon} style={{ width: 32, height: 32 }} viewBox="0 0 32 32" htmlColor={fillColor} />
+        <SvgIcon component={DocIcon} style={{ width: size, height: size }} viewBox="0 0 32 32" htmlColor={fillColor} />
       </Link>
       <Link href={MediumLink} className="community-icon-link">
-        <SvgIcon component={MediumIcon} style={{ width: 32, height: 32 }} viewBox="0 0 32 32" htmlColor={fillColor} />
+        <SvgIcon
+          component={MediumIcon}
+          style={{ width: size, height: size }}
+          viewBox="0 0 32 32"
+          htmlColor={fillColor}
+        />
       </Link>
     </div>
   );

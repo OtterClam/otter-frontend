@@ -2,23 +2,23 @@ import { Box, Grid, Link, makeStyles, Paper, Tooltip, useTheme } from '@material
 import { Skeleton } from '@material-ui/lab';
 import groupBy from 'lodash/groupBy';
 import { useCallback, useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { NavLink, useLocation } from 'react-router-dom';
-import { LabelChip } from 'src/components/Chip';
+import AuditedMark from 'src/components/AuditedMark';
+import SocialIcons from 'src/components/SocialIcons';
 import { DEFAULT_NETWORK, getAddresses } from 'src/constants';
 import { AppThemeContext } from 'src/helpers/app-theme-context';
 import { IReduxState } from 'src/store/slices/state.interface';
 import { trim } from '../../../helpers';
 import { useBonds } from '../../../hooks';
 import '../sidebar.scss';
-import Social from '../Social';
 import ActiveMenuIcon from './ActiveMenuIcon';
 import AppLogo from './AppLogo';
 import AppTitle from './AppTitle';
 import InactiveMenuIcon from './InactiveMenuIcon';
 import ToggleDark from './toggle-dark.png';
 import ToggleLight from './toggle-light.png';
-import { useTranslation } from 'react-i18next';
 
 const useStyles = makeStyles(theme => ({
   navbar: {
@@ -263,8 +263,12 @@ function NavContent() {
               </Grid>
             )}
           </Grid>
-          <div className="dapp-menu-social">
-            <Social />
+          <div className="dapp-menu-bottom">
+            <SocialIcons color="gray" size={24} />
+            <p className="dapp-menu-bottom__rights">© 2021 OtterClam All Rights Reserved</p>
+            <div className="dapp-menu-bottom__audit">
+              <AuditedMark />
+            </div>
           </div>
         </Box>
       </Box>
