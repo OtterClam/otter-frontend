@@ -36,8 +36,8 @@ const Italian = {
     },
     // src\views\Dashboard
     dashboard: {
-      marketCap: 'Market Cap',
-      stakingRatio: 'Staking Ratio', //TODO
+      marketCap: 'Cap. di Mercato',
+      stakingRatio: 'Tasso di Staking', //TODO
       circulatingSupply: 'Offerta Circolante',
       backingPerClam: 'Supporto per CLAM', //TODO REVIEW
       otterKingdom: 'Benvenuto nel Regno delle Lontre',
@@ -185,8 +185,8 @@ const Italian = {
     },
     // src\components
     components: {
-      staked: 'in Stak',
-      notStaked: 'Non in stak',
+      staked: 'in Stake',
+      notStaked: 'Non in stake',
       disconnect: 'Disconnetti',
       buy: 'COMPRA',
       buyOnQuickswap: 'Compra su Quickswap',
