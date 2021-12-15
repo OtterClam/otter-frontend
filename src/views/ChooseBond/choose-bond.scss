@@ -228,7 +228,7 @@
     cursor: pointer;
   }
   .MuiTableRow-root:hover {
-    border: 2px solid rgb(163, 163, 163, 0.8);
+    box-shadow: 0px 0px 0px 2px rgb(163, 163, 163, 0.8) inset;
     border-radius: 20px;
   }
 }
@@ -354,4 +354,8 @@
 // }
 .ohm-card-container {
   width: 100%;
+  .MuiGrid-item {
+    margin-bottom: 20px;
+    border-radius: 10px;
+  }
 }
