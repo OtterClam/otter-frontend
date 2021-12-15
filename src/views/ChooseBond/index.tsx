@@ -156,7 +156,7 @@ query {
       </Zoom>
 
       {isSmallScreen && (
-        <Box className="ohm-card-container">
+        <Box className={`ohm-card-container ${styles.white}`}>
           <Grid container item spacing={2}>
             {bonds.map(bond => (
               <Grid item xs={12} key={bond.value}>
