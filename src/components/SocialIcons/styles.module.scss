@@ -1,0 +1,17 @@
+.communityIcons {
+  display: flex;
+  gap: 20px;
+  margin-top: 30px;
+
+  @media screen and (max-width: 800px) {
+    justify-content: center;
+    gap: 15px;
+  }
+
+  a {
+    transition: 400ms;
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}

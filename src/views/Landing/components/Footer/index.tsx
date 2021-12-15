@@ -1,4 +1,4 @@
-import { Link } from '@material-ui/core';
+import { Link, Typography } from '@material-ui/core';
 import { DiscordLink, DocsLink, GithubLink, TwitterLink } from 'src/constants';
 import styles from './footer.module.scss';
 import TwitterIcon from '../../images/twitter.svg';
@@ -9,6 +9,8 @@ import HeaderLogo from 'src/assets/images/header-logo.png';
 import PolygonLogo from './polygon-logo.png';
 import XIcon from './x-icon.svg';
 import { useTranslation } from 'react-i18next';
+import SocialIcons from 'src/components/SocialIcons';
+import AuditedMark from 'src/components/AuditedMark';
 interface LinkButtonProps {
   name: string;
   href: string;
@@ -40,13 +42,20 @@ export default function Footer({ backgroundColor }: Props) {
         <LinkButton name="Docs" href={DocsLink} image={DocIcon} />
       </div>
       <p className={styles.makeit}>{t('landing.footer.letsMakeIt')} (🦦,🦦)</p>
+      <div className={styles.socialIcons}>
+        <div className="contact-us">
+          <Link href="mailto:dev@otterclam.finance">{t('landing.footer.contactUs')} </Link>
+        </div>
+        <SocialIcons color="gray" />
+      </div>
       <div className={styles.logos}>
         <img src={HeaderLogo} alt="logo" />
         <img src={XIcon} alt="x" style={{ width: 20, height: 20 }} />
         <img src={PolygonLogo} alt="logo" />
       </div>
-      <div className="contact-us">
-        <Link href="mailto:dev@otterclam.finance">{t('landing.footer.contactUs')} </Link>
+      <div className={styles.last}>
+        <p className={styles.rightsReserved}>© 2021 OtterClam All Rights Reserved</p>
+        <AuditedMark />
       </div>
     </footer>
   );

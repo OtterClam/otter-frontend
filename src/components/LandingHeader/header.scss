@@ -13,6 +13,12 @@
   top: 0;
   left: 0;
 
+  @media screen and (max-width: 596px) {
+    width: 100%;
+    padding: 0%;
+    justify-content: flex-end;
+  }
+
   &-logo {
     flex: 1;
 
@@ -29,6 +35,10 @@
     @media screen and (max-width: 596px) {
       display: none;
     }
+  }
+
+  .nft-link {
+    display: block !important;
   }
 
   &__new {

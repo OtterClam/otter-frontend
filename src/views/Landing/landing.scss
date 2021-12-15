@@ -82,9 +82,13 @@
         margin-top: 16px;
       }
 
+      &__audited {
+        margin-top: 10px;
+      }
+
       &__app-button {
         display: block;
-        margin-top: 30px;
+        margin-top: 20px;
         text-decoration: none;
 
         @media screen and (max-width: 596px) {
@@ -143,27 +147,6 @@
         button {
           margin: 16px 0;
         }
-      }
-    }
-
-    .community-icons {
-      display: flex;
-      gap: 20px;
-      margin-top: 30px;
-
-      @media screen and (max-width: 596px) {
-        justify-content: center;
-      }
-    }
-
-    .community-icon-link {
-      transition: 400ms;
-      &:hover {
-        opacity: 0.8;
-      }
-      img {
-        width: 32px;
-        height: 32px;
       }
     }
 
