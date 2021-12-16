@@ -95,7 +95,7 @@ function ClamMenu() {
           htmlColor="primary"
           style={{ marginRight: '10px', marginLeft: '-20px', width: '24px', height: '24px' }}
         />
-        <p>{t('common.buyThing')}CLAM2</p>
+        <p>{t('common.buyThing')}CLAM</p>
       </Box>
 
       <Popper id={id} open={open} anchorEl={anchorEl} transition>
@@ -125,17 +125,17 @@ function ClamMenu() {
                       size="large"
                       variant="text"
                       color="primary"
-                      onClick={addTokenToWallet('CLAM2', CLAM_ADDRESS)}
+                      onClick={addTokenToWallet('CLAM', CLAM_ADDRESS)}
                     >
-                      <Typography className="buy-text">CLAM2</Typography>
+                      <Typography className="buy-text">CLAM</Typography>
                     </Button>
                     <Button
                       variant="text"
                       size="large"
                       color="primary"
-                      onClick={addTokenToWallet('sCLAM2', sCLAM_ADDRESS)}
+                      onClick={addTokenToWallet('sCLAM', sCLAM_ADDRESS)}
                     >
-                      <Typography className="buy-text">sCLAM2</Typography>
+                      <Typography className="buy-text">sCLAM</Typography>
                     </Button>
                   </Box>
                 ) : null}

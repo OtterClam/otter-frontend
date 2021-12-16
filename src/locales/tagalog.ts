@@ -80,9 +80,9 @@ const Tagalog = {
       claimWarmup: 'Kunin ang Warmup',
       done: 'Tapos',
       unstakeClam: 'Unstake CLAM',
-      migrateTo: 'Migrate CLAM to CLAM2',
-      estimatedClamTwo: 'Estimated CLAM2 ',
-      yourClamTwoBalance: 'Balanse ng Iyong CLAM2',
+      migrateTo: 'Migrate CLAM to CLAM',
+      estimatedClamTwo: 'Estimated CLAM ',
+      yourClamTwoBalance: 'Balanse ng Iyong CLAM',
     },
     // src\views\Bond
     bonds: {
@@ -156,7 +156,7 @@ const Tagalog = {
     // src\views\Stake
     stake: {
       clamStaking: 'Staking ng Clam',
-      connectWalletDescription: 'Ikonekta ang Iyong Pitaka para mag-stake ng CLAM2 tokens!',
+      connectWalletDescription: 'Ikonekta ang Iyong Pitaka para mag-stake ng CLAM tokens!',
       approvalInfo:
         'Tandaan: Ang "Aprub" transaksyon ay kailangan lamang sa unang beses ng staking/unstaking; sa mga kasunod na staking/unstaking, kailangan nalang isagawa ang "Stake" or "Unstake" transaksyon.',
       balanceInWarmup: 'Iyong balanseng naka-stake sa warmup',

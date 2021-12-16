@@ -79,9 +79,9 @@ const French = {
       claimWarmup: 'Réclamez vos CLAMs préparés',
       done: 'TERMINÉ',
       unstakeClam: 'Unstake CLAM',
-      migrateTo: 'Migrer vos CLAM en CLAM2',
-      estimatedClamTwo: 'Estimation de CLAM2 ',
-      yourClamTwoBalance: 'Votre balance de CLAM2',
+      migrateTo: 'Migrer vos CLAM en CLAM',
+      estimatedClamTwo: 'Estimation de CLAM ',
+      yourClamTwoBalance: 'Votre balance de CLAM',
     },
     // src\views\Bond
     bonds: {
@@ -156,7 +156,7 @@ const French = {
     // src\views\Stake
     stake: {
       clamStaking: 'CLAM Staking',
-      connectWalletDescription: 'Connectez votre portefeuille pour staker vos jetons CLAM2!',
+      connectWalletDescription: 'Connectez votre portefeuille pour staker vos jetons CLAM!',
       approvalInfo:
         "Note: La transaction \"Approuver\" n'est nécessaire que pour la première transaction de staking/unstaking; les opérations subséquentes de staking/unstaking n'ont pas besoin d'approbation",
       balanceInWarmup: 'Votre balance de staking en préparation',

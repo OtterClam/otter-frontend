@@ -79,11 +79,11 @@ function StakeDialog({
               {action === `stake` ? (
                 <div className="rcv">
                   {t('bonds.purchase.youWillGet')}
-                  <span className="quantity">{quantity}</span> sCLAM2!
+                  <span className="quantity">{quantity}</span> sCLAM!
                 </div>
               ) : (
                 <div className="rcv">
-                  {t('stake.youReceived')} <span className="quantity">{quantity}</span> CLAM2!
+                  {t('stake.youReceived')} <span className="quantity">{quantity}</span> CLAM!
                 </div>
               )}
             </div>
@@ -94,19 +94,19 @@ function StakeDialog({
                     <div>{t('common.yourBalance')}</div>
                   </Grid>
                   <Grid item xs={6} md={6} className="dtl-value">
-                    <div>{balance} CLAM2</div>
+                    <div>{balance} CLAM</div>
                   </Grid>
                   <Grid item xs={6} md={6}>
                     <div>{t('stake.stakedBalance')}</div>
                   </Grid>
                   <Grid item xs={6} md={6} className="dtl-value">
-                    <div>{stakeBalance} sCLAM2</div>
+                    <div>{stakeBalance} sCLAM</div>
                   </Grid>
                   <Grid item xs={6} md={6}>
                     <div>{t('stake.nextRewardAmount')}</div>
                   </Grid>
                   <Grid item xs={6} md={6} className="dtl-value">
-                    <div>{nextRewardValue} sCLAM2</div>
+                    <div>{nextRewardValue} sCLAM</div>
                   </Grid>
                   <Grid item xs={6} md={6}>
                     <div>{t('stake.nextRewardYield')}</div>

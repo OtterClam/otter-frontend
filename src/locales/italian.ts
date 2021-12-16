@@ -81,9 +81,9 @@ const Italian = {
       claimWarmup: 'Claim Warmup',
       done: 'FINITO',
       unstakeClam: 'Unstake CLAM',
-      migrateTo: 'Migra da CLAM a CLAM2',
-      estimatedClamTwo: 'CLAM2 Stimati ',
-      yourClamTwoBalance: 'Il tuo bilancio in CLAM2',
+      migrateTo: 'Migra da CLAM a CLAM',
+      estimatedClamTwo: 'CLAM Stimati ',
+      yourClamTwoBalance: 'Il tuo bilancio in CLAM',
     },
     // src\views\Bond
     bonds: {
@@ -159,7 +159,7 @@ const Italian = {
     // src\views\Stake
     stake: {
       clamStaking: 'Staking CLAM',
-      connectWalletDescription: 'Connetti il tuo wallet per mettere in stake token CLAM2!',
+      connectWalletDescription: 'Connetti il tuo wallet per mettere in stake token CLAM!',
       approvalInfo:
         'Nota: La transazione "Approve" è necessario soltanto quando fai staking/unstaking la prima volta; staking/unstaking successivi richiedono soltanto che tu faccia la transazione "Stake" o "Unstake".',
       balanceInWarmup: 'Il tuo Saldo in Stake in warmup',
