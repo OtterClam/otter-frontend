@@ -97,7 +97,7 @@ function Migrate() {
             <Grid item>
               <div className="card-header">
                 <p className="single-stake-title">
-                  CLAM → CLAM2 {t('migrate.migration')} ({<img src={SCLAM} />},{<img src={SCLAM} />})
+                  CLAM → CLAM {t('migrate.migration')} ({<img src={SCLAM} />},{<img src={SCLAM} />})
                 </p>
               </div>
             </Grid>
@@ -217,7 +217,7 @@ function Migrate() {
                         {isAppLoading ? <Skeleton width="80px" /> : <>{trim(Number(oldClamBalance), 4)} CLAM</>}
                       </div>
                       <div className="estimated-clam2">
-                        {isAppLoading ? <Skeleton width="80px" /> : <>{trim(Number(oldClamBalance) / 5, 4)} CLAM2</>}
+                        {isAppLoading ? <Skeleton width="80px" /> : <>{trim(Number(oldClamBalance) / 5, 4)} CLAM</>}
                       </div>
                     </div>
                     <div className="data-row-action">
@@ -247,7 +247,7 @@ function Migrate() {
                     <p className="data-row-name data-row-expand">{t('migrate.yourClamTwoBalance')}</p>
                     <p />
                     <p className="data-row-value data-row-action">
-                      {isAppLoading ? <Skeleton width="80px" /> : <>{trim(Number(clamBalance), 4)} CLAM2</>}
+                      {isAppLoading ? <Skeleton width="80px" /> : <>{trim(Number(clamBalance), 4)} CLAM</>}
                     </p>
                   </Box>
                 </div>

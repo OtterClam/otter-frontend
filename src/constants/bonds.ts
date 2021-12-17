@@ -109,7 +109,7 @@ export function listBonds(chainId: number): BondMap {
     },
     frax_clam: {
       key: 'frax_clam',
-      name: 'FRAX-CLAM2 (4,4)',
+      name: 'FRAX-CLAM (4,4)',
       address: '0xd99c8aF24c5E7fd6E292b1682Ec0f0cB3535e002',
       reserve: '0x1f847e05afaf47ec54626928d0e6c235663e938f',
       reserveUnit: 'LP',
@@ -146,7 +146,7 @@ export function listBonds(chainId: number): BondMap {
     },
     mai_clam: {
       key: 'mai_clam',
-      name: 'MAI-CLAM2 LP',
+      name: 'MAI-CLAM LP',
       address: BONDS.MAI_CLAM,
       reserve: RESERVES.MAI_CLAM,
       reserveUnit: 'LP',
@@ -158,7 +158,7 @@ export function listBonds(chainId: number): BondMap {
     },
     mai_clam44: {
       key: 'mai_clam44',
-      name: 'MAI-CLAM2 (4,4)',
+      name: 'MAI-CLAM (4,4)',
       address: '0xda0d7c3d751d00a1ec1c495eF7Cf3db1a202B0B9',
       reserve: RESERVES.MAI_CLAM,
       reserveUnit: 'LP',

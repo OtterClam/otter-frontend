@@ -1,18 +1,16 @@
-import './landing.scss';
+import { Backdrop, Button } from '@material-ui/core';
 import { useState } from 'react';
-import Header from '../../components/LandingHeader';
-import Stat from './components/Stat';
-import { Backdrop, Button, Link, Paper, Popper, Typography, Fade, Box, makeStyles, SvgIcon } from '@material-ui/core';
-import SecondSection from './components/SecondSection';
-import Footer from './components/Footer';
-import { DiscordLink, GithubLink, TwitterLink } from 'src/constants';
-import TwitterIcon from './images/twitter.svg';
-import DiscordIcon from './images/icon_discord.svg';
-import GithubIcon from './images/icon_github.svg';
-import Otter01 from './images/otter_01.png';
-import CloseIcon from './images/icon_24x24_close.svg';
-import WhiteList from '../WhiteList';
 import { useTranslation } from 'react-i18next';
+import AuditedMark from 'src/components/AuditedMark';
+import SocialIcons from 'src/components/SocialIcons';
+import Header from '../../components/LandingHeader';
+import WhiteList from '../WhiteList';
+import Footer from './components/Footer';
+import SecondSection from './components/SecondSection';
+import Stat from './components/Stat';
+import CloseIcon from './images/icon_24x24_close.svg';
+import Otter01 from './images/otter_01.png';
+import './landing.scss';
 
 function Landing() {
   const { t, i18n } = useTranslation();
@@ -39,22 +37,15 @@ function Landing() {
             <div className="landing__first-section__body__subtitle">
               <p>{t('landing.description.tagline')}</p>
             </div>
+            <div className="landing__first-section__body__audited">
+              <AuditedMark />
+            </div>
             <a className="landing__first-section__body__app-button" href="https://app.otterclam.finance">
               <Button variant="contained" color="primary" size="medium" disableElevation>
                 {t('landing.appButton')}
               </Button>
             </a>
-            <div className="community-icons">
-              <Link href={TwitterLink} className="community-icon-link">
-                <img src={TwitterIcon} />
-              </Link>
-              <Link href={DiscordLink} className="community-icon-link">
-                <img src={DiscordIcon} />
-              </Link>
-              <Link href={GithubLink} className="community-icon-link">
-                <img src={GithubIcon} />
-              </Link>
-            </div>
+            <SocialIcons color="blue" />
           </div>
           <div className="otter01">
             <img src={Otter01} alt="otter01" />
@@ -67,14 +58,6 @@ function Landing() {
       <Stat />
       <SecondSection />
       <Footer />
-      <Backdrop open={open} className="whitelist-check">
-        <div className="whitelist-container">
-          <WhiteList />
-          <div className="close-modal-button" onClick={() => setOpen(false)}>
-            <img src={CloseIcon} />
-          </div>
-        </div>
-      </Backdrop>
     </div>
   );
 }

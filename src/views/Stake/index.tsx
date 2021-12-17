@@ -205,7 +205,7 @@ function Stake() {
                     <div className="stake-index">
                       <p className="single-stake-subtitle">{t('common.currentIndex')}</p>
                       <Box component="p" color="text.secondary" className="single-stake-subtitle-value">
-                        {currentIndex ? <>{trim(Number(currentIndex), 3)} sCLAM2</> : <Skeleton width="150px" />}
+                        {currentIndex ? <>{trim(Number(currentIndex), 3)} sCLAM</> : <Skeleton width="150px" />}
                       </Box>
                     </div>
                   </Grid>
@@ -296,7 +296,7 @@ function Stake() {
                           <ActionButton
                             pendingTransactions={pendingTransactions}
                             type="unstaking"
-                            start="Unstake CLAM2"
+                            start="Unstake CLAM"
                             progress="Unstaking..."
                             processTx={() => onChangeStake('unstake')}
                           ></ActionButton>
@@ -333,7 +333,7 @@ function Stake() {
                       <div className="data-row">
                         <p className="data-row-name-warmup">{t('stake.balanceInWarmup')}</p>
                         <p className="data-row-value">
-                          {isAppLoading ? <Skeleton width="80px" /> : <>{trim(Number(warmupBalance), 4)} CLAM2</>}
+                          {isAppLoading ? <Skeleton width="80px" /> : <>{trim(Number(warmupBalance), 4)} CLAM</>}
                         </p>
                       </div>
                     )}
@@ -341,7 +341,7 @@ function Stake() {
                     <div className="data-row">
                       <p className="data-row-name">{t('common.yourBalance')}</p>
                       <p className="data-row-value">
-                        {isAppLoading ? <Skeleton width="80px" /> : <>{trim(Number(clamBalance), 4)} CLAM2</>}
+                        {isAppLoading ? <Skeleton width="80px" /> : <>{trim(Number(clamBalance), 4)} CLAM</>}
                       </p>
                     </div>
                     <div className="data-row">
@@ -350,7 +350,7 @@ function Stake() {
                         {isAppLoading ? (
                           <Skeleton width="80px" />
                         ) : (
-                          <>{new Intl.NumberFormat('en-US').format(Number(trimmedSClamBalance))} sCLAM2</>
+                          <>{new Intl.NumberFormat('en-US').format(Number(trimmedSClamBalance))} sCLAM</>
                         )}
                       </p>
                     </div>
@@ -358,7 +358,7 @@ function Stake() {
                     <div className="data-row">
                       <p className="data-row-name">{t('stake.nextRewardAmount')}</p>
                       <p className="data-row-value">
-                        {isAppLoading ? <Skeleton width="80px" /> : <>{nextRewardValue} sCLAM2</>}
+                        {isAppLoading ? <Skeleton width="80px" /> : <>{nextRewardValue} sCLAM</>}
                       </p>
                     </div>
 

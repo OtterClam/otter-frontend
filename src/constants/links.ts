@@ -9,3 +9,5 @@ export const DocsLink = 'https://docs.otterclam.finance';
 export const GithubLink = 'https://github.com/OtterClam';
 
 export const MediumLink = 'https://otterclam.medium.com/';
+
+export const TelegramLink = 'https://t.me/otterclam_official';

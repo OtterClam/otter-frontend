@@ -79,9 +79,9 @@ const BahasaIndonesia = {
       claimWarmup: 'Warmup Klaim',
       done: 'SELESAI',
       unstakeClam: 'Lepas CLAM',
-      migrateTo: 'Migrasikan CLAM ke CLAM2',
-      estimatedClamTwo: 'Estimasi CLAM2 ',
-      yourClamTwoBalance: 'Saldo CLAM2 Anda',
+      migrateTo: 'Migrasikan CLAM ke CLAM',
+      estimatedClamTwo: 'Estimasi CLAM ',
+      yourClamTwoBalance: 'Saldo CLAM Anda',
     },
     // src\views\Bond
     bonds: {
@@ -156,7 +156,7 @@ const BahasaIndonesia = {
     // src\views\Stake
     stake: {
       clamStaking: 'Staking CLAM',
-      connectWalletDescription: 'Sambungkan wallet anda untuk melakukan staking token CLAM2!',
+      connectWalletDescription: 'Sambungkan wallet anda untuk melakukan staking token CLAM!',
       approvalInfo:
         'Note: Opsi transaksi "Setujui" hanya dibutuhkan saat pertama kali melakukan staking(kunci)/unstaking(lepas); staking/unstaking selanjutnya hanya memerlukan anda untuk bertransaksi dengan opsi "Stake" atau "Unstake".',
       balanceInWarmup: 'Saldo Staking Anda dalam Warmup',

@@ -80,9 +80,9 @@ const Norwegian = {
       claimWarmup: 'Krev inn warmup-tokens',
       done: 'FERDIG',
       unstakeClam: 'Avstak dine CLAM',
-      migrateTo: 'Migrere CLAM til CLAM2',
-      estimatedClamTwo: 'Estimerte CLAM2 ',
-      yourClamTwoBalance: 'Din CLAM2 Saldo',
+      migrateTo: 'Migrere CLAM til CLAM',
+      estimatedClamTwo: 'Estimerte CLAM ',
+      yourClamTwoBalance: 'Din CLAM Saldo',
     },
     // src\views\Bond
     bonds: {
@@ -155,7 +155,7 @@ const Norwegian = {
     // src\views\Stake
     stake: {
       clamStaking: 'CLAM Staking',
-      connectWalletDescription: 'Koble til din crypto-wallet for å stake CLAM2!',
+      connectWalletDescription: 'Koble til din crypto-wallet for å stake CLAM!',
       approvalInfo:
         'NB: Du behøver kun å trykke "Godkjenn" når du staker eller avstaker for første gang. Alle andre ganger du gjør det så behøver du kun å "Stake" eller "Avstake".',
       balanceInWarmup: 'Din stakede saldo i warmup modus',
