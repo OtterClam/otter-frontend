@@ -12,28 +12,25 @@ import {
   TabsActions,
   Zoom,
 } from '@material-ui/core';
-import { Skeleton } from '@material-ui/lab';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { useCallback, useEffect, useRef, useState, useContext } from 'react';
+import { Skeleton } from '@material-ui/lab';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import ActionButton from '../../components/Button/ActionButton';
-import RebaseTimer from '../../components/RebaseTimer/RebaseTimer';
-import TabPanel from '../../components/TabPanel';
-import { trim } from '../../helpers';
-import { useWeb3Context } from '../../hooks';
+import UnwrapImageDark from 'src/assets/images/image_unwrap_dark.png';
+import UnwrapImageLight from 'src/assets/images/image_unwrap_light.png';
+import WrapImageDark from 'src/assets/images/image_wrap_dark.png';
+import WrapImageLight from 'src/assets/images/image_wrap_light.png';
 import { AppThemeContext } from 'src/helpers/app-theme-context';
-import { IPendingTxn } from '../../store/slices/pending-txns-slice';
-import { approveWrapping, changeWrap } from '../../store/slices/wrap-thunk';
-import { IReduxState } from '../../store/slices/state.interface';
-import { useTranslation, Trans } from 'react-i18next';
+import ActionButton from 'src/components/Button/ActionButton';
+import TabPanel from 'src/components/TabPanel';
+import { trim } from 'src/helpers';
+import { useWeb3Context } from 'src/hooks';
+import { IPendingTxn } from 'src/store/slices/pending-txns-slice';
+import { IReduxState } from 'src/store/slices/state.interface';
+import { approveWrapping, changeWrap } from 'src/store/slices/wrap-thunk';
 import './wrap.scss';
 import WrapDialog from './WrapDialog';
-import { ethers } from 'ethers';
-import { getAddresses } from 'src/constants';
-import WrapImageLight from 'src/assets/images/image_wrap_light.png';
-import WrapImageDark from 'src/assets/images/image_wrap_dark.png';
-import UnwrapImageLight from 'src/assets/images/image_unwrap_light.png';
-import UnwrapImageDark from 'src/assets/images/image_unwrap_dark.png';
 
 const useStyles = makeStyles(theme => ({
   root: {

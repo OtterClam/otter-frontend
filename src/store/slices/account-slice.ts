@@ -2,9 +2,9 @@ import { JsonRpcProvider } from '@ethersproject/providers';
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
 import { ethers } from 'ethers';
 import _ from 'lodash';
-import { ClamTokenContract, MAIContract, StakedClamContract, PearlTokenContract } from '../../abi/';
-import { BondKey, getAddresses, getBond } from '../../constants';
-import { contractForBond, contractForReserve, setAll } from '../../helpers';
+import { ClamTokenContract, MAIContract, PearlTokenContract, StakedClamContract } from 'src/abi';
+import { BondKey, getAddresses, getBond } from 'src/constants';
+import { contractForBond, contractForReserve, setAll } from 'src/helpers';
 
 interface IState {
   [key: string]: any;

@@ -1,12 +1,10 @@
 import { JsonRpcProvider } from '@ethersproject/providers';
-import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
-import { ethers, BigNumber } from 'ethers';
-import { clearPendingTxn, fetchPendingTxns, getWrappingTypeText } from './pending-txns-slice';
-import _ from 'lodash';
-import { ClamTokenContract, MAIContract, StakedClamContract, PearlTokenContract } from '../../abi/';
-import { BondKey, getAddresses, getBond } from '../../constants';
-import { contractForBond, contractForReserve, setAll } from '../../helpers';
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { BigNumber, ethers } from 'ethers';
+import { PearlTokenContract, StakedClamContract } from 'src/abi';
+import { getAddresses } from 'src/constants';
 import { fetchAccountSuccess, getBalances } from './account-slice';
+import { clearPendingTxn, fetchPendingTxns, getWrappingTypeText } from './pending-txns-slice';
 
 interface IState {
   [key: string]: any;
