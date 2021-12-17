@@ -34,7 +34,6 @@ export const useOnChainProvider = (): OnChainProvider => {
   const hasCachedProvider = useHasCachedProviderCallback(web3Modal);
 
   const connect = useConnectCallback({
-    connectedNetwork,
     web3Modal,
     provider,
     setAddress,
@@ -108,14 +107,12 @@ const useWeb3Modal = () => {
 };
 
 const useConnectCallback = ({
-  connectedNetwork,
   web3Modal,
   provider,
   setNetwork,
   setAddress,
   setConnectedNetwork,
 }: {
-  connectedNetwork?: number;
   web3Modal: Web3Modal;
   provider: JsonRpcProvider;
   setNetwork: (network: Networks) => void;
@@ -141,6 +138,7 @@ const useConnectCallback = ({
     const chainId = parseChainId(await connectedProvider.getNetwork().then(network => network.chainId));
     const connectedAddress = await connectedProvider.getSigner().getAddress();
     changeNetwork(chainId, connectedAddress);
+    return chainId;
   };
 
   const addListeners = () => {
@@ -154,17 +152,20 @@ const useConnectCallback = ({
   };
 
   return useCallback(async () => {
-    if (connectedNetwork && !isValidChainId(connectedNetwork)) {
-      switchNetwork();
-      return;
+    if (!rawProvider) {
+      rawProvider = await web3Modal.connect();
+      connectedProvider = new Web3Provider(rawProvider, 'any');
+      addListeners();
     }
 
-    rawProvider = await web3Modal.connect();
-    connectedProvider = new Web3Provider(rawProvider, 'any');
-    addListeners();
-    await updateConnectionStatus();
+    const network = await updateConnectionStatus();
+
+    if (!isValidChainId(network)) {
+      switchNetwork();
+    }
+
     return connectedProvider;
-  }, [provider, web3Modal, connectedNetwork]);
+  }, [provider, web3Modal]);
 };
 
 const useDisconnectCallback = ({
