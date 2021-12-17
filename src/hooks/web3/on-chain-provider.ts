@@ -5,12 +5,12 @@ import WalletConnectProvider from '@walletconnect/web3-provider';
 import { DEFAULT_NETWORK, Networks, RPCURL } from 'src/constants';
 
 export interface OnChainProvider {
-  connect: () => Promise<Web3Provider | undefined>;
+  connect: (options?: { switchNetwork: boolean }) => Promise<Web3Provider | undefined>;
   disconnect: () => void;
   provider: JsonRpcProvider;
   readOnlyProvider: JsonRpcProvider;
   address: string;
-  connected: Boolean;
+  connected: boolean;
   web3Modal: Web3Modal;
   chainID: number;
   hasCachedProvider: () => boolean;
@@ -151,21 +151,24 @@ const useConnectCallback = ({
     rawProvider.on('chainChanged', updateConnectionStatus);
   };
 
-  return useCallback(async () => {
-    if (!rawProvider) {
-      rawProvider = await web3Modal.connect();
-      connectedProvider = new Web3Provider(rawProvider, 'any');
-      addListeners();
-    }
+  return useCallback(
+    async (options: { switchNetwork: boolean } = { switchNetwork: false }) => {
+      if (!rawProvider) {
+        rawProvider = await web3Modal.connect();
+        connectedProvider = new Web3Provider(rawProvider, 'any');
+        addListeners();
+      }
 
-    const network = await updateConnectionStatus();
+      const network = await updateConnectionStatus();
 
-    if (!isValidChainId(network)) {
-      switchNetwork();
-    }
+      if (options.switchNetwork && !isValidChainId(network)) {
+        switchNetwork();
+      }
 
-    return connectedProvider;
-  }, [provider, web3Modal]);
+      return connectedProvider;
+    },
+    [provider, web3Modal],
+  );
 };
 
 const useDisconnectCallback = ({
