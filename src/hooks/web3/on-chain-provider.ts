@@ -35,6 +35,7 @@ export const useOnChainProvider = (): OnChainProvider => {
   const hasCachedProvider = useHasCachedProviderCallback(web3Modal);
 
   const connect = useConnectCallback({
+    connectedNetwork,
     web3Modal,
     provider,
     setAddress,
@@ -108,12 +109,14 @@ const useWeb3Modal = () => {
 };
 
 const useConnectCallback = ({
+  connectedNetwork,
   web3Modal,
   provider,
   setNetwork,
   setAddress,
   setConnectedNetwork,
 }: {
+  connectedNetwork?: number;
   web3Modal: Web3Modal;
   provider: JsonRpcProvider;
   setNetwork: (network: Networks) => void;
@@ -151,12 +154,17 @@ const useConnectCallback = ({
   };
 
   return useCallback(async () => {
+    if (connectedNetwork && !isValidChainId(connectedNetwork)) {
+      switchNetwork();
+      return;
+    }
+
     rawProvider = await web3Modal.connect();
     connectedProvider = new Web3Provider(rawProvider, 'any');
     addListeners();
     await updateConnectionStatus();
     return connectedProvider;
-  }, [provider, web3Modal]);
+  }, [provider, web3Modal, connectedNetwork]);
 };
 
 const useDisconnectCallback = ({
@@ -186,4 +194,16 @@ const isValidChainId = (chainId: number): boolean => {
 
 const parseChainId = (chainId: string | number): number => {
   return typeof chainId === 'string' ? parseInt(chainId, 16) : chainId;
+};
+
+const switchNetwork = () => {
+  if (!window.ethereum) {
+    console.error('failed to switch network');
+    return;
+  }
+
+  window.ethereum.request({
+    method: 'wallet_switchEthereumChain',
+    params: [{ chainId: '0x' + DEFAULT_NETWORK.toString(16) }],
+  });
 };
