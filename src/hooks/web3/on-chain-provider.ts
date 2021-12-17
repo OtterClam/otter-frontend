@@ -22,7 +22,6 @@ export const useOnChainProvider = (): OnChainProvider => {
   const [connectedNetwork, setConnectedNetwork] = useState<Networks>();
   const [network, setNetwork] = useState(DEFAULT_NETWORK);
   const [address, setAddress] = useState('');
-  console.log(connectedNetwork, network, address);
 
   // all the variables below are derive from the above three variables
   const connected = network === connectedNetwork && Boolean(address);
