@@ -1,7 +1,7 @@
 import { Box, Modal, Paper, SvgIcon, IconButton, makeStyles, Grid } from '@material-ui/core';
 import { ReactComponent as XIcon } from '../../assets/icons/icon_close.svg';
 import { getTokenImage } from '../../helpers';
-
+import { useTranslation } from 'react-i18next';
 import './bondDialog.scss';
 
 const useStyles = makeStyles(theme => ({
@@ -37,6 +37,7 @@ interface BondDialogProps {
 
 function BondRedeemDialog({ open, handleClose, balance, pendingPayout }: BondDialogProps) {
   const styles = useStyles();
+  const { t } = useTranslation();
   return (
     <Modal id="bdialog" open={open} onClose={handleClose} hideBackdrop>
       <Paper className={`${styles.modalContent} clam-popover`}>
@@ -54,20 +55,20 @@ function BondRedeemDialog({ open, handleClose, balance, pendingPayout }: BondDia
 
           <div className="body">
             <div className="confirm">
-              <span>Your redeem was successful.</span>
+              <span>{t('bonds.redeem.successful')}</span>
             </div>
             <div className="logo-wrapper">{getTokenImage('sclam')}</div>
             <div className="amt-msg">
-              You just received <span className="quantity">{pendingPayout}</span> CLAM!
+              {t('stake.youReceived')} <span className="quantity">{pendingPayout}</span> sCLAM!
             </div>
             <div className="dtl-container">
               <div className={`${styles.detailContent} dtl-wrap`}>
                 <Grid container className="dtl">
                   <Grid item xs={6} md={6}>
-                    <div>Your CLAM Balance</div>
+                    <div>{t('calculator.yoursClamBalance')}</div>
                   </Grid>
                   <Grid item xs={6} md={6} className="dtl-value">
-                    <div>{balance} CLAM</div>
+                    <div>{balance} sCLAM</div>
                   </Grid>
                 </Grid>
               </div>
