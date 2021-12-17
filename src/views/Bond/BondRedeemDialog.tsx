@@ -58,7 +58,7 @@ function BondRedeemDialog({ open, handleClose, balance, pendingPayout }: BondDia
             </div>
             <div className="logo-wrapper">{getTokenImage('sclam')}</div>
             <div className="amt-msg">
-              You just received <span className="quantity">{pendingPayout}</span> CLAM!
+              You just received <span className="quantity">{pendingPayout}</span> sCLAM!
             </div>
             <div className="dtl-container">
               <div className={`${styles.detailContent} dtl-wrap`}>
