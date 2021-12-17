@@ -4,6 +4,7 @@ import NFTBack from './images/nft-back.jpg';
 import NFT1 from './images/nft1.jpg';
 import NFT2 from './images/nft2.jpg';
 import NFT3 from './images/nft3.jpg';
+import NFT4 from './images/nft4.jpg';
 import { useTranslation } from 'react-i18next';
 
 const useHighlightStyle = () => {
@@ -35,7 +36,7 @@ export default function NFTCards() {
     {
       name: 'Diamond-Hand Otter',
       description: t('nft.diamondhandDescription'),
-      image: NFTBack,
+      image: NFT4,
     },
   ];
   return (
