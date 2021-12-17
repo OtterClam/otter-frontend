@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { MouseEventHandler, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
   Box,
@@ -20,10 +20,31 @@ import ClamMenu from './ClamMenu';
 import { ReactComponent as MetamaskIcon } from '../../assets/icons/metamask.svg';
 import { useTranslation } from 'react-i18next';
 
+const useButtonText = ({
+  isConnected,
+  isSmallScreen,
+  processing,
+}: {
+  isConnected: boolean;
+  isSmallScreen: boolean;
+  processing: boolean;
+}) => {
+  let buttonText = isSmallScreen ? 'Connect' : 'Connect Wallet';
+  if (isConnected) {
+    buttonText = 'Disconnect';
+  }
+
+  if (processing) {
+    buttonText = 'In progress';
+  }
+
+  return buttonText;
+};
+
 function ConnectMenu() {
   const { t } = useTranslation();
   const { connect, disconnect, connected, chainID } = useWeb3Context();
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorEl, setAnchorEl] = useState<HTMLElement>();
   const [isConnected, setConnected] = useState(connected);
   const [isHovering, setIsHovering] = useState(false);
   const isSmallScreen = useMediaQuery('(max-width: 600px)');
@@ -33,22 +54,26 @@ function ConnectMenu() {
     return state.pendingTransactions;
   });
 
-  let buttonText = isSmallScreen ? 'Connect' : 'Connect Wallet';
-  let clickFunc: any = connect;
+  const processing = pendingTransactions && pendingTransactions.length > 0;
+  const buttonText = useButtonText({
+    isConnected,
+    processing,
+    isSmallScreen,
+  });
 
   const handleClick = (event: any) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
 
-  if (isConnected) {
-    buttonText = 'Disconnect';
-    clickFunc = disconnect;
-  }
-
-  if (pendingTransactions && pendingTransactions.length > 0) {
-    buttonText = 'In progress';
-    clickFunc = handleClick;
-  }
+  const clickFunc: MouseEventHandler<HTMLDivElement> = event => {
+    if (processing) {
+      setAnchorEl(anchorEl ? undefined : event.currentTarget);
+    } else if (isConnected) {
+      disconnect();
+    } else {
+      connect({ switchNetwork: true });
+    }
+  };
 
   const open = Boolean(anchorEl);
   const id = open ? 'ohm-popper-pending' : undefined;
@@ -59,10 +84,9 @@ function ConnectMenu() {
     return chainID === 4 ? 'https://rinkeby.etherscan.io/tx/' + txnHash : 'https://polygonscan.com/tx/' + txnHash;
   };
 
-  const isVerySmallScreen = useMediaQuery('(max-width: 512px)');
   useEffect(() => {
     if (pendingTransactions.length === 0) {
-      setAnchorEl(null);
+      setAnchorEl(undefined);
     }
   }, [pendingTransactions]);
 

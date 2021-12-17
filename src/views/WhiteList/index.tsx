@@ -59,7 +59,13 @@ export default function WhiteList() {
       )}
       {!connected && (
         <div className={styles.button}>
-          <Button variant="contained" color="primary" size="large" disableElevation onClick={connect}>
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            disableElevation
+            onClick={() => connect({ switchNetwork: true })}
+          >
             Connect Your Wallet
           </Button>
         </div>
