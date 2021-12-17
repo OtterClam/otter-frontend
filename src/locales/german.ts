@@ -5,6 +5,7 @@ const German = {
       language: 'Sprache',
       bond: 'Bond',
       stake: 'Stake',
+      unstake: 'Unstake',
       migrate: 'Migration',
       roi: 'ROI', //Return on Investment
       max: 'Max',
@@ -26,12 +27,17 @@ const German = {
       currentApy: 'Momentane APY',
       dashboard: 'Dashboard',
       calculator: 'Taschenrechner',
+      helpTranslate: 'Hilf uns beim Übersetzen',
     },
     time: {
       days: 'Tage',
+      day: 'Tag',
       hours: 'Stunden',
+      hour: 'Stunde',
       minutes: 'Minuten',
+      minute: 'Minute',
       seconds: 'Sekunden',
+      second: 'Sekunde',
       today: 'Heute',
     },
     // src\views\Dashboard
@@ -95,6 +101,8 @@ const German = {
       deprecated: 'Veraltet',
       bondDiscount: 'Rabatt!',
       myBond: 'Meine Bond(s)',
+      fullyVested: 'Vollständig gebunden',
+      fullyVestedAt: 'Vollständig gebunden für',
       advancedSettings: {
         txrevert:
           'Die Transaktion kann rückgängig gemacht werden, wenn sich der Preis um mehr als die Slippage % ändert',
@@ -116,6 +124,9 @@ const German = {
 
         youWillGet: 'Sie werden bekommen',
         maxBuy: 'Maximaler Betrag, den Sie kaufen können',
+      },
+      purchaseDialog: {
+        bondSuccessful: 'Dein Bond war erfolgreich!',
       },
       redeem: {
         fullyVestedPopup:
@@ -153,6 +164,7 @@ const German = {
         clamToken: 'CLAM Token',
         compounds: 'Compounds Renditen automatisch durch einen Treasury-Backed Memecoin mit intrinsischem Wert',
         treasuryBalance: 'Treasury',
+        totalStaked: 'Gesamt gestaket',
       },
     },
     // src\views\Stake
@@ -166,6 +178,9 @@ const German = {
       nextRewardAmount: 'Nächster Prämienbetrag',
       nextRewardYield: 'Nächste Belohnungsausbeute',
       roiFiveDay: 'ROI (5-Tage-Rate)', //Return on Investment
+      stakeSuccessful: 'Dein Stake war erfolgreich!',
+      unstakeSuccessful: 'Dein Unstake war erfolgreich!',
+      youReceived: 'Du hast gerade erhalten ',
     },
     // src\views\Calculator
     calculator: {
@@ -205,6 +220,8 @@ const German = {
       stonehandDescription: 'Verliehen an Wallets mit über 56 sCLAM, die vom 09.11. bis zum Drop-Datum gestaked haben.',
       diamondhandDescription:
         'Verliehen für das Staken der vollen CLAM-Menge vom IDO oder dem Startdatum (11.03., mit einem Minimum von 20 sCLAM) bis zum Drop-Datum',
+      giveawayParty: 'Geschenkeparty',
+      giveawayPartyHeld: 'Geschenkeparty ist am',
     },
   },
 };
