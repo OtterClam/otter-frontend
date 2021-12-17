@@ -13,7 +13,6 @@ export interface OnChainProvider {
   connected: Boolean;
   web3Modal: Web3Modal;
   chainID: number;
-  web3?: any;
   hasCachedProvider: () => boolean;
 }
 
