@@ -150,6 +150,7 @@ const useConnectCallback = ({
       return;
     }
 
+    rawProvider.on('accountsChanged', updateConnectionStatus);
     rawProvider.on('chainChanged', updateConnectionStatus);
   };
 
