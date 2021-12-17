@@ -16,6 +16,12 @@ export const localeString = (i18n: any): string => {
     case 'fr':
       ls = 'fr-FR';
       break;
+    case 'de':
+      ls = 'de-DE';
+      break;
+    case 'it':
+      ls = 'it-IT';
+      break;
     default:
       ls = 'default';
       break;
