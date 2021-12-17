@@ -51,6 +51,7 @@ function Landing() {
             <img src={Otter01} alt="otter01" />
           </div>
         </div>
+        <div className="scroll-down" />
         <div className="landing__first-section__footer">
           <div className="landing__first-section__footer__wave" />
         </div>
