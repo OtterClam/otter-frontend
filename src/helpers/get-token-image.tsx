@@ -17,7 +17,7 @@ export function getCLAMTokenImage(size: number = 32) {
 
 export function getStakedCLAMTokenImage(size: number = 32) {
   const style = { height: size, width: size };
-  return <SvgIcon component={StakedClam} viewBox="0 0 100 100" style={style} />;
+  return <SvgIcon component={StakedClam} viewBox="0 0 32 32" style={style} />;
 }
 
 export function getFRAXTokenImage(size: number = 32) {
