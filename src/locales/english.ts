@@ -152,7 +152,6 @@ const English = {
     },
     // src\views\Stake
     stake: {
-      stake: 'Stake',
       clamStaking: 'CLAM Staking',
       connectWalletDescription: 'Connect your wallet to stake CLAM tokens!',
       approvalInfo:
@@ -206,6 +205,7 @@ const English = {
         'Awarded for staking the full amount of CLAM from IDO or launch date (11/3, with a minimum of 20 sCLAM) to drop date',
       giveawayParty: 'Giveaway Party',
       giveawayPartyHeld: 'giveaway party will be held on',
+      airdropCountdown: 'Airdrop Countdown',
     },
   },
 };

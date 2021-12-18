@@ -70,7 +70,7 @@ export default function NFTCountdown() {
         component="div"
       >
         <Typography variant="h4" component="h2" className="nft-cd__title">
-          Airdrop Countdown
+          {t('nft.airdropCountdown')}
         </Typography>
         <div className="nft-cd__numbers">
           <div className="nft-cd__number-group">

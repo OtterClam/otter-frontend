@@ -194,7 +194,7 @@ const Tagalog = {
     },
     // src\components\NFT
     nft: {
-      which: 'Alin ',
+      which: 'Aling ',
       willYouGet: ' ang iyong makukuha?',
       safehandDescription:
         'Ipagkakaloob sa bawat Otter na naka-stake ng hindi bababa sa 2 linggo na mayroong higit sa 4 sCLAM sa peta ng drop.',
