@@ -6,10 +6,6 @@ import { getAddresses } from 'src/constants';
 import { fetchAccountSuccess, getBalances } from './account-slice';
 import { clearPendingTxn, fetchPendingTxns, getWrappingTypeText } from './pending-txns-slice';
 
-interface IState {
-  [key: string]: any;
-}
-
 interface ApproveWrappingProps {
   provider: JsonRpcProvider;
   address: string;

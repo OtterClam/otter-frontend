@@ -16,18 +16,16 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Skeleton } from '@material-ui/lab';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
 import UnwrapImageDark from 'src/assets/images/image_unwrap_dark.png';
 import UnwrapImageLight from 'src/assets/images/image_unwrap_light.png';
 import WrapImageDark from 'src/assets/images/image_wrap_dark.png';
 import WrapImageLight from 'src/assets/images/image_wrap_light.png';
-import { AppThemeContext } from 'src/helpers/app-theme-context';
 import ActionButton from 'src/components/Button/ActionButton';
 import TabPanel from 'src/components/TabPanel';
 import { trim } from 'src/helpers';
-import { useWeb3Context } from 'src/hooks';
+import { AppThemeContext } from 'src/helpers/app-theme-context';
+import { useAppSelector, useAppDispatch, useWeb3Context } from 'src/hooks';
 import { IPendingTxn } from 'src/store/slices/pending-txns-slice';
-import { IReduxState } from 'src/store/slices/state.interface';
 import { approveWrapping, changeWrap } from 'src/store/slices/wrap-thunk';
 import './wrap.scss';
 import WrapDialog from './WrapDialog';
@@ -60,7 +58,7 @@ function a11yProps(index: number) {
 function Wrap() {
   const { t } = useTranslation();
   const styles = useStyles();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { provider, address, connect, chainID } = useWeb3Context();
   const tabsActions = useRef<TabsActions>(null);
   const currenTheme = useContext(AppThemeContext).name;
@@ -76,15 +74,13 @@ function Wrap() {
   const [predictedPearl, setPredictedPearl] = useState(0);
   const [predictedsClam, setPredictedsClam] = useState(0);
 
-  const isAppLoading = useSelector<IReduxState, boolean>(state => state.app.loading);
-  const currentIndex = useSelector<IReduxState, string>(state => {
-    return state.app.currentIndex;
-  });
-  const pearlBalance = useSelector<IReduxState, string>(state => state.account.balances?.pearl);
-  const sClamBalance = useSelector<IReduxState, string>(state => state.account.balances?.sClam);
+  const isAppLoading = useAppSelector<boolean>(state => state.app.loading);
+  const currentIndex = useAppSelector<string>(state => state.app.currentIndex);
+  const pearlBalance = useAppSelector<string>(state => state.account.balances.pearl);
+  const sClamBalance = useAppSelector<string>(state => state.account.balances.sClam);
 
-  const wrapAllowance = useSelector<IReduxState, number>(state => state.account.wrapping?.sClamWrap);
-  const pendingTransactions = useSelector<IReduxState, IPendingTxn[]>(state => state.pendingTransactions);
+  const wrapAllowance = useAppSelector<number>(state => state.account.wrapping.sClamWrap);
+  const pendingTransactions = useAppSelector<IPendingTxn[]>(state => state.pendingTransactions);
 
   const isWrapTab = () => view === 0;
 
