@@ -1,6 +1,6 @@
 import { JsonRpcProvider } from '@ethersproject/providers';
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import _ from 'lodash';
 import { ClamTokenContract, MAIContract, PearlTokenContract, StakedClamContract } from 'src/abi';
 import { BondKey, getAddresses, getBond } from 'src/constants';
@@ -162,6 +162,18 @@ const accountSlice = createSlice({
     fetchAccountSuccess(state, action) {
       _.merge(state, action.payload);
     },
+    wrap(state, action) {
+      const { pearl, sClam } = state.balances;
+      const newPearlBalance = ethers.utils.formatEther(ethers.utils.parseEther(pearl).add(action.payload.pearl));
+      const newsClamBalance = ethers.utils.formatUnits(ethers.utils.parseUnits(sClam, 9).sub(action.payload.sClam), 9);
+      _.merge(state, { balances: { pearl: newPearlBalance, sClam: newsClamBalance } });
+    },
+    unwrap(state, action) {
+      const { pearl, sClam } = state.balances;
+      const newPearlBalance = ethers.utils.formatEther(ethers.utils.parseEther(pearl).sub(action.payload.pearl));
+      const newsClamBalance = ethers.utils.formatUnits(ethers.utils.parseUnits(sClam, 9).add(action.payload.sClam), 9);
+      _.merge(state, { balances: { pearl: newPearlBalance, sClam: newsClamBalance } });
+    },
   },
   extraReducers: builder => {
     builder
@@ -205,7 +217,7 @@ const accountSlice = createSlice({
 
 export default accountSlice.reducer;
 
-export const { fetchAccountSuccess } = accountSlice.actions;
+export const { fetchAccountSuccess, wrap, unwrap } = accountSlice.actions;
 
 const baseInfo = (state: { account: IAccount }) => state.account;
 
