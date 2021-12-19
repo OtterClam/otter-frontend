@@ -65,7 +65,7 @@ function ClamMenu() {
 
   const addresses = getAddresses(networkID);
 
-  const { CLAM_ADDRESS, sCLAM_ADDRESS } = addresses;
+  const { CLAM_ADDRESS, sCLAM_ADDRESS, PEARL_ADDRESS } = addresses;
 
   const handleClick = (event: any) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
@@ -136,6 +136,14 @@ function ClamMenu() {
                       onClick={addTokenToWallet('sCLAM', sCLAM_ADDRESS)}
                     >
                       <Typography className="buy-text">sCLAM</Typography>
+                    </Button>
+                    <Button
+                      variant="text"
+                      size="large"
+                      color="primary"
+                      onClick={addTokenToWallet('PEARL', PEARL_ADDRESS)}
+                    >
+                      <Typography className="buy-text">PEARL</Typography>
                     </Button>
                   </Box>
                 ) : null}
