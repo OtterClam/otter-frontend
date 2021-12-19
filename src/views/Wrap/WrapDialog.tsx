@@ -59,10 +59,9 @@ function WrapDialog({ open, handleClose, received, stakeBalance, pearlBalance, a
             <div className="confirm">
               <span>Your {action === `wrap` ? 'wrap' : 'unwrap'} was successful.</span>
             </div>
-            <div className="logo-wrapper">
-              {/* FIXME: pearl image */}
+            {/* <div className="logo-wrapper">
               {action === `stake` ? <img src={StakeGif} style={{ width: 200, height: 200 }} /> : getTokenImage('clam')}
-            </div>
+            </div> */}
             <div className="amt-msg">
               {action === `wrap` ? (
                 <div className="rcv">
