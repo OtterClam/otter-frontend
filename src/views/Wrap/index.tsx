@@ -76,10 +76,10 @@ function Wrap() {
 
   const isAppLoading = useAppSelector<boolean>(state => state.app.loading);
   const currentIndex = useAppSelector<string>(state => state.app.currentIndex);
-  const pearlBalance = useAppSelector<string>(state => state.account.balances.pearl);
-  const sClamBalance = useAppSelector<string>(state => state.account.balances.sClam);
+  const pearlBalance = useAppSelector<string>(state => state.account.balances?.pearl);
+  const sClamBalance = useAppSelector<string>(state => state.account.balances?.sClam);
 
-  const wrapAllowance = useAppSelector<number>(state => state.account.wrapping.sClamWrap);
+  const wrapAllowance = useAppSelector<number>(state => state.account.wrapping?.sClamWrap);
   const pendingTransactions = useAppSelector<IPendingTxn[]>(state => state.pendingTransactions);
 
   const isWrapTab = () => view === 0;
