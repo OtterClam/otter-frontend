@@ -65,11 +65,11 @@ function WrapDialog({ open, handleClose, received, stakeBalance, pearlBalance, a
             <div className="amt-msg">
               {action === `wrap` ? (
                 <div className="rcv">
-                  You will get <span className="quantity">{received}</span> PEARL!
+                  You got <span className="quantity">{received}</span> PEARL!
                 </div>
               ) : (
                 <div className="rcv">
-                  You just received <span className="quantity">{received}</span> sCLAM!
+                  You got <span className="quantity">{received}</span> sCLAM!
                 </div>
               )}
             </div>
@@ -77,16 +77,16 @@ function WrapDialog({ open, handleClose, received, stakeBalance, pearlBalance, a
               <div className={`${styles.detailContent} dtl-wrap`}>
                 <Grid container className="dtl">
                   <Grid item xs={6} md={6}>
-                    <div>Your sCLAM Balance</div>
-                  </Grid>
-                  <Grid item xs={6} md={6} className="dtl-value">
-                    <div>{stakeBalance} sCLAM</div>
-                  </Grid>
-                  <Grid item xs={6} md={6}>
-                    <div>Your PEARL Balance</div>
+                    <div>Your Wrapped Balance</div>
                   </Grid>
                   <Grid item xs={6} md={6} className="dtl-value">
                     <div>{pearlBalance} PEARL</div>
+                  </Grid>
+                  <Grid item xs={6} md={6}>
+                    <div>Your Staked Balance</div>
+                  </Grid>
+                  <Grid item xs={6} md={6} className="dtl-value">
+                    <div>{stakeBalance} sCLAM</div>
                   </Grid>
                 </Grid>
               </div>
