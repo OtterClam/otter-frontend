@@ -4,6 +4,7 @@ import { ReactComponent as StakedClam } from '../assets/tokens/sCLAM.svg';
 import { ReactComponent as FRAX } from '../assets/tokens/FRAX.svg';
 import { ReactComponent as MAI } from '../assets/tokens/MAI.svg';
 import { ReactComponent as WMATIC } from '../assets/tokens/WMATIC.svg';
+import { ReactComponent as PEARL } from '../assets/tokens/PEARL.svg';
 
 export function getMAITokenImage(size: number = 32) {
   const style = { height: size, width: size };
@@ -22,8 +23,7 @@ export function getStakedCLAMTokenImage(size: number = 32) {
 
 export function getPEARLTokenImage(size: number = 32) {
   const style = { height: size, width: size };
-  // FIXME: change to pearl image
-  return <SvgIcon component={StakedClam} viewBox="0 0 32 32" style={style} />;
+  return <SvgIcon component={PEARL} viewBox="0 0 32 32" style={style} />;
 }
 
 export function getFRAXTokenImage(size: number = 32) {
@@ -66,8 +66,7 @@ export function getTokenUrl(name: Token) {
   }
 
   if (name === 'pearl') {
-    // FIXME: change to pearl image
-    const path = require('../assets/tokens/sCLAM.svg').default;
+    const path = require('../assets/tokens/PEARL.svg').default;
     return toUrl(path);
   }
 
