@@ -26,9 +26,9 @@ function TreasuryDashboard() {
     apy: [t('common.apy')],
     runway: [
       t('dashboard.tooltipItems.current'),
-      `7.5K ${t('common.apy')}`,
-      `5K ${t('common.apy')}`,
-      `2.5K ${t('common.apy')}`,
+      `100K ${t('common.apy')}`,
+      `50K ${t('common.apy')}`,
+      `10K ${t('common.apy')}`,
     ],
     pol: [t('dashboard.tooltipItems.lpTreasury'), t('dashboard.tooltipItems.marketLP')],
   };
