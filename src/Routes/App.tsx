@@ -16,7 +16,7 @@ import { calculateUserBondDetails, loadAccountDetails } from '../store/slices/ac
 import { loadAppDetails } from '../store/slices/app-slice';
 import { calcBondDetails } from '../store/slices/bond-slice';
 import { IReduxState } from '../store/slices/state.interface';
-import { Bond, ChooseBond, Stake } from '../views';
+import { Bond, ChooseBond, Stake, Wrap } from '../views';
 import NotFound from '../views/404/NotFound';
 import './style.scss';
 
@@ -178,6 +178,10 @@ function App() {
 
             <Route path="/stake">
               <Stake />
+            </Route>
+
+            <Route path="/wrap">
+              <Wrap />
             </Route>
 
             <Route path="/bonds">

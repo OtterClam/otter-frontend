@@ -33,7 +33,7 @@ const useGroupedBonds = () => {
   return groupBy(bonds, bond => (bond.deprecated ? 'deprecated' : 'active'));
 };
 
-type Page = 'dashboard' | 'stake' | 'choose_bond' | 'bonds' | 'migrate' | 'calculator';
+type Page = 'dashboard' | 'wrap' | 'stake' | 'choose_bond' | 'bonds' | 'migrate' | 'calculator';
 
 type ComputedBond = ReturnType<typeof useBonds>[0];
 
@@ -139,6 +139,22 @@ function NavContent() {
                 <div className="dapp-menu-item">
                   {checkPage(location, 'stake') ? <ActiveMenuIcon /> : <InactiveMenuIcon />}
                   <p>{t('common.stake')}</p>
+                </div>
+              </Link>
+
+              <Link
+                component={NavLink}
+                id="wrap-nav"
+                to="/wrap"
+                isActive={(match: any, location: any) => {
+                  return checkPage(location, 'wrap');
+                }}
+                activeClassName="active"
+                className="button-dapp-menu"
+              >
+                <div className="dapp-menu-item">
+                  {checkPage(location, 'wrap') ? <ActiveMenuIcon /> : <InactiveMenuIcon />}
+                  <p>{t('common.wrap')}</p>
                 </div>
               </Link>
 

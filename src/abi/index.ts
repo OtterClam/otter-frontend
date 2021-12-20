@@ -6,6 +6,7 @@ export { abi as ClamMaiReserveContract } from './reserves/ClamMaiContract.json';
 
 export { abi as StakedClamContract } from './tokens/StakedClamTokenContract.json';
 export { abi as ClamTokenContract } from './tokens/ClamTokenContract.json';
+export { abi as PearlTokenContract } from './tokens/OtterPearlERC20.json';
 export { abi as MAIContract } from './tokens/MAIContract.json';
 
 export { abi as BondingCalcContract } from './BondingCalcContract.json';

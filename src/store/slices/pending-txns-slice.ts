@@ -6,7 +6,7 @@ export interface IPendingTxn {
   readonly type: string;
 }
 
-const initialState: Array<any> = [];
+const initialState: Array<IPendingTxn> = [];
 
 const pendingTxnsSlice = createSlice({
   name: 'pendingTransactions',
@@ -16,14 +16,18 @@ const pendingTxnsSlice = createSlice({
       state.push(action.payload);
     },
     clearPendingTxn(state, action) {
-      const target = state.find(x => x.txnHash === action.payload);
-      state.splice(state.indexOf(target), 1);
+      const target = state.find((x): x is IPendingTxn => x.txnHash === action.payload);
+      target && state.splice(state.indexOf(target), 1);
     },
   },
 });
 
 export const getStakingTypeText = (action: string) => {
   return action.toLowerCase() === 'stake' ? 'Staking CLAM' : 'Unstaking sCLAM';
+};
+
+export const getWrappingTypeText = (action: string) => {
+  return action.toLowerCase() === 'wrap' ? 'Wrapping sCLAM' : 'Unwrapping PEARL';
 };
 
 export const isPendingTxn = (pendingTransactions: IPendingTxn[], type: string) => {

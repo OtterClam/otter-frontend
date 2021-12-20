@@ -4,6 +4,7 @@ const English = {
       //Only change the text on the right in quote marks!
       language: 'Language',
       bond: 'Bond',
+      wrap: 'Wrap',
       stake: 'Stake',
       unstake: 'Unstake',
       staking: 'staking',
@@ -165,6 +166,20 @@ const English = {
       unstakeSuccessful: 'Your unstake was successful',
       youReceived: 'You just received ',
     },
+    // src\views\Stake
+    wrap: {
+      wrapsClam: 'Wrap sCLAM',
+      connectWalletDescription: 'Connect your wallet to wrap your sCLAM!',
+      approvalInfo:
+        'Note: The "Approve" transaction is only needed when wrapping for the first time; subsequent minting only requires you to perform the "Wrap" transaction.',
+      description:
+        'PEARL is an index-adjusted wrapper for sCLAM. Some people may find this useful for cross-blockchain purposes. Unlike your sCLAM balance, your PEARL balance will not increase over time. When PEARL is unwrapped, you receive sCLAM based on the latest (ever-increasing) index, so the total yield is the same.',
+      stakedBalance: 'Your Balance (Staked)',
+      wrappedBalance: 'Your Balance (Wrapped)',
+      currentIndex: 'Current Index',
+      indexAdjustedBalance: 'Index-adjusted Balance',
+      youWillGet: 'You Will Get',
+    },
     // src\views\Calculator
     calculator: {
       current: 'Current',
@@ -182,6 +197,7 @@ const English = {
     },
     // src\components
     components: {
+      wrapped: 'Wrapped',
       staked: 'Staked',
       notStaked: 'Not staked',
       disconnect: 'Disconnect',

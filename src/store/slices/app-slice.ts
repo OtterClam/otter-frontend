@@ -7,6 +7,20 @@ import { getMarketPrice, getTokenPrice, setAll } from '../../helpers';
 
 const initialState = {
   loading: true,
+  marketPrice: 0,
+  marketCap: 0,
+  circSupply: 0,
+  totalSupply: 0,
+  stakingRatio: 0,
+  currentIndex: '',
+  currentBlock: 0,
+  currentBlockTime: 0,
+  fiveDayRate: 0,
+  stakingAPY: 0,
+  stakingTVL: 0,
+  stakingRebase: 0,
+  networkID: 0,
+  nextRebase: 0,
 };
 
 export interface IApp {
