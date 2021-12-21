@@ -5,6 +5,8 @@ const Italian = {
       language: 'Lingua',
       bond: 'Bond', //TODO
       stake: 'Stake', //TODO
+      unstake: 'Unstake',
+      staking: 'staking',
       migrate: 'Migrazione',
       roi: 'ROI', //Return on Investment
       max: 'Max',
@@ -26,12 +28,16 @@ const Italian = {
       currentApy: 'APY Attuale',
       dashboard: 'Dashboard',
       calculator: 'Calcolatore',
+      helpTranslate: 'Aiutaci a Tradurre',
     },
     time: {
       days: 'Giorni',
       hours: 'Ore',
+      hour: 'Ora',
       minutes: 'Minuti',
+      minute: 'Minuto',
       seconds: 'Secondi',
+      second: 'Secondo',
       today: 'Oggi',
     },
     // src\views\Dashboard
@@ -56,17 +62,17 @@ const Italian = {
         marketLP: 'LP di Mercato',
       },
       tooltipInfoMessages: {
-        tvl: "Valore Totale Bloccato, è l'importo in dollari di tutti i CLAM in stake nel protocol. Questa metrica è spesso usata come indicatore di crescita o salute nei progetti DeFi.",
+        tvl: "Valore Totale Bloccato, è l'importo in dollari di tutti i CLAM in stake nel protocollo. Questa metrica è spesso usata come indicatore di crescita o di salute nei progetti DeFi.",
         mvt: 'Valore di Mercato degli Asset del Treasury, è la somma del valore (in dollari) di tutti gli asset posseduti dal tesoro.',
         rfv: "Valore Risk Free, è l'importo di fondi che il tesoro usa a garanzia di CLAM.",
-        pol: 'Lìquidità Posseduta dal Protocollo, è la quantità di LP che il tesoro possiede e controlla. Più elevata è la POL meglio è; per il protocollo e i suoi utenti.',
+        pol: 'Lìquidità Posseduta dal Protocollo, è la quantità di LP che il tesoro possiede e controlla. Più elevata è la POL meglio è per il protocollo e i suoi utenti.',
         holder: 'Detentori, rappresenta il numero totale di  lontre (detentori di sCLAM)',
         staked: 'CLAM Staked, è il rapporto di sCLAM con CLAM (staked vs unstaked)',
         apy: 'Annual Percentage Yield, è la rappresentazione normalizzata di un tasso di interesse, bassata su un periodo di composizione in un anno. Nota che le APY fornite sono più che altro indicatori di livello di riferimento e non sono risultati futuri precisi.', // ballpark ?
         runway:
-          'Runway, è il numero di giorni per cui le emissioni di  sCLAM sono sostenibili ad un certo tasso di interesse. APY più = runway più lungo',
+          'Runway, è il numero di giorni per cui le emissioni di  sCLAM sono sostenibili ad un certo tasso di interesse. APY più basso = runway più lungo',
         currentIndex:
-          "L'indice attuale traccia la quantit&agrve; di sCLAM accumulati dall'inizio dello staking. In pratica, quanti sCLAM un holder potrebbe possedere se avesse detenuto e messo in stake un CLAM dal giorno 1.",
+          "L'indice attuale traccia la quantità di sCLAM accumulati dall'inizio dello staking. In pratica, quanti sCLAM un holder potrebbe possedere se avesse detenuto e messo in stake un CLAM dal giorno 1.",
       },
     },
     // src\views\Migrate
@@ -75,7 +81,7 @@ const Italian = {
       oldClamSupply: 'Vecchia Fornitura di CLAM ',
       oldTreasuryReserve: 'Vecchia Riserva del Tesoro',
       migrationProgress: 'Avanzamento della Migrazione',
-      connectWalletDescription: 'Connetti il tuo waller per migrare i tuoi token CLAM !',
+      connectWalletDescription: 'Connetti il tuo wallet per migrare i tuoi token CLAM !',
       steps: 'Passi',
       yourAmount: 'Il tuo importo',
       claimWarmup: 'Claim Warmup',
@@ -93,8 +99,10 @@ const Italian = {
       purchased: 'Acquistato',
       bondPrice: 'Prezzo dei Bond',
       deprecated: 'Deprecato',
-      bondDiscount: 'sconto!',
-      myBond: 'Il miei Bond',
+      bondDiscount: 'di sconto!',
+      myBond: 'I miei Bond',
+      fullyVested: 'Maturato Completamente',
+      fullyVestedAt: 'Maturato Completamente il',
       advancedSettings: {
         txrevert: 'La Transazione potrebbe tornare indietro se il prezzo cambia più dello slippage %', //TODO revert
         recipientAddress:
@@ -117,12 +125,15 @@ const Italian = {
         youWillGet: 'Otterrai',
         maxBuy: 'Massimo che puoi acquistare',
       },
+      purchaseDialog: {
+        bondSuccessful: 'Il tuo bond è andato a buon fine.',
+      },
       redeem: {
         fullyVestedPopup: 'Puoi fare il claim del bond  (4,4) dopo che è completamente maturato.',
         claimAndAutostake: 'Claim e Autostake',
         pendingRewards: 'Ricompense in attesa',
         claimableRewards: 'Ricompense richiedibili',
-        timeUntilFullyVested: "Tempo rimanente alla fine dell'acquisizione",
+        timeUntilFullyVested: 'Tempo rimanente alla fine della maturazione',
       },
     },
     // src\views\Landing
@@ -144,16 +155,17 @@ const Italian = {
         treasuryRevenue: 'Ricavi del Tesoro',
         bondsLPFees: 'Commissioni di Bonds e LP',
         bondSales:
-          'Le commissioni delle vendite di Bond e LP Fees aumenta il Ricavo del Tesoro delle Lontre, mantiene la liquiditàe aiuta il controllo della fornitura di CLAM',
+          'Le commissioni delle vendite di Bond e dei LP aumentano il Ricavo del Tesoro delle Lontre, mantengono la liquidità e aiutano il controllo della fornitura di CLAM',
         treasuryGrowth: 'Crescita del Tesoro',
         otterTreasury: 'Tesoro delle Lontre',
         treasuryInflow:
-          "L'afflusso del Tesoro Treasury è usato per aumentare il saldo del Tesoro delle Lontre, garantire i token CLAM in sospeso e regolare l'APY di staking",
+          "L'afflusso del Tesoro è usato per aumentare il saldo del Tesoro delle Lontre, garantire i token CLAM in sospeso e regolare l'APY di staking",
         stakingRewards: 'Ricompense di Staking',
         clamToken: 'Token CLAM',
         compounds:
-          'Compone i rendimenti automaticamente attraverso una memecoin garantita dal tesoro con valore intrinseco',
-        treasuryBalance: 'Saldo del Treasury',
+          'Compone i rendimenti automaticamente attraverso una memecoin con valore intrinseco garantita dal tesoro',
+        treasuryBalance: 'Saldo del Tesoro',
+        totalStaked: 'Totale in Staking',
       },
     },
     // src\views\Stake
@@ -161,12 +173,15 @@ const Italian = {
       clamStaking: 'Staking CLAM',
       connectWalletDescription: 'Connetti il tuo wallet per mettere in stake token CLAM!',
       approvalInfo:
-        'Nota: La transazione "Approve" è necessario soltanto quando fai staking/unstaking la prima volta; staking/unstaking successivi richiedono soltanto che tu faccia la transazione "Stake" o "Unstake".',
+        'Nota: La transazione di "Approve" è necessaria soltanto quando fai staking/unstaking la prima volta; staking/unstaking successivi richiedono soltanto che tu faccia la transazione di "Stake" o "Unstake".',
       balanceInWarmup: 'Il tuo Saldo in Stake in warmup',
-      stakedBalance: 'Your Staked Balance',
+      stakedBalance: 'Il tuo Sado in Staking',
       nextRewardAmount: 'Importo della prossima Ricompensa',
-      nextRewardYield: 'Prossima Ricompensa Maturata Yield',
+      nextRewardYield: 'Prossima Ricompensa Maturata',
       roiFiveDay: 'ROI (Tasso in 5 giorni)', //Return on Investment
+      stakeSuccessful: 'Il tuo stake è andato a buon fine',
+      unstakeSuccessful: 'Il tuo unstake è andato a buon fine',
+      youReceived: 'Hai appena ricevuto ',
     },
     // src\views\Calculator
     calculator: {
@@ -185,8 +200,8 @@ const Italian = {
     },
     // src\components
     components: {
-      staked: 'in Stake',
-      notStaked: 'Non in stake',
+      staked: 'in Staking',
+      notStaked: 'Non in Staking',
       disconnect: 'Disconnetti',
       buy: 'COMPRA',
       buyOnQuickswap: 'Compra su Quickswap',
@@ -200,13 +215,16 @@ const Italian = {
       which: 'Che ',
       willYouGet: ' otterrai?',
       safehandDescription:
-        'In Premio a ogni Lontra whe ha messo in staking per un minimo di 2 settimane più di 4 sCLAM alla data di rilascio.',
+        'In Premio a ogni Lontra che ha messo in staking per un minimo di due settimane più di 4 sCLAM alla data di rilascio.',
       furryhandDescription:
         'In Premio a ogni Lontra che ha messo in staking per un minimo di due settimane più di 40 sCLAM alla data di rilascio',
       stonehandDescription:
         'In premio ai wallet con più di 56 sCLAM che hanno fatto staking dal 9/11 alla data di rilascio.',
       diamondhandDescription:
-        "In premio per che ha in staking l'intera quantita di CLAM dalla IDO o dalla data di lancio (3/11, con un minimo di 20 sCLAM) fino alla data di rilascio",
+        "In premio per chi ha in staking l'intera quantita di CLAM dalla IDO o dalla data di lancio (3/11, con un minimo di 20 sCLAM) fino alla data di rilascio",
+      giveawayParty: 'Giveaway Party',
+      giveawayPartyHeld: 'giveaway party si terrà il',
+      airdropCountdown: "Conto alla Rovescia per l'Airdrop",
     },
   },
 };
