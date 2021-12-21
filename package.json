@@ -101,8 +101,10 @@
     "gulp-debug": "^4.0.0",
     "gulp-less": "^5.0.0",
     "gulp-postcss": "^9.0.0",
+    "husky": ">=6",
     "ipfs-http-client": "^50.1.2",
     "less-plugin-npm-import": "^2.1.0",
+    "lint-staged": ">=10",
     "prettier": "^2.0.5",
     "s3-folder-upload": "^2.3.1",
     "surge": "^0.21.5"
@@ -121,6 +123,10 @@
     "s3": "node ./scripts/s3.js",
     "ship": "yarn surge",
     "theme": "npx gulp less",
-    "watch": "node ./scripts/watch.js"
+    "watch": "node ./scripts/watch.js",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "*.js": "eslint --cache --fix"
   }
 }
