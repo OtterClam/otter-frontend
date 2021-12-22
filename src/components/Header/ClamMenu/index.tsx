@@ -33,7 +33,7 @@ const addTokenToWallet = (tokenSymbol: string, tokenAddress: string) => async ()
           options: {
             address: tokenAddress,
             symbol: tokenSymbol,
-            decimals: TOKEN_DECIMALS,
+            decimals: tokenSymbol === 'PEARL' ? 18 : TOKEN_DECIMALS,
             image: tokenImage,
           },
         },
