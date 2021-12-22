@@ -10,6 +10,7 @@
   align-items: center;
   justify-content: flex-end;
   transition: background-color 0.2s, box-shadow 0.2s;
+  background-color: #0a0e23;
 
   &__logo {
     flex: 1;
@@ -53,6 +54,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      margin-left: 40px;
 
       p {
         font-size: 16px;
@@ -65,7 +67,7 @@
   padding-top: 6px;
   display: flex;
   flex-direction: column;
-  width: 200px;
+  width: 150px;
   max-width: 200px;
   border-radius: 10px;
   .select-language {
