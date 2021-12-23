@@ -166,13 +166,7 @@ export default function IDO() {
         Claim your <span className={styles.highlight}>CLAM</span> to join the Otter Kingdom now!
       </p>
       <div className={styles.button}>
-        <Button
-          variant="contained"
-          color="primary"
-          size="large"
-          disableElevation
-          onClick={() => connect({ switchNetwork: true })}
-        >
+        <Button variant="contained" color="primary" size="large" disableElevation onClick={connect}>
           Connect Your Wallet
         </Button>
       </div>
