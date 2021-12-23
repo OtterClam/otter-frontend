@@ -22,7 +22,7 @@ import { useTranslation } from 'react-i18next';
 
 function ConnectMenu() {
   const { t } = useTranslation();
-  const { connect, disconnect, connected, chainID } = useWeb3Context();
+  const { connect, disconnect, connected, web3, chainID } = useWeb3Context();
   const [anchorEl, setAnchorEl] = useState(null);
   const [isConnected, setConnected] = useState(connected);
   const [isHovering, setIsHovering] = useState(false);
@@ -54,6 +54,8 @@ function ConnectMenu() {
   const id = open ? 'ohm-popper-pending' : undefined;
 
   const primaryColor = '#49A1F2';
+  const buttonStyles =
+    'pending-txn-container' + (isHovering && pendingTransactions.length > 0 ? ' hovered-button' : '');
 
   const getEtherscanUrl = (txnHash: string) => {
     return chainID === 4 ? 'https://rinkeby.etherscan.io/tx/' + txnHash : 'https://polygonscan.com/tx/' + txnHash;
@@ -68,7 +70,7 @@ function ConnectMenu() {
 
   useEffect(() => {
     setConnected(connected);
-  }, [connected]);
+  }, [web3, connected]);
 
   return (
     <div className="wallet-menu" id="wallet-menu">
