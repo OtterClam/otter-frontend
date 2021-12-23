@@ -1,9 +1,7 @@
 import { Box, Typography } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import './countdown.scss';
-import { useTranslation, Trans } from 'react-i18next';
-
-const PARTY_DATE = new Date(Date.UTC(2021, 11, 24, 13, 0, 0));
+import { useTranslation, Trans, useSSR } from 'react-i18next';
 
 const getNumber = (num: number, pos: number) => {
   if (pos === 0) {
@@ -12,7 +10,7 @@ const getNumber = (num: number, pos: number) => {
   return num % 10;
 };
 
-const useCountdown = () => {
+const useCountdown = (dueDate: Date) => {
   const [timeDiff, setTimeDiff] = useState({
     days: 0,
     hours: 0,
@@ -22,7 +20,7 @@ const useCountdown = () => {
 
   useEffect(() => {
     let timer = setInterval(() => {
-      let delta = (PARTY_DATE.getTime() - Date.now()) / 1000;
+      let delta = (dueDate.getTime() - Date.now()) / 1000;
 
       const days = Math.floor(delta / 86400);
       delta -= days * 86400;
@@ -56,9 +54,20 @@ const Number = ({ value }: { value: number }) => {
   );
 };
 
-export default function NFTCountdown() {
-  const cd = useCountdown();
+interface NFTCountdownProps {
+  onTimeUp: () => void;
+  dueDate: Date;
+}
+
+export default function NFTCountdown({ onTimeUp, dueDate }: NFTCountdownProps) {
+  const cd = useCountdown(dueDate);
   const { t } = useTranslation();
+
+  useEffect(() => {
+    if (cd.days < 0) {
+      onTimeUp();
+    }
+  }, [cd.days]);
 
   return (
     <section className="nft-cd">

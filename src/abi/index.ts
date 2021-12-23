@@ -23,3 +23,5 @@ export { abi as ClamTokenMigrator } from './ClamTokenMigrator.json';
 export { abi as OtterNonStableBondDepository } from './OtterNonStableBondDepository.json';
 
 export { abi as AggregatorV3InterfaceABI } from './AggregatorV3InterfaceABI.json';
+
+export { abi as OtterPAW } from './tokens/OtterPAW.json';

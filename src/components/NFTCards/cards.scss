@@ -85,6 +85,23 @@
   &__description {
     font-size: 14px !important;
     line-height: 21px !important;
+    height: 84px;
+  }
+
+  &__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    // background: $otter-blue;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 14px;
+    margin-top: 18px;
+    margin-bottom: 0px;
   }
 
   @media screen and (max-width: 768px) {

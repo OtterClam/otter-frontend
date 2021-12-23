@@ -1,7 +1,7 @@
-import { Box } from '@material-ui/core';
+import { Box, BoxProps } from '@material-ui/core';
 import { IPendingTxn, isPendingTxn, txnButtonText } from '../../store/slices/pending-txns-slice';
 
-interface ActionButton {
+interface ActionButtonProps extends BoxProps {
   pendingTransactions: IPendingTxn[];
   type: string;
   start: string;
@@ -9,17 +9,18 @@ interface ActionButton {
   processTx: any;
 }
 
-function ActionButton(props: ActionButton) {
-  const { pendingTransactions, type, start, progress, processTx } = props;
+function ActionButton(props: ActionButtonProps) {
+  const { pendingTransactions, type, start, progress, processTx, ...boxProps } = props;
 
   return (
     <Box
-      className="wrap-tab-panel-btn stake-tab-panel-btn transaction-button app-otter-button"
+      className="wrap-tab-panel-btn stake-tab-panel-btn transaction-button app-otter-button nft-card__button"
       bgcolor="otter.otterBlue"
       onClick={() => {
         if (isPendingTxn(pendingTransactions, progress)) return;
         processTx();
       }}
+      {...boxProps}
     >
       <p>{txnButtonText(pendingTransactions, type, progress, start)}</p>
     </Box>

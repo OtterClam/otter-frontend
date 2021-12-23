@@ -1,0 +1,97 @@
+@import "../../styles/colors";
+
+.nft-dialog {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  background-color: #55555555;
+
+  &__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #101631;
+    padding: 40px 185px;
+  }
+
+  &__bg {
+    top: 0;
+    position: absolute;
+    z-index: 10;
+    height: 659px;
+    animation-name: rotation;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+  }
+
+  &__fg {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 20;
+
+    img {
+      width: 262px;
+      height: 400px;
+    }
+  }
+
+  &__title {
+    font-size: 48px;
+    color: white;
+    font-weight: 800;
+    line-height: 72px;
+    margin-top: 40px;
+  }
+
+  &__name {
+    font-size: 24px;
+    color: white;
+    font-weight: 700;
+    line-height: 36px;
+    margin-top: 0px;
+    color: #f15a4b;
+  }
+
+  &__desc {
+    font-size: 24px;
+    color: white;
+    font-weight: 700;
+    line-height: 36px;
+    margin-top: 0px;
+  }
+
+  &__note {
+    font-size: 14px;
+    color: white;
+    font-weight: 400;
+    line-height: 21px;
+    margin-top: 10px;
+  }
+
+  .close-button {
+    position: absolute;
+    top: -40px;
+    right: -185px;
+
+    button {
+      padding: 0;
+    }
+  }
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
