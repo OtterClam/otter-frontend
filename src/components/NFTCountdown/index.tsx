@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import './countdown.scss';
 import { useTranslation, Trans } from 'react-i18next';
 
-const PARTY_DATE = new Date(Date.UTC(2021, 11, 24, 0, 0, 0));
+const PARTY_DATE = new Date(Date.UTC(2021, 11, 24, 13, 0, 0));
 
 const getNumber = (num: number, pos: number) => {
   if (pos === 0) {
