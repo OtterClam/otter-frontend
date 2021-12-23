@@ -143,11 +143,7 @@ function Migrate() {
               {!address ? (
                 <div className="stake-wallet-notification">
                   <div className="wallet-menu" id="wallet-menu">
-                    <Box
-                      bgcolor="otter.otterBlue"
-                      className="app-otter-button"
-                      onClick={() => connect({ switchNetwork: true })}
-                    >
+                    <Box bgcolor="otter.otterBlue" className="app-otter-button" onClick={connect}>
                       <p>{t('common.connectWallet')}</p>
                     </Box>
                   </div>

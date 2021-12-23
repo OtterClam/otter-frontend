@@ -1,4 +1,4 @@
-import { MouseEventHandler, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
   Box,
@@ -20,31 +20,10 @@ import ClamMenu from './ClamMenu';
 import { ReactComponent as MetamaskIcon } from '../../assets/icons/metamask.svg';
 import { useTranslation } from 'react-i18next';
 
-const useButtonText = ({
-  isConnected,
-  isSmallScreen,
-  processing,
-}: {
-  isConnected: boolean;
-  isSmallScreen: boolean;
-  processing: boolean;
-}) => {
-  let buttonText = isSmallScreen ? 'Connect' : 'Connect Wallet';
-  if (isConnected) {
-    buttonText = 'Disconnect';
-  }
-
-  if (processing) {
-    buttonText = 'In progress';
-  }
-
-  return buttonText;
-};
-
 function ConnectMenu() {
   const { t } = useTranslation();
-  const { connect, disconnect, connected, chainID } = useWeb3Context();
-  const [anchorEl, setAnchorEl] = useState<HTMLElement>();
+  const { connect, disconnect, connected, web3, chainID } = useWeb3Context();
+  const [anchorEl, setAnchorEl] = useState(null);
   const [isConnected, setConnected] = useState(connected);
   const [isHovering, setIsHovering] = useState(false);
   const isSmallScreen = useMediaQuery('(max-width: 600px)');
@@ -54,45 +33,44 @@ function ConnectMenu() {
     return state.pendingTransactions;
   });
 
-  const processing = pendingTransactions && pendingTransactions.length > 0;
-  const buttonText = useButtonText({
-    isConnected,
-    processing,
-    isSmallScreen,
-  });
+  let buttonText = isSmallScreen ? 'Connect' : 'Connect Wallet';
+  let clickFunc: any = connect;
 
   const handleClick = (event: any) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
 
-  const clickFunc: MouseEventHandler<HTMLDivElement> = event => {
-    if (processing) {
-      setAnchorEl(anchorEl ? undefined : event.currentTarget);
-    } else if (isConnected) {
-      disconnect();
-    } else {
-      connect({ switchNetwork: true });
-    }
-  };
+  if (isConnected) {
+    buttonText = 'Disconnect';
+    clickFunc = disconnect;
+  }
+
+  if (pendingTransactions && pendingTransactions.length > 0) {
+    buttonText = 'In progress';
+    clickFunc = handleClick;
+  }
 
   const open = Boolean(anchorEl);
   const id = open ? 'ohm-popper-pending' : undefined;
 
   const primaryColor = '#49A1F2';
+  const buttonStyles =
+    'pending-txn-container' + (isHovering && pendingTransactions.length > 0 ? ' hovered-button' : '');
 
   const getEtherscanUrl = (txnHash: string) => {
     return chainID === 4 ? 'https://rinkeby.etherscan.io/tx/' + txnHash : 'https://polygonscan.com/tx/' + txnHash;
   };
 
+  const isVerySmallScreen = useMediaQuery('(max-width: 512px)');
   useEffect(() => {
     if (pendingTransactions.length === 0) {
-      setAnchorEl(undefined);
+      setAnchorEl(null);
     }
   }, [pendingTransactions]);
 
   useEffect(() => {
     setConnected(connected);
-  }, [connected]);
+  }, [web3, connected]);
 
   return (
     <div className="wallet-menu" id="wallet-menu">
