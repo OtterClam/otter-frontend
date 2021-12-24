@@ -8,7 +8,7 @@ import { IReduxState } from 'src/store/slices/state.interface';
 import Chart from '../../components/Chart/Chart.jsx';
 import { formatCurrency, getTokenImage, trim } from '../../helpers';
 import apollo from '../../lib/apolloClient';
-import OtterKing from './otterking.png';
+import OtterKing from './otterking_xmas.png';
 import './treasury-dashboard.scss';
 import { useTranslation, Trans } from 'react-i18next';
 import { bulletpoints, itemType, treasuryDataQuery } from './treasuryData.js';
