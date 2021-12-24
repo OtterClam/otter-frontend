@@ -1,8 +1,7 @@
-import { makeStyles, Modal, IconButton, SvgIcon } from '@material-ui/core';
-import NFT1 from '../NFTCards/images/nft1.jpg';
+import { IconButton, makeStyles, Modal, SvgIcon } from '@material-ui/core';
+import { ReactComponent as XIcon } from '../../assets/icons/icon_close.svg';
 import './nftDialog.scss';
 import { ReactComponent as Star } from './Star.svg';
-import { ReactComponent as XIcon } from '../../assets/icons/icon_close.svg';
 
 const useStyles = makeStyles(theme => ({
   modalContent: {
@@ -36,7 +35,6 @@ interface NFTDialogProps {
 }
 
 function NFTDialog({ open, handleClose, name, image }: NFTDialogProps) {
-  const styles = useStyles();
   return (
     <Modal className="nft-dialog" open={open} onClose={handleClose} hideBackdrop>
       <div className="nft-dialog__container">
@@ -51,7 +49,7 @@ function NFTDialog({ open, handleClose, name, image }: NFTDialogProps) {
           <p className="nft-dialog__title">Otter’standing!</p>
           <div>
             <span className="nft-dialog__desc">You got the </span>
-            <span className="nft-dialog__name">Diamond-Hand Otters</span>
+            <span className="nft-dialog__name">{name}</span>
             <span className="nft-dialog__desc"> NFT</span>
           </div>
           <p className="nft-dialog__note">The NFT will be in your wallet after the transaction is finished.</p>

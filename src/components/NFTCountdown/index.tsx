@@ -1,7 +1,7 @@
 import { Box, Typography } from '@material-ui/core';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import './countdown.scss';
-import { useTranslation, Trans, useSSR } from 'react-i18next';
 
 const getNumber = (num: number, pos: number) => {
   if (pos === 0) {

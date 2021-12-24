@@ -5,18 +5,9 @@ import * as ActionButton from 'src/components/Button/ActionButton';
 import './connect.scss';
 import { useAppSelector, useAppDispatch, useWeb3Context } from 'src/hooks';
 
-const getNumber = (num: number, pos: number) => {
-  if (pos === 0) {
-    return Math.floor(num / 10);
-  }
-  return num % 10;
-};
-
-export default function NFTCountdown() {
+export default function NFTConnect() {
   const { t } = useTranslation();
   const { provider, address, connect, disconnect, connected, chainID } = useWeb3Context();
-
-  // const pendingTransactions = useAppSelector<IPendingTxn[]>(state => state.pendingTransactions);
 
   return (
     <section className="nft-conn">
