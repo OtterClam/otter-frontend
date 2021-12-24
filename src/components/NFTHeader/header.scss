@@ -11,6 +11,8 @@
   justify-content: flex-end;
   transition: background-color 0.2s, box-shadow 0.2s;
   background-color: #0a0e23;
+  border-bottom: 1px solid;
+  border-color: #425475;
 
   &__logo {
     flex: 1;
@@ -37,6 +39,7 @@
       -webkit-backdrop-filter: blur(33px);
       margin-top: 10px;
       border-radius: 10px;
+
       .MuiPaper-root.lang-menu {
         padding: 16px 6px;
         display: flex;
@@ -70,6 +73,7 @@
   width: 150px;
   max-width: 200px;
   border-radius: 10px;
+
   .select-language {
     padding-left: 16px;
   }

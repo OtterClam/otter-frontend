@@ -15,7 +15,10 @@ const English = {
       tvl: 'TVL', //Total Value Locked
       amount: 'Amount',
       approve: 'Approve',
+      claimed: 'Claimed',
       claim: 'Claim',
+      pending: 'Pending',
+      notEligible: 'Not Eligible',
       clamPrice: 'CLAM Price',
       connectWallet: 'Connect Wallet',
       price: 'Price',
@@ -222,6 +225,8 @@ const English = {
       giveawayParty: 'Giveaway Party',
       giveawayPartyHeld: 'giveaway party will be held on',
       airdropCountdown: 'Airdrop Countdown',
+      connectWallet: 'Please connect your wallet to claim the NFT',
+      claimYourNFT: 'Claim your NFT',
     },
   },
 };

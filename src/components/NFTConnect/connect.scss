@@ -1,0 +1,61 @@
+.nft-conn {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 105px;
+
+  &__title {
+    margin-bottom: 20px !important;
+    font-size: 18px !important;
+    line-height: 27px !important;
+    font-weight: bold !important;
+  }
+
+  &__content {
+    flex: 1 100%;
+    max-width: 730px;
+    padding: 40px;
+    border-radius: 20px;
+    margin: 0 20px;
+  }
+
+  &__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    // background: $otter-blue;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 18px;
+    width: 191px;
+    margin: auto;
+  }
+
+  @media screen and (max-width: 512px) {
+    &__number-group {
+      width: 54px;
+    }
+
+    &__number-label {
+      font-size: 12px !important;
+      line-height: 18px !important;
+    }
+
+    &__number {
+      width: 24px;
+      height: 36px;
+
+      span {
+        font-size: 20px !important;
+      }
+    }
+
+    &__title {
+      font-size: 16px !important;
+      line-height: 24px !important;
+    }
+  }
+}
