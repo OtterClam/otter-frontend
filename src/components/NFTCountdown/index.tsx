@@ -28,7 +28,7 @@ const useCountdown = (dueDate: Date) => {
       const hours = Math.floor(delta / 3600) % 24;
       delta -= hours * 3600;
 
-      const minutes = Math.floor(delta / 60) % 24;
+      const minutes = Math.floor(delta / 60) % 60;
       delta -= minutes * 60;
 
       const seconds = Math.floor(delta % 60);
