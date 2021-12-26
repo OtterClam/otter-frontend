@@ -9,9 +9,10 @@ import AuditedMark from 'src/components/AuditedMark';
 import SocialIcons from 'src/components/SocialIcons';
 import { DEFAULT_NETWORK, getAddresses } from 'src/constants';
 import { AppThemeContext } from 'src/helpers/app-theme-context';
+import useENS from 'src/hooks/useENS';
 import { IReduxState } from 'src/store/slices/state.interface';
-import { trim } from '../../../helpers';
-import { useBonds } from '../../../hooks';
+import { shorten, trim } from '../../../helpers';
+import { useAddress, useBonds } from '../../../hooks';
 import '../sidebar.scss';
 import ActiveMenuIcon from './ActiveMenuIcon';
 import AppLogo from './AppLogo';
@@ -19,6 +20,7 @@ import AppTitle from './AppTitle';
 import InactiveMenuIcon from './InactiveMenuIcon';
 import ToggleDark from './toggle-dark.png';
 import ToggleLight from './toggle-light.png';
+import Davatar from '@davatar/react';
 
 const useStyles = makeStyles(theme => ({
   navbar: {
@@ -77,6 +79,8 @@ function NavContent() {
   const { t } = useTranslation();
   const styles = useStyles();
   const { active: activeBonds = [] } = useGroupedBonds();
+  const address = useAddress();
+  const { ensName } = useENS(address);
   const location = useLocation();
   const currenTheme = useContext(AppThemeContext).name;
   const networkID = useSelector<IReduxState, number>(state => {
@@ -105,6 +109,12 @@ function NavContent() {
               <AppLogo />
               <Box mt="10px" />
               <AppTitle />
+              {address && (
+                <div className="dapp-account">
+                  <Davatar size={20} address={address} style={{ marginRight: 6 }} generatedAvatarType="jazzicon" />
+                  <div>{ensName || shorten(address)}</div>
+                </div>
+              )}
             </Box>
           </Link>
 
