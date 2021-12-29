@@ -13,7 +13,7 @@ const ConnectMenu = () => {
     return state.pendingTransactions;
   });
 
-  const buttonStatus = useMemo(() => {
+  const connectStatus = useMemo(() => {
     if (pendingTransactions && pendingTransactions.length > 0) return ConnectButtonStatus.InProgress;
     if (connected) return ConnectButtonStatus.Connected;
     return ConnectButtonStatus.NotConnected;
@@ -25,7 +25,7 @@ const ConnectMenu = () => {
         <ClamMenu />
       </Box>
       <Box sx={{ mx: 0.5 }}>
-        <ConnectButton status={buttonStatus} />
+        <ConnectButton status={connectStatus} />
       </Box>
       <Box sx={{ mx: 0.5 }}>
         <LanguagePicker border={true} />
