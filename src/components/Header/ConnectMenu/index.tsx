@@ -27,7 +27,7 @@ const ConnectMenu = () => {
       <Box sx={{ mx: 0.5 }}>
         <ConnectButton status={connectStatus} />
       </Box>
-      <Box sx={{ mx: 0.5 }}>
+      <Box sx={{ ml: 0.5 }}>
         <LanguagePicker border={true} />
       </Box>
     </div>
