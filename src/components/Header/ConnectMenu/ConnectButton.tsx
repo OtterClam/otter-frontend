@@ -1,10 +1,11 @@
 import { useRef, useState } from 'react';
 import { useWeb3Context } from '../../../hooks';
+import { useMediaQuery } from '@material-ui/core';
+import { useTranslation } from 'react-i18next';
 
 import CustomButton from 'src/components/Button/CustomButton';
 import PendingPopper from './PendingPopper';
 import { ReactComponent as MetamaskIcon } from '../../../assets/icons/metamask.svg';
-import { useMediaQuery } from '@material-ui/core';
 
 import { mobileMediaQuery } from 'src/themes/mediaQuery';
 
@@ -19,14 +20,16 @@ interface ConnectButtonProps {
 }
 const ConnectButton = ({ status }: ConnectButtonProps) => {
   const isMobile = useMediaQuery(mobileMediaQuery);
+  const { t } = useTranslation();
   const { connect, disconnect } = useWeb3Context();
   if (status === ConnectButtonStatus.Connected) {
-    if (isMobile) return <CustomButton type="outline" text="Disconnect" onClick={disconnect} />;
-    return <CustomButton type="outline" text="Disconnect" icon={MetamaskIcon} onClick={disconnect} />;
+    if (isMobile) return <CustomButton type="outline" text={t('components.disconnect')} onClick={disconnect} />;
+    return <CustomButton type="outline" text={t('components.disconnect')} icon={MetamaskIcon} onClick={disconnect} />;
   }
   if (status === ConnectButtonStatus.NotConnected) {
+    // TODO: to be translate - components.connect
     if (isMobile) return <CustomButton text="Connect" onClick={connect} />;
-    return <CustomButton text="Connect Wallet" onClick={connect} />;
+    return <CustomButton text={t('common.connectWallet')} onClick={connect} />;
   }
 
   const [popperOpen, setPopperOpen] = useState(false);
@@ -36,7 +39,7 @@ const ConnectButton = ({ status }: ConnectButtonProps) => {
       <>
         <CustomButton
           ref={buttonRef}
-          text="In Progress"
+          text="In Progress" // TODO: to be translate - components.inProgress
           icon={MetamaskIcon}
           onMouseEnter={() => setPopperOpen(true)}
           onMouseLeave={() => setPopperOpen(false)}
