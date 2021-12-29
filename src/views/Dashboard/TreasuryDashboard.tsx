@@ -58,6 +58,7 @@ function TreasuryDashboard() {
   const stakingRatio = useSelector<IReduxState, number>(state => state.app.stakingRatio);
   const marketCap = useSelector<IReduxState, number>(state => state.app.marketCap);
   const marketPrice = useSelector<IReduxState, number>(state => state.app.marketPrice);
+  const pearlPrice = useSelector<IReduxState, number>(state => state.app.pearlPrice);
   const currentIndex = useSelector<IReduxState, string>(state => state.app.currentIndex);
 
   const displayData = [
@@ -71,9 +72,9 @@ function TreasuryDashboard() {
       image: getTokenImage('clam'),
     },
     {
-      title: t('dashboard.stakingRatio'),
-      value: stakingRatio ? percentFormatter.format(stakingRatio) : null,
-      info: tooltipInfoMessages.staked,
+      title: t('common.pearlPrice'),
+      value: pearlPrice ? formatCurrency(pearlPrice, 2) : null,
+      image: getTokenImage('pearl'),
     },
     {
       title: t('dashboard.circulatingSupply'),

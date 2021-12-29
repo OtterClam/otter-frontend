@@ -20,6 +20,7 @@ const English = {
       pending: 'Pending',
       notEligible: 'Not Eligible',
       clamPrice: 'CLAM Price',
+      pearlPrice: 'PEARL Price',
       connectWallet: 'Connect Wallet',
       price: 'Price',
       buy: 'Buy',

@@ -1,4 +1,5 @@
 import { JsonRpcProvider } from '@ethersproject/providers';
+import { formatUnits } from '@ethersproject/units';
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
 import { ethers } from 'ethers';
 import { ClamCirculatingSupply, ClamTokenContract, StakedClamContract, StakingContract } from '../../abi';
@@ -8,6 +9,7 @@ import { getMarketPrice, getTokenPrice, setAll } from '../../helpers';
 const initialState = {
   loading: true,
   marketPrice: 0,
+  pearlPrice: 0,
   marketCap: 0,
   circSupply: 0,
   totalSupply: 0,
@@ -26,6 +28,7 @@ const initialState = {
 export interface IApp {
   loading: boolean;
   marketPrice: number;
+  pearlPrice: number;
   marketCap: number;
   circSupply: number;
   totalSupply: number;
@@ -71,7 +74,7 @@ export const loadAppDetails = createAsyncThunk(
       (await clamContract.totalSupply()) / 1e9,
       stakingContract.epoch(),
       (await sCLAMContract.circulatingSupply()) / 1e9,
-      stakingContract.index(),
+      formatUnits(await stakingContract.index(), 9),
       getMarketPrice(networkID, provider),
     ]);
     const stakingReward = epoch.distribute / 1e9;
@@ -84,9 +87,10 @@ export const loadAppDetails = createAsyncThunk(
     const stakingTVL = sClamCirc * marketPrice;
     const marketCap = circSupply * marketPrice;
     const stakingRatio = sClamCirc / circSupply;
+    const pearlPrice = (marketPrice * Number(currentIndex)).toFixed(2);
 
     return {
-      currentIndex: ethers.utils.formatUnits(currentIndex, 'gwei'),
+      currentIndex,
       circSupply,
       totalSupply,
       currentBlock,
@@ -95,6 +99,7 @@ export const loadAppDetails = createAsyncThunk(
       stakingRebase,
       stakingRatio,
       marketPrice,
+      pearlPrice,
       marketCap,
       currentBlockTime,
       nextRebase,
