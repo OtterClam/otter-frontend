@@ -21,8 +21,8 @@ const ConnectButton = ({ status }: ConnectButtonProps) => {
   const isMobile = useMediaQuery(mobileMediaQuery);
   const { connect, disconnect } = useWeb3Context();
   if (status === ConnectButtonStatus.Connected) {
-    if (isMobile) return <CustomButton text="Disconnect" onClick={disconnect} />;
-    return <CustomButton text="Disconnect" icon={MetamaskIcon} onClick={disconnect} />;
+    if (isMobile) return <CustomButton type="outline" text="Disconnect" onClick={disconnect} />;
+    return <CustomButton type="outline" text="Disconnect" icon={MetamaskIcon} onClick={disconnect} />;
   }
   if (status === ConnectButtonStatus.NotConnected) {
     if (isMobile) return <CustomButton text="Connect" onClick={connect} />;
