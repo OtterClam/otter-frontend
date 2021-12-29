@@ -1,31 +1,30 @@
-import { AppBar, Toolbar, Box, Button, SvgIcon } from '@material-ui/core';
+import { AppBar, Toolbar } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { ReactComponent as MenuIcon } from '../../assets/icons/icon_24x24_hamburger.svg';
-import ClamMenu from './ClamMenu';
+import CustomButton from '../Button/CustomButton';
 import ConnectMenu from './ConnectMenu';
 import './topbar.scss';
+
+import { tabletMediaQuery } from 'src/themes/mediaQuery';
 
 const drawerWidth = 280;
 const transitionDuration = 969;
 
 const useStyles = makeStyles(theme => ({
   appBar: {
-    [theme.breakpoints.up('sm')]: {
-      width: '100%',
-      padding: '20px 0 30px 0',
-    },
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end',
     background: 'transparent',
     backdropFilter: 'none',
     zIndex: 10,
   },
+  toolBar: {
+    justifyContent: 'space-between',
+    [theme.breakpoints.up('md')]: {
+      justifyContent: 'flex-end',
+    },
+  },
   menuButton: {
     marginRight: theme.spacing(2),
-    [theme.breakpoints.up('md')]: {
-      display: 'none',
-    },
   },
   topBar: {
     backgroundColor: theme.palette.background.default,
@@ -50,25 +49,15 @@ interface IHeader {
 
 function Header({ handleDrawerToggle, drawe }: IHeader) {
   const classes = useStyles();
-  const isVerySmallScreen = useMediaQuery('(max-width: 400px)');
+  const isTablet = useMediaQuery(tabletMediaQuery);
   return (
     <div className={`${classes.topBar} ${!drawe && classes.topBarShift}`}>
-      <div style={{ maxWidth: 833, margin: 'auto', width: '89%' }}>
+      <div style={{ width: '100%' }}>
         <AppBar position="sticky" className={classes.appBar} elevation={0}>
-          <Toolbar disableGutters className="dapp-topbar">
-            {/* @ts-ignore */}
-            <Button
-              id="hamburger"
-              aria-label="open drawer"
-              edge="start"
-              size="large"
-              variant="text"
-              color="secondary"
-              onClick={handleDrawerToggle}
-              className={classes.menuButton}
-            >
-              <SvgIcon component={MenuIcon} color="primary" />
-            </Button>
+          <Toolbar className={classes.toolBar}>
+            {isTablet && (
+              <CustomButton type="icon" aria-label="open drawer" icon={MenuIcon} onClick={handleDrawerToggle} />
+            )}
             <ConnectMenu />
           </Toolbar>
         </AppBar>

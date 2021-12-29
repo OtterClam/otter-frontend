@@ -1,0 +1,23 @@
+.custom-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 44px;
+    border-radius: 10px;
+    padding: 0 30px;
+    cursor: pointer;
+  
+    font-weight: 600;
+    font-size: 16px;
+}
+
+@media screen and (max-width: 598px) {
+    .custom-button {
+      padding: 10px 20px;
+  }
+}
+
+.icon-button { 
+    padding: 10px;
+    border-radius: 10px;
+}
