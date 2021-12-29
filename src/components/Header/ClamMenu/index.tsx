@@ -14,6 +14,8 @@ import {
   makeStyles,
   useMediaQuery,
 } from '@material-ui/core';
+import CustomButton from 'src/components/Button/CustomButton';
+import { mobileMediaQuery } from 'src/themes/mediaQuery';
 import { ReactComponent as ArrowUpIcon } from '../../../assets/icons/arrow-up.svg';
 import { ReactComponent as ClamIcon } from '../../../assets/icons/CLAM.svg';
 import './clam-menu.scss';
@@ -52,12 +54,19 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+const BuyButton = ({ text }: { text: string }) => {
+  const isMobile = useMediaQuery(mobileMediaQuery);
+  if (isMobile) {
+    return <CustomButton type="outline" text={text} />;
+  }
+  return <CustomButton type="outline" icon={ClamIcon} text={`${text} CLAM`} />;
+};
+
 function ClamMenu() {
   const { t } = useTranslation();
   const styles = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const isEthereumAPIAvailable = window.ethereum;
-  const isSmallScreen = useMediaQuery('(max-width: 600px)');
 
   const networkID = useSelector<IReduxState, number>(state => {
     return (state.app && state.app.networkID) || DEFAULT_NETWORK;
@@ -89,15 +98,7 @@ function ClamMenu() {
       onMouseLeave={e => handleClick(e)}
       id="ohm-menu-button-hover"
     >
-      <Box id="buy-button" color="text.primary" className="ohm-button">
-        <SvgIcon
-          component={ClamIcon}
-          htmlColor="primary"
-          style={{ marginRight: '10px', marginLeft: '-20px', width: '24px', height: '24px' }}
-        />
-        <p>{t('common.buyThing')}CLAM</p>
-      </Box>
-
+      <BuyButton text={t('common.buyThing')} />
       <Popper id={id} open={open} anchorEl={anchorEl} transition>
         {({ TransitionProps }) => {
           return (
