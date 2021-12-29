@@ -20,8 +20,8 @@ const STYLE: Record<ButtonType, ButtonConfig> = {
     color: 'text.primary',
   },
   solid: {
-    bgcolor: 'text.primary',
-    color: 'text.white',
+    bgcolor: 'otter.otterBlue',
+    color: 'otter.white',
   },
   icon: {
     border: '2px solid',
