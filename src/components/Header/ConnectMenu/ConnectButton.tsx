@@ -30,19 +30,19 @@ const ConnectButton = ({ status }: ConnectButtonProps) => {
   }
 
   const [popperOpen, setPopperOpen] = useState(false);
-  const popperRef = useRef(null);
+  const buttonRef = useRef(null);
   if (status === ConnectButtonStatus.InProgress) {
     return (
       <>
         <CustomButton
-          ref={popperRef}
+          ref={buttonRef}
           text="In Progress"
           icon={MetamaskIcon}
           onMouseEnter={() => setPopperOpen(true)}
           onMouseLeave={() => setPopperOpen(false)}
           onClick={() => setPopperOpen(true)}
         />
-        <PendingPopper open={popperOpen} anchorEl={popperRef.current} />
+        <PendingPopper open={popperOpen} anchorEl={buttonRef.current} />
       </>
     );
   }
