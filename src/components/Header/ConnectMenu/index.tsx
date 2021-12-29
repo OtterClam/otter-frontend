@@ -14,6 +14,7 @@ const ConnectMenu = () => {
   });
 
   const buttonStatus = useMemo(() => {
+    return ConnectButtonStatus.InProgress;
     if (pendingTransactions && pendingTransactions.length > 0) return ConnectButtonStatus.InProgress;
     if (connected) return ConnectButtonStatus.Connected;
     return ConnectButtonStatus.NotConnected;
