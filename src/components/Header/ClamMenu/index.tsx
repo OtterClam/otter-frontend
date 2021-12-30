@@ -117,6 +117,21 @@ function ClamMenu() {
                     </Button>
                   </Link>
                 </Box>
+                <Box component="div" className="buy-tokens">
+                  <Link
+                    href={
+                      'https://quickswap.exchange/#/swap?outputCurrency=0x52A7F40BB6e9BD9183071cdBdd3A977D713F2e34 '
+                    }
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <Button size="large" variant="text" color="primary" fullWidth>
+                      <Typography className="buy-text" align="left">
+                        {t('components.buyPearl')} <SvgIcon component={ArrowUpIcon} htmlColor="#A3A3A3" />
+                      </Typography>
+                    </Button>
+                  </Link>
+                </Box>
 
                 {isEthereumAPIAvailable ? (
                   <Box className="add-tokens">

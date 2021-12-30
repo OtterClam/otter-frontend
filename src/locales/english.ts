@@ -207,6 +207,7 @@ const English = {
       disconnect: 'Disconnect',
       buy: 'BUY',
       buyOnQuickswap: 'Buy On Quickswap',
+      buyPearl: 'Buy PEARL',
       addTokenToWallet: 'ADD TOKEN TO WALLET',
       toNextHarvest: 'to Next Harvest',
       harvesting: 'Harvesting',
