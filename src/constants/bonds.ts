@@ -36,13 +36,15 @@ export enum BondAction {
   Redeem = 'redeem',
 }
 
+export type BondType = 'token' | 'lp';
+
 export interface Bond {
   key: BondKey;
   name: string;
   address: string;
   reserve: string;
   reserveUnit: string;
-  type: 'token' | 'lp';
+  type: BondType;
   dexUrl: string;
   deprecated: boolean;
   autostake: boolean;
