@@ -7,7 +7,8 @@ import { tabletMediaQuery } from 'src/themes/mediaQuery';
 
 import { Box, Grid, Paper, Zoom, Slide, makeStyles, Typography } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
-import { BondCard, BondRow } from './BondRow';
+import BondRow from './BondRow';
+import BondCard from './BondCard';
 import './choose-bond.scss';
 
 import apollo from 'src/lib/apolloClient';
@@ -45,7 +46,6 @@ query {
     });
   });
 
-  const styles = useStyles();
   return (
     <div id="choose-bond-view">
       <Paper className="bond-paper">

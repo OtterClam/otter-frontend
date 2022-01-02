@@ -24,12 +24,12 @@
     .bond-hero-card {
       padding: 20px;
       border-radius: 10px;
-  
+
       .bond-hero-title {
         font-size: 16px;
         font-weight: 700;
       }
-  
+
       .bond-hero-value {
         font-size: 24px;
         font-weight: 800;
@@ -45,7 +45,7 @@
         font-size: 16px;
         font-weight: 700;
         padding: 10px;
-  
+
         &.first-col {
           text-align: left;
         }
@@ -59,8 +59,8 @@
       border: 2px solid #ffffff;
       transition: 0.3s;
       &:hover {
-        border: 2px solid #CCD4E0;
-        box-shadow: 0px 4px 20px 0px #E9F0F3;
+        border: 2px solid #ccd4e0;
+        box-shadow: 0px 4px 20px 0px #e9f0f3;
         cursor: pointer;
       }
 
@@ -89,7 +89,7 @@
   }
 }
 
-@media screen and (max-width: 1400px)  {
+@media screen and (max-width: 1400px) {
   #choose-bond-view {
     padding: 0px 30px 20px 30px;
   }
@@ -104,12 +104,12 @@
 
       .bond-hero-card {
         padding: 10px 20px;
-    
+
         .bond-hero-title {
           font-size: 14px;
           text-align: center;
         }
-    
+
         .bond-hero-value {
           font-size: 20px;
           text-align: center;
@@ -118,11 +118,13 @@
     }
 
     .bond-card-container {
+      font-size: 14px;
+
       .bond-card {
         border-radius: 10px;
         padding: 20px;
         margin-bottom: 20px;
-  
+
         .bond-avatar-row {
           margin-bottom: 20px;
         }
@@ -130,8 +132,12 @@
         .bond-card-value {
           text-align: right;
         }
+
+        .vesting-time-text {
+          font-weight: 400;
+          margin-top: -12px;
+        }
       }
     }
   }
 }
-
