@@ -9,13 +9,13 @@ interface IBondHeaderProps {
 function BondLogo({ bond }: IBondHeaderProps) {
   const reserveAssetImg = () => {
     if (bond.key.indexOf('clam') >= 0) {
-      return getTokenImage('clam', 32);
+      return getTokenImage('clam', 36);
     } else if (bond.key.indexOf('mai') >= 0) {
-      return getTokenImage('mai', 32);
+      return getTokenImage('mai', 36);
     } else if (bond.key.indexOf('frax') >= 0) {
-      return getTokenImage('frax', 32);
+      return getTokenImage('frax', 36);
     } else if (bond.key.indexOf('matic') >= 0) {
-      return getTokenImage('wmatic', 32);
+      return getTokenImage('wmatic', 36);
     }
   };
 
