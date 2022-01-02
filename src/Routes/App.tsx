@@ -1,25 +1,28 @@
+import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
+import { useCallback, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'src/store/hook';
+import { useAddress, useWeb3Context } from '../hooks';
+
+import './style.scss';
 import { Hidden, useMediaQuery } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
 import SnowFall from 'react-snowfall';
-import Calculator from 'src/views/Calculator';
-import Dashboard from 'src/views/Dashboard/TreasuryDashboard';
-import Migrate from 'src/views/Migrate';
 import TopBar from '../components/Header';
 import Loading from '../components/Loader';
 import Sidebar from '../components/Sidebar';
 import NavDrawer from '../components/Sidebar/NavDrawer';
-import { BondKeys } from '../constants';
-import { useAddress, useWeb3Context } from '../hooks';
+import Calculator from 'src/views/Calculator';
+import Dashboard from 'src/views/Dashboard/TreasuryDashboard';
+import Migrate from 'src/views/Migrate';
+import NotFound from '../views/404/NotFound';
+import { Bond, ChooseBond, Stake, Wrap } from '../views';
+
 import { calculateUserBondDetails, loadAccountDetails } from '../store/slices/account-slice';
 import { loadAppDetails } from '../store/slices/app-slice';
-import { calcBondDetails } from '../store/actions/bond-action';
-import { IReduxState } from '../store/slices/state.interface';
-import { Bond, ChooseBond, Stake, Wrap } from '../views';
-import NotFound from '../views/404/NotFound';
-import './style.scss';
+import { batchGetBondDetails } from '../store/actions/bond-action';
+
+import { BondKeys } from '../constants';
 
 const drawerWidth = 280;
 const transitionDuration = 969;
@@ -71,8 +74,9 @@ function App() {
 
   const [walletChecked, setWalletChecked] = useState(false);
 
-  const isAppLoading = useSelector<IReduxState, boolean>(state => state.app.loading);
-  const isAppLoaded = useSelector<IReduxState>(state => typeof state.app.marketPrice != 'undefined');
+  const isAppLoading = useSelector(state => state.app.loading);
+  const isBondLoading = useSelector(state => state.bonding.loading);
+  const isAppLoaded = useSelector(state => typeof state.app.marketPrice != 'undefined');
 
   async function loadDetails(whichDetails: string) {
     let loadProvider = readOnlyProvider;
@@ -98,11 +102,7 @@ function App() {
   const loadApp = useCallback(
     loadProvider => {
       dispatch(loadAppDetails({ networkID: chainID, provider: loadProvider }));
-      BondKeys.map(bondKey => {
-        dispatch(
-          calcBondDetails({ bondKey, value: null, provider: loadProvider, networkID: chainID, userBalance: '0' }),
-        );
-      });
+      dispatch(batchGetBondDetails({ value: null, provider: loadProvider, networkID: chainID, userBalance: '0' }));
     },
     [connected],
   );
@@ -152,7 +152,7 @@ function App() {
     if (isSidebarExpanded) handleSidebarClose();
   }, [location]);
 
-  if (isAppLoading) return <Loading />;
+  if (isAppLoading || isBondLoading) return <Loading />;
 
   return (
     <>
