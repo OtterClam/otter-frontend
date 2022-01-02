@@ -56,7 +56,14 @@ function Header({ handleDrawerToggle, drawe }: IHeader) {
         <AppBar position="sticky" className={classes.appBar} elevation={0}>
           <Toolbar className={classes.toolBar}>
             {isTablet && (
-              <CustomButton type="icon" aria-label="open drawer" icon={MenuIcon} onClick={handleDrawerToggle} />
+              <CustomButton
+                type="icon"
+                bgcolor=""
+                color="text.primary"
+                aria-label="open drawer"
+                icon={MenuIcon}
+                onClick={handleDrawerToggle}
+              />
             )}
             <ConnectMenu />
           </Toolbar>
