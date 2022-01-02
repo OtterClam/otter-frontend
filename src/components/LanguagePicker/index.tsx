@@ -22,9 +22,9 @@ const lngs: any = {
 const LangButton = ({ text }: { text: string }) => {
   const isMobile = useMediaQuery(mobileMediaQuery);
   if (isMobile) {
-    return <CustomButton type="icon" icon={IntlIcon} />;
+    return <CustomButton type="icon" color="text.primary" icon={IntlIcon} />;
   }
-  return <CustomButton type="outline" icon={IntlIcon} text={`${text}`} />;
+  return <CustomButton type="outline" color="text.primary" icon={IntlIcon} text={`${text}`} />;
 };
 interface Props {
   border: Boolean;

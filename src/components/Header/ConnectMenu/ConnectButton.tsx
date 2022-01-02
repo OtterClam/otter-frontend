@@ -23,13 +23,27 @@ const ConnectButton = ({ status }: ConnectButtonProps) => {
   const { t } = useTranslation();
   const { connect, disconnect } = useWeb3Context();
   if (status === ConnectButtonStatus.Connected) {
-    if (isMobile) return <CustomButton type="outline" text={t('components.disconnect')} onClick={disconnect} />;
-    return <CustomButton type="outline" text={t('components.disconnect')} icon={MetamaskIcon} onClick={disconnect} />;
+    if (isMobile)
+      return (
+        <CustomButton type="outline" color="text.primary" text={t('components.disconnect')} onClick={disconnect} />
+      );
+    return (
+      <CustomButton
+        type="outline"
+        color="text.primary"
+        text={t('components.disconnect')}
+        icon={MetamaskIcon}
+        onClick={disconnect}
+      />
+    );
   }
   if (status === ConnectButtonStatus.NotConnected) {
     // TODO: to be translate - components.connect
-    if (isMobile) return <CustomButton text="Connect" onClick={connect} />;
-    return <CustomButton text={t('common.connectWallet')} onClick={connect} />;
+    if (isMobile)
+      return <CustomButton bgcolor="otter.otterBlue" color="otter.white" text="Connect" onClick={connect} />;
+    return (
+      <CustomButton bgcolor="otter.otterBlue" color="otter.white" text={t('common.connectWallet')} onClick={connect} />
+    );
   }
 
   const [popperOpen, setPopperOpen] = useState(false);
@@ -39,6 +53,8 @@ const ConnectButton = ({ status }: ConnectButtonProps) => {
       <>
         <CustomButton
           ref={buttonRef}
+          bgcolor="otter.otterBlue"
+          color="otter.white"
           text="In Progress" // TODO: to be translate - components.inProgress
           icon={MetamaskIcon}
           onMouseEnter={() => setPopperOpen(true)}
