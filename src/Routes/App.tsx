@@ -7,6 +7,7 @@ import SnowFall from 'react-snowfall';
 import Calculator from 'src/views/Calculator';
 import Dashboard from 'src/views/Dashboard/TreasuryDashboard';
 import Migrate from 'src/views/Migrate';
+import PearlChests from 'src/views/PearlChests';
 import TopBar from '../components/Header';
 import Loading from '../components/Loader';
 import Sidebar from '../components/Sidebar';
@@ -184,6 +185,10 @@ function App() {
 
             <Route path="/wrap">
               <Wrap />
+            </Route>
+
+            <Route path="/pearl-chests">
+              <PearlChests />
             </Route>
 
             <Route path="/bonds">

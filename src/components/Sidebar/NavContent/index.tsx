@@ -35,7 +35,7 @@ const useGroupedBonds = () => {
   return groupBy(bonds, bond => (bond.deprecated ? 'deprecated' : 'active'));
 };
 
-type Page = 'dashboard' | 'wrap' | 'stake' | 'choose_bond' | 'bonds' | 'migrate' | 'calculator';
+type Page = 'dashboard' | 'wrap' | 'stake' | 'choose_bond' | 'bonds' | 'migrate' | 'calculator' | 'pearl-chests';
 
 type ComputedBond = ReturnType<typeof useBonds>[0];
 
@@ -165,6 +165,22 @@ function NavContent() {
                 <div className="dapp-menu-item">
                   {checkPage(location, 'wrap') ? <ActiveMenuIcon /> : <InactiveMenuIcon />}
                   <p>{t('common.wrap')}</p>
+                </div>
+              </Link>
+
+              <Link
+                component={NavLink}
+                id="pearl-chests-nav"
+                to="/pearl-chests"
+                isActive={(match: any, location: any) => {
+                  return checkPage(location, 'pearl-chests');
+                }}
+                activeClassName="active"
+                className="button-dapp-menu"
+              >
+                <div className="dapp-menu-item">
+                  {checkPage(location, 'pearl-chests') ? <ActiveMenuIcon /> : <InactiveMenuIcon />}
+                  <p>{t('common.pearlChests')}</p>
                 </div>
               </Link>
 
