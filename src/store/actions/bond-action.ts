@@ -1,4 +1,4 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { fetchAccountSuccess } from '../slices/account-slice';
 import { calculateUserBondDetails, getBalances } from '../slices/account-slice';
@@ -10,7 +10,7 @@ import { JsonRpcProvider } from '@ethersproject/providers';
 import { BondingCalcContract, AggregatorV3InterfaceABI } from '../../abi';
 
 import { getMarketPrice, contractForBond, contractForReserve, getTokenPrice } from '../../helpers';
-import { BondKey, getAddresses, getBond } from '../../constants';
+import { BondKey, BondKeys, getAddresses, getBond } from '../../constants';
 
 import {
   getBondDiscount,
@@ -193,6 +193,18 @@ export const calcBondDetails = createAsyncThunk(
       marketPrice,
       maxUserCanBuy,
     };
+  },
+);
+
+type BatchGetBondDetailsPayload = Omit<CalcBondDetailsPayload, 'bondKey'>;
+export const batchGetBondDetails = createAsyncThunk(
+  'bonding/batchGetBondDetails',
+  async (payload: BatchGetBondDetailsPayload, { dispatch }) => {
+    await Promise.all(
+      BondKeys.map(async bondKey => {
+        await dispatch(calcBondDetails({ bondKey, ...payload }));
+      }),
+    );
   },
 );
 
