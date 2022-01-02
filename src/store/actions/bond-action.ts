@@ -7,11 +7,21 @@ import { BondDetails } from '../slices/bond-slice';
 
 import { ethers, constants, BigNumber } from 'ethers';
 import { JsonRpcProvider } from '@ethersproject/providers';
-import { formatUnits } from '@ethersproject/units';
 import { BondingCalcContract, AggregatorV3InterfaceABI } from '../../abi';
 
 import { getMarketPrice, contractForBond, contractForReserve, getTokenPrice } from '../../helpers';
-import { BondType, BondKey, getAddresses, getBond } from '../../constants';
+import { BondKey, getAddresses, getBond } from '../../constants';
+
+import {
+  getBondDiscount,
+  getBondQuote,
+  getMaxUserCanBuy,
+  getDebtRatio,
+  getPurchasedBonds,
+  getTransformedBondPrice,
+  getTransformedMarketPrice,
+  getTransformedMaxPayout,
+} from '../utils';
 
 interface IChangeApproval {
   bondKey: BondKey;
@@ -79,101 +89,6 @@ interface CalcBondDetailsPayload {
   networkID: number;
   userBalance: string;
 }
-
-type GetBoundDiscountPayload = {
-  originalMarketPrice: BigNumber;
-  bondPriceInUSD: number;
-};
-const getBondDiscount = ({ originalMarketPrice, bondPriceInUSD }: GetBoundDiscountPayload) => {
-  return (originalMarketPrice.toNumber() * 1e9 - bondPriceInUSD) / bondPriceInUSD;
-};
-
-type GetDebtRatioPayload = {
-  bondType: BondType;
-  standardizedDebtRatio: any; // number for lp, BigNumber for token
-};
-function getDebtRatio({ bondType, standardizedDebtRatio }: GetDebtRatioPayload): number {
-  if (bondType === 'lp') return standardizedDebtRatio / 1e9;
-  return standardizedDebtRatio.toNumber();
-}
-
-type GetBondQuotePayload = {
-  bondType: BondType;
-  payoutForValuation: number;
-};
-const getBondQuote = ({ bondType, payoutForValuation }: GetBondQuotePayload) => {
-  if (bondType === 'lp') {
-    return payoutForValuation / 1e9;
-  }
-  return payoutForValuation / 1e18;
-};
-
-type GetPurchasedBondsPayload = {
-  bondType: BondType;
-  isBondStable: boolean;
-  balanceOfTreasury: number;
-  valuation: number;
-  markdown: number;
-  latestRoundDataAnswer: number;
-};
-const getPurchasedBonds = ({
-  bondType,
-  isBondStable,
-  balanceOfTreasury,
-  valuation,
-  markdown,
-  latestRoundDataAnswer,
-}: GetPurchasedBondsPayload) => {
-  if (bondType === 'lp') {
-    return (markdown / 1e18) * (valuation / 1e9);
-  }
-  if (isBondStable) {
-    return balanceOfTreasury / 1e18;
-  }
-  if (latestRoundDataAnswer) {
-    return (balanceOfTreasury / 1e18) * (latestRoundDataAnswer / 1e8);
-  }
-  throw new Error('Please give latestRoundDataAnswer to getPurchasedBonds function');
-};
-
-type GetTransformedMaxPayoutPayload = {
-  originalMaxPayout: number;
-};
-const getTransformedMaxPayout = ({ originalMaxPayout }: GetTransformedMaxPayoutPayload) => {
-  return originalMaxPayout / 1e9;
-};
-
-type GetTransformedBondPrice = {
-  bondPriceInUSD: number;
-};
-const getTransformedBondPrice = ({ bondPriceInUSD }: GetTransformedBondPrice) => {
-  return bondPriceInUSD / 1e18;
-};
-
-type GetTransformedMarketPricePayload = {
-  originalMarketPrice: BigNumber;
-};
-const getTransformedMarketPrice = ({ originalMarketPrice }: GetTransformedMarketPricePayload) => {
-  return formatUnits(originalMarketPrice, 9);
-};
-
-type GetMaxUserCanBuyPayload = {
-  isOverMaxPayout: boolean;
-  originalMaxPayout: BigNumber;
-  bondPriceInUSD: number;
-  userBalance: string;
-};
-const getMaxUserCanBuy = ({
-  isOverMaxPayout,
-  originalMaxPayout,
-  bondPriceInUSD,
-  userBalance,
-}: GetMaxUserCanBuyPayload) => {
-  if (isOverMaxPayout) {
-    return originalMaxPayout.sub(1).mul(bondPriceInUSD).div(1e9).toString();
-  }
-  return userBalance;
-};
 
 const DEPRECATED_BOND_STATIC_VALUES = {
   bondDiscount: 1,
