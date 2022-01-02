@@ -1,5 +1,5 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
-import { calcBondDetails } from '../actions/bond-action';
+import { calcBondDetails, batchGetBondDetails } from '../actions/bond-action';
 import { BondKey } from '../../constants';
 
 export interface BondDetails {
@@ -36,14 +36,19 @@ const bondingSlice = createSlice({
   },
   extraReducers: builder => {
     builder
-      .addCase(calcBondDetails.pending, state => {
-        state.loading = true;
-      })
       .addCase(calcBondDetails.fulfilled, (state, action) => {
         state[action.payload.bond] = action.payload;
+      })
+      .addCase(calcBondDetails.rejected, (_state, { error, ...payload }) => {
+        console.log(payload, error);
+      })
+      .addCase(batchGetBondDetails.pending, state => {
+        state.loading = true;
+      })
+      .addCase(batchGetBondDetails.fulfilled, state => {
         state.loading = false;
       })
-      .addCase(calcBondDetails.rejected, (state, { error, ...payload }) => {
+      .addCase(batchGetBondDetails.rejected, (state, { error, ...payload }) => {
         state.loading = false;
         console.log(payload, error);
       });
