@@ -119,6 +119,7 @@ export const dark = responsiveFontSizes(
         },
         secondary: {
           main: colorPalette.dark.darkGray200,
+          light: colorPalette.dark.darkGray100,
         },
         background: {
           default: colorPalette.dark.lightGray100,

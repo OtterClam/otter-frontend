@@ -86,6 +86,11 @@
       line-height: 24px;
     }
 
+    .market-price {
+      text-decoration: line-through;
+      margin-right: 8px;
+    }
+
     .bond-price-data-value {
       // color: $clam-pink;
       font-weight: 800;
