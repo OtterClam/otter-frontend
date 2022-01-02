@@ -78,7 +78,9 @@ function Bond({ bondKey }: IBondProps) {
               {!bond.deprecated && (
                 <Box className="bond-price-data-row">
                   <div className="bond-price-data">
-                    <p className="bond-price-data-title">{t('bonds.bondPrice')}</p>
+                    <Box className="bond-price-data-title" component="p" color="text.disabled">
+                      {t('bonds.bondPrice')}
+                    </Box>
                     <Box className="bond-price-data-value market-price" component="span" color="secondary.light">
                       {formatCurrency(+marketPrice, 2)}
                     </Box>
@@ -103,7 +105,9 @@ function Bond({ bondKey }: IBondProps) {
                     )}
                   </div>
                   <div className="bond-price-data">
-                    <p className="bond-price-data-title">{t('common.clamPrice')}</p>
+                    <Box className="bond-price-data-title" component="p" color="text.disabled">
+                      {t('common.clamPrice')}
+                    </Box>
                     <Box component="p" color="text.secondary" className="bond-price-data-value">
                       {isBondLoading ? <Skeleton /> : `$${trim(marketPrice, 2)}`}
                     </Box>
