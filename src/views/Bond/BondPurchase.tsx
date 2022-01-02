@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Box, InputLabel, OutlinedInput, InputAdornment, Slide, FormControl, makeStyles } from '@material-ui/core';
 import { shorten, trim, prettifySeconds } from '../../helpers';
-import { changeApproval, bondAsset, calcBondDetails } from '../../store/slices/bond-slice';
+import { changeApproval, bondAsset, calcBondDetails } from '../../store/actions/bond-action';
 import { useWeb3Context } from '../../hooks';
 import { IPendingTxn, isPendingTxn, txnButtonText } from '../../store/slices/pending-txns-slice';
 import { Skeleton } from '@material-ui/lab';

@@ -15,7 +15,7 @@ import { BondKeys } from '../constants';
 import { useAddress, useWeb3Context } from '../hooks';
 import { calculateUserBondDetails, loadAccountDetails } from '../store/slices/account-slice';
 import { loadAppDetails } from '../store/slices/app-slice';
-import { calcBondDetails } from '../store/slices/bond-slice';
+import { calcBondDetails } from '../store/actions/bond-action';
 import { IReduxState } from '../store/slices/state.interface';
 import { Bond, ChooseBond, Stake, Wrap } from '../views';
 import NotFound from '../views/404/NotFound';
