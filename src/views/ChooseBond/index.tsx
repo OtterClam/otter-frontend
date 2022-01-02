@@ -7,6 +7,7 @@ import { tabletMediaQuery } from 'src/themes/mediaQuery';
 
 import { Box, Grid, Paper, Zoom, Slide, makeStyles, Typography } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
+import BondRowHeader from './BondRowHeader';
 import BondRow from './BondRow';
 import BondCard from './BondCard';
 import './choose-bond.scss';
@@ -105,39 +106,7 @@ query {
         ) : (
           <Zoom in>
             <Grid className="bond-row-container" container xs={12} aria-label="Available bonds">
-              <Grid container className="bond-title-row">
-                <Grid item xs={1} />
-                <Grid item xs={2}>
-                  <Typography className="bond-row-title first-col" variant="h4" color="secondary">
-                    {t('common.bond')}
-                  </Typography>
-                </Grid>
-                <Grid item xs={2}>
-                  <Typography className="bond-row-title" variant="h4" color="secondary">
-                    {t('common.price')}
-                  </Typography>
-                </Grid>
-                <Grid item xs={1}>
-                  <Typography className="bond-row-title" variant="h4" color="secondary">
-                    {t('common.roi')}
-                  </Typography>
-                </Grid>
-                <Grid item xs={2}>
-                  <Typography className="bond-row-title" variant="h4" color="secondary">
-                    {t('bonds.purchased')}
-                  </Typography>
-                </Grid>
-                <Grid item xs={2}>
-                  <Typography className="bond-row-title" variant="h4" color="secondary">
-                    {t('bonds.myBond')}
-                  </Typography>
-                </Grid>
-                <Grid item xs={2}>
-                  <Typography className="bond-row-title" variant="h4" color="secondary">
-                    {t('bonds.fullyVestedAt')}
-                  </Typography>
-                </Grid>
-              </Grid>
+              <BondRowHeader />
               {bonds.map(bond => (
                 <BondRow key={bond.value} bondKey={bond.value} />
               ))}
