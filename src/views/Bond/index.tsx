@@ -6,7 +6,7 @@ import { useLocation } from 'react-router';
 import { Status, StatusChip } from 'src/components/Chip';
 import { Bond as BondType, BondAction, BondKey, getBond } from 'src/constants';
 import TabPanel from '../../components/TabPanel';
-import { trim } from '../../helpers';
+import { formatCurrency, trim } from '../../helpers';
 import { useWeb3Context } from '../../hooks';
 import { IReduxState } from '../../store/slices/state.interface';
 import './bond.scss';
@@ -79,7 +79,10 @@ function Bond({ bondKey }: IBondProps) {
                 <Box className="bond-price-data-row">
                   <div className="bond-price-data">
                     <p className="bond-price-data-title">{t('bonds.bondPrice')}</p>
-                    <Box component="p" color="text.secondary" className="bond-price-data-value">
+                    <Box className="bond-price-data-value market-price" component="span" color="secondary.light">
+                      {formatCurrency(+marketPrice, 2)}
+                    </Box>
+                    <Box className="bond-price-data-value" component="span" color="text.secondary">
                       {isBondLoading ? (
                         <Skeleton />
                       ) : bond.deprecated ? (
@@ -91,7 +94,12 @@ function Bond({ bondKey }: IBondProps) {
                       )}
                     </Box>
                     {priceDiff > 0 && (
-                      <StatusChip status={Status.Success} label={`$${trim(priceDiff, 2)} ${t('bonds.bondDiscount')}`} />
+                      <Box component="div">
+                        <StatusChip
+                          status={Status.Success}
+                          label={`$${trim(priceDiff, 2)} ${t('bonds.bondDiscount')}`}
+                        />
+                      </Box>
                     )}
                   </div>
                   <div className="bond-price-data">
