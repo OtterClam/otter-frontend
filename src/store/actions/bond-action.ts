@@ -3,6 +3,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchAccountSuccess } from '../slices/account-slice';
 import { calculateUserBondDetails, getBalances } from '../slices/account-slice';
 import { fetchPendingTxns, clearPendingTxn } from '../slices/pending-txns-slice';
+import { BondDetails } from '../slices/bond-slice';
 
 import { ethers, constants, BigNumber } from 'ethers';
 import { JsonRpcProvider } from '@ethersproject/providers';
@@ -10,15 +11,7 @@ import { formatUnits } from '@ethersproject/units';
 import { BondingCalcContract, AggregatorV3InterfaceABI } from '../../abi';
 
 import { getMarketPrice, contractForBond, contractForReserve, getTokenPrice } from '../../helpers';
-import { BondKey, getAddresses, getBond } from '../../constants';
-
-interface IState {
-  [key: string]: any;
-}
-
-const initialState: IState = {
-  loading: true,
-};
+import { BondType, BondKey, getAddresses, getBond } from '../../constants';
 
 interface IChangeApproval {
   bondKey: BondKey;
@@ -26,23 +19,6 @@ interface IChangeApproval {
   networkID: number;
   address: string;
 }
-
-export interface BondDetails {
-  bond: BondKey;
-  bondDiscount: number;
-  debtRatio: number;
-  bondQuote: number;
-  purchased: number;
-  vestingTerm: number;
-  maxPayout: number;
-  bondPrice: number;
-  marketPrice: string;
-  maxUserCanBuy: string;
-}
-
-export type IBond = {
-  [key in BondKey]: BondDetails;
-} & { loading: boolean };
 
 export const changeApproval = createAsyncThunk(
   'bonding/changeApproval',
@@ -61,7 +37,7 @@ export const changeApproval = createAsyncThunk(
     try {
       const approvedPromise = new Promise<BigNumber>(resolve => {
         const event = reserveContract.filters.Approval(address, bond.address);
-        const action = (owner: string, spender: string, allowance: BigNumber) => {
+        const action = (_owner: string, _spender: string, allowance: BigNumber) => {
           reserveContract.off(event, action);
           resolve(allowance);
         };
@@ -104,106 +80,190 @@ interface CalcBondDetailsPayload {
   userBalance: string;
 }
 
+type GetBoundDiscountPayload = {
+  originalMarketPrice: BigNumber;
+  bondPriceInUSD: number;
+};
+const getBondDiscount = ({ originalMarketPrice, bondPriceInUSD }: GetBoundDiscountPayload) => {
+  return (originalMarketPrice.toNumber() * 1e9 - bondPriceInUSD) / bondPriceInUSD;
+};
+
+type GetDebtRatioPayload = {
+  bondType: BondType;
+  standardizedDebtRatio: any; // number for lp, BigNumber for token
+};
+function getDebtRatio({ bondType, standardizedDebtRatio }: GetDebtRatioPayload): number {
+  if (bondType === 'lp') return standardizedDebtRatio / 1e9;
+  return standardizedDebtRatio.toNumber();
+}
+
+type GetBondQuotePayload = {
+  bondType: BondType;
+  payoutForValuation: number;
+};
+const getBondQuote = ({ bondType, payoutForValuation }: GetBondQuotePayload) => {
+  if (bondType === 'lp') {
+    return payoutForValuation / 1e9;
+  }
+  return payoutForValuation / 1e18;
+};
+
+type GetPurchasedBondsPayload = {
+  bondType: BondType;
+  isBondStable: boolean;
+  balanceOfTreasury: number;
+  valuation: number;
+  markdown: number;
+  latestRoundDataAnswer: number;
+};
+const getPurchasedBonds = ({
+  bondType,
+  isBondStable,
+  balanceOfTreasury,
+  valuation,
+  markdown,
+  latestRoundDataAnswer,
+}: GetPurchasedBondsPayload) => {
+  if (bondType === 'lp') {
+    return (markdown / 1e18) * (valuation / 1e9);
+  }
+  if (isBondStable) {
+    return balanceOfTreasury / 1e18;
+  }
+  if (latestRoundDataAnswer) {
+    return (balanceOfTreasury / 1e18) * (latestRoundDataAnswer / 1e8);
+  }
+  throw new Error('Please give latestRoundDataAnswer to getPurchasedBonds function');
+};
+
+type GetTransformedMaxPayoutPayload = {
+  originalMaxPayout: number;
+};
+const getTransformedMaxPayout = ({ originalMaxPayout }: GetTransformedMaxPayoutPayload) => {
+  return originalMaxPayout / 1e9;
+};
+
+type GetTransformedBondPrice = {
+  bondPriceInUSD: number;
+};
+const getTransformedBondPrice = ({ bondPriceInUSD }: GetTransformedBondPrice) => {
+  return bondPriceInUSD / 1e18;
+};
+
+type GetTransformedMarketPricePayload = {
+  originalMarketPrice: BigNumber;
+};
+const getTransformedMarketPrice = ({ originalMarketPrice }: GetTransformedMarketPricePayload) => {
+  return formatUnits(originalMarketPrice, 9);
+};
+
+type GetMaxUserCanBuyPayload = {
+  isOverMaxPayout: boolean;
+  originalMaxPayout: BigNumber;
+  bondPriceInUSD: number;
+  userBalance: string;
+};
+const getMaxUserCanBuy = ({
+  isOverMaxPayout,
+  originalMaxPayout,
+  bondPriceInUSD,
+  userBalance,
+}: GetMaxUserCanBuyPayload) => {
+  if (isOverMaxPayout) {
+    return originalMaxPayout.sub(1).mul(bondPriceInUSD).div(1e9).toString();
+  }
+  return userBalance;
+};
+
+const DEPRECATED_BOND_STATIC_VALUES = {
+  bondDiscount: 1,
+  debtRatio: 1,
+  bondQuote: 1,
+  purchased: 1,
+  vestingTerm: 1,
+  maxPayout: 1,
+  bondPrice: 1,
+  marketPrice: '0.0',
+  maxUserCanBuy: '0.0',
+};
+
 export const calcBondDetails = createAsyncThunk(
   'bonding/calcBondDetails',
   async ({ bondKey, value, provider, networkID, userBalance }: CalcBondDetailsPayload): Promise<BondDetails> => {
-    const amountInWei =
-      !value || value === ''
-        ? ethers.utils.parseEther('0.0001') // Use a realistic SLP ownership
-        : ethers.utils.parseEther(value);
+    const amountInWei = !value
+      ? ethers.utils.parseEther('0.0001') // Use a realistic SLP ownership
+      : ethers.utils.parseEther(value);
 
-    const addresses = getAddresses(networkID);
-    const bondContract = contractForBond(bondKey, networkID, provider);
     const bond = getBond(bondKey, networkID);
+    const bondContract = contractForBond(bondKey, networkID, provider);
+    const addresses = getAddresses(networkID);
 
-    // skip loading if bond is deprecated
     if (bond.deprecated) {
       return {
         bond: bondKey,
-        bondDiscount: 1,
-        debtRatio: 1,
-        bondQuote: 1,
-        purchased: 1,
-        vestingTerm: 1,
-        maxPayout: 1,
-        bondPrice: 1,
-        marketPrice: '0.0',
-        maxUserCanBuy: '0.0',
+        ...DEPRECATED_BOND_STATIC_VALUES,
       };
     }
 
-    let bondPrice = 0,
-      bondDiscount = 0,
-      valuation,
-      bondQuote,
-      maxUserCanBuy = userBalance;
-
-    const bondCalcContract = new ethers.Contract(addresses.CLAM_BONDING_CALC_ADDRESS, BondingCalcContract, provider);
-
-    const terms = await bondContract.terms();
-    const maxPayout = await bondContract.maxPayout();
-    const standardizedDebtRatio = await bondContract.standardizedDebtRatio();
-
-    let debtRatio = standardizedDebtRatio / 1e9;
+    // Calculate bond discount
+    const bondPriceInUSD = await bondContract.bondPriceInUSD();
     const maiPrice = await getTokenPrice('MAI');
-    const rawMarketPrice = (await getMarketPrice(networkID, provider)).mul(maiPrice);
-    const marketPrice = formatUnits(rawMarketPrice, 9);
+    const originalMarketPrice = ((await getMarketPrice(networkID, provider)) as BigNumber).mul(maiPrice);
+    const bondDiscount = getBondDiscount({ originalMarketPrice, bondPriceInUSD });
 
-    try {
-      bondPrice = await bondContract.bondPriceInUSD();
-      bondDiscount = (rawMarketPrice.toNumber() * 1e9 - bondPrice) / bondPrice;
-    } catch (e) {
-      console.log('error getting bondPriceInUSD', e);
-    }
+    // Calculate bond quote
+    const bondCalcContract = new ethers.Contract(addresses.CLAM_BONDING_CALC_ADDRESS, BondingCalcContract, provider);
+    const payoutForValuation =
+      bond.type === 'lp'
+        ? await (async () => {
+            const valuation = await bondCalcContract.valuation(bond.reserve, amountInWei);
+            return await bondContract.payoutFor(valuation);
+          })()
+        : await bondContract.payoutFor(amountInWei);
+    const bondQuote = getBondQuote({ bondType: bond.type, payoutForValuation });
 
-    if (bond.type === 'lp') {
-      valuation = await bondCalcContract.valuation(bond.reserve, amountInWei);
-      bondQuote = await bondContract.payoutFor(valuation);
-      bondQuote = bondQuote / 1e9;
+    // Calculate max bond that user can buy
+    const maxQuoteOfUser = (await bondContract.payoutFor(userBalance)).div(1e9) as BigNumber;
+    const originalMaxPayout = await bondContract.maxPayout();
+    const isOverMaxPayout = maxQuoteOfUser.gte(originalMaxPayout);
+    const maxUserCanBuy = getMaxUserCanBuy({ isOverMaxPayout, originalMaxPayout, bondPriceInUSD, userBalance });
 
-      // let maxQuoteOfUser = await bondContract.payoutFor(await bondCalcContract.valuation(bond.reserve, userBalance));
-      // if (maxQuoteOfUser.gte(maxPayout)) {
-      //   maxQuoteOfUser = maxPayout.sub(1);
-      //   const rawBondPrice = await bondContract.bondPrice();
-      //   maxUserCanBuy = maxQuoteOfUser.mul(rawBondPrice).toString();
-      // } else {
-      //   maxUserCanBuy = userBalance;
-      // }
-    } else {
-      bondQuote = await bondContract.payoutFor(amountInWei);
-      bondQuote = bondQuote / 1e18;
-      // @dev: fix for non-lp bond
-      debtRatio = standardizedDebtRatio.toNumber();
-
-      let maxQuoteOfUser = (await bondContract.payoutFor(userBalance)).div(1e9);
-      if (maxQuoteOfUser.gte(maxPayout)) {
-        maxUserCanBuy = maxPayout.sub(1).mul(bondPrice).div(1e9).toString();
-      }
-    }
-
-    // Display error if user tries to exceed maximum.
-    if (!!value && bondQuote > maxPayout / 1e9) {
-      alert(
-        "You're trying to bond more than the maximum payout available! The maximum bond payout is " +
-          (maxPayout / 1e9).toFixed(2).toString() +
-          ' CLAM.',
-      );
-    }
+    // Calculate debt ratio
+    const standardizedDebtRatio = await bondContract.standardizedDebtRatio();
+    const debtRatio = getDebtRatio({ bondType: bond.type, standardizedDebtRatio });
 
     // Calculate bonds purchased
-    const token = contractForReserve(bondKey, networkID, provider);
-    let purchased = await token.balanceOf(addresses.TREASURY_ADDRESS);
+    const reserveContract = contractForReserve(bondKey, networkID, provider);
+    const balanceOfTreasury = await reserveContract.balanceOf(addresses.TREASURY_ADDRESS);
+    const markdown = bond.type === 'lp' && (await bondCalcContract.markdown(bond.reserve));
+    const valuation = bond.type === 'lp' && (await bondCalcContract.valuation(bond.reserve, balanceOfTreasury));
+    const priceFeed = bond.oracle && new ethers.Contract(bond.oracle, AggregatorV3InterfaceABI, provider);
+    const latestRoundData = priceFeed && (await priceFeed.latestRoundData());
+    const purchased = getPurchasedBonds({
+      bondType: bond.type,
+      isBondStable: bond.stable,
+      balanceOfTreasury,
+      ...(valuation && { valuation }),
+      ...(markdown && { markdown }),
+      ...(latestRoundData && { latestRoundDataAnswer: latestRoundData?.answer }),
+    });
 
-    if (bond.type === 'lp') {
-      const markdown = await bondCalcContract.markdown(bond.reserve);
-      purchased = await bondCalcContract.valuation(bond.reserve, purchased);
-      purchased = (markdown / 1e18) * (purchased / 1e9);
-    } else if (bond.stable) {
-      purchased = purchased / 1e18;
-    } else {
-      const priceFeed = new ethers.Contract(bond.oracle!, AggregatorV3InterfaceABI, provider);
-      const latestRoundData = await priceFeed.latestRoundData();
-      purchased = (purchased / 1e18) * (latestRoundData.answer / 1e8);
+    // Get transformed prices
+    const bondPrice = getTransformedBondPrice({ bondPriceInUSD });
+    const marketPrice = getTransformedMarketPrice({ originalMarketPrice });
+
+    // Get vesting term
+    const terms = await bondContract.terms();
+    const vestingTerm = +terms.vestingTerm;
+
+    // Display error if user tries to exceed maximum.
+    const maxPayout = getTransformedMaxPayout({ originalMaxPayout });
+    if (!!value && bondQuote > maxPayout) {
+      alert(
+        "You're trying to bond more than the maximum payout available! The maximum bond payout is " +
+          (originalMaxPayout / 1e9).toFixed(2).toString() +
+          ' CLAM.',
+      );
     }
 
     return {
@@ -212,9 +272,9 @@ export const calcBondDetails = createAsyncThunk(
       debtRatio,
       bondQuote,
       purchased,
-      vestingTerm: Number(terms.vestingTerm),
-      maxPayout: maxPayout / 1e9,
-      bondPrice: bondPrice / 1e18,
+      vestingTerm,
+      maxPayout,
+      bondPrice,
       marketPrice,
       maxUserCanBuy,
     };
