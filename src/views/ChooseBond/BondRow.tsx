@@ -5,6 +5,7 @@ import BondLogo from 'src/components/BondLogo';
 import CustomButton from 'src/components/Button/CustomButton';
 import './choose-bond.scss';
 
+import { useMemo } from 'react';
 import { NavLink, useHistory } from 'react-router-dom';
 import { useSelector } from 'src/store/hook';
 import { useTranslation } from 'react-i18next';
@@ -24,96 +25,7 @@ interface IBondProps {
   bondKey: BondKey;
 }
 
-export function BondCard({ bondKey }: IBondProps) {
-  const { chainID } = useWeb3Context();
-  const bond = getBond(bondKey, chainID);
-
-  const bonding = useSelector(state => state.bonding[bondKey]);
-  console.log({ bonding });
-  const { bondPrice, bondDiscount, purchased, marketPrice } = useSelector(state => state.bonding[bondKey]);
-  const isBondLoading = useSelector(state => !state.bonding[bondKey]?.bondPrice ?? true);
-  const fiveDayRate = useSelector(state => state.app.fiveDayRate);
-  const priceDiff = (Number(marketPrice) ?? 0) - (bondPrice ?? 0);
-  const { t } = useTranslation();
-
-  return (
-    <Paper id={`${bond}--bond`} className="bond-card">
-      <Grid container xs={12} alignItems="center" className="bond-avatar-row">
-        <Grid item>
-          <BondLogo bond={bond} />
-        </Grid>
-        <Grid item zeroMinWidth>
-          <p>{bond.name}</p>
-          {bond.deprecated ? (
-            <LabelChip label={`${t('bonds.deprecated')}`} className="bond-name-label" />
-          ) : (
-            <Link color="primary" href={bond.dexUrl} target="_blank">
-              <Box component="p" color="otter.otterBlue">
-                {bond.type === 'lp' ? `${t('common.addLiquidity')}` : `${t('common.buyThing')}${bond.reserveUnit}`}
-              </Box>
-            </Link>
-          )}
-        </Grid>
-      </Grid>
-
-      <Grid container spacing={4} justifyContent="space-between">
-        <Grid item>{t('common.price')}</Grid>
-        <Grid item className="bond-card-value">
-          <p>
-            <span className="currency-icon">{priceUnits(bondKey)}</span>
-            {isBondLoading ? <Skeleton width="50px" /> : bond.deprecated ? '-' : trim(bondPrice, 2)}
-          </p>
-          {priceDiff > 0 && (
-            <StatusChip status={Status.Success} label={`$${trim(priceDiff, 2)} ${t('bonds.bondDiscount')}`} />
-          )}
-        </Grid>
-      </Grid>
-
-      <Grid container spacing={4} justifyContent="space-between">
-        <Grid item>{t('common.roi')}</Grid>
-        <Grid item className="bond-card-value">
-          {isBondLoading ? <Skeleton width="50px" /> : bond.deprecated ? '-' : `${trim(bondDiscount * 100, 2)}%`}
-          {!bond.deprecated && bond.autostake && (
-            <Tooltip title={`* ${t('bonds.purchase.roiFourFourInfo')} `}>
-              <span>{` + ${trim(fiveDayRate * 100, 2)}%*`}</span>
-            </Tooltip>
-          )}
-        </Grid>
-      </Grid>
-
-      <Grid container spacing={4} justifyContent="space-between">
-        <Grid item>{t('bonds.purchased')}</Grid>
-        <Grid item className="bond-card-value">
-          {isBondLoading ? (
-            <Skeleton width="80px" />
-          ) : bond.deprecated ? (
-            '-'
-          ) : (
-            new Intl.NumberFormat('en-US', {
-              style: 'currency',
-              currency: 'USD',
-              maximumFractionDigits: 0,
-              minimumFractionDigits: 0,
-            }).format(purchased)
-          )}
-        </Grid>
-      </Grid>
-      <Grid container spacing={4}>
-        <Grid item xs={12}>
-          <Link component={NavLink} to={`/bonds/${bondKey}`}>
-            {bond.deprecated ? (
-              <CustomButton type="solid" text={`${t('common.redeem')} ${bond.name}`} />
-            ) : (
-              <CustomButton type="outline" text={`${t('common.bond')} ${bond.name}`} />
-            )}
-          </Link>
-        </Grid>
-      </Grid>
-    </Paper>
-  );
-}
-
-export function BondRow({ bondKey }: IBondProps) {
+function BondRow({ bondKey }: IBondProps) {
   const { chainID } = useWeb3Context();
   // Use BondPrice as indicator of loading.
   const isBondLoading = useSelector(state => !state.bonding[bondKey]?.bondPrice ?? true);
@@ -142,10 +54,10 @@ export function BondRow({ bondKey }: IBondProps) {
     return state.account[bondKey] && state.account[bondKey].bondMaturationTime;
   });
 
-  const vestingTime = () => {
-    return prettyShortVestingPeriod(t, currentBlockTime, bondMaturationTime);
-  };
-
+  const vestingTime = useMemo(
+    () => prettyShortVestingPeriod(t, currentBlockTime, bondMaturationTime),
+    [currentBlockTime, bondMaturationTime],
+  );
   const fullyVested = currentBlockTime > bondMaturationTime && bondMaturationTime > 0;
 
   const styles = useStyles();
@@ -209,34 +121,32 @@ export function BondRow({ bondKey }: IBondProps) {
         </p>
       </Grid>
       <Grid item xs={2} className="bond-row-value">
-        <p>{myBalance ? `${trim(myBalance, 2)} ${bond.autostake ? 'sCLAM' : 'CLAM'}` : '-'}</p>
+        {myBalance ? `${trim(myBalance, 2)} ${bond.autostake ? 'sCLAM' : 'CLAM'}` : '-'}
       </Grid>
       <Grid item xs={2} className="bond-row-value">
-        <div>
-          {fullyVested && (
-            <Link component={NavLink} to={`/bonds/${bondKey}?action=redeem`}>
-              <Box color="otter.otterBlue" display="flex" justifyContent="center" alignItems="center" height="44px">
-                <p>{t('common.redeem')}</p>
-              </Box>
-            </Link>
-          )}
-          {vestingTime() && !fullyVested && (
-            <div>
-              <p>
-                {new Date(bondMaturationTime * 1000).toLocaleString(localeString(i18n), {
-                  year: 'numeric',
-                  month: 'numeric',
-                  day: 'numeric',
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}
-              </p>
-              <p>{vestingTime()}</p>
-            </div>
-          )}
-          {!fullyVested && !vestingTime() && <p className="bond-row-value">-</p>}
-        </div>
+        {fullyVested ? (
+          <Link component={NavLink} to={`/bonds/${bondKey}?action=redeem`}>
+            {/* FIXME: modify desc from redeem to clain now */}
+            <CustomButton bgcolor="otter.otterBlue" color="otter.white" text={`${t('common.redeem')}`} />
+          </Link>
+        ) : vestingTime ? (
+          <div>
+            <p>
+              {new Date(bondMaturationTime * 1000).toLocaleString(localeString(i18n), {
+                year: 'numeric',
+                month: 'numeric',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+              })}
+            </p>
+            <p>{vestingTime}</p>
+          </div>
+        ) : (
+          <p className="bond-row-value">-</p>
+        )}
       </Grid>
     </Grid>
   );
 }
+export default BondRow;
