@@ -1,17 +1,33 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Box, InputLabel, OutlinedInput, InputAdornment, Slide, FormControl, makeStyles } from '@material-ui/core';
-import { shorten, trim, prettifySeconds } from '../../helpers';
-import { changeApproval, bondAsset, calcBondDetails } from '../../store/actions/bond-action';
-import { useWeb3Context } from '../../hooks';
-import { IPendingTxn, isPendingTxn, txnButtonText } from '../../store/slices/pending-txns-slice';
-import { Skeleton } from '@material-ui/lab';
-import { IReduxState } from '../../store/slices/state.interface';
-import { BondKey, getBond } from 'src/constants';
-import { ethers } from 'ethers';
 import { useTranslation } from 'react-i18next';
+import { useWeb3Context } from '../../hooks';
+
+import {
+  Box,
+  Grid,
+  InputLabel,
+  OutlinedInput,
+  InputAdornment,
+  Slide,
+  FormControl,
+  makeStyles,
+  useMediaQuery,
+} from '@material-ui/core';
+import { Skeleton } from '@material-ui/lab';
 import BondPurchaseDialog from './BondPurchaseDialog';
 import ActionButton from '../../components/Button/ActionButton';
+
+import { ethers } from 'ethers';
+
+import { changeApproval, bondAsset, calcBondDetails } from '../../store/actions/bond-action';
+
+import { IPendingTxn } from '../../store/slices/pending-txns-slice';
+import { IReduxState } from '../../store/slices/state.interface';
+
+import { BondKey, getBond } from 'src/constants';
+import { shorten, trim, prettifySeconds } from '../../helpers';
+import { tabletMediaQuery } from 'src/themes/mediaQuery';
 
 const useStyles = makeStyles(theme => ({
   input: {
@@ -37,6 +53,7 @@ interface IBondPurchaseProps {
 }
 
 function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
+  const isTablet = useMediaQuery(tabletMediaQuery);
   const styles = useStyles();
   const dispatch = useDispatch();
   const { provider, address, chainID } = useWeb3Context();
@@ -171,43 +188,47 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
 
   return (
     <Box display="flex" flexDirection="column">
-      <div className={`${styles.input} input-container`}>
-        <FormControl className="ohm-input" variant="outlined" color="primary" fullWidth>
-          <InputLabel htmlFor="outlined-adornment-amount"></InputLabel>
-          <OutlinedInput
-            placeholder={`${bond.reserveUnit} ${t('common.amount')}`}
-            id="outlined-adornment-amount"
-            type="number"
-            value={quantity}
-            onChange={e => setQuantity(e.target.value)}
-            labelWidth={0}
-            className="bond-input"
-            endAdornment={
-              <InputAdornment position="end">
-                <div className="stake-input-btn" onClick={setMax}>
-                  <p>{t('common.max')}</p>
-                </div>
-              </InputAdornment>
-            }
-          />
-        </FormControl>
-        {hasAllowance() ? (
-          <ActionButton
-            pendingTransactions={pendingTransactions}
-            type={'bond_' + bond.key}
-            start="Bond"
-            progress="Bonding..."
-            processTx={() => onBond()}
-          ></ActionButton>
-        ) : (
-          <ActionButton
-            pendingTransactions={pendingTransactions}
-            type={'approve_' + bond.key}
-            start="Approve"
-            progress="Approving..."
-            processTx={() => onSeekApproval()}
-          ></ActionButton>
-        )}
+      <Grid container spacing={isTablet ? 1 : 2} className={`${styles.input} input-container`}>
+        <Grid item xs={12} md={9}>
+          <FormControl variant="outlined" color="primary" fullWidth>
+            <InputLabel htmlFor="outlined-adornment-amount"></InputLabel>
+            <OutlinedInput
+              placeholder={`${bond.reserveUnit} ${t('common.amount')}`}
+              id="outlined-adornment-amount"
+              type="number"
+              value={quantity}
+              onChange={e => setQuantity(e.target.value)}
+              labelWidth={0}
+              className="bond-input"
+              endAdornment={
+                <InputAdornment position="end">
+                  <div className="stake-input-btn" onClick={setMax}>
+                    <p>{t('common.max')}</p>
+                  </div>
+                </InputAdornment>
+              }
+            />
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={3}>
+          {hasAllowance() ? (
+            <ActionButton
+              pendingTransactions={pendingTransactions}
+              type={'bond_' + bond.key}
+              start="Bond"
+              progress="Bonding..."
+              processTx={() => onBond()}
+            ></ActionButton>
+          ) : (
+            <ActionButton
+              pendingTransactions={pendingTransactions}
+              type={'approve_' + bond.key}
+              start="Approve"
+              progress="Approving..."
+              processTx={() => onSeekApproval()}
+            ></ActionButton>
+          )}
+        </Grid>
         <BondPurchaseDialog
           open={open}
           handleClose={handleCloseDialog}
@@ -219,18 +240,9 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
           autoStake={trim(fiveDayRate * 100, 2)}
           vestingTerm={vestingTerm}
         />
-      </div>
-      {hasAllowance() ? (
-        bond.autostake && (
-          <div className="help-text">
-            <p className="help-text-desc">{t('bonds.purchase.fourFourInfo')}</p>
-          </div>
-        )
-      ) : (
-        <div className="help-text">
-          <p className="help-text-desc"></p>
-        </div>
-      )}
+      </Grid>
+
+      <p className="purchase-note">{hasAllowance() && bond.autostake && t('bonds.purchase.fourFourInfo')}</p>
 
       <Slide direction="left" in={true} mountOnEnter unmountOnExit {...{ timeout: 533 }}>
         <Box className="bond-data">
