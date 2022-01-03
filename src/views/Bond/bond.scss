@@ -80,6 +80,8 @@
   }
 
   .bond-price-data {
+    text-align: center;
+
     .bond-price-data-title {
       font-weight: 700;
       font-size: 16px;
@@ -100,10 +102,9 @@
   }
 
   .bond-price-data-row {
-    display: flex;
-    justify-content: space-around;
-    text-align: center;
-    margin: 23px;
+    margin-top: 40px;
+    margin-bottom: 20px;
+
     h4 {
       margin-bottom: 0;
     }
@@ -116,16 +117,6 @@
     flex: 1;
     min-width: 50%;
     margin: 5px;
-  }
-}
-
-.transaction-button {
-  min-width: 185px !important;
-  max-width: 408px;
-  margin: 5px !important;
-  @media screen and (max-width: 417px) {
-    max-width: unset;
-    width: 100%;
   }
 }
 
@@ -164,7 +155,7 @@
   backdrop-filter: blur(100px) !important;
 }
 
-.bond-one-table {
+.bond-tabs {
   .MuiTabs-indicator {
     // background-color: $otter-dark;
     height: 3px;
@@ -185,6 +176,7 @@
 
   .MuiOutlinedInput-input {
     font-size: 16px;
+    padding: 16px;
   }
 
   .MuiOutlinedInput-notchedOutline {
@@ -208,12 +200,10 @@
   }
 }
 
-.help-text {
-  .help-text-desc {
-    font-weight: 300;
-    font-size: 14px;
-    text-align: center;
-  }
+.purchase-note {
+  margin-top: 20px;
+  font-weight: 300;
+  font-size: 14px;
 }
 
 .bond-balance-title {

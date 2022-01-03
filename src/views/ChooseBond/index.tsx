@@ -5,7 +5,7 @@ import { useBonds } from '../../hooks';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { tabletMediaQuery } from 'src/themes/mediaQuery';
 
-import { Box, Grid, Paper, Zoom, Slide, makeStyles, Typography } from '@material-ui/core';
+import { Box, Grid, Paper, Zoom, Slide, Typography } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import BondRowHeader from './BondRowHeader';
 import BondRow from './BondRow';
@@ -15,14 +15,6 @@ import './choose-bond.scss';
 import apollo from 'src/lib/apolloClient';
 import { getTokenImage, trim } from '../../helpers';
 import { IReduxState } from '../../store/slices/state.interface';
-
-const useStyles = makeStyles(theme => ({
-  white: {
-    '& ': {
-      backgroundColor: theme.palette.mode.white,
-    },
-  },
-}));
 
 function ChooseBond() {
   const { t } = useTranslation();
@@ -42,7 +34,7 @@ query {
     treasuryMarketValue
   }
 }`).then(r => {
-      const latestMetrics = (r as any).data.protocolMetrics[0];
+      const latestMetrics = (r as any)?.data.protocolMetrics[0];
       setTreasuryBalance(latestMetrics.treasuryMarketValue);
     });
   });

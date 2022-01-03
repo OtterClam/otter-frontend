@@ -1,4 +1,4 @@
-import { Backdrop, Box, Fade, Grid, Paper, Tab, Tabs } from '@material-ui/core';
+import { Backdrop, Box, Divider, Fade, Grid, Paper, Tab, Tabs } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -76,8 +76,8 @@ function Bond({ bondKey }: IBondProps) {
                 onRecipientAddressChange={onRecipientAddressChange}
               />
               {!bond.deprecated && (
-                <Box className="bond-price-data-row">
-                  <div className="bond-price-data">
+                <Grid container justifyContent="space-evenly" className="bond-price-data-row">
+                  <Grid item xs={5} className="bond-price-data">
                     <Box className="bond-price-data-title" component="p" color="text.disabled">
                       {t('bonds.bondPrice')}
                     </Box>
@@ -103,16 +103,17 @@ function Bond({ bondKey }: IBondProps) {
                         />
                       </Box>
                     )}
-                  </div>
-                  <div className="bond-price-data">
+                  </Grid>
+                  <Divider orientation="vertical" flexItem />
+                  <Grid item xs={5} className="bond-price-data">
                     <Box className="bond-price-data-title" component="p" color="text.disabled">
                       {t('common.clamPrice')}
                     </Box>
                     <Box component="p" color="text.secondary" className="bond-price-data-value">
                       {isBondLoading ? <Skeleton /> : `$${trim(marketPrice, 2)}`}
                     </Box>
-                  </div>
-                </Box>
+                  </Grid>
+                </Grid>
               )}
 
               <Tabs
@@ -121,7 +122,7 @@ function Bond({ bondKey }: IBondProps) {
                 indicatorColor="primary"
                 onChange={changeView}
                 aria-label="bond tabs"
-                className="bond-one-table"
+                className="bond-tabs"
               >
                 {!bond.deprecated && <Tab value={0} label="Bond" {...a11yProps(0)} />}
                 <Tab value={bond.deprecated ? 0 : 1} label="Redeem" {...a11yProps(1)} />

@@ -1,4 +1,4 @@
-import { Box, Slide } from '@material-ui/core';
+import { Box, Grid, Slide } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -95,24 +95,30 @@ function BondRedeem({ bondKey }: IBondRedeem) {
             <p>{t('common.claim')}</p>
           </Box>
         )}
-        {!(bond.autostake && !fullVested) && (
-          <ActionButton
-            pendingTransactions={pendingTransactions}
-            type={'redeem_bond_' + bondKey}
-            start="Claim"
-            progress="Claiming..."
-            processTx={() => onRedeem(false)}
-          ></ActionButton>
-        )}
-        {!bond.deprecated && !bond.autostake && (
-          <ActionButton
-            pendingTransactions={pendingTransactions}
-            type={'redeem_bond_' + bondKey + '_autostake'}
-            start="Claim and Autostake"
-            progress="Claiming..."
-            processTx={() => onRedeem(true)}
-          ></ActionButton>
-        )}
+        <Grid container spacing={2} justifyContent="center">
+          {!(bond.autostake && !fullVested) && (
+            <Grid item xs={6}>
+              <ActionButton
+                pendingTransactions={pendingTransactions}
+                type={'redeem_bond_' + bondKey}
+                start="Claim"
+                progress="Claiming..."
+                processTx={() => onRedeem(false)}
+              />
+            </Grid>
+          )}
+          {!bond.deprecated && (
+            <Grid item xs={6}>
+              <ActionButton
+                pendingTransactions={pendingTransactions}
+                type={'redeem_bond_' + bondKey + '_autostake'}
+                start="Claim and Autostake"
+                progress="Claiming..."
+                processTx={() => onRedeem(true)}
+              />
+            </Grid>
+          )}
+        </Grid>
       </Box>
       <BondRedeemDialog
         open={open}
