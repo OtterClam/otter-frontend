@@ -161,7 +161,7 @@ export function listBonds(chainId: number): BondMap {
     mai_clam44: {
       key: 'mai_clam44',
       name: 'MAI-CLAM (4,4)',
-      address: '0xda0d7c3d751d00a1ec1c495eF7Cf3db1a202B0B9',
+      address: BONDS.MAI_CLAM,
       reserve: RESERVES.MAI_CLAM,
       reserveUnit: 'LP',
       type: 'lp',
