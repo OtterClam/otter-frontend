@@ -1,4 +1,4 @@
-import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { fetchAccountSuccess } from '../slices/account-slice';
 import { calculateUserBondDetails, getBalances } from '../slices/account-slice';
@@ -121,7 +121,10 @@ export const calcBondDetails = createAsyncThunk(
     }
 
     // Calculate bond discount
-    const bondPriceInUSD = await bondContract.bondPriceInUSD();
+    const bondPriceInUSD =
+      bondKey === 'mai_clam44'
+        ? await bondContract.bondPriceInUSD(addresses.BONDS.MAI_CLAM)
+        : await bondContract.bondPriceInUSD();
     const maiPrice = await getTokenPrice('MAI');
     const originalMarketPrice = ((await getMarketPrice(networkID, provider)) as BigNumber).mul(maiPrice);
     const bondDiscount = getBondDiscount({ originalMarketPrice, bondPriceInUSD });
@@ -129,7 +132,9 @@ export const calcBondDetails = createAsyncThunk(
     // Calculate bond quote
     const bondCalcContract = new ethers.Contract(addresses.CLAM_BONDING_CALC_ADDRESS, BondingCalcContract, provider);
     const payoutForValuation =
-      bond.type === 'lp'
+      bondKey === 'mai_clam44'
+        ? await bondContract.payoutFor(amountInWei, addresses.BONDS.MAI_CLAM)
+        : bond.type === 'lp'
         ? await (async () => {
             const valuation = await bondCalcContract.valuation(bond.reserve, amountInWei);
             return await bondContract.payoutFor(valuation);
@@ -138,7 +143,10 @@ export const calcBondDetails = createAsyncThunk(
     const bondQuote = getBondQuote({ bondType: bond.type, payoutForValuation });
 
     // Calculate max bond that user can buy
-    const maxQuoteOfUser = (await bondContract.payoutFor(userBalance)).div(1e9) as BigNumber;
+    const maxQuoteOfUser =
+      bondKey === 'mai_clam44'
+        ? ((await bondContract.payoutFor(userBalance, addresses.BONDS.MAI_CLAM)).div(1e9) as BigNumber)
+        : ((await bondContract.payoutFor(userBalance)).div(1e9) as BigNumber);
     const originalMaxPayout = await bondContract.maxPayout();
     const isOverMaxPayout = maxQuoteOfUser.gte(originalMaxPayout);
     const maxUserCanBuy = getMaxUserCanBuy({ isOverMaxPayout, originalMaxPayout, bondPriceInUSD, userBalance });
