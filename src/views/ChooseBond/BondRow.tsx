@@ -68,7 +68,7 @@ function BondRow({ bondKey }: IBondProps) {
     history.push(`/bonds/${bondKey}?action=${redeemable}`);
   };
   return (
-    <Grid container xs={12} id={`${bondKey}--bond`} className={`bond-row ${styles.white}`} onClick={redirect}>
+    <Grid container id={`${bondKey}--bond`} className={`bond-row ${styles.white}`} onClick={redirect}>
       <Grid item xs={1}>
         <BondLogo bond={bond} />
       </Grid>

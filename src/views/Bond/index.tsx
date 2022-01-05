@@ -1,4 +1,4 @@
-import { Backdrop, Box, Divider, Fade, Grid, Paper, Tab, Tabs } from '@material-ui/core';
+import { Backdrop, Box, Divider, Fade, Grid, Paper, Tab, Tabs, makeStyles } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -22,11 +22,20 @@ function a11yProps(index: number) {
   };
 }
 
+const useStyle = makeStyles(theme => {
+  return {
+    modal: {
+      backgroundColor: theme.palette.mode.lightGray100,
+    },
+  };
+});
+
 interface IBondProps {
   bondKey: BondKey;
 }
 
 function Bond({ bondKey }: IBondProps) {
+  const style = useStyle();
   const { provider, address, chainID } = useWeb3Context();
 
   const [slippage, setSlippage] = useState(0.5);
@@ -64,83 +73,78 @@ function Bond({ bondKey }: IBondProps) {
 
   return (
     <Fade in={true} mountOnEnter unmountOnExit>
-      <Grid container id="bond-view">
-        <Backdrop open={true}>
-          <Fade in={true}>
-            <Paper className="ohm-card ohm-modal bond-modal">
-              <BondHeader
-                bond={bond}
-                slippage={slippage}
-                recipientAddress={recipientAddress}
-                onSlippageChange={onSlippageChange}
-                onRecipientAddressChange={onRecipientAddressChange}
-              />
-              {!bond.deprecated && (
-                <Grid container justifyContent="space-evenly" className="bond-price-data-row">
-                  <Grid item xs={5} className="bond-price-data">
-                    <Box className="bond-price-data-title" component="p" color="text.disabled">
-                      {t('bonds.bondPrice')}
-                    </Box>
-                    <Box className="bond-price-data-value market-price" component="span" color="secondary.light">
-                      {formatCurrency(+marketPrice, 2)}
-                    </Box>
-                    <Box className="bond-price-data-value" component="span" color="text.secondary">
-                      {isBondLoading ? (
-                        <Skeleton />
-                      ) : bond.deprecated ? (
-                        '-'
-                      ) : bond.type === 'lp' ? (
-                        `$${trim(bondPrice, 2)}`
-                      ) : (
-                        `${trim(bondPrice, 2)} ${bond.reserveUnit}`
-                      )}
-                    </Box>
-                    {priceDiff > 0 && (
-                      <Box component="div">
-                        <StatusChip
-                          status={Status.Success}
-                          label={`$${trim(priceDiff, 2)} ${t('bonds.bondDiscount')}`}
-                        />
-                      </Box>
+      <Backdrop id="bond-view" open={true}>
+        <Fade in={true}>
+          <Paper className={`${style.modal} ohm-card ohm-modal bond-modal`}>
+            <BondHeader
+              bond={bond}
+              slippage={slippage}
+              recipientAddress={recipientAddress}
+              onSlippageChange={onSlippageChange}
+              onRecipientAddressChange={onRecipientAddressChange}
+            />
+            {!bond.deprecated && (
+              <Grid container justifyContent="space-evenly" className="bond-price-data-row">
+                <Grid item xs={5} className="bond-price-data">
+                  <Box className="bond-price-data-title" component="p" color="text.disabled">
+                    {t('bonds.bondPrice')}
+                  </Box>
+                  <Box className="bond-price-data-value market-price" component="span" color="secondary.light">
+                    {formatCurrency(+marketPrice, 2)}
+                  </Box>
+                  <Box className="bond-price-data-value" component="span" color="text.secondary">
+                    {isBondLoading ? (
+                      <Skeleton />
+                    ) : bond.deprecated ? (
+                      '-'
+                    ) : bond.type === 'lp' ? (
+                      `$${trim(bondPrice, 2)}`
+                    ) : (
+                      `${trim(bondPrice, 2)} ${bond.reserveUnit}`
                     )}
-                  </Grid>
-                  <Divider orientation="vertical" flexItem />
-                  <Grid item xs={5} className="bond-price-data">
-                    <Box className="bond-price-data-title" component="p" color="text.disabled">
-                      {t('common.clamPrice')}
+                  </Box>
+                  {priceDiff > 0 && (
+                    <Box component="div">
+                      <StatusChip status={Status.Success} label={`$${trim(priceDiff, 2)} ${t('bonds.bondDiscount')}`} />
                     </Box>
-                    <Box component="p" color="text.secondary" className="bond-price-data-value">
-                      {isBondLoading ? <Skeleton /> : `$${trim(marketPrice, 2)}`}
-                    </Box>
-                  </Grid>
+                  )}
                 </Grid>
-              )}
+                <Divider orientation="vertical" flexItem />
+                <Grid item xs={5} className="bond-price-data">
+                  <Box className="bond-price-data-title" component="p" color="text.disabled">
+                    {t('common.clamPrice')}
+                  </Box>
+                  <Box component="p" color="text.secondary" className="bond-price-data-value">
+                    {isBondLoading ? <Skeleton /> : `$${trim(marketPrice, 2)}`}
+                  </Box>
+                </Grid>
+              </Grid>
+            )}
 
-              <Tabs
-                centered
-                value={view}
-                indicatorColor="primary"
-                onChange={changeView}
-                aria-label="bond tabs"
-                className="bond-tabs"
-              >
-                {!bond.deprecated && <Tab value={0} label="Bond" {...a11yProps(0)} />}
-                <Tab value={bond.deprecated ? 0 : 1} label="Redeem" {...a11yProps(1)} />
-              </Tabs>
+            <Tabs
+              centered
+              value={view}
+              indicatorColor="primary"
+              onChange={changeView}
+              aria-label="bond tabs"
+              className="bond-tabs"
+            >
+              {!bond.deprecated && <Tab value={0} label="Bond" {...a11yProps(0)} />}
+              <Tab value={bond.deprecated ? 0 : 1} label="Redeem" {...a11yProps(1)} />
+            </Tabs>
 
-              {!bond.deprecated && (
-                <TabPanel value={view} index={0}>
-                  <BondPurchase bondKey={bondKey} slippage={slippage} />
-                </TabPanel>
-              )}
-
-              <TabPanel value={view} index={bond.deprecated ? 0 : 1}>
-                <BondRedeem bondKey={bondKey} />
+            {!bond.deprecated && (
+              <TabPanel className="purchase-box" value={view} index={0}>
+                <BondPurchase bondKey={bondKey} slippage={slippage} />
               </TabPanel>
-            </Paper>
-          </Fade>
-        </Backdrop>
-      </Grid>
+            )}
+
+            <TabPanel value={view} index={bond.deprecated ? 0 : 1}>
+              <BondRedeem bondKey={bondKey} />
+            </TabPanel>
+          </Paper>
+        </Fade>
+      </Backdrop>
     </Fade>
   );
 }
