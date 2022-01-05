@@ -97,7 +97,7 @@ query {
           </Slide>
         ) : (
           <Zoom in>
-            <Grid className="bond-row-container" container xs={12} aria-label="Available bonds">
+            <Grid className="bond-row-container" item xs={12} aria-label="Available bonds">
               <BondRowHeader />
               {bonds.map(bond => (
                 <BondRow key={bond.value} bondKey={bond.value} />

@@ -1,0 +1,68 @@
+@import 'styles/_colors.scss';
+
+.otter-card {
+    padding: 16px;
+    margin: 0 10px;
+    border-radius: 10px;
+    border: 2px solid white;
+    transition: 0.3s;
+    &.desktop {
+      &:hover {
+        cursor: pointer;
+        border: 2px solid $light-gray400;
+        box-shadow: 0px 4px 20px 0px $light-gray200;
+      }
+    }
+  
+    .otter-img {
+      width: 194px;
+    }
+  
+    .otter-name {
+      text-align: center;
+      margin: 14px 0px;
+    }
+  
+    .otter-discount {
+      color: $clam-pink;
+      font-size: 20px;
+      text-align: center;
+    }
+    .select-button {
+      display: flex;
+      align-items: center;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s;
+      
+      .select-text {
+          color: $otter-blue;
+          margin-right: 10px;
+      }
+
+      .arrow-icon {
+          fill: transparent;
+          stroke: $otter-dark;
+      }
+    }
+  }
+
+  @media screen and (max-width: 960px)  {
+    .otter-card {
+        margin: 10px 0;
+        .otter-img {
+            width: 100px;
+            margin-right: 20px;
+          }
+          .otter-name {
+            font-size: 20px;
+            text-align: left;
+            margin: 10px 0px;
+          }
+          .otter-discount {
+            font-size: 20px;
+            text-align: left;
+            color: $clam-pink;
+          }
+    }
+  }

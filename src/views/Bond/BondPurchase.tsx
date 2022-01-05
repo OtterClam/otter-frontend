@@ -17,6 +17,8 @@ import {
 import { Skeleton } from '@material-ui/lab';
 import BondPurchaseDialog from './BondPurchaseDialog';
 import ActionButton from '../../components/Button/ActionButton';
+import BondNFTDiscount from './BondNFTDiscount';
+import BondNTFDiscountDialog from './BondNFTDiscountDialog';
 
 import { ethers } from 'ethers';
 
@@ -28,6 +30,7 @@ import { IReduxState } from '../../store/slices/state.interface';
 import { BondKey, getBond } from 'src/constants';
 import { shorten, trim, prettifySeconds } from '../../helpers';
 import { tabletMediaQuery } from 'src/themes/mediaQuery';
+import { OtterNft } from './BondNFTDiscountDialog/type';
 
 const useStyles = makeStyles(theme => ({
   input: {
@@ -62,6 +65,16 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
   const [quantity, setQuantity] = useState('');
 
   const [open, setOpen] = useState(false);
+  const [nftDialogOpen, setNftDialogOpen] = useState(false);
+  const [nftSelection, setNftSelection] = useState<OtterNft | undefined>(undefined);
+  const canSelect = true;
+
+  const handleSelect = () => {
+    if (!canSelect) {
+      return;
+    }
+    return setNftDialogOpen(true);
+  };
 
   const isBondLoading = useSelector<IReduxState, boolean>(state => state.bonding.loading ?? true);
   const vestingTerm = useSelector<IReduxState, number>(state => {
@@ -185,6 +198,7 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
   };
 
   const bondUnit = bond.autostake ? 'sCLAM' : 'CLAM';
+  console.log(bond.key);
 
   return (
     <Box display="flex" flexDirection="column">
@@ -243,6 +257,20 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
       </Grid>
 
       <p className="purchase-note">{hasAllowance() && bond.autostake && t('bonds.purchase.fourFourInfo')}</p>
+      {bond.key === 'mai_clam44' && (
+        <BondNFTDiscount
+          disabled={!canSelect}
+          selection={nftSelection}
+          setSelection={setNftSelection}
+          onClick={handleSelect}
+        />
+      )}
+      <BondNTFDiscountDialog
+        open={nftDialogOpen}
+        selection={nftSelection}
+        setSelection={setNftSelection}
+        onClose={() => setNftDialogOpen(false)}
+      />
 
       <Slide direction="left" in={true} mountOnEnter unmountOnExit {...{ timeout: 533 }}>
         <Box className="bond-data">
