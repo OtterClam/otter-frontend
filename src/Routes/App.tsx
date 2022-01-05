@@ -16,6 +16,7 @@ import { BondKeys } from '../constants';
 import { useAddress, useWeb3Context } from '../hooks';
 import { calculateUserBondDetails, loadAccountDetails } from '../store/slices/account-slice';
 import { loadAppDetails } from '../store/slices/app-slice';
+import { loadTermsDetails } from '../store/slices/pearl-vault-slice';
 import { calcBondDetails } from '../store/slices/bond-slice';
 import { IReduxState } from '../store/slices/state.interface';
 import { Bond, ChooseBond, Stake, Wrap } from '../views';
@@ -80,10 +81,12 @@ function App() {
 
     if (whichDetails === 'app') {
       loadApp(loadProvider);
+      loadTerms(loadProvider);
     }
 
     if (whichDetails === 'account' && address && connected) {
       loadAccount(loadProvider);
+      loadTerms(loadProvider);
       if (isAppLoaded) return;
 
       loadApp(loadProvider);
@@ -104,6 +107,13 @@ function App() {
           calcBondDetails({ bondKey, value: null, provider: loadProvider, networkID: chainID, userBalance: '0' }),
         );
       });
+    },
+    [connected],
+  );
+
+  const loadTerms = useCallback(
+    loadProvider => {
+      dispatch(loadTermsDetails({ networkID: chainID, address, provider: loadProvider }));
     },
     [connected],
   );
