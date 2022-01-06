@@ -7,6 +7,7 @@ import { getAddresses } from '../../constants';
 import { setAll } from '../../helpers';
 import { fetchPendingTxns, clearPendingTxn } from './pending-txns-slice';
 import { formatEther } from '@ethersproject/units';
+import axios from 'axios';
 
 export interface ITerm {
   note: INote;
@@ -25,11 +26,13 @@ export interface INote {
 }
 
 export interface ILock {
-  tokenId: BigNumber;
-  amount: BigNumber;
-  endEpoch: BigNumber;
-  receiptUrl: string;
+  name: string;
+  tokenId: string;
+  amount: string;
+  endEpoch: number;
+  imageUrl: string;
   noteAddress: string;
+  reward: string;
 }
 
 export interface IPearlVaultSliceState {
@@ -61,7 +64,7 @@ interface IClaimRewardDetails {
 
 interface IRedeemDetails {
   noteAddress: string;
-  tokenId: BigNumber;
+  tokenId: string;
   networkID: number;
   provider: JsonRpcProvider;
 }
@@ -80,6 +83,89 @@ interface IExtendLockDetails {
   networkID: number;
   provider: JsonRpcProvider;
   tokenId: number;
+}
+
+export const loadTermsDetails = createAsyncThunk(
+  'pearlVault/loadTermsDetails',
+  async ({ address, networkID, provider }: ILoadTermsDetails) => {
+    const { terms, locks } = await getTermsAndLocks(address, networkID, provider);
+    return { terms, locks };
+  },
+);
+
+async function getTermsAndLocks(address: string, networkID: number, provider: JsonRpcProvider) {
+  const addresses = getAddresses(networkID);
+  const pearlVaultContract = new ethers.Contract(addresses.PEARL_VAULT, PearlVault, provider);
+
+  const termsCount = (await pearlVaultContract.termsCount()).toNumber();
+  const actions: Promise<ITerm>[] = [];
+  const locks: ILock[] = [];
+
+  for (let i = 0; i < termsCount; i += 1) {
+    actions.push(
+      (async (i: number) => {
+        const termAddress = await pearlVaultContract.termAddresses(i);
+        const term = await pearlVaultContract.terms(termAddress);
+        const noteContract = new ethers.Contract(term.note, PearlNote, provider);
+        const [locksCount, name, symbol] = await Promise.all([
+          noteContract.balanceOf(address),
+          noteContract.name(),
+          noteContract.symbol(),
+        ]);
+        for (let j = 0; j < locksCount.toNumber(); j += 1) {
+          const id = await noteContract.tokenOfOwnerByIndex(address, j);
+          const [lock, tokenURI, reward] = await Promise.all([
+            noteContract.lockInfos(id),
+            noteContract.tokenURI(id),
+            pearlVaultContract.reward(term.note, id),
+          ]);
+          let imageUrl = '';
+          try {
+            const tokenMeta = await axios.get(tokenURI);
+            imageUrl = tokenMeta.data.image;
+          } catch (err) {
+            console.warn('get token meta failed: ' + tokenURI);
+          }
+
+          locks.push({
+            name,
+            imageUrl,
+            noteAddress: term.note,
+            tokenId: id.toString(),
+            amount: formatEther(lock.amount),
+            reward: formatEther(reward),
+            endEpoch: lock.endEpoch.toNumber(),
+          });
+        }
+        return {
+          noteAddress: term.note,
+          lockPeriod: term.lockPeriod.toNumber(),
+          minLockAmount: formatEther(term.minLockAmount),
+          multiplier: term.multiplier,
+          enabled: term.enabled,
+          note: {
+            name,
+            symbol,
+            noteAddress: term.note,
+          },
+        };
+      })(i),
+    );
+  }
+
+  const rawTerms = await Promise.all(actions);
+  const groupedTerms = groupBy(rawTerms, term => term.lockPeriod);
+
+  const terms = Object.keys(groupedTerms).map(key => {
+    const term = groupedTerms[key].find(term => Number(term.minLockAmount) > 0) || groupedTerms[key][0];
+    const fallbackTerm = groupedTerms[key].find(term => Number(term.minLockAmount) === 0);
+    return {
+      ...term,
+      fallbackTerm: fallbackTerm?.noteAddress === term.noteAddress ? undefined : fallbackTerm,
+    };
+  });
+
+  return { terms, locks };
 }
 
 export const claimReward = createAsyncThunk(
@@ -122,7 +208,7 @@ export const redeem = createAsyncThunk(
         fetchPendingTxns({
           txnHash: tx.hash,
           text: 'Redeem',
-          type: 'redeem_' + noteAddress + '_' + tokenId.toString(),
+          type: 'redeem_' + noteAddress + '_' + tokenId,
         }),
       );
       await tx.wait();
@@ -206,76 +292,8 @@ export const extendLock = createAsyncThunk(
   },
 );
 
-export const loadTermsDetails = createAsyncThunk(
-  'pearlVault/loadTermsDetails',
-  async ({ address, networkID, provider }: ILoadTermsDetails) => {
-    const { terms, locks } = await getTermsAndLocks(address, networkID, provider);
-    return { terms, locks };
-  },
-);
-
-async function getTermsAndLocks(address: string, networkID: number, provider: JsonRpcProvider) {
-  const addresses = getAddresses(networkID);
-  const pearlVaultContract = new ethers.Contract(addresses.PEARL_VAULT, PearlVault, provider);
-
-  const termsCount = (await pearlVaultContract.termsCount()).toNumber();
-  const actions: Promise<ITerm>[] = [];
-  const locks: ILock[] = [];
-
-  for (let i = 0; i < termsCount; i += 1) {
-    actions.push(
-      (async (i: number) => {
-        const termAddress = await pearlVaultContract.termAddresses(i);
-        const term = await pearlVaultContract.terms(termAddress);
-        const noteContract = new ethers.Contract(term.note, PearlNote, provider);
-        const [locksCount, name, symbol] = await Promise.all([
-          noteContract.balanceOf(address),
-          noteContract.name(),
-          noteContract.symbol(),
-        ]);
-        for (let j = 0; j < locksCount.toNumber(); j += 1) {
-          const id = await noteContract.tokenOfOwnerByIndex(address, j);
-          const [lock, receiptUrl] = await Promise.all([noteContract.lockInfos(id), noteContract.tokenURI(id)]);
-          locks.push({
-            ...lock,
-            receiptUrl,
-            noteAddress: term.note,
-            tokenId: id.toString(),
-          });
-        }
-        return {
-          noteAddress: term.note,
-          lockPeriod: term.lockPeriod.toNumber(),
-          minLockAmount: formatEther(term.minLockAmount),
-          multiplier: term.multiplier,
-          enabled: term.enabled,
-          note: {
-            name,
-            symbol,
-            noteAddress: term.note,
-          },
-        };
-      })(i),
-    );
-  }
-
-  const rawTerms = await Promise.all(actions);
-  const groupedTerms = groupBy(rawTerms, term => term.lockPeriod);
-
-  const terms = Object.keys(groupedTerms).map(key => {
-    const term = groupedTerms[key].find(term => Number(term.minLockAmount) > 0) || groupedTerms[key][0];
-    const fallbackTerm = groupedTerms[key].find(term => Number(term.minLockAmount) === 0);
-    return {
-      ...term,
-      fallbackTerm: fallbackTerm?.noteAddress === term.noteAddress ? undefined : fallbackTerm,
-    };
-  });
-
-  return { terms, locks };
-}
-
 const pearlVaultSlice = createSlice({
-  name: 'app',
+  name: 'pearl-vault',
   initialState,
   reducers: {
     selectTerm(state, action) {

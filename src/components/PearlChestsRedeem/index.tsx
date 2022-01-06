@@ -25,7 +25,7 @@ const numberFormatter = Intl.NumberFormat('en', { maximumFractionDigits: 0 });
 
 export interface Note {
   id: string;
-  amount: number;
+  amount: string;
   currentReward: number;
   nextReward: number;
   lockedValue: number;
@@ -40,7 +40,12 @@ export default function PearlChestsRedeem() {
   const locks = useSelector(state => state.pearlVault.locks);
   const terms = useSelector(state => state.pearlVault.terms);
   const termsMap = useMemo(() => {
-    return new Map(terms.map(term => [term.noteAddress, term]));
+    return new Map(
+      terms
+        .flatMap(term => [term, term.fallbackTerm])
+        .filter(Boolean)
+        .map(term => [term?.noteAddress, term]),
+    );
   }, [terms]);
 
   return (
@@ -52,8 +57,8 @@ export default function PearlChestsRedeem() {
             term={term}
             lock={lock}
             note={{
-              id: lock.tokenId.toString(),
-              amount: 123,
+              id: lock.tokenId,
+              amount: lock.amount,
               currentReward: 10,
               nextReward: 20,
               lockedValue: 42.1,
@@ -152,7 +157,7 @@ function NoteCard({ note, term, lock }: { note: Note; term: ITerm; lock: ILock }
             <ActionButton
               className="note__action"
               pendingTransactions={pendingTransactions}
-              type={'redeem_' + term.noteAddress + '_' + lock.tokenId.toString()}
+              type={'redeem_' + term.noteAddress + '_' + lock.tokenId}
               start={t('pearlChests.redeemAll')}
               progress="Processing..."
               processTx={redeem}

@@ -10,14 +10,14 @@ import ActionButton from '../Button/ActionButton';
 import InfoTooltip from '../InfoTooltip/InfoTooltip';
 import PearlChestLockupModal from '../PearlChestLockupModal';
 import PearlChestLockupSuccessModal from '../PearlChestLockupSuccessModal';
-import receiptImage from './receipt.png';
 import './styles.scss';
 import { useCallback, useState } from 'react';
+import getNoteImage from 'src/helpers/get-note-image';
 
 const extraBonus: { [k: number]: number } = {
-  28: 5,
-  90: 10,
-  180: 20,
+  28: 0.5,
+  90: 1,
+  180: 2,
 };
 
 export default function PearlChestsLockup() {
@@ -41,7 +41,7 @@ export default function PearlChestsLockup() {
         open={Boolean(pearlVault.selectedTerm)}
         onClose={() => selectTerm(undefined)}
         onSuccess={setLockupResult}
-        discount={extraBonus[Number(pearlVault.selectedTerm?.lockPeriod) ?? 0] ?? 0}
+        discount={extraBonus[(pearlVault.selectedTerm?.lockPeriod ?? 0) / 3] ?? 0}
         term={pearlVault.selectedTerm}
       />
       <PearlChestLockupSuccessModal open={lockupResult} onClose={() => setLockupResult(undefined)} />
@@ -51,8 +51,9 @@ export default function PearlChestsLockup() {
 
 function LockupOption({ term, onSelect }: { term: ITerm; onSelect: (settings: ITerm | undefined) => void }) {
   const { t } = useTranslation();
-  const showBadge = Number(term.lockPeriod) / 3 >= 90;
-  const multiplier = Number((term.multiplier / 100).toFixed(1));
+  const lockPeriodDays = term.lockPeriod / 3;
+  const showBadge = lockPeriodDays >= 90;
+  const multiplier = (term.multiplier / 100).toFixed(2);
   const pendingTransactions = useSelector<IReduxState, IPendingTxn[]>(state => {
     return state.pendingTransactions;
   });
@@ -77,7 +78,7 @@ function LockupOption({ term, onSelect }: { term: ITerm; onSelect: (settings: IT
       <div className="lockup-option__content">
         <div>
           <Typography className="lockup-option__days" component="span">
-            {term.lockPeriod / 3}
+            {lockPeriodDays}
           </Typography>
           <Typography className="lockup-option__days-label" component="span">
             {t('pearlChests.lockUp.days')}
@@ -102,7 +103,7 @@ function LockupOption({ term, onSelect }: { term: ITerm; onSelect: (settings: IT
             {t('pearlChests.lockUp.expectedAPY')} <InfoTooltip message="test" />
           </Typography>
           <Typography className="lockup-option__value" component="span">
-            {formatApy(apy * multiplier)}%
+            {/* TODO: calculate APY {formatApy(apy * multiplier)}% */}
           </Typography>
         </div>
 
@@ -112,17 +113,17 @@ function LockupOption({ term, onSelect }: { term: ITerm; onSelect: (settings: IT
           <Typography className="lockup-option__label" variant="caption" component="span">
             {t('pearlChests.lockUp.youWillGet')}
           </Typography>
-          <img className="lockup-option__receipt" src={receiptImage} />
+          <img className="lockup-option__receipt" src={getNoteImage(term.note.name)} />
           <Typography className="lockup-option__nft-name" component="span">
             {t(term.note.name)}
           </Typography>
         </div>
 
         <div>
-          {extraBonus[term.lockPeriod] && (
+          {extraBonus[term.lockPeriod / 3] && (
             <>
               <Typography className="lockup-option__bonus-title" component="span">
-                {t('pearlChests.lockUp.bonusTitle', { percentage: extraBonus[term.lockPeriod] })}
+                {t('pearlChests.lockUp.bonusTitle', { percentage: extraBonus[term.lockPeriod / 3] })}
               </Typography>
               <Typography className="lockup-option__bonus-desc" variant="caption" component="span">
                 {t('pearlChests.lockUp.bonusDescription')}
@@ -132,7 +133,7 @@ function LockupOption({ term, onSelect }: { term: ITerm; onSelect: (settings: IT
               </Typography>
             </>
           )}
-          {!extraBonus[term.lockPeriod] && (
+          {!extraBonus[term.lockPeriod / 3] && (
             <Typography component="span" variant="caption">
               {t('pearlChests.lockUp.noExtraBonus')}
             </Typography>
