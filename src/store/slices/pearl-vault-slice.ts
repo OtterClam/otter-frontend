@@ -1,32 +1,44 @@
+import groupBy from 'lodash/groupBy';
 import { JsonRpcProvider } from '@ethersproject/providers';
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
-import { BigNumberish, ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import { PearlNote, PearlVaulte } from '../../abi';
 import { getAddresses } from '../../constants';
 import { setAll } from '../../helpers';
 import { fetchPendingTxns, clearPendingTxn } from './pending-txns-slice';
 
 export interface ITerm {
-  minLockAmount: BigNumberish;
-  lockPeriod: BigNumberish;
-  multiplier: BigNumberish;
+  note: INote;
+  noteAddress: string;
+  minLockAmount: BigNumber;
+  lockPeriod: BigNumber;
+  multiplier: number;
   enabled: boolean;
-  locks: ILock[];
+  fallbackTerm?: ITerm;
+}
+
+export interface INote {
+  name: string;
+  symbol: string;
+  noteAddress: string;
 }
 
 export interface ILock {
-  amount: BigNumberish;
-  endEpoch: BigNumberish;
+  amount: BigNumber;
+  endEpoch: BigNumber;
+  receiptUrl: string;
 }
 
 export interface IPearlVaultSliceState {
   loading: boolean;
   terms: ITerm[];
+  locks: ILock[];
 }
 
 const initialState: IPearlVaultSliceState = {
   loading: true,
   terms: [],
+  locks: [],
 };
 
 interface ILoadTermsDetails {
@@ -171,18 +183,18 @@ export const extendLock = createAsyncThunk(
 export const loadTermsDetails = createAsyncThunk(
   'app/loadTermsDetails',
   async ({ address, networkID, provider }: ILoadTermsDetails) => {
-    const terms = await getTerms(address, networkID, provider);
-    console.log(terms);
-    return { terms };
+    const { terms, locks } = await getTermsAndLocks(address, networkID, provider);
+    return { terms, locks };
   },
 );
 
-async function getTerms(address: string, networkID: number, provider: JsonRpcProvider): Promise<ITerm[]> {
+async function getTermsAndLocks(address: string, networkID: number, provider: JsonRpcProvider) {
   const addresses = getAddresses(networkID);
   const pearlVaultContract = new ethers.Contract(addresses.PEARL_VAULT, PearlVaulte, provider);
 
   const termsCount = (await pearlVaultContract.termsCount()).toNumber();
   const actions: Promise<ITerm>[] = [];
+  const locks: ILock[] = [];
 
   for (let i = 0; i < termsCount; i += 1) {
     actions.push(
@@ -190,22 +202,44 @@ async function getTerms(address: string, networkID: number, provider: JsonRpcPro
         const termAddress = await pearlVaultContract.termAddresses(i);
         const term = await pearlVaultContract.terms(termAddress);
         const noteContract = new ethers.Contract(term.note, PearlNote, provider);
-        const locksCount = await noteContract.balanceOf(address);
-        const locks: ILock[] = [];
+        const [locksCount, name, symbol] = await Promise.all([
+          noteContract.balanceOf(address),
+          noteContract.name(),
+          noteContract.symbol(),
+        ]);
         for (let j = 0; j < locksCount; j += 1) {
           const id = await noteContract.tokenOfOwnerByIndex(j);
-          const lock = await noteContract.lockInfos(id);
-          locks.push(lock);
+          const [lock, receiptUrl] = await Promise.all([noteContract.lockInfos(id), noteContract.tokenURI(id)]);
+          locks.push({
+            ...lock,
+            receiptUrl,
+          });
         }
         return {
           ...term,
-          locks,
+          noteAddress: term.note,
+          note: {
+            name,
+            symbol,
+          },
         };
       })(i),
     );
   }
 
-  return Promise.all(actions);
+  const rawTerms = await Promise.all(actions);
+  const grouppedTerms = groupBy(rawTerms, term => term.lockPeriod.toNumber());
+
+  const terms = Object.keys(grouppedTerms).map(key => {
+    const term = grouppedTerms[key].find(term => term.minLockAmount.gt(0)) || grouppedTerms[key][0];
+    const fallbackTerm = grouppedTerms[key].find(term => term.minLockAmount.eq(0));
+    return {
+      ...term,
+      fallbackTerm: fallbackTerm?.noteAddress === term.noteAddress ? undefined : fallbackTerm,
+    };
+  });
+
+  return { terms, locks };
 }
 
 const pearlVaultSlice = createSlice({
