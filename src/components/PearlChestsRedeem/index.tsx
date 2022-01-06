@@ -8,7 +8,18 @@ import receiptImage from './receipt.png';
 import './styles.scss';
 import CustomButton from '../Button/CustomButton';
 import { useSelector } from 'src/store/hook';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
+import { useDispatch, useSelector as useReduxSelector } from 'react-redux';
+import {
+  redeem as redeemAction,
+  claimReward as claimRewardAction,
+  ITerm,
+  ILock,
+} from 'src/store/slices/pearl-vault-slice';
+import { useWeb3Context } from 'src/hooks';
+import ActionButton from '../Button/ActionButton';
+import { IPendingTxn } from 'src/store/slices/pending-txns-slice';
+import { IReduxState } from 'src/store/slices/state.interface';
 
 const numberFormatter = Intl.NumberFormat('en', { maximumFractionDigits: 0 });
 
@@ -38,8 +49,10 @@ export default function PearlChestsRedeem() {
         const term = termsMap.get(lock.noteAddress)!;
         return (
           <NoteCard
+            term={term}
+            lock={lock}
             note={{
-              id: lock.tokenId,
+              id: lock.tokenId.toString(),
               amount: 123,
               currentReward: 10,
               nextReward: 20,
@@ -57,7 +70,7 @@ export default function PearlChestsRedeem() {
   );
 }
 
-function NoteCard({ note }: { note: Note }) {
+function NoteCard({ note, term, lock }: { note: Note; term: ITerm; lock: ILock }) {
   const { t } = useTranslation();
   const details = [
     {
@@ -84,6 +97,22 @@ function NoteCard({ note }: { note: Note }) {
     },
     { label: 'pearlChests.apy', value: numberFormatter.format(note.apy) + '%' },
   ];
+
+  const dispatch = useDispatch();
+  const { provider, address, chainID } = useWeb3Context();
+  const pendingTransactions = useReduxSelector<IReduxState, IPendingTxn[]>(state => {
+    return state.pendingTransactions;
+  });
+  const redeem = useCallback(() => {
+    dispatch(
+      redeemAction({
+        networkID: chainID,
+        provider,
+        noteAddress: lock.noteAddress,
+        tokenId: lock.tokenId,
+      }),
+    );
+  }, [lock]);
 
   return (
     <div className="note">
@@ -120,7 +149,14 @@ function NoteCard({ note }: { note: Note }) {
         )}
         {!note.locked && (
           <>
-            <CustomButton className="note__action" text={t('pearlChests.redeemAll')} />
+            <ActionButton
+              className="note__action"
+              pendingTransactions={pendingTransactions}
+              type={'redeem_' + term.noteAddress + '_' + lock.tokenId.toString()}
+              start={t('pearlChests.redeemAll')}
+              progress="Processing..."
+              processTx={redeem}
+            />
             <CustomButton className="note__action" type="outline" text={t('pearlChests.claimAllAndRelock')} />
           </>
         )}

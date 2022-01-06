@@ -24,7 +24,7 @@ export interface INote {
 }
 
 export interface ILock {
-  tokenId: string;
+  tokenId: BigNumber;
   amount: BigNumber;
   endEpoch: BigNumber;
   receiptUrl: string;
@@ -60,7 +60,7 @@ interface IClaimRewardDetails {
 
 interface IRedeemDetails {
   noteAddress: string;
-  tokenId: number;
+  tokenId: BigNumber;
   networkID: number;
   provider: JsonRpcProvider;
 }
@@ -121,7 +121,7 @@ export const redeem = createAsyncThunk(
         fetchPendingTxns({
           txnHash: tx.hash,
           text: 'Redeem',
-          type: 'redeem_' + noteAddress + '_' + tokenId,
+          type: 'redeem_' + noteAddress + '_' + tokenId.toString(),
         }),
       );
       await tx.wait();
