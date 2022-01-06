@@ -2,13 +2,31 @@ import { Paper, Typography } from '@material-ui/core';
 import receiveImage from './receipt.png';
 import Modal from '../Modal';
 import './styles.scss';
+import { BigNumber } from 'ethers';
+import { useSelector } from 'src/store/hook';
+import formateDate from 'date-fns/format';
+import addDays from 'date-fns/addDays';
 
 export interface PearlChestLockupSuccessModalProps {
   open: boolean;
+  actionResult?: {
+    user: string;
+    note: string;
+    tokenId: BigNumber;
+    amount: BigNumber;
+  };
   onClose: () => void;
 }
 
-export default function PearlChestLockupSuccessModal({ open, onClose }: PearlChestLockupSuccessModalProps) {
+export default function PearlChestLockupSuccessModal({
+  open,
+  actionResult,
+  onClose,
+}: PearlChestLockupSuccessModalProps) {
+  const terms = useSelector(state => state.pearlVault.terms);
+  const term = terms.find(term => term.noteAddress === actionResult?.note);
+  const multiplier = term ? Number((term.multiplier / 100).toFixed(1)) : 1;
+
   return (
     <Modal title="Otter’standing!" open={open} onClose={onClose} contentClassName="lockup-success-modal__content">
       <>
@@ -16,22 +34,24 @@ export default function PearlChestLockupSuccessModal({ open, onClose }: PearlChe
           Your Chest lock-up was successful.
         </Typography>
         <img className="lockup-success-modal__receipt" src={receiveImage} />
-        <Typography className="lockup-success-modal__message2">You got a Stone-Hand PEARL Note!</Typography>
+        <Typography className="lockup-success-modal__message2">You got a {term?.note.name} Note!</Typography>
         <Paper className="lockup-success-modal__details">
           <div className="lockup-success-modal__details-row">
             <Typography className="lockup-success-modal__label">Locked-up Amount</Typography>
-            <Typography className="lockup-success-modal__value">50 PEARL</Typography>
+            <Typography className="lockup-success-modal__value">{actionResult?.amount} PEARL</Typography>
           </div>
           <div className="lockup-success-modal__details-row">
             <Typography className="lockup-success-modal__label">Lock-up Period</Typography>
-            <Typography className="lockup-success-modal__value">90 PEARL</Typography>
+            <Typography className="lockup-success-modal__value">{term?.lockPeriod?.toNumber()} Days</Typography>
           </div>
           <div className="lockup-success-modal__details-row">
             <Typography className="lockup-success-modal__label">Due Date</Typography>
-            <Typography className="lockup-success-modal__value">March 30, 2022 09:00 PM (UTC+8)</Typography>
+            <Typography className="lockup-success-modal__value">
+              {formateDate(addDays(new Date(), term?.lockPeriod?.toNumber() ?? 0), 'MMM dd, yyyy HH:mm a (O)')}
+            </Typography>
           </div>
           <div className="lockup-success-modal__details-row">
-            <Typography className="lockup-success-modal__label">Next Reward (x2)</Typography>
+            <Typography className="lockup-success-modal__label">Next Reward (x{multiplier})</Typography>
             <Typography className="lockup-success-modal__value">20 PEARL</Typography>
           </div>
         </Paper>

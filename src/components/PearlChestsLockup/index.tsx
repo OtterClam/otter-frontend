@@ -1,11 +1,10 @@
 import { Divider, Paper, Typography } from '@material-ui/core';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import { formatCurrency } from 'src/helpers';
+import { useDispatch, useSelector } from 'react-redux';
+import { formatCurrency, formatApy } from 'src/helpers';
 import { useWeb3Context } from 'src/hooks';
 import { IPendingTxn } from 'src/store/slices/pending-txns-slice';
-import { IPearlVaultSliceState, ITerm } from 'src/store/slices/pearl-vault-slice';
+import { IPearlVaultSliceState, ITerm, selectTerm as selectTermAction } from 'src/store/slices/pearl-vault-slice';
 import { IReduxState } from 'src/store/slices/state.interface';
 import ActionButton from '../Button/ActionButton';
 import InfoTooltip from '../InfoTooltip/InfoTooltip';
@@ -13,6 +12,7 @@ import PearlChestLockupModal from '../PearlChestLockupModal';
 import PearlChestLockupSuccessModal from '../PearlChestLockupSuccessModal';
 import receiptImage from './receipt.png';
 import './styles.scss';
+import { useCallback, useState } from 'react';
 
 const extraBonus: { [k: number]: number } = {
   28: 5,
@@ -20,52 +20,12 @@ const extraBonus: { [k: number]: number } = {
   180: 20,
 };
 
-interface Option {
-  days: number;
-  boost: number;
-  name: string;
-  extraBonus: number;
-  requiredAmount: number;
-  badge?: boolean;
-}
-
-const options: Option[] = [
-  {
-    days: 14,
-    boost: 1,
-    name: 'pearlChests.lockUp.safeHandNft',
-    extraBonus: 0,
-    requiredAmount: 0,
-  },
-  {
-    days: 30,
-    boost: 1.2,
-    name: 'pearlChests.lockUp.furryHandNft',
-    extraBonus: 5,
-    requiredAmount: 10,
-  },
-  {
-    days: 90,
-    boost: 1.5,
-    name: 'pearlChests.lockUp.stoneHandNft',
-    extraBonus: 10,
-    requiredAmount: 50,
-    badge: true,
-  },
-  {
-    days: 180,
-    boost: 2,
-    name: 'pearlChests.lockUp.diamondHandNft',
-    extraBonus: 15,
-    requiredAmount: 100,
-    badge: true,
-  },
-];
-
 export default function PearlChestsLockup() {
   const { t } = useTranslation();
+  const [lockupResult, setLockupResult] = useState<any>();
   const pearlVault = useSelector<IReduxState, IPearlVaultSliceState>(state => state.pearlVault);
-  const [selectedTerm, selectTerm] = useState<ITerm | undefined>(undefined);
+  const dispatch = useDispatch();
+  const selectTerm = useCallback((term?: ITerm) => dispatch(selectTermAction(term)), []);
 
   return (
     <div className="lockup">
@@ -77,8 +37,14 @@ export default function PearlChestsLockup() {
           <LockupOption key={i} term={term} onSelet={selectTerm} />
         ))}
       </div>
-      <PearlChestLockupModal open={Boolean(selectedTerm)} onClose={() => selectTerm(undefined)} option={selectedTerm} />
-      <PearlChestLockupSuccessModal open={false} onClose={console.log} />
+      <PearlChestLockupModal
+        open={Boolean(pearlVault.selectedTerm)}
+        onClose={() => selectTerm(undefined)}
+        onSuccess={setLockupResult}
+        discount={extraBonus[pearlVault.selectedTerm?.lockPeriod.toNumber() ?? 0] ?? 0}
+        term={pearlVault.selectedTerm}
+      />
+      <PearlChestLockupSuccessModal open={lockupResult} onClose={() => setLockupResult(undefined)} />
     </div>
   );
 }
@@ -91,7 +57,7 @@ function LockupOption({ term, onSelet }: { term: ITerm; onSelet: (settings: ITer
     return state.pendingTransactions;
   });
   const { address, connect } = useWeb3Context();
-  const apy = 24538;
+  const apy = useSelector<IReduxState, number>(state => Math.floor(state.app.stakingAPY * 100));
 
   return (
     <Paper className="lockup-option">
@@ -136,7 +102,7 @@ function LockupOption({ term, onSelet }: { term: ITerm; onSelet: (settings: ITer
             {t('pearlChests.lockUp.expectedAPY')} <InfoTooltip message="test" />
           </Typography>
           <Typography className="lockup-option__value" component="span">
-            {formatCurrency(apy * multiplier, 0)}%
+            {formatApy(apy * multiplier)}%
           </Typography>
         </div>
 

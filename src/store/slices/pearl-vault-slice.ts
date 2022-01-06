@@ -1,8 +1,8 @@
 import groupBy from 'lodash/groupBy';
 import { JsonRpcProvider } from '@ethersproject/providers';
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
-import { BigNumber, ethers } from 'ethers';
-import { PearlNote, PearlVaulte } from '../../abi';
+import { BigNumber, constants, ethers } from 'ethers';
+import { PearlNote, PearlVaulte, PearlTokenContract } from '../../abi';
 import { getAddresses } from '../../constants';
 import { setAll } from '../../helpers';
 import { fetchPendingTxns, clearPendingTxn } from './pending-txns-slice';
@@ -33,12 +33,14 @@ export interface IPearlVaultSliceState {
   loading: boolean;
   terms: ITerm[];
   locks: ILock[];
+  selectedTerm?: ITerm;
 }
 
 const initialState: IPearlVaultSliceState = {
   loading: true,
   terms: [],
   locks: [],
+  selectedTerm: undefined,
 };
 
 interface ILoadTermsDetails {
@@ -63,9 +65,10 @@ interface IRedeemDetails {
 
 interface ILockDetails {
   noteAddress: string;
-  amount: number;
+  amount: string;
   networkID: number;
   provider: JsonRpcProvider;
+  address: string;
 }
 
 interface IExtendLockDetails {
@@ -77,7 +80,7 @@ interface IExtendLockDetails {
 }
 
 export const claimReward = createAsyncThunk(
-  'app/claimReward',
+  'pearlVault/claimReward',
   async ({ networkID, provider, noteAddress, tokenId }: IClaimRewardDetails, { dispatch }) => {
     const addresses = getAddresses(networkID);
     const pearlVaultContract = new ethers.Contract(addresses.PEARL_VAULT, PearlVaulte, provider);
@@ -103,7 +106,7 @@ export const claimReward = createAsyncThunk(
 );
 
 export const redeem = createAsyncThunk(
-  'app/redeem',
+  'pearlVault/redeem',
   async ({ networkID, provider, noteAddress, tokenId }: IRedeemDetails, { dispatch }) => {
     const addresses = getAddresses(networkID);
     const pearlVaultContract = new ethers.Contract(addresses.PEARL_VAULT, PearlVaulte, provider);
@@ -129,14 +132,16 @@ export const redeem = createAsyncThunk(
 );
 
 export const lock = createAsyncThunk(
-  'app/lock',
-  async ({ networkID, provider, noteAddress, amount }: ILockDetails, { dispatch }) => {
+  'pearlVault/lock',
+  async ({ networkID, provider, noteAddress, address, amount }: ILockDetails, { dispatch }) => {
     const addresses = getAddresses(networkID);
     const pearlVaultContract = new ethers.Contract(addresses.PEARL_VAULT, PearlVaulte, provider);
     let tx;
+    let lockedEvent: any;
 
     try {
-      tx = pearlVaultContract.lock(noteAddress, amount);
+      await allowanceGuard(networkID, provider, address, amount);
+      tx = await pearlVaultContract.connect(provider.getSigner()).lock(noteAddress, ethers.utils.parseEther(amount));
       dispatch(
         fetchPendingTxns({
           txnHash: tx.hash,
@@ -144,18 +149,33 @@ export const lock = createAsyncThunk(
           type: 'lock_' + noteAddress,
         }),
       );
+      const result = await tx.wait();
+      lockedEvent = result.events.find((event: any) => event.event === 'Locked');
     } catch (err) {
       alert((err as Error).message);
     } finally {
       if (tx) {
-        dispatch(clearPendingTxn(tx));
+        dispatch(clearPendingTxn(tx.hash));
       }
+    }
+
+    if (lockedEvent) {
+      return lockedEvent;
     }
   },
 );
 
+const allowanceGuard = async (networkID: number, provider: JsonRpcProvider, address: string, amount: string) => {
+  const addresses = getAddresses(networkID);
+  const pearlContract = new ethers.Contract(addresses.PEARL_ADDRESS, PearlTokenContract, provider);
+  const allowance = await pearlContract.connect(provider.getSigner()).allowance(address, addresses.PEARL_VAULT);
+  if (allowance.lt(ethers.utils.parseEther(amount))) {
+    await pearlContract.connect(provider.getSigner()).approve(addresses.PEARL_VAULT, constants.MaxUint256);
+  }
+};
+
 export const extendLock = createAsyncThunk(
-  'app/extendLock',
+  'pearlVault/extendLock',
   async ({ networkID, provider, noteAddress, amount, tokenId }: IExtendLockDetails, { dispatch }) => {
     const addresses = getAddresses(networkID);
     const pearlVaultContract = new ethers.Contract(addresses.PEARL_VAULT, PearlVaulte, provider);
@@ -181,7 +201,7 @@ export const extendLock = createAsyncThunk(
 );
 
 export const loadTermsDetails = createAsyncThunk(
-  'app/loadTermsDetails',
+  'pearlVault/loadTermsDetails',
   async ({ address, networkID, provider }: ILoadTermsDetails) => {
     const { terms, locks } = await getTermsAndLocks(address, networkID, provider);
     return { terms, locks };
@@ -207,8 +227,8 @@ async function getTermsAndLocks(address: string, networkID: number, provider: Js
           noteContract.name(),
           noteContract.symbol(),
         ]);
-        for (let j = 0; j < locksCount; j += 1) {
-          const id = await noteContract.tokenOfOwnerByIndex(j);
+        for (let j = 0; j < locksCount.toNumber(); j += 1) {
+          const id = await noteContract.tokenOfOwnerByIndex(address, j);
           const [lock, receiptUrl] = await Promise.all([noteContract.lockInfos(id), noteContract.tokenURI(id)]);
           locks.push({
             ...lock,
@@ -245,7 +265,11 @@ async function getTermsAndLocks(address: string, networkID: number, provider: Js
 const pearlVaultSlice = createSlice({
   name: 'app',
   initialState,
-  reducers: {},
+  reducers: {
+    selectTerm(state, action) {
+      state.selectedTerm = action.payload;
+    },
+  },
   extraReducers: builder => {
     builder
       .addCase(loadTermsDetails.pending, (state, action) => {
@@ -265,5 +289,7 @@ const pearlVaultSlice = createSlice({
 const baseInfo = (state: { app: IPearlVaultSliceState }) => state.app;
 
 export default pearlVaultSlice.reducer;
+
+export const { selectTerm } = pearlVaultSlice.actions;
 
 export const getPearlVaultState = createSelector(baseInfo, pearlVault => pearlVault);

@@ -17,6 +17,14 @@ import receiptImage from './receipt.png';
 import { useTranslation } from 'react-i18next';
 import './styles.scss';
 import ActionButton from '../Button/ActionButton';
+import { ITerm, lock as lockAction } from 'src/store/slices/pearl-vault-slice';
+import formatDate from 'date-fns/format';
+import addDays from 'date-fns/addDays';
+import { useCallback, useState } from 'react';
+import { useSelector } from 'src/store/hook';
+import { trim } from 'src/helpers';
+import { useDispatch } from 'react-redux';
+import { useWeb3Context } from '../../hooks';
 
 const useStyles = makeStyles(theme => ({
   input: {
@@ -38,15 +46,42 @@ const useStyles = makeStyles(theme => ({
 
 export interface PearlChestLockupModalProps {
   open?: boolean;
-  option?: {};
-  fallbackOption?: {};
+  term?: ITerm;
+  discount: number;
   onClose: () => void;
+  onSuccess: (event: any) => void;
 }
 
-export default function PearlChestLockupModal({ open = false, onClose }: PearlChestLockupModalProps) {
+export default function PearlChestLockupModal({
+  open = false,
+  term,
+  discount,
+  onClose,
+  onSuccess,
+}: PearlChestLockupModalProps) {
   const { t } = useTranslation();
   const theme = useTheme();
   const styles = useStyles();
+  const dispatch = useDispatch();
+  const [amount, setAmount] = useState('0');
+  const multiplier = term ? Number((term.multiplier / 100).toFixed(1)) : 1;
+  const useFallback = Number(amount) < (term?.minLockAmount?.toNumber() ?? 0);
+  const account = useSelector(state => state.account);
+  const app = useSelector(state => state.app);
+  const stakingRebasePercentage = trim(app.stakingRebase ?? 0 * 100 * multiplier, 4);
+  const nextRewardValue = trim((Number(stakingRebasePercentage) / 100) * Number(amount), 4);
+  const pendingTransactions = useSelector(state => state.pendingTransactions);
+  const { provider, address, chainID } = useWeb3Context();
+  const noteAddress = useFallback ? term?.fallbackTerm!.noteAddress : term?.noteAddress;
+
+  const lockup = useCallback(async () => {
+    const action: any = await dispatch(
+      lockAction({ networkID: chainID, provider, address, noteAddress: noteAddress!, amount }),
+    );
+    if (action.payload) {
+      onSuccess(action.payload);
+    }
+  }, [amount, onSuccess]);
 
   return (
     <Modal title={t('pearlChests.lockUpModal.title')} open={open} onClose={onClose}>
@@ -55,25 +90,28 @@ export default function PearlChestLockupModal({ open = false, onClose }: PearlCh
           <Typography style={{ color: theme.palette.mode.darkGray200 }} className="lockup-modal__summary-label">
             Order Summary
           </Typography>
-          <Typography className="lockup-modal__summary-title">Stone-Hand PEARL Chest</Typography>
+          <Typography className="lockup-modal__summary-title">{term?.note.name}</Typography>
           <div className="lockup-modal__summary-period-wrapper">
-            <Typography className="lockup-modal__summary-period">90 Days Locked-up Period</Typography>
-            <Typography variant="caption">Due date: March, 30, 2022</Typography>
+            <Typography className="lockup-modal__summary-period">
+              {term?.lockPeriod.toNumber()} Days Locked-up Period
+            </Typography>
+            <Typography variant="caption">
+              Due date: {formatDate(addDays(new Date(), term?.lockPeriod.toNumber() ?? 1), 'MMM, dd, yyyy')}
+            </Typography>
           </div>
           <Divider className="lockup-modal__summary-div" />
           <Typography variant="caption" className="lockup-modal__reward-label">
             You will get:
           </Typography>
           <Typography className="lockup-modal__reward">
-            <SvgIcon component={RocketIcon} className="lockup-modal__reward-icon" />
-            2x Reward Boost
+            <SvgIcon component={RocketIcon} className="lockup-modal__reward-icon" />x{multiplier} Reward Boost
           </Typography>
           <Typography className="lockup-modal__reward">
             <SvgIcon component={NoteIcon} className="lockup-modal__reward-icon" />
-            1x Stone-Hand PEARL Note, immediately
+            1x {useFallback ? term?.fallbackTerm?.note.name : term?.note.name}, immediately
           </Typography>
-          <NoteCard option={{}} />
-          <NoteCard option={{}} />
+          {useFallback && term?.fallbackTerm && <NoteCard qualified discount={0} term={term.fallbackTerm} />}
+          {term && <NoteCard qualified={!useFallback} discount={discount} term={term} />}
         </Paper>
 
         <Paper className="lockup-modal__form">
@@ -88,13 +126,19 @@ export default function PearlChestLockupModal({ open = false, onClose }: PearlCh
                 placeholder="0"
                 id="outlined-adornment-amount"
                 type="number"
-                value={undefined}
-                onChange={e => console.log(e.target.value)}
+                value={amount}
+                onChange={e => setAmount(e.target.value)}
                 labelWidth={0}
                 className="lockup-modal__form-input"
                 endAdornment={
                   <InputAdornment position="end">
-                    <div className="stake-input-btn" onClick={console.log}>
+                    <div
+                      className="stake-input-btn"
+                      onClick={e => {
+                        e.preventDefault();
+                        setAmount(account?.balances?.pearl ?? 0);
+                      }}
+                    >
                       <p>{t('common.max')}</p>
                     </div>
                   </InputAdornment>
@@ -103,11 +147,11 @@ export default function PearlChestLockupModal({ open = false, onClose }: PearlCh
             </FormControl>
             <ActionButton
               className="lockup-modal__action-btn"
-              pendingTransactions={[]}
-              type="lockup"
+              pendingTransactions={pendingTransactions}
+              type={'lock_' + noteAddress}
               start="Lock Up"
               progress="Processing..."
-              processTx={console.log}
+              processTx={lockup}
             />
           </div>
 
@@ -119,11 +163,13 @@ export default function PearlChestLockupModal({ open = false, onClose }: PearlCh
           <div className="lockup-modal__account-details">
             <div className="lockup-modal__account-detail">
               <Typography className="lockup-modal__account-detail-label">Your Balance</Typography>
-              <Typography className="lockup-modal__account-detail-value">400 PEARL</Typography>
+              <Typography className="lockup-modal__account-detail-value">
+                {trim(account?.balances?.pearl ?? 0, 4)} PEARL
+              </Typography>
             </div>
             <div className="lockup-modal__account-detail">
               <Typography className="lockup-modal__account-detail-label">Next Reward</Typography>
-              <Typography className="lockup-modal__account-detail-value">10 PEARL</Typography>
+              <Typography className="lockup-modal__account-detail-value">{nextRewardValue} PEARL</Typography>
             </div>
             <div className="lockup-modal__account-detail">
               <Typography className="lockup-modal__account-detail-label">Next Reward Bonus</Typography>
@@ -144,23 +190,29 @@ export default function PearlChestLockupModal({ open = false, onClose }: PearlCh
   );
 }
 
-function NoteCard({ option }: { option: {} }) {
+function NoteCard({ term, discount, qualified }: { term: ITerm; discount: number; qualified: boolean }) {
   return (
     <div className="lockup-modal__card">
       <div className="lockup-modal__card-receipt">
         <img className="lockup-modal__card-receipt-img" src={receiptImage} />
-        {/* <Typography className="lockup-modal__card-receipt-">Not qualified</Typography> */}
+        {!qualified && <Typography className="lockup-modal__not-qualified">Not qualified</Typography>}
       </div>
       <div className="lockup-modal__card-body">
         <Typography variant="h4" className="lockup-modal__card-title">
-          Safe-Hand PEARL Note
+          {term.note.name}
         </Typography>
-        <Typography className="lockup-modal__card-discount">
-          You can enjoy 5% OFF discount on a (4,4) bond by using this note
-        </Typography>
-        <Typography className="lockup-modal__card-requirement">
-          In order to get this note and the extra bonus, you need to at least lock up 50 PEARL at once in the beginning.
-        </Typography>
+        {discount !== 0 && (
+          <>
+            <Typography className="lockup-modal__card-discount">
+              You can enjoy {discount}% OFF discount on a (4,4) bond by using this note
+            </Typography>
+            <Typography className="lockup-modal__card-requirement">
+              In order to get this note and the extra bonus, you need to at least lock up{' '}
+              {term.minLockAmount.toNumber()} PEARL at once in the beginning.
+            </Typography>
+          </>
+        )}
+        {discount === 0 && <Typography className="lockup-modal__no-discount">No extra note bonus</Typography>}
       </div>
     </div>
   );
