@@ -97,6 +97,7 @@ export const claimReward = createAsyncThunk(
           type: 'claim-reward_' + noteAddress + '_' + tokenId,
         }),
       );
+      await tx.wait();
     } catch (err) {
       alert((err as Error).message);
     } finally {
@@ -123,6 +124,7 @@ export const redeem = createAsyncThunk(
           type: 'redeem_' + noteAddress + '_' + tokenId,
         }),
       );
+      await tx.wait();
     } catch (err) {
       alert((err as Error).message);
     } finally {
@@ -192,6 +194,7 @@ export const extendLock = createAsyncThunk(
           type: 'extend-lock' + noteAddress + '_' + tokenId,
         }),
       );
+      await tx.wait();
     } catch (err) {
       alert((err as Error).message);
     } finally {
