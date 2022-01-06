@@ -8,10 +8,25 @@ interface ActionButtonProps extends BoxProps {
   start: string;
   progress: string;
   processTx: any;
+  wrapper?: (props: { onClick: () => void; text: string }) => JSX.Element;
 }
 
 function ActionButton(props: ActionButtonProps) {
-  const { pendingTransactions, type, start, progress, processTx, className = '', ...boxProps } = props;
+  const { pendingTransactions, type, start, progress, processTx, wrapper, className = '', ...boxProps } = props;
+
+  const text = txnButtonText(pendingTransactions, type, progress, start);
+
+  const handleClick = () => {
+    if (isPendingTxn(pendingTransactions, progress)) return;
+    processTx();
+  };
+
+  if (wrapper) {
+    return wrapper({
+      onClick: handleClick,
+      text,
+    });
+  }
 
   return (
     <Box
@@ -19,13 +34,10 @@ function ActionButton(props: ActionButtonProps) {
         'wrap-tab-panel-btn stake-tab-panel-btn transaction-button app-otter-button nft-card__button ' + className
       }
       bgcolor="otter.otterBlue"
-      onClick={() => {
-        if (isPendingTxn(pendingTransactions, progress)) return;
-        processTx();
-      }}
+      onClick={handleClick}
       {...boxProps}
     >
-      <p>{txnButtonText(pendingTransactions, type, progress, start)}</p>
+      <p>{text}</p>
     </Box>
   );
 }

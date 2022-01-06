@@ -8,20 +8,30 @@ import receiptImage from './receipt.png';
 import './styles.scss';
 import CustomButton from '../Button/CustomButton';
 import { useSelector } from 'src/store/hook';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector as useReduxSelector } from 'react-redux';
 import {
   redeem as redeemAction,
   claimReward as claimRewardAction,
+  extendLock as extendLockAction,
   ITerm,
   ILock,
+  selectTerm as selectTermAction,
 } from 'src/store/slices/pearl-vault-slice';
 import { useWeb3Context } from 'src/hooks';
 import ActionButton from '../Button/ActionButton';
 import { IPendingTxn } from 'src/store/slices/pending-txns-slice';
 import { IReduxState } from 'src/store/slices/state.interface';
+import PearlChestLockupModal from '../PearlChestLockupModal';
+import PearlChestLockupSuccessModal from '../PearlChestLockupSuccessModal';
 
 const numberFormatter = Intl.NumberFormat('en', { maximumFractionDigits: 0 });
+
+const extraBonus: { [k: number]: number } = {
+  28: 5,
+  90: 10,
+  180: 20,
+};
 
 export interface Note {
   id: string;
@@ -37,6 +47,9 @@ export interface Note {
 }
 
 export default function PearlChestsRedeem() {
+  const [relockResult, setRelockResult] = useState<any>();
+  const [selectedLock, setSelectedLock] = useState<ILock | undefined>();
+  const selectedTerm = useSelector(state => state.pearlVault.selectedTerm);
   const locks = useSelector(state => state.pearlVault.locks);
   const terms = useSelector(state => state.pearlVault.terms);
   const termsMap = useMemo(() => {
@@ -48,6 +61,25 @@ export default function PearlChestsRedeem() {
     );
   }, [terms]);
 
+  const dispatch = useDispatch();
+
+  const clearSelectedTerm = useCallback(() => {
+    dispatch(selectTermAction(undefined));
+  }, []);
+
+  const claimAndRelock = useCallback((term, lock) => {
+    dispatch(selectTermAction(term));
+    setSelectedLock(lock);
+  }, []);
+
+  const handleRelockSuccessEvent = useCallback(
+    (result: any) => {
+      clearSelectedTerm();
+      setRelockResult(result);
+    },
+    [relockResult],
+  );
+
   return (
     <Paper className="ohm-card">
       {locks.map(lock => {
@@ -56,6 +88,7 @@ export default function PearlChestsRedeem() {
           <NoteCard
             term={term}
             lock={lock}
+            claimAndRelock={claimAndRelock}
             note={{
               id: lock.tokenId,
               amount: lock.amount,
@@ -71,11 +104,34 @@ export default function PearlChestsRedeem() {
           />
         );
       })}
+      <PearlChestLockupModal
+        discount={extraBonus[Number(selectedTerm?.lockPeriod) ?? 0] ?? 0}
+        open={Boolean(selectedTerm)}
+        term={selectedTerm}
+        lock={selectedLock}
+        onClose={clearSelectedTerm}
+        onSuccess={handleRelockSuccessEvent}
+      />
+      <PearlChestLockupSuccessModal
+        open={Boolean(relockResult)}
+        actionResult={relockResult}
+        onClose={() => setRelockResult(undefined)}
+      />
     </Paper>
   );
 }
 
-function NoteCard({ note, term, lock }: { note: Note; term: ITerm; lock: ILock }) {
+function NoteCard({
+  note,
+  term,
+  lock,
+  claimAndRelock,
+}: {
+  note: Note;
+  term: ITerm;
+  lock: ILock;
+  claimAndRelock: (term: ITerm, lock: ILock) => void;
+}) {
   const { t } = useTranslation();
   const details = [
     {
@@ -108,16 +164,30 @@ function NoteCard({ note, term, lock }: { note: Note; term: ITerm; lock: ILock }
   const pendingTransactions = useReduxSelector<IReduxState, IPendingTxn[]>(state => {
     return state.pendingTransactions;
   });
+
   const redeem = useCallback(() => {
     dispatch(
       redeemAction({
+        address,
         networkID: chainID,
         provider,
         noteAddress: lock.noteAddress,
         tokenId: lock.tokenId,
       }),
     );
-  }, [lock]);
+  }, [lock, address]);
+
+  const claimReward = useCallback(() => {
+    dispatch(
+      claimRewardAction({
+        networkID: chainID,
+        provider,
+        noteAddress: lock.noteAddress,
+        tokenId: lock.tokenId,
+        address,
+      }),
+    );
+  }, [lock, address]);
 
   return (
     <div className="note">
@@ -148,22 +218,35 @@ function NoteCard({ note, term, lock }: { note: Note; term: ITerm; lock: ILock }
       <div className="note__actions">
         {note.locked && (
           <>
-            <CustomButton className="note__action" text={t('pearlChests.claimRewardAndRelock')} />
-            <CustomButton className="note__action" type="outline" text={t('pearlChests.claimReward')} />
+            <ActionButton
+              pendingTransactions={pendingTransactions}
+              type={'extend-lock_' + term.noteAddress + '_' + lock.tokenId}
+              start={t('pearlChests.claimRewardAndRelock')}
+              progress="Processing..."
+              processTx={() => claimAndRelock(term, lock)}
+              wrapper={({ onClick, text }) => <CustomButton className="note__action" text={text} onClick={onClick} />}
+            />
+            <ActionButton
+              pendingTransactions={pendingTransactions}
+              type={'claim-reward_' + term.noteAddress + '_' + lock.tokenId}
+              start={t('pearlChests.claimReward')}
+              progress="Processing..."
+              processTx={claimReward}
+              wrapper={({ onClick, text }) => (
+                <CustomButton className="note__action" type="outline" text={text} onClick={onClick} />
+              )}
+            />
           </>
         )}
         {!note.locked && (
-          <>
-            <ActionButton
-              className="note__action"
-              pendingTransactions={pendingTransactions}
-              type={'redeem_' + term.noteAddress + '_' + lock.tokenId}
-              start={t('pearlChests.redeemAll')}
-              progress="Processing..."
-              processTx={redeem}
-            />
-            <CustomButton className="note__action" type="outline" text={t('pearlChests.claimAllAndRelock')} />
-          </>
+          <ActionButton
+            pendingTransactions={pendingTransactions}
+            type={'redeem_' + term.noteAddress + '_' + lock.tokenId}
+            start={t('pearlChests.redeemAll')}
+            progress="Processing..."
+            processTx={redeem}
+            wrapper={({ onClick, text }) => <CustomButton className="note__action" text={text} onClick={onClick} />}
+          />
         )}
       </div>
     </div>

@@ -6,6 +6,7 @@ import { BigNumber } from 'ethers';
 import { useSelector } from 'src/store/hook';
 import formateDate from 'date-fns/format';
 import addDays from 'date-fns/addDays';
+import { formatEther } from '@ethersproject/units';
 
 export interface PearlChestLockupSuccessModalProps {
   open: boolean;
@@ -38,7 +39,9 @@ export default function PearlChestLockupSuccessModal({
         <Paper className="lockup-success-modal__details">
           <div className="lockup-success-modal__details-row">
             <Typography className="lockup-success-modal__label">Locked-up Amount</Typography>
-            <Typography className="lockup-success-modal__value">{actionResult?.amount} PEARL</Typography>
+            <Typography className="lockup-success-modal__value">
+              {actionResult && formatEther(actionResult.amount)} PEARL
+            </Typography>
           </div>
           <div className="lockup-success-modal__details-row">
             <Typography className="lockup-success-modal__label">Lock-up Period</Typography>

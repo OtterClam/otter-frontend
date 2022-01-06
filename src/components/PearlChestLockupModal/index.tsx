@@ -17,10 +17,10 @@ import receiptImage from './receipt.png';
 import { useTranslation } from 'react-i18next';
 import './styles.scss';
 import ActionButton from '../Button/ActionButton';
-import { ITerm, lock as lockAction } from 'src/store/slices/pearl-vault-slice';
+import { ILock, ITerm, lock as lockAction, extendLock as extendLockAction } from 'src/store/slices/pearl-vault-slice';
 import formatDate from 'date-fns/format';
 import addDays from 'date-fns/addDays';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'src/store/hook';
 import { trim } from 'src/helpers';
 import { useDispatch } from 'react-redux';
@@ -47,6 +47,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export interface PearlChestLockupModalProps {
+  lock?: ILock;
   open?: boolean;
   term?: ITerm;
   discount: number;
@@ -56,6 +57,7 @@ export interface PearlChestLockupModalProps {
 
 export default function PearlChestLockupModal({
   open = false,
+  lock,
   term,
   discount,
   onClose,
@@ -77,13 +79,31 @@ export default function PearlChestLockupModal({
   const noteAddress = useFallback ? term?.fallbackTerm!.noteAddress : term?.noteAddress;
 
   const lockup = useCallback(async () => {
-    const action: any = await dispatch(
-      lockAction({ networkID: chainID, provider, address, noteAddress: noteAddress!, amount }),
-    );
-    if (action.payload) {
-      onSuccess(action.payload);
+    let result: any;
+    if (lock) {
+      result = await dispatch(
+        extendLockAction({
+          networkID: chainID,
+          provider,
+          noteAddress: noteAddress!,
+          amount,
+          address,
+          tokenId: lock.tokenId,
+        }),
+      );
+    } else {
+      result = await dispatch(lockAction({ networkID: chainID, provider, address, noteAddress: noteAddress!, amount }));
     }
-  }, [amount, onSuccess]);
+    if (result.payload) {
+      onSuccess(result.payload);
+    }
+  }, [lock, amount, onSuccess]);
+
+  useEffect(() => {
+    if (lock) {
+      setAmount(formatEther(lock.amount));
+    }
+  }, [lock]);
 
   return (
     <Modal title={t('pearlChests.lockUpModal.title')} open={open} onClose={onClose}>
@@ -123,6 +143,7 @@ export default function PearlChestLockupModal({
             <FormControl className="ohm-input" variant="outlined" color="primary" fullWidth>
               <InputLabel htmlFor="outlined-adornment-amount"></InputLabel>
               <OutlinedInput
+                disabled={Boolean(lock)}
                 placeholder="0"
                 id="outlined-adornment-amount"
                 type="number"
@@ -136,7 +157,9 @@ export default function PearlChestLockupModal({
                       className="stake-input-btn"
                       onClick={e => {
                         e.preventDefault();
-                        setAmount(account?.balances?.pearl ?? 0);
+                        if (!lock) {
+                          setAmount(account?.balances?.pearl ?? 0);
+                        }
                       }}
                     >
                       <p>{t('common.max')}</p>
