@@ -25,6 +25,8 @@ import { useSelector } from 'src/store/hook';
 import { trim } from 'src/helpers';
 import { useDispatch } from 'react-redux';
 import { useWeb3Context } from '../../hooks';
+import { ethers } from 'ethers';
+import { formatEther, parseEther } from '@ethersproject/units';
 
 const useStyles = makeStyles(theme => ({
   input: {
@@ -65,7 +67,7 @@ export default function PearlChestLockupModal({
   const dispatch = useDispatch();
   const [amount, setAmount] = useState('0');
   const multiplier = term ? Number((term.multiplier / 100).toFixed(1)) : 1;
-  const useFallback = Number(amount) < (term?.minLockAmount?.toNumber() ?? 0);
+  const useFallback = parseEther(amount || '0').lt(parseEther(term?.minLockAmount ?? '0'));
   const account = useSelector(state => state.account);
   const app = useSelector(state => state.app);
   const stakingRebasePercentage = trim(app.stakingRebase ?? 0 * 100 * multiplier, 4);
@@ -92,11 +94,9 @@ export default function PearlChestLockupModal({
           </Typography>
           <Typography className="lockup-modal__summary-title">{term?.note.name}</Typography>
           <div className="lockup-modal__summary-period-wrapper">
-            <Typography className="lockup-modal__summary-period">
-              {term?.lockPeriod.toNumber()} Days Locked-up Period
-            </Typography>
+            <Typography className="lockup-modal__summary-period">{term?.lockPeriod} Days Locked-up Period</Typography>
             <Typography variant="caption">
-              Due date: {formatDate(addDays(new Date(), term?.lockPeriod.toNumber() ?? 1), 'MMM, dd, yyyy')}
+              Due date: {formatDate(addDays(new Date(), Number(term?.lockPeriod ?? 1)), 'MMM, dd, yyyy')}
             </Typography>
           </div>
           <Divider className="lockup-modal__summary-div" />
@@ -207,8 +207,8 @@ function NoteCard({ term, discount, qualified }: { term: ITerm; discount: number
               You can enjoy {discount}% OFF discount on a (4,4) bond by using this note
             </Typography>
             <Typography className="lockup-modal__card-requirement">
-              In order to get this note and the extra bonus, you need to at least lock up{' '}
-              {term.minLockAmount.toNumber()} PEARL at once in the beginning.
+              In order to get this note and the extra bonus, you need to at least lock up
+              {term.minLockAmount} PEARL at once in the beginning.
             </Typography>
           </>
         )}

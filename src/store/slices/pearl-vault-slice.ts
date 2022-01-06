@@ -2,16 +2,17 @@ import groupBy from 'lodash/groupBy';
 import { JsonRpcProvider } from '@ethersproject/providers';
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
 import { BigNumber, constants, ethers } from 'ethers';
-import { PearlNote, PearlVaulte, PearlTokenContract } from '../../abi';
+import { PearlNote, PearlVault, PearlTokenContract } from '../../abi';
 import { getAddresses } from '../../constants';
 import { setAll } from '../../helpers';
 import { fetchPendingTxns, clearPendingTxn } from './pending-txns-slice';
+import { formatEther } from '@ethersproject/units';
 
 export interface ITerm {
   note: INote;
   noteAddress: string;
-  minLockAmount: BigNumber;
-  lockPeriod: BigNumber;
+  minLockAmount: string;
+  lockPeriod: number;
   multiplier: number;
   enabled: boolean;
   fallbackTerm?: ITerm;
@@ -85,7 +86,7 @@ export const claimReward = createAsyncThunk(
   'pearlVault/claimReward',
   async ({ networkID, provider, noteAddress, tokenId }: IClaimRewardDetails, { dispatch }) => {
     const addresses = getAddresses(networkID);
-    const pearlVaultContract = new ethers.Contract(addresses.PEARL_VAULT, PearlVaulte, provider);
+    const pearlVaultContract = new ethers.Contract(addresses.PEARL_VAULT, PearlVault, provider);
     let tx;
 
     try {
@@ -112,7 +113,7 @@ export const redeem = createAsyncThunk(
   'pearlVault/redeem',
   async ({ networkID, provider, noteAddress, tokenId }: IRedeemDetails, { dispatch }) => {
     const addresses = getAddresses(networkID);
-    const pearlVaultContract = new ethers.Contract(addresses.PEARL_VAULT, PearlVaulte, provider);
+    const pearlVaultContract = new ethers.Contract(addresses.PEARL_VAULT, PearlVault, provider);
     let tx;
 
     try {
@@ -139,7 +140,7 @@ export const lock = createAsyncThunk(
   'pearlVault/lock',
   async ({ networkID, provider, noteAddress, address, amount }: ILockDetails, { dispatch }) => {
     const addresses = getAddresses(networkID);
-    const pearlVaultContract = new ethers.Contract(addresses.PEARL_VAULT, PearlVaulte, provider);
+    const pearlVaultContract = new ethers.Contract(addresses.PEARL_VAULT, PearlVault, provider);
     let tx;
     let lockedEvent: any;
 
@@ -182,7 +183,7 @@ export const extendLock = createAsyncThunk(
   'pearlVault/extendLock',
   async ({ networkID, provider, noteAddress, amount, tokenId }: IExtendLockDetails, { dispatch }) => {
     const addresses = getAddresses(networkID);
-    const pearlVaultContract = new ethers.Contract(addresses.PEARL_VAULT, PearlVaulte, provider);
+    const pearlVaultContract = new ethers.Contract(addresses.PEARL_VAULT, PearlVault, provider);
     let tx;
 
     try {
@@ -215,7 +216,7 @@ export const loadTermsDetails = createAsyncThunk(
 
 async function getTermsAndLocks(address: string, networkID: number, provider: JsonRpcProvider) {
   const addresses = getAddresses(networkID);
-  const pearlVaultContract = new ethers.Contract(addresses.PEARL_VAULT, PearlVaulte, provider);
+  const pearlVaultContract = new ethers.Contract(addresses.PEARL_VAULT, PearlVault, provider);
 
   const termsCount = (await pearlVaultContract.termsCount()).toNumber();
   const actions: Promise<ITerm>[] = [];
@@ -243,11 +244,15 @@ async function getTermsAndLocks(address: string, networkID: number, provider: Js
           });
         }
         return {
-          ...term,
           noteAddress: term.note,
+          lockPeriod: term.lockPeriod.toNumber(),
+          minLockAmount: formatEther(term.minLockAmount),
+          multiplier: term.multiplier,
+          enabled: term.enabled,
           note: {
             name,
             symbol,
+            noteAddress: term.note,
           },
         };
       })(i),
@@ -255,11 +260,11 @@ async function getTermsAndLocks(address: string, networkID: number, provider: Js
   }
 
   const rawTerms = await Promise.all(actions);
-  const grouppedTerms = groupBy(rawTerms, term => term.lockPeriod.toNumber());
+  const groupedTerms = groupBy(rawTerms, term => term.lockPeriod);
 
-  const terms = Object.keys(grouppedTerms).map(key => {
-    const term = grouppedTerms[key].find(term => term.minLockAmount.gt(0)) || grouppedTerms[key][0];
-    const fallbackTerm = grouppedTerms[key].find(term => term.minLockAmount.eq(0));
+  const terms = Object.keys(groupedTerms).map(key => {
+    const term = groupedTerms[key].find(term => Number(term.minLockAmount) > 0) || groupedTerms[key][0];
+    const fallbackTerm = groupedTerms[key].find(term => Number(term.minLockAmount) === 0);
     return {
       ...term,
       fallbackTerm: fallbackTerm?.noteAddress === term.noteAddress ? undefined : fallbackTerm,

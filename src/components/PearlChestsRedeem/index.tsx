@@ -30,7 +30,7 @@ export interface Note {
   nextReward: number;
   lockedValue: number;
   marketValue: number;
-  lockupPeirod: number;
+  lockupPeriod: number;
   dueDate: Date;
   apy: number;
   locked: boolean;
@@ -58,7 +58,7 @@ export default function PearlChestsRedeem() {
               nextReward: 20,
               lockedValue: 42.1,
               marketValue: 5592.12,
-              lockupPeirod: term.lockPeriod.toNumber(),
+              lockupPeriod: term.lockPeriod,
               dueDate: new Date('March, 26, 2022 9:00 AM'),
               apy: 492391,
               locked: true,
@@ -88,7 +88,7 @@ function NoteCard({ note, term, lock }: { note: Note; term: ITerm; lock: ILock }
     { label: 'pearlChests.marketValue', value: formatCurrency(note.marketValue) },
     {
       label: 'pearlChests.lockupPeriod',
-      value: note.lockupPeirod,
+      value: note.lockupPeriod,
       after: <span className="note__countdown">{differenceInDays(note.dueDate, new Date())} days left</span>,
     },
     {

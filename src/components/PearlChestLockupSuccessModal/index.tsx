@@ -42,12 +42,12 @@ export default function PearlChestLockupSuccessModal({
           </div>
           <div className="lockup-success-modal__details-row">
             <Typography className="lockup-success-modal__label">Lock-up Period</Typography>
-            <Typography className="lockup-success-modal__value">{term?.lockPeriod?.toNumber()} Days</Typography>
+            <Typography className="lockup-success-modal__value">{Number(term?.lockPeriod) / 3} Days</Typography>
           </div>
           <div className="lockup-success-modal__details-row">
             <Typography className="lockup-success-modal__label">Due Date</Typography>
             <Typography className="lockup-success-modal__value">
-              {formateDate(addDays(new Date(), term?.lockPeriod?.toNumber() ?? 0), 'MMM dd, yyyy HH:mm a (O)')}
+              {formateDate(addDays(new Date(), (term?.lockPeriod || 0) / 3), 'MMM dd, yyyy HH:mm a (O)')}
             </Typography>
           </div>
           <div className="lockup-success-modal__details-row">

@@ -34,14 +34,14 @@ export default function PearlChestsLockup() {
       </Typography>
       <div className="lockup__options">
         {pearlVault.terms.map((term, i) => (
-          <LockupOption key={i} term={term} onSelet={selectTerm} />
+          <LockupOption key={i} term={term} onSelect={selectTerm} />
         ))}
       </div>
       <PearlChestLockupModal
         open={Boolean(pearlVault.selectedTerm)}
         onClose={() => selectTerm(undefined)}
         onSuccess={setLockupResult}
-        discount={extraBonus[pearlVault.selectedTerm?.lockPeriod.toNumber() ?? 0] ?? 0}
+        discount={extraBonus[Number(pearlVault.selectedTerm?.lockPeriod) ?? 0] ?? 0}
         term={pearlVault.selectedTerm}
       />
       <PearlChestLockupSuccessModal open={lockupResult} onClose={() => setLockupResult(undefined)} />
@@ -49,9 +49,9 @@ export default function PearlChestsLockup() {
   );
 }
 
-function LockupOption({ term, onSelet }: { term: ITerm; onSelet: (settings: ITerm | undefined) => void }) {
+function LockupOption({ term, onSelect }: { term: ITerm; onSelect: (settings: ITerm | undefined) => void }) {
   const { t } = useTranslation();
-  const showBadge = term.lockPeriod.toNumber() >= 90;
+  const showBadge = Number(term.lockPeriod) / 3 >= 90;
   const multiplier = Number((term.multiplier / 100).toFixed(1));
   const pendingTransactions = useSelector<IReduxState, IPendingTxn[]>(state => {
     return state.pendingTransactions;
@@ -77,7 +77,7 @@ function LockupOption({ term, onSelet }: { term: ITerm; onSelet: (settings: ITer
       <div className="lockup-option__content">
         <div>
           <Typography className="lockup-option__days" component="span">
-            {term.lockPeriod.toNumber()}
+            {term.lockPeriod / 3}
           </Typography>
           <Typography className="lockup-option__days-label" component="span">
             {t('pearlChests.lockUp.days')}
@@ -119,20 +119,20 @@ function LockupOption({ term, onSelet }: { term: ITerm; onSelet: (settings: ITer
         </div>
 
         <div>
-          {extraBonus[term.lockPeriod.toNumber()] && (
+          {extraBonus[term.lockPeriod] && (
             <>
               <Typography className="lockup-option__bonus-title" component="span">
-                {t('pearlChests.lockUp.bonusTitle', { percentage: extraBonus[term.lockPeriod.toNumber()] })}
+                {t('pearlChests.lockUp.bonusTitle', { percentage: extraBonus[term.lockPeriod] })}
               </Typography>
               <Typography className="lockup-option__bonus-desc" variant="caption" component="span">
                 {t('pearlChests.lockUp.bonusDescription')}
               </Typography>
               <Typography className="lockup-option__requirement" variant="caption" component="span">
-                {t('pearlChests.lockUp.nftRequirement', { amount: term.minLockAmount.toNumber() })}
+                {t('pearlChests.lockUp.nftRequirement', { amount: term.minLockAmount })}
               </Typography>
             </>
           )}
-          {!extraBonus[term.lockPeriod.toNumber()] && (
+          {!extraBonus[term.lockPeriod] && (
             <Typography component="span" variant="caption">
               {t('pearlChests.lockUp.noExtraBonus')}
             </Typography>
@@ -146,7 +146,7 @@ function LockupOption({ term, onSelet }: { term: ITerm; onSelet: (settings: ITer
         type="select_lockup_option"
         start={t(address ? 'pearlChests.lockUp.select' : 'common.connectWallet')}
         progress="Processing..."
-        processTx={() => (address ? onSelet(term) : connect())}
+        processTx={() => (address ? onSelect(term) : connect())}
       />
     </Paper>
   );
