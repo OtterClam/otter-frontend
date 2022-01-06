@@ -6,7 +6,7 @@ import './button.scss';
 
 type BoxProps = ComponentProps<typeof Box>;
 type ButtonType = 'outline' | 'solid' | 'icon';
-type Props = BoxProps & {
+type Props = Omit<BoxProps, 'className'> & {
   text?: string;
   type?: ButtonType;
   mainColor?: string;

@@ -187,13 +187,6 @@ function App() {
             </Route>
 
             <Route path="/bonds">
-              {BondKeys.map(bondKey => {
-                return (
-                  <Route exact key={bondKey} path={`/bonds/${bondKey}`}>
-                    <Bond bondKey={bondKey} />
-                  </Route>
-                );
-              })}
               <ChooseBond />
             </Route>
 

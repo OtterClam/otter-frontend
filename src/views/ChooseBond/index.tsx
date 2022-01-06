@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { useBonds } from '../../hooks';
+import { useWeb3Context } from '../../hooks';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { tabletMediaQuery } from 'src/themes/mediaQuery';
 
@@ -10,15 +11,24 @@ import { Skeleton } from '@material-ui/lab';
 import BondRowHeader from './BondRowHeader';
 import BondRow from './BondRow';
 import BondCard from './BondCard';
+import BondDialog from '../BondDialog';
+import BondSuccessDialog from '../BondDialog/BondSuccessDialog';
+import BondNTFDiscountDialog from '../BondDialog/BondNFTDiscountDialog';
 import './choose-bond.scss';
 
 import apollo from 'src/lib/apolloClient';
+import { Bond, BondKeys, getBond } from 'src/constants';
 import { getTokenImage, trim } from '../../helpers';
 import { IReduxState } from '../../store/slices/state.interface';
+import { checkBondKey } from './utils';
+import { OtterNft } from '../BondDialog/BondNFTDiscountDialog/type';
 
 function ChooseBond() {
   const { t } = useTranslation();
-  const bonds = useBonds();
+  const { chainID } = useWeb3Context();
+  const bonds = useMemo(() => {
+    return BondKeys.map(key => getBond(key, chainID));
+  }, []);
   const isTablet = useMediaQuery(tabletMediaQuery); // change to breakpoint query
   const [treasuryBalance, setTreasuryBalance] = useState<number | null>(null);
 
@@ -38,6 +48,22 @@ query {
       setTreasuryBalance(latestMetrics.treasuryMarketValue);
     });
   });
+
+  const history = useHistory();
+  const { location } = history;
+
+  const pathname = location.pathname;
+  const matches = pathname.match(/(\/bonds)\/([a-z]*)/);
+  const bondKeyMatch = matches ? matches[2] : '';
+  const bondKey = checkBondKey(bondKeyMatch) ? bondKeyMatch : undefined;
+  const defaultBond = bondKey ? getBond(bondKey, chainID) : undefined;
+  const [selectedBond, setSelectedBond] = useState<Bond | undefined>(defaultBond);
+
+  const [nftDialogOpen, setNftDialogOpen] = useState(false);
+  const [nftSelection, setNftSelection] = useState<OtterNft | undefined>(undefined);
+  const canSelect = true;
+
+  const [successDialogOpen, setSuccessDialogOpen] = useState(false);
 
   return (
     <div id="choose-bond-view">
@@ -89,8 +115,8 @@ query {
           <Slide direction="up" in={true}>
             <Grid container className="bond-card-container">
               {bonds.map(bond => (
-                <Grid item xs={12} key={bond.value}>
-                  <BondCard key={bond.value} bondKey={bond.value} />
+                <Grid item xs={12} key={bond.key} onClick={() => setSelectedBond(bond)}>
+                  <BondCard key={bond.key} bondKey={bond.key} />
                 </Grid>
               ))}
             </Grid>
@@ -100,12 +126,34 @@ query {
             <Grid className="bond-row-container" item xs={12} aria-label="Available bonds">
               <BondRowHeader />
               {bonds.map(bond => (
-                <BondRow key={bond.value} bondKey={bond.value} />
+                <Box key={bond.key} onClick={() => setSelectedBond(bond)}>
+                  <BondRow bondKey={bond.key} />
+                </Box>
               ))}
             </Grid>
           </Zoom>
         )}
       </Paper>
+      {selectedBond && (
+        <BondDialog
+          bond={selectedBond}
+          canSelect={canSelect}
+          setBond={setSelectedBond}
+          setSelection={setNftSelection}
+          setNftDialogOpen={setNftDialogOpen}
+        />
+      )}
+      {selectedBond && (
+        <BondNTFDiscountDialog
+          open={nftDialogOpen}
+          selection={nftSelection}
+          setSelection={setNftSelection}
+          onClose={() => setNftDialogOpen(false)}
+        />
+      )}
+      {selectedBond && (
+        <BondSuccessDialog bond={selectedBond} open={successDialogOpen} setOpen={setSuccessDialogOpen} />
+      )}
     </div>
   );
 }

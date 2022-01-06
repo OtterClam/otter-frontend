@@ -1,4 +1,4 @@
-export { default as Bond } from './Bond';
+export { default as Bond } from './BondDialog';
 export { default as ChooseBond } from './ChooseBond';
 export { default as Wrap } from './Wrap';
 export { default as Stake } from './Stake';

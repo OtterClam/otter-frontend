@@ -1,19 +1,24 @@
+import { useEffect, useState, useRef, SetStateAction, Dispatch } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useSelector } from 'src/store/hook';
+import { useTranslation } from 'react-i18next';
+
+import { parse } from 'query-string';
+
 import { Backdrop, Box, Divider, Fade, Grid, Paper, Tab, Tabs, makeStyles } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
-import { useEffect, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useLocation } from 'react-router';
 import { Status, StatusChip } from 'src/components/Chip';
-import { Bond as BondType, BondAction, BondKey, getBond } from 'src/constants';
 import TabPanel from '../../components/TabPanel';
-import { formatCurrency, trim } from '../../helpers';
-import { useWeb3Context } from '../../hooks';
-import { IReduxState } from '../../store/slices/state.interface';
-import './bond.scss';
 import BondHeader from './BondHeader';
 import BondPurchase from './BondPurchase';
 import BondRedeem from './BondRedeem';
-import { useTranslation } from 'react-i18next';
+import './bond.scss';
+
+import { Bond as BondType, BondAction } from 'src/constants';
+import { OtterNft } from './BondNFTDiscountDialog/type';
+import { formatCurrency, trim } from '../../helpers';
+import { useWeb3Context } from '../../hooks';
+import { checkBondAction } from '../ChooseBond/utils';
 
 function a11yProps(index: number) {
   return {
@@ -31,53 +36,64 @@ const useStyle = makeStyles(theme => {
 });
 
 interface IBondProps {
-  bondKey: BondKey;
+  bond: BondType;
+  canSelect: boolean;
+  selection?: OtterNft;
+  setBond: Dispatch<SetStateAction<BondType | undefined>>;
+  setSelection: Dispatch<SetStateAction<OtterNft | undefined>>;
+  setNftDialogOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-function Bond({ bondKey }: IBondProps) {
+function BondDialog({ bond, canSelect, selection, setBond, setSelection, setNftDialogOpen }: IBondProps) {
+  const { t } = useTranslation();
   const style = useStyle();
-  const { provider, address, chainID } = useWeb3Context();
+  const { provider, address } = useWeb3Context();
 
-  const [slippage, setSlippage] = useState(0.5);
-  const [recipientAddress, setRecipientAddress] = useState(address);
-
-  const [quantity, setQuantity] = useState();
-
-  const bond = useMemo(() => getBond(bondKey, chainID), [bondKey, chainID]);
-  const [view, setView] = useState(0);
-  const isBondLoading = useSelector<IReduxState, boolean>(state => state.bonding.loading ?? true);
-  const marketPrice = useSelector<IReduxState, string>(state => state.bonding[bondKey]?.marketPrice);
-  const bondPrice = useSelector<IReduxState, number>(state => {
-    return state.bonding[bondKey] && state.bonding[bondKey].bondPrice;
-  });
+  const isBondLoading = useSelector(state => state.bonding.loading);
+  const marketPrice = useSelector(state => state.bonding[bond.key])?.marketPrice;
+  const bondPrice = useSelector(state => state.bonding[bond.key])?.bondPrice;
   const priceDiff = (Number(marketPrice) ?? 0) - (bondPrice ?? 0);
+
+  const [recipientAddress, setRecipientAddress] = useState(address);
   const onRecipientAddressChange = (e: any) => {
     return setRecipientAddress(e.target.value);
   };
+
+  const [slippage, setSlippage] = useState(0.5);
   const onSlippageChange = (e: any) => {
     return setSlippage(e.target.value);
   };
 
   useEffect(() => {
     if (address) setRecipientAddress(address);
-  }, [provider, quantity, address]);
+  }, [provider, address]);
 
-  useActionEffect(bond, action => {
-    setView(bond.deprecated || action === BondAction.Bond ? 0 : 1);
-  });
+  const history = useHistory();
+  const { location } = history;
+  const search = location.search;
+  const query = parse(search).action as string;
+  const defaultTab: BondAction = checkBondAction(query) ? query : BondAction.Bond;
+  const currentTab = useRef<BondAction | undefined>(defaultTab);
 
-  const changeView = (event: any, newView: number) => {
-    setView(newView);
+  const changeView = (_e: any, newView: BondAction) => {
+    currentTab.current = newView;
+    history.push(`/bonds/${bond.key}?action=${newView}`);
   };
-  const { t } = useTranslation();
+
+  useEffect(() => {
+    if (bond.deprecated) {
+      history.push({ pathname: `${history.location.pathname}?action=${BondAction.Redeem}` });
+    }
+  }, []);
 
   return (
     <Fade in={true} mountOnEnter unmountOnExit>
-      <Backdrop id="bond-view" open={true}>
+      <Backdrop id="bond-view" open={!!bond}>
         <Fade in={true}>
           <Paper className={`${style.modal} ohm-card ohm-modal bond-modal`}>
             <BondHeader
               bond={bond}
+              setBond={setBond}
               slippage={slippage}
               recipientAddress={recipientAddress}
               onSlippageChange={onSlippageChange}
@@ -121,26 +137,35 @@ function Bond({ bondKey }: IBondProps) {
               </Grid>
             )}
 
-            <Tabs
-              centered
-              value={view}
-              indicatorColor="primary"
-              onChange={changeView}
-              aria-label="bond tabs"
-              className="bond-tabs"
-            >
-              {!bond.deprecated && <Tab value={0} label="Bond" {...a11yProps(0)} />}
-              <Tab value={bond.deprecated ? 0 : 1} label="Redeem" {...a11yProps(1)} />
-            </Tabs>
+            {bond.key === 'mai_clam44' ? null : (
+              <Tabs
+                centered
+                value={currentTab.current}
+                indicatorColor="primary"
+                onChange={changeView}
+                aria-label="bond tabs"
+                className="bond-tabs"
+              >
+                {!bond.deprecated && <Tab value={BondAction.Bond} label="Bond" {...a11yProps(0)} />}
+                <Tab value={bond.deprecated ? BondAction.Bond : BondAction.Redeem} label="Redeem" {...a11yProps(1)} />
+              </Tabs>
+            )}
 
             {!bond.deprecated && (
-              <TabPanel className="purchase-box" value={view} index={0}>
-                <BondPurchase bondKey={bondKey} slippage={slippage} />
+              <TabPanel className="purchase-box" value={currentTab.current} index={BondAction.Bond}>
+                <BondPurchase
+                  bondKey={bond.key}
+                  canSelect={canSelect}
+                  slippage={slippage}
+                  selection={selection}
+                  setSelection={setSelection}
+                  setNftDialogOpen={setNftDialogOpen}
+                />
               </TabPanel>
             )}
 
-            <TabPanel value={view} index={bond.deprecated ? 0 : 1}>
-              <BondRedeem bondKey={bondKey} />
+            <TabPanel value={currentTab.current} index={bond.deprecated ? BondAction.Bond : BondAction.Redeem}>
+              <BondRedeem bondKey={bond.key} />
             </TabPanel>
           </Paper>
         </Fade>
@@ -149,18 +174,4 @@ function Bond({ bondKey }: IBondProps) {
   );
 }
 
-function useActionEffect(bond: BondType, cb: (action: BondAction) => void) {
-  const location = useLocation();
-  const query = new URLSearchParams(location.search.substr(1));
-  let action = query.get('action');
-
-  if (action !== BondAction.Bond && action !== BondAction.Redeem) {
-    action = bond.deprecated ? BondAction.Redeem : BondAction.Bond;
-  }
-
-  useEffect(() => {
-    cb(action as BondAction);
-  }, [action]);
-}
-
-export default Bond;
+export default BondDialog;

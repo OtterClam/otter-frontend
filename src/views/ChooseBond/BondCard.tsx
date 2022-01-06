@@ -126,20 +126,18 @@ export function BondCard({ bondKey }: IBondProps) {
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <Link component={NavLink} to={`/bonds/${bondKey}`}>
-            <Link component={NavLink} to={`/bonds/${bondKey}`}>
-              <CustomButton
-                color="otter.white"
-                bgcolor="otter.otterBlue"
-                fontSize={14}
-                text={`${t('common.bond')} ${bond.name}`}
-              />
-            </Link>
-            {fullyVested && (
-              <Link component={NavLink} to={`/bonds/${bondKey}?action=redeem`}>
-                <CustomButton color="otter.otterBlue" bgcolor="" text={`${t('common.redeem')} ${bond.name}`} />
-              </Link>
-            )}
+            <CustomButton
+              color="otter.white"
+              bgcolor="otter.otterBlue"
+              fontSize={14}
+              text={`${t('common.bond')} ${bond.name}`}
+            />
           </Link>
+          {fullyVested && (
+            <Link component={NavLink} to={`/bonds/${bondKey}?action=redeem`}>
+              <CustomButton color="otter.otterBlue" bgcolor="" text={`${t('common.redeem')} ${bond.name}`} />
+            </Link>
+          )}
         </Grid>
       </Grid>
     </Paper>
