@@ -5,7 +5,7 @@ import WalletConnectProvider from '@walletconnect/web3-provider';
 import { DEFAULT_NETWORK, Networks, RPCURL } from '../../constants';
 
 type onChainProvider = {
-  connect: () => Promise<Web3Provider>;
+  connect: () => Promise<Web3Provider | undefined>;
   disconnect: () => void;
   provider: JsonRpcProvider;
   readOnlyProvider: JsonRpcProvider;
@@ -163,6 +163,5 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
     }),
     [connect, disconnect, hasCachedProvider, provider, connected, address, chainID, web3Modal, readOnlyProvider],
   );
-  //@ts-ignore
   return <Web3Context.Provider value={{ onChainProvider }}>{children}</Web3Context.Provider>;
 };
