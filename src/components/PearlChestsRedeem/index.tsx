@@ -7,11 +7,13 @@ import differenceInDays from 'date-fns/differenceInDays';
 import receiptImage from './receipt.png';
 import './styles.scss';
 import CustomButton from '../Button/CustomButton';
+import { useSelector } from 'src/store/hook';
+import { useMemo } from 'react';
 
 const numberFormatter = Intl.NumberFormat('en', { maximumFractionDigits: 0 });
 
 export interface Note {
-  id: number;
+  id: string;
   amount: number;
   currentReward: number;
   nextReward: number;
@@ -24,36 +26,33 @@ export interface Note {
 }
 
 export default function PearlChestsRedeem() {
+  const locks = useSelector(state => state.pearlVault.locks);
+  const terms = useSelector(state => state.pearlVault.terms);
+  const termsMap = useMemo(() => {
+    return new Map(terms.map(term => [term.noteAddress, term]));
+  }, [terms]);
+
   return (
     <Paper className="ohm-card">
-      <NoteCard
-        note={{
-          id: 19203884927,
-          amount: 1230,
-          currentReward: 10,
-          nextReward: 20,
-          lockedValue: 42.1,
-          marketValue: 5592.12,
-          lockupPeirod: 10,
-          dueDate: new Date('March, 26, 2022 9:00 AM'),
-          apy: 492391,
-          locked: true,
-        }}
-      />
-      <NoteCard
-        note={{
-          id: 19203884927,
-          amount: 1230,
-          currentReward: 10,
-          nextReward: 20,
-          lockedValue: 42.1,
-          marketValue: 5592.12,
-          lockupPeirod: 10,
-          dueDate: new Date('March, 26, 2022 9:00 AM'),
-          apy: 492391,
-          locked: false,
-        }}
-      />
+      {locks.map(lock => {
+        const term = termsMap.get(lock.noteAddress)!;
+        return (
+          <NoteCard
+            note={{
+              id: lock.tokenId,
+              amount: 123,
+              currentReward: 10,
+              nextReward: 20,
+              lockedValue: 42.1,
+              marketValue: 5592.12,
+              lockupPeirod: term.lockPeriod.toNumber(),
+              dueDate: new Date('March, 26, 2022 9:00 AM'),
+              apy: 492391,
+              locked: true,
+            }}
+          />
+        );
+      })}
     </Paper>
   );
 }

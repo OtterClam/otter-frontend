@@ -24,9 +24,11 @@ export interface INote {
 }
 
 export interface ILock {
+  tokenId: string;
   amount: BigNumber;
   endEpoch: BigNumber;
   receiptUrl: string;
+  noteAddress: string;
 }
 
 export interface IPearlVaultSliceState {
@@ -233,6 +235,8 @@ async function getTermsAndLocks(address: string, networkID: number, provider: Js
           locks.push({
             ...lock,
             receiptUrl,
+            noteAddress: term.note,
+            tokenId: id.toString(),
           });
         }
         return {
