@@ -1,0 +1,113 @@
+
+@import 'styles/_colors.scss';
+
+.success-dialog {
+    z-index: 100 !important;
+  
+    .success-title {
+      font-size: 36px;
+      font-weight: 700;
+    }
+
+    .success-subtitle {
+      font-size: 24px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .bond-logo {
+      margin: 40px 0;
+    }
+
+    .bond-nft-title {
+      margin-top: 10px;
+    }
+
+    .helper-text {
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 3;
+    }
+
+    .divider {
+       margin-bottom: 20px;
+    }
+
+    .bond-detail {
+      padding: 20px;
+      margin-bottom: 40px;
+      border-radius: 10px;
+
+      .detail-row {
+        display: flex;
+        justify-content: space-between;
+        margin: 10px 0;
+      }
+    }
+
+    .bond-balance-title {
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 24px;
+    }
+    
+    .bond-balance-value {
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 24px;
+    }
+
+    .selection-area {
+      display: flex;
+      align-items: center;
+
+      .selection-image {
+        width: 60px;
+        height: 60px;
+        border-radius: 10px;
+        margin: 0 10px 0 16px;
+        &.nft2 {
+          background: url('/components/NFTCards/images/nft2.jpg') center/cover no-repeat;
+        }
+        &.nft3 {
+          background: url('/components/NFTCards/images/nft3.jpg') center/cover no-repeat;
+        }
+        &.nft4 {
+          background: url('/components/NFTCards/images/nft4.jpg') center/cover no-repeat;
+        }
+      }
+    }
+  
+    .highlight-text {
+      color: $clam-pink;
+    }
+
+    .dialog {
+      padding: 40px;
+    }
+  }
+
+  @media screen and (max-width: 598px) {
+    .success-dialog  {
+      .success-title {
+        font-size: 24px;
+      }
+
+      .success-subtitle {
+        font-size: 20px;
+        margin-bottom: 20px;
+      }
+
+      .bond-logo {
+        margin: 20px 0;
+      }
+
+      .bond-detail {
+        margin-bottom: 20px;
+      }
+    }
+
+    .dialog {
+      padding: 20px;
+    }
+  }

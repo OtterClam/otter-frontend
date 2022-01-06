@@ -1,6 +1,9 @@
 @import 'styles/_colors.scss';
 
-.otter-card {
+.nft-dialog {
+  z-index: 10 !important;
+
+  .otter-card {
     padding: 16px;
     margin: 0 10px;
     border-radius: 10px;
@@ -46,8 +49,10 @@
       }
     }
   }
+}
 
   @media screen and (max-width: 960px)  {
+    .nft-dialog {
     .otter-card {
         margin: 10px 0;
         .otter-img {
@@ -65,4 +70,5 @@
             color: $clam-pink;
           }
     }
+  }
   }

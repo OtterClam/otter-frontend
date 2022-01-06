@@ -1,4 +1,4 @@
-import { useState, PropsWithChildren } from 'react';
+import { PropsWithChildren, ReactNode } from 'react';
 import { Backdrop, BackdropProps, Paper, makeStyles } from '@material-ui/core';
 
 import './dialog.scss';
@@ -12,9 +12,9 @@ const useStyle = makeStyles(theme => {
   };
 });
 
-interface Props extends Omit<BackdropProps, 'children'> {
+interface Props extends Omit<BackdropProps, 'title' | 'children'> {
   open: boolean;
-  title: string;
+  title: (() => ReactNode) | string;
   onClose(): void;
 }
 const Dialog = ({ children, title, onClose, ...props }: PropsWithChildren<Props>) => {
@@ -22,7 +22,7 @@ const Dialog = ({ children, title, onClose, ...props }: PropsWithChildren<Props>
   return (
     <Backdrop {...props}>
       <Paper className={`${style.modal} dialog`}>
-        <DialogHeader title={title} onClose={onClose} />
+        {typeof title === 'function' ? title() : <DialogHeader title={title} onClose={onClose} />}
         {children}
       </Paper>
     </Backdrop>

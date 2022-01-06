@@ -21,7 +21,7 @@ const BondNTFDiscountDialog = ({ selection, setSelection, onClose, ...props }: P
     onClose();
   };
   return (
-    <Dialog {...props} title="Select Discount NFT" onClose={onClose}>
+    <Dialog {...props} className="nft-dialog" title="Select Discount NFT" onClose={onClose}>
       <NFTDiscountCardRow options={options} onSelect={onSelect} />
     </Dialog>
   );
