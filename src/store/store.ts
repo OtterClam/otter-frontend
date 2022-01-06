@@ -8,6 +8,7 @@ import whitelistReducer from './slices/whitelist-slice';
 import ido from './slices/ido-slice';
 import migrate from './slices/migrate-slice';
 import nftGiveaway from './slices/nft-giveaway-slice';
+import nftReducer from './slices/nft-slice';
 
 const store = configureStore({
   reducer: {
@@ -19,6 +20,7 @@ const store = configureStore({
     ido,
     migrate,
     nftGiveaway,
+    nft: nftReducer,
   },
 });
 // Infer the `RootState` and `AppDispatch` types from the store itself
