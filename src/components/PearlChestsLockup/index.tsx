@@ -51,8 +51,7 @@ export default function PearlChestsLockup() {
 
 function LockupOption({ term, onSelect }: { term: ITerm; onSelect: (settings: ITerm | undefined) => void }) {
   const { t } = useTranslation();
-  const lockPeriodDays = term.lockPeriod / 3;
-  const showBadge = lockPeriodDays >= 90;
+  const showBadge = term.lockPeriod >= 90;
   const multiplier = (term.multiplier / 100).toFixed(2);
   const pendingTransactions = useSelector<IReduxState, IPendingTxn[]>(state => {
     return state.pendingTransactions;
@@ -78,7 +77,7 @@ function LockupOption({ term, onSelect }: { term: ITerm; onSelect: (settings: IT
       <div className="lockup-option__content">
         <div>
           <Typography className="lockup-option__days" component="span">
-            {lockPeriodDays}
+            {term.lockPeriod}
           </Typography>
           <Typography className="lockup-option__days-label" component="span">
             {t('pearlChests.lockUp.days')}
@@ -120,10 +119,10 @@ function LockupOption({ term, onSelect }: { term: ITerm; onSelect: (settings: IT
         </div>
 
         <div>
-          {extraBonus[term.lockPeriod / 3] && (
+          {extraBonus[term.lockPeriod] && (
             <>
               <Typography className="lockup-option__bonus-title" component="span">
-                {t('pearlChests.lockUp.bonusTitle', { percentage: extraBonus[term.lockPeriod / 3] })}
+                {t('pearlChests.lockUp.bonusTitle', { percentage: extraBonus[term.lockPeriod] })}
               </Typography>
               <Typography className="lockup-option__bonus-desc" variant="caption" component="span">
                 {t('pearlChests.lockUp.bonusDescription')}
@@ -133,7 +132,7 @@ function LockupOption({ term, onSelect }: { term: ITerm; onSelect: (settings: IT
               </Typography>
             </>
           )}
-          {!extraBonus[term.lockPeriod / 3] && (
+          {!extraBonus[term.lockPeriod] && (
             <Typography component="span" variant="caption">
               {t('pearlChests.lockUp.noExtraBonus')}
             </Typography>

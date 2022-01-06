@@ -139,7 +139,7 @@ async function getTermsAndLocks(address: string, networkID: number, provider: Js
         }
         return {
           noteAddress: term.note,
-          lockPeriod: term.lockPeriod.toNumber(),
+          lockPeriod: term.lockPeriod.toNumber() / 3, // epochs -> days
           minLockAmount: formatEther(term.minLockAmount),
           multiplier: term.multiplier,
           enabled: term.enabled,
