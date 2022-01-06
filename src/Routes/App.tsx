@@ -8,12 +8,6 @@ import './style.scss';
 import { Hidden, useMediaQuery } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
-import Dashboard from 'src/views/Dashboard/TreasuryDashboard';
-import Migrate from 'src/views/Migrate';
-import Calculator from 'src/views/Calculator';
 import TopBar from '../components/Header';
 import Loading from '../components/Loader';
 import Sidebar from '../components/Sidebar';
@@ -22,7 +16,7 @@ import Calculator from 'src/views/Calculator';
 import Dashboard from 'src/views/Dashboard/TreasuryDashboard';
 import Migrate from 'src/views/Migrate';
 import NotFound from '../views/404/NotFound';
-import { Bond, ChooseBond, Stake, Wrap } from '../views';
+import { ChooseBond, Stake, Wrap } from '../views';
 
 import { calculateUserBondDetails, loadAccountDetails } from '../store/slices/account-slice';
 import { loadAppDetails } from '../store/slices/app-slice';
