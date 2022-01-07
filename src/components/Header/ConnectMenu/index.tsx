@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useSelector } from '../../../store/hook';
+import { useAppSelector } from '../../../store/hook';
 import { useWeb3Context } from '../../../hooks';
 
 import { Box } from '@material-ui/core';
@@ -9,7 +9,7 @@ import LanguagePicker from '../../LanguagePicker';
 
 const ConnectMenu = () => {
   const { connected } = useWeb3Context();
-  const pendingTransactions = useSelector(state => {
+  const pendingTransactions = useAppSelector(state => {
     return state.pendingTransactions;
   });
 

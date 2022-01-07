@@ -1,13 +1,15 @@
 import { useEffect } from 'react';
 import { Typography, Box, useTheme } from '@material-ui/core';
 import './cards.scss';
-import NFTBack from './images/nft-back.jpg';
+
 import NFT1 from './images/nft1.jpg';
 import NFT2 from './images/nft2.jpg';
 import NFT3 from './images/nft3.jpg';
 import NFT4 from './images/nft4.jpg';
+
 import { useTranslation } from 'react-i18next';
-import { useWeb3Context, useAppSelector, useAppDispatch } from 'src/hooks';
+import { useWeb3Context } from 'src/hooks';
+import { useAppSelector, useAppDispatch } from 'src/store/hook';
 import { fetchAll, claim } from 'src/store/slices/nft-giveaway-slice';
 
 const useHighlightStyle = () => {

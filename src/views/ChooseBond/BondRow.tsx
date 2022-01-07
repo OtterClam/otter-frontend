@@ -7,7 +7,7 @@ import './choose-bond.scss';
 
 import { useMemo } from 'react';
 import { NavLink, useHistory } from 'react-router-dom';
-import { useSelector } from 'src/store/hook';
+import { useAppSelector } from 'src/store/hook';
 import { useTranslation } from 'react-i18next';
 import { useWeb3Context } from '../../hooks';
 
@@ -28,28 +28,28 @@ interface IBondProps {
 function BondRow({ bondKey }: IBondProps) {
   const { chainID } = useWeb3Context();
   // Use BondPrice as indicator of loading.
-  const isBondLoading = useSelector(state => !state.bonding[bondKey]?.bondPrice ?? true);
+  const isBondLoading = useAppSelector(state => !state.bonding[bondKey]?.bondPrice ?? true);
   const bond = getBond(bondKey, chainID);
 
-  const bondPrice = useSelector(state => {
+  const bondPrice = useAppSelector(state => {
     return state.bonding[bondKey] && state.bonding[bondKey].bondPrice;
   });
-  const bondDiscount = useSelector(state => {
+  const bondDiscount = useAppSelector(state => {
     return state.bonding[bondKey] && state.bonding[bondKey].bondDiscount;
   });
-  const bondPurchased = useSelector(state => {
+  const bondPurchased = useAppSelector(state => {
     return state.bonding[bondKey] && state.bonding[bondKey].purchased;
   });
-  const fiveDayRate = useSelector(state => state.app.fiveDayRate);
-  const marketPrice = useSelector(state => state.bonding[bondKey]?.marketPrice);
-  const myBalance = useSelector(state => {
+  const fiveDayRate = useAppSelector(state => state.app.fiveDayRate);
+  const marketPrice = useAppSelector(state => state.bonding[bondKey]?.marketPrice);
+  const myBalance = useAppSelector(state => {
     //@ts-ignore
     return state.account[bondKey] && state.account[bondKey].interestDue;
   });
   const priceDiff = (Number(marketPrice) ?? 0) - (bondPrice ?? 0);
   const { t, i18n } = useTranslation();
-  const currentBlockTime = useSelector(state => state.app.currentBlockTime);
-  const bondMaturationTime = useSelector(state => {
+  const currentBlockTime = useAppSelector(state => state.app.currentBlockTime);
+  const bondMaturationTime = useAppSelector(state => {
     //@ts-ignore
     return state.account[bondKey] && state.account[bondKey].bondMaturationTime;
   });

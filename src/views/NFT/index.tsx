@@ -8,7 +8,7 @@ import NFTFooter from 'src/components/NFTFooter';
 import NFTHeader from 'src/components/NFTHeader';
 import NFTHero from 'src/components/NFTHero';
 import { CHRISTMAS_EVE_2021_DATE } from 'src/constants';
-import { useAppSelector } from 'src/hooks';
+import { useAppSelector } from 'src/store/hook';
 
 const useBodyBackground = () => {
   const theme = useTheme();

@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
-import { useSelector } from 'src/store/hook';
+import { useAppSelector } from 'src/store/hook';
 import Calculator from 'src/views/Calculator';
 import Dashboard from 'src/views/Dashboard/TreasuryDashboard';
 import Migrate from 'src/views/Migrate';
@@ -70,9 +70,9 @@ function App() {
 
   const [walletChecked, setWalletChecked] = useState(false);
 
-  const isAppLoading = useSelector(state => state.app.loading);
-  const isBondLoading = useSelector(state => state.bonding.loading);
-  const isAppLoaded = useSelector(state => typeof state.app.marketPrice != 'undefined');
+  const isAppLoading = useAppSelector(state => state.app.loading);
+  const isBondLoading = useAppSelector(state => state.bonding.loading);
+  const isAppLoaded = useAppSelector(state => typeof state.app.marketPrice != 'undefined');
 
   async function loadDetails(whichDetails: string) {
     let loadProvider = readOnlyProvider;

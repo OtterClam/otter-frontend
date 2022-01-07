@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useSelector } from 'src/store/hook';
+import { useAppSelector } from 'src/store/hook';
 import { useTranslation } from 'react-i18next';
 
 import './successDialog.scss';
@@ -36,8 +36,13 @@ interface Props {
 const BondSuccessDialog = ({ bond, open, setOpen }: Props) => {
   const { t } = useTranslation();
 
-  const fiveDayRate = useSelector(state => state.app.fiveDayRate);
-  const { loading: isBondLoading, bondDiscount, balance, vestingTerm } = useSelector(state => state.bonding[bond.key]);
+  const fiveDayRate = useAppSelector(state => state.app.fiveDayRate);
+  const {
+    loading: isBondLoading,
+    bondDiscount,
+    balance,
+    vestingTerm,
+  } = useAppSelector(state => state.bonding[bond.key]);
   const vestingPeriod = useMemo(() => {
     return prettifySeconds(t, vestingTerm, 'day');
   }, [t, vestingTerm]);
