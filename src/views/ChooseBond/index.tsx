@@ -151,6 +151,7 @@ query {
         <BondDialog
           bond={selectedBond}
           canSelect={canSelect}
+          selection={nftSelection}
           setBond={setSelectedBond}
           setSelection={setNftSelection}
           setNftDialogOpen={setNftDialogOpen}

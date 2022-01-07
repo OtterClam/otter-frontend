@@ -38,7 +38,7 @@ const useStyle = makeStyles(theme => {
 interface IBondProps {
   bond: BondType;
   canSelect: boolean;
-  selection?: OtterNft;
+  selection: OtterNft | undefined;
   setBond: Dispatch<SetStateAction<BondType | undefined>>;
   setSelection: Dispatch<SetStateAction<OtterNft | undefined>>;
   setNftDialogOpen: Dispatch<SetStateAction<boolean>>;
