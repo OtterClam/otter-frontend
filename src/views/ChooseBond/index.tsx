@@ -53,16 +53,20 @@ query {
   const { location } = history;
 
   const pathname = location.pathname;
-  const matches = pathname.match(/(\/bonds)\/([a-z]*)/);
+  const matches = pathname.match(/(\/bonds)\/([a-z_0-9]*)/);
   const bondKeyMatch = matches ? matches[2] : '';
   const bondKey = checkBondKey(bondKeyMatch) ? bondKeyMatch : undefined;
   const defaultBond = bondKey ? getBond(bondKey, chainID) : undefined;
-  const [selectedBond, setSelectedBond] = useState<Bond | undefined>(defaultBond);
 
+  const [selectedBond, setSelectedBond] = useState<Bond | undefined>(defaultBond);
   const [nftDialogOpen, setNftDialogOpen] = useState(false);
   const [nftSelection, setNftSelection] = useState<OtterNft | undefined>(undefined);
-  const canSelect = true;
 
+  useEffect(() => {
+    setSelectedBond(defaultBond);
+  }, [bondKey]);
+
+  const canSelect = true; // TODO: selectable condition
   const [successDialogOpen, setSuccessDialogOpen] = useState(false);
 
   return (
