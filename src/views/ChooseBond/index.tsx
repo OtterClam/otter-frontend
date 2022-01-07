@@ -6,7 +6,7 @@ import { useWeb3Context } from '../../hooks';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { tabletMediaQuery } from 'src/themes/mediaQuery';
 
-import { Box, Grid, Paper, Zoom, Slide, Typography } from '@material-ui/core';
+import { Box, Grid, Paper, Zoom, Slide, Typography, makeStyles } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import BondRowHeader from './BondRowHeader';
 import BondRow from './BondRow';
@@ -23,9 +23,18 @@ import { IReduxState } from '../../store/slices/state.interface';
 import { checkBondKey } from './utils';
 import { OtterNft } from '../BondDialog/BondNFTDiscountDialog/type';
 
+const useStyle = makeStyles(theme => {
+  return {
+    heroCard: {
+      backgroundColor: theme.palette.mode.white,
+    },
+  };
+});
+
 function ChooseBond() {
   const { t } = useTranslation();
   const { chainID } = useWeb3Context();
+  const style = useStyle();
   const bonds = useMemo(() => {
     return BondKeys.map(key => getBond(key, chainID));
   }, []);
@@ -84,7 +93,7 @@ query {
 
         <Grid className="bond-hero-section" container spacing={2}>
           <Grid item xs={6}>
-            <Box className="bond-hero-card" bgcolor="common.white">
+            <Box className={`bond-hero-card ${style.heroCard}`}>
               <Typography className="bond-hero-title" variant="h4" color="secondary">
                 {t('common.treasuryBalance')}
               </Typography>
@@ -104,7 +113,7 @@ query {
             </Box>
           </Grid>
           <Grid item xs={6}>
-            <Box className="bond-hero-card" bgcolor="common.white">
+            <Box className={`bond-hero-card ${style.heroCard}`}>
               <Typography className="bond-hero-title" variant="h4" color="secondary">
                 {t('common.clamPrice')}
               </Typography>

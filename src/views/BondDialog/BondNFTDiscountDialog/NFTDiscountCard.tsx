@@ -1,9 +1,17 @@
 import './nftCard.scss';
 import { ReactComponent as ArrowRightIcon } from '../../../assets/icons/arrow_right.svg';
-import { Box, Grid } from '@material-ui/core';
+import { Box, Grid, makeStyles } from '@material-ui/core';
 
 import { OtterNft } from './type';
 import { DISCOUNT_NFTS } from './constants';
+
+const useStyle = makeStyles(theme => {
+  return {
+    nftCard: {
+      backgroundColor: theme.palette.mode.white,
+    },
+  };
+});
 
 interface CardProps {
   option: OtterNft;
@@ -12,8 +20,9 @@ interface CardProps {
 
 export const TabletNFTDiscountCard = ({ option, onSelect }: CardProps) => {
   const nft = DISCOUNT_NFTS[option];
+  const style = useStyle();
   return (
-    <Box key={nft.name} component="div" className="otter-card" bgcolor="otter.white">
+    <Box key={nft.name} component="div" className={`otter-card ${style.nftCard}`}>
       <Grid container direction="row">
         <img className="otter-img" src={nft.image} />
         <Box component="div" flex flexDirection="column">
