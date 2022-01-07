@@ -69,7 +69,7 @@ function BondRow({ bondKey }: IBondProps) {
   };
   return (
     <Grid container id={`${bondKey}--bond`} className={`bond-row ${styles.white}`} onClick={redirect}>
-      <Grid item xs={1}>
+      <Grid item xs={1} className="bond-row-logo">
         <BondLogo bond={bond} />
       </Grid>
       <Grid item xs={2} className="bond-row-value first-col">

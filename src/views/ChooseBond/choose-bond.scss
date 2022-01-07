@@ -64,6 +64,15 @@
         cursor: pointer;
       }
 
+      .bond-row-logo, .bond-row-value {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        .chip--status {
+          align-self: flex-end;
+        }
+      }
+
       .bond-row-value {
         text-align: right;
         padding: 0px 10px;
@@ -80,6 +89,7 @@
 
   // common css
   .bond-name-label {
+    width: fit-content;
     margin-top: 4px;
   }
 
