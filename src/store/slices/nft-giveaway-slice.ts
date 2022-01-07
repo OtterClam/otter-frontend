@@ -39,14 +39,14 @@ export const fetchAll = createAsyncThunk<{ allWhitelisted: boolean[]; allTokenID
   },
 );
 
-export enum OtterNTF {
+export enum OtterNFT {
   SafeHand,
   FurryHand,
   StoneHand,
   DiamondHand,
 }
 interface ClaimProps extends EthersProps {
-  nft: OtterNTF;
+  nft: OtterNFT;
 }
 
 export const claim = createAsyncThunk<void, ClaimProps>(
