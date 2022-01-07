@@ -198,7 +198,6 @@ function BondPurchase({ bondKey, slippage, canSelect, selection, setSelection, s
   };
 
   const bondUnit = bond.autostake ? 'sCLAM' : 'CLAM';
-  console.log(bond.key);
 
   return (
     <Box display="flex" flexDirection="column">
