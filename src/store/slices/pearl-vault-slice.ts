@@ -1,7 +1,7 @@
 import groupBy from 'lodash/groupBy';
 import { JsonRpcProvider } from '@ethersproject/providers';
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
-import { BigNumber, constants, ethers } from 'ethers';
+import { constants, ethers } from 'ethers';
 import { PearlNote, PearlVault, PearlTokenContract } from '../../abi';
 import { getAddresses } from '../../constants';
 import { setAll } from '../../helpers';

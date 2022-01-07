@@ -41,7 +41,7 @@ export default function PearlChestsLockup() {
         open={Boolean(pearlVault.selectedTerm)}
         onClose={() => selectTerm(undefined)}
         onSuccess={setLockupResult}
-        discount={extraBonus[(pearlVault.selectedTerm?.lockPeriod ?? 0) / 3] ?? 0}
+        discount={extraBonus[pearlVault.selectedTerm?.lockPeriod ?? 0] ?? 0}
         term={pearlVault.selectedTerm}
       />
       <PearlChestLockupSuccessModal open={lockupResult} onClose={() => setLockupResult(undefined)} />

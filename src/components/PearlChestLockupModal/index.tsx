@@ -1,32 +1,31 @@
+import { formatEther, parseEther } from '@ethersproject/units';
 import {
   Divider,
   FormControl,
   InputAdornment,
   InputLabel,
+  makeStyles,
   OutlinedInput,
   Paper,
   SvgIcon,
   Typography,
-  makeStyles,
   useTheme,
 } from '@material-ui/core';
+import addDays from 'date-fns/addDays';
+import formatDate from 'date-fns/format';
+import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import Modal from 'src/components/Modal';
+import { trim } from 'src/helpers';
+import getNoteImage from 'src/helpers/get-note-image';
+import { useSelector } from 'src/store/hook';
+import { extendLock as extendLockAction, ILock, ITerm, lock as lockAction } from 'src/store/slices/pearl-vault-slice';
 import { ReactComponent as NoteIcon } from '../../assets/icons/note.svg';
 import { ReactComponent as RocketIcon } from '../../assets/icons/rocket.svg';
-import Modal from 'src/components/Modal';
-import receiptImage from './receipt.png';
-import { useTranslation } from 'react-i18next';
-import './styles.scss';
-import ActionButton from '../Button/ActionButton';
-import { ILock, ITerm, lock as lockAction, extendLock as extendLockAction } from 'src/store/slices/pearl-vault-slice';
-import formatDate from 'date-fns/format';
-import addDays from 'date-fns/addDays';
-import { useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'src/store/hook';
-import { trim } from 'src/helpers';
-import { useDispatch } from 'react-redux';
 import { useWeb3Context } from '../../hooks';
-import { ethers } from 'ethers';
-import { formatEther, parseEther } from '@ethersproject/units';
+import ActionButton from '../Button/ActionButton';
+import './styles.scss';
 
 const useStyles = makeStyles(theme => ({
   input: {
@@ -217,7 +216,7 @@ function NoteCard({ term, discount, qualified }: { term: ITerm; discount: number
   return (
     <div className="lockup-modal__card">
       <div className="lockup-modal__card-receipt">
-        <img className="lockup-modal__card-receipt-img" src={receiptImage} />
+        <img className="lockup-modal__card-receipt-img" src={getNoteImage(term.note.name)} />
         {!qualified && <Typography className="lockup-modal__not-qualified">Not qualified</Typography>}
       </div>
       <div className="lockup-modal__card-body">
@@ -230,8 +229,8 @@ function NoteCard({ term, discount, qualified }: { term: ITerm; discount: number
               You can enjoy {discount}% OFF discount on a (4,4) bond by using this note
             </Typography>
             <Typography className="lockup-modal__card-requirement">
-              In order to get this note and the extra bonus, you need to at least lock up
-              {term.minLockAmount} PEARL at once in the beginning.
+              In order to get this note and the extra bonus, you need to at least lock up {term.minLockAmount} PEARL at
+              once in the beginning.
             </Typography>
           </>
         )}
