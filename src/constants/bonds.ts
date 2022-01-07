@@ -15,15 +15,15 @@ export type BondKey =
   | 'mai_clam-v1';
 
 export const BondKeys: BondKey[] = [
-  'frax',
   'frax2',
   'frax_clam',
-  'mai',
   'matic',
   'matic_clam',
   'mai44',
-  'mai_clam',
   'mai_clam44',
+  'frax',
+  'mai',
+  'mai_clam',
   'mai-v1',
   'mai_clam-v1',
   'mai_clam_v2-v1',
