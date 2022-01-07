@@ -5,6 +5,7 @@ export const checkBondAction = (query: string): query is BondAction => {
   return actions.includes(query);
 };
 
+// NOTE: the order is meaningful for list in bond page
 const bondKeys = [
   'frax',
   'frax2',
