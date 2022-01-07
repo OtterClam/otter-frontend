@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, SetStateAction, Dispatch } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useSelector } from 'src/store/hook';
+import { useAppSelector } from 'src/store/hook';
 import { useTranslation } from 'react-i18next';
 
 import { parse } from 'query-string';
@@ -49,9 +49,9 @@ function BondDialog({ bond, canSelect, selection, setBond, setSelection, setNftD
   const style = useStyle();
   const { provider, address } = useWeb3Context();
 
-  const isBondLoading = useSelector(state => state.bonding.loading);
-  const marketPrice = useSelector(state => state.bonding[bond.key])?.marketPrice;
-  const bondPrice = useSelector(state => state.bonding[bond.key])?.bondPrice;
+  const isBondLoading = useAppSelector(state => state.bonding.loading);
+  const marketPrice = useAppSelector(state => state.bonding[bond.key])?.marketPrice;
+  const bondPrice = useAppSelector(state => state.bonding[bond.key])?.bondPrice;
   const priceDiff = (Number(marketPrice) ?? 0) - (bondPrice ?? 0);
 
   const [recipientAddress, setRecipientAddress] = useState(address);

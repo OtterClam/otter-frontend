@@ -1,6 +1,6 @@
 import { ComponentProps } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from '../../../store/hook';
+import { useAppSelector } from '../../../store/hook';
 import { useWeb3Context } from '../../../hooks';
 
 import { Box, Button, SvgIcon, Typography, Popper, Paper, Divider, Link } from '@material-ui/core';
@@ -13,7 +13,7 @@ type Props = Omit<ComponentProps<typeof Popper>, 'children'>;
 const PendingPopper = (props: Props) => {
   const { t } = useTranslation();
   const { disconnect, chainID } = useWeb3Context();
-  const pendingTransactions = useSelector(state => {
+  const pendingTransactions = useAppSelector(state => {
     return state.pendingTransactions;
   });
   const getEtherscanUrl = (txnHash: string) => {

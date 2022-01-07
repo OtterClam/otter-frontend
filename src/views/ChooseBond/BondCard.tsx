@@ -7,7 +7,7 @@ import './choose-bond.scss';
 
 import { useMemo } from 'react';
 import { NavLink } from 'react-router-dom';
-import { useSelector } from 'src/store/hook';
+import { useAppSelector } from 'src/store/hook';
 import { useTranslation } from 'react-i18next';
 import { useWeb3Context } from '../../hooks';
 
@@ -22,14 +22,14 @@ export function BondCard({ bondKey }: IBondProps) {
   const { chainID } = useWeb3Context();
   const bond = getBond(bondKey, chainID);
 
-  const { bondPrice, bondDiscount, purchased, marketPrice } = useSelector(state => state.bonding[bondKey]);
-  const isBondLoading = useSelector(state => !state.bonding[bondKey]?.bondPrice ?? true);
-  const fiveDayRate = useSelector(state => state.app.fiveDayRate);
+  const { bondPrice, bondDiscount, purchased, marketPrice } = useAppSelector(state => state.bonding[bondKey]);
+  const isBondLoading = useAppSelector(state => !state.bonding[bondKey]?.bondPrice ?? true);
+  const fiveDayRate = useAppSelector(state => state.app.fiveDayRate);
   const priceDiff = (Number(marketPrice) ?? 0) - (bondPrice ?? 0);
   const { t } = useTranslation();
 
-  const currentBlockTime = useSelector(state => state.app.currentBlockTime);
-  const bondMaturationTime = useSelector(state => {
+  const currentBlockTime = useAppSelector(state => state.app.currentBlockTime);
+  const bondMaturationTime = useAppSelector(state => {
     //@ts-ignore
     return state.account[bondKey] && state.account[bondKey].bondMaturationTime;
   });
@@ -39,7 +39,7 @@ export function BondCard({ bondKey }: IBondProps) {
   );
   const fullyVested = currentBlockTime > bondMaturationTime && bondMaturationTime > 0;
 
-  const myBalance = useSelector(state => {
+  const myBalance = useAppSelector(state => {
     //@ts-ignore
     return state.account[bondKey] && state.account[bondKey].interestDue;
   });
