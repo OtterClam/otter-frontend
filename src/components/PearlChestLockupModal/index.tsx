@@ -113,7 +113,7 @@ export default function PearlChestLockupModal({
           <div className="lockup-modal__summary-period-wrapper">
             <Typography className="lockup-modal__summary-period">{term?.lockPeriod} Days Locked-up Period</Typography>
             <Typography variant="caption">
-              Due date: {formatDate(addDays(new Date(), Number(term?.lockPeriod ?? 1)), 'MMM, dd, yyyy')}
+              Due date: {formatDate(addDays(new Date(), Number(term?.lockPeriod ?? 1)), 'MMM dd, yyyy')}
             </Typography>
           </div>
           <Divider className="lockup-modal__summary-div" />
@@ -176,8 +176,8 @@ export default function PearlChestLockupModal({
           </div>
 
           <Typography variant="caption" className="lockup-modal__approve-caption">
-            Note: The "Approve" transaction is only needed when bonding for the first time; subsequent minting only
-            requires you to perform the "Bond" transaction.
+            Note: Your first interaction with Pearl Chests includes an “Approve” transaction followed by a lock-up
+            transaction. Subsequent lockups will only require the “Lock Up” transaction.
           </Typography>
 
           <div className="lockup-modal__account-details">
@@ -190,7 +190,8 @@ export default function PearlChestLockupModal({
             {/* <div className="lockup-modal__account-detail">
               <Typography className="lockup-modal__account-detail-label">Next Reward</Typography>
               <Typography className="lockup-modal__account-detail-value">{nextRewardValue} PEARL</Typography>
-            </div>
+            </div> */}
+            {/*
             <div className="lockup-modal__account-detail">
               <Typography className="lockup-modal__account-detail-label">Next Reward Bonus</Typography>
               <Typography className="lockup-modal__account-detail-value">10 PEARL</Typography>
@@ -224,11 +225,10 @@ function NoteCard({ term, discount, qualified }: { term: ITerm; discount: number
         {discount !== 0 && (
           <>
             <Typography className="lockup-modal__card-discount">
-              You can enjoy {discount}% OFF discount on a (4,4) bond by using this note
+              Use this note to receive a {discount}% discount on any (4,4) bond.
             </Typography>
             <Typography className="lockup-modal__card-requirement">
-              In order to get this note and the extra bonus, you need to at least lock up {term.minLockAmount} PEARL at
-              once in the beginning.
+              (Minimum {term.minLockAmount} PEARL locked-up required to get this note)
             </Typography>
           </>
         )}

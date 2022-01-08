@@ -261,7 +261,7 @@ const English = {
         boost: 'Boost',
         rewardBoost: 'Reward Boost',
         expectedAPY: 'Expected APY',
-        youWillGet: 'You Will Get 1:',
+        youWillGet: 'You Will Get:',
         safeHandNft: 'Safe-Hand\nPEARL Note',
         furryHandNft: 'Furry-Hand\nPEARL Note',
         stoneHandNft: 'Stone-Hand\nPEARL Note',
