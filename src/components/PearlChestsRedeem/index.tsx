@@ -24,6 +24,8 @@ import { IPendingTxn } from 'src/store/slices/pending-txns-slice';
 import { IReduxState } from 'src/store/slices/state.interface';
 import PearlChestLockupModal from '../PearlChestLockupModal';
 import PearlChestLockupSuccessModal from '../PearlChestLockupSuccessModal';
+import { addDays } from 'date-fns';
+import getNoteImage from 'src/helpers/get-note-image';
 
 const numberFormatter = Intl.NumberFormat('en', { maximumFractionDigits: 0 });
 
@@ -36,7 +38,7 @@ const extraBonus: { [k: number]: number } = {
 export interface Note {
   id: string;
   amount: string;
-  currentReward: number;
+  currentReward: string;
   nextReward: number;
   lockedValue: number;
   marketValue: number;
@@ -49,9 +51,11 @@ export interface Note {
 export default function PearlChestsRedeem() {
   const [relockResult, setRelockResult] = useState<any>();
   const [selectedLock, setSelectedLock] = useState<ILock | undefined>();
+  const currentEpoch = useSelector(state => state.app.currentEpoch);
   const selectedTerm = useSelector(state => state.pearlVault.selectedTerm);
   const locks = useSelector(state => state.pearlVault.locks);
   const terms = useSelector(state => state.pearlVault.terms);
+  const pearlPrice = useSelector(state => state.app.pearlPrice);
   const termsMap = useMemo(() => {
     return new Map(
       terms
@@ -82,24 +86,25 @@ export default function PearlChestsRedeem() {
 
   return (
     <Paper className="ohm-card">
-      {locks.map(lock => {
+      {locks.map((lock, i) => {
         const term = termsMap.get(lock.noteAddress)!;
         return (
           <NoteCard
+            key={i}
             term={term}
             lock={lock}
             claimAndRelock={claimAndRelock}
             note={{
               id: lock.tokenId,
               amount: lock.amount,
-              currentReward: 10,
-              nextReward: 20,
-              lockedValue: 42.1,
-              marketValue: 5592.12,
+              currentReward: lock.reward,
+              nextReward: -1,
+              lockedValue: -1,
+              marketValue: Number(lock.amount) * pearlPrice,
               lockupPeriod: term.lockPeriod,
-              dueDate: new Date('March, 26, 2022 9:00 AM'),
+              dueDate: addDays(Date.UTC(2021, 10, 3, 0, 0, 0), lock.endEpoch / 3),
               apy: 492391,
-              locked: true,
+              locked: currentEpoch < lock.endEpoch,
             }}
           />
         );
@@ -133,13 +138,18 @@ function NoteCard({
   claimAndRelock: (term: ITerm, lock: ILock) => void;
 }) {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const { provider, address, chainID } = useWeb3Context();
+  const pendingTransactions = useReduxSelector<IReduxState, IPendingTxn[]>(state => {
+    return state.pendingTransactions;
+  });
   const details = [
     {
       label: 'pearlChests.lockupAmount',
       after: <span className="note__peral-icon">{getTokenImage('pearl', 20)}</span>,
       value: note.amount,
     },
-    { label: 'pearlChests.currentReward', value: numberFormatter.format(note.currentReward) + ' PERAL' },
+    { label: 'pearlChests.currentReward', value: note.currentReward + ' PERAL' },
     {
       label: 'pearlChests.nextReward',
       value: numberFormatter.format(note.nextReward) + ' PERAL',
@@ -158,12 +168,6 @@ function NoteCard({
     },
     { label: 'pearlChests.apy', value: numberFormatter.format(note.apy) + '%' },
   ];
-
-  const dispatch = useDispatch();
-  const { provider, address, chainID } = useWeb3Context();
-  const pendingTransactions = useReduxSelector<IReduxState, IPendingTxn[]>(state => {
-    return state.pendingTransactions;
-  });
 
   const redeem = useCallback(() => {
     dispatch(
@@ -192,14 +196,15 @@ function NoteCard({
   return (
     <div className="note">
       <Typography className="note__title" variant="h3" component="h3">
-        Safe-Hand PEARL Note
+        {term.note.name}
         <LockStatus locked={note.locked} />
         <span className="note__id">{note.id}</span>
       </Typography>
 
       <div className="note__body">
         <div className="note__receipt-image">
-          <img src={receiptImage} />
+          {/* TODO: load image from NFT */}
+          <img src={getNoteImage(term.note.name)} />
         </div>
         <Divider className="note__div" flexItem orientation="vertical" />
         <div className="note__details">

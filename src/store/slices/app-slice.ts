@@ -23,6 +23,7 @@ const initialState = {
   stakingRebase: 0,
   networkID: 0,
   nextRebase: 0,
+  currentEpoch: 0,
 };
 
 export interface IApp {
@@ -42,6 +43,7 @@ export interface IApp {
   stakingRebase: number;
   networkID: number;
   nextRebase: number;
+  currentEpoch: number;
 }
 
 interface ILoadAppDetails {
@@ -104,6 +106,7 @@ export const loadAppDetails = createAsyncThunk(
       currentBlockTime,
       nextRebase,
       stakingTVL,
+      currentEpoch: epoch.number.toNumber(),
     };
   },
 );

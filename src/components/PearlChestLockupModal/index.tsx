@@ -98,7 +98,7 @@ export default function PearlChestLockupModal({
 
   useEffect(() => {
     if (lock) {
-      setAmount(formatEther(lock.amount));
+      setAmount(lock.amount);
     }
   }, [lock]);
 
