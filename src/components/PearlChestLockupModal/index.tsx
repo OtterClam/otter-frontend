@@ -51,7 +51,7 @@ export interface PearlChestLockupModalProps {
   term?: ITerm;
   discount: number;
   onClose: () => void;
-  onSuccess: (event: any) => void;
+  onSuccess: (result: any) => void;
 }
 
 export default function PearlChestLockupModal({
@@ -71,8 +71,6 @@ export default function PearlChestLockupModal({
   const useFallback = parseEther(amount || '0').lt(parseEther(term?.minLockAmount ?? '0'));
   const account = useSelector(state => state.account);
   const app = useSelector(state => state.app);
-  const stakingRebasePercentage = trim(app.stakingRebase ?? 0 * 100 * multiplier, 4);
-  const nextRewardValue = trim((Number(stakingRebasePercentage) / 100) * Number(amount), 4);
   const pendingTransactions = useSelector(state => state.pendingTransactions);
   const { provider, address, chainID } = useWeb3Context();
   const noteAddress = useFallback ? term?.fallbackTerm!.noteAddress : term?.noteAddress;
@@ -189,7 +187,7 @@ export default function PearlChestLockupModal({
                 {trim(account?.balances?.pearl ?? 0, 4)} PEARL
               </Typography>
             </div>
-            <div className="lockup-modal__account-detail">
+            {/* <div className="lockup-modal__account-detail">
               <Typography className="lockup-modal__account-detail-label">Next Reward</Typography>
               <Typography className="lockup-modal__account-detail-value">{nextRewardValue} PEARL</Typography>
             </div>
@@ -200,7 +198,7 @@ export default function PearlChestLockupModal({
             <div className="lockup-modal__account-detail">
               <Typography className="lockup-modal__account-detail-label">Total Next Reward</Typography>
               <Typography className="lockup-modal__account-detail-value">20 PEARL</Typography>
-            </div>
+            </div> */}
             <div className="lockup-modal__account-detail">
               <Typography className="lockup-modal__account-detail-label">Next Reward Yield</Typography>
               <Typography className="lockup-modal__account-detail-value">0.8 %</Typography>

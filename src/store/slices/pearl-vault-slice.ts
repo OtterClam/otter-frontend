@@ -256,14 +256,12 @@ export const lock = createAsyncThunk(
       }
     }
 
-    if (lockedEvent) {
-      return {
-        user: lockedEvent.args[0],
-        note: lockedEvent.args[1],
-        tokenId: lockedEvent.args[2].toString(),
-        amount: lockedEvent.args[3],
-      };
-    }
+    return {
+      user: lockedEvent.args[0],
+      note: lockedEvent.args[1],
+      tokenId: lockedEvent.args[2].toString(),
+      amount: ethers.utils.formatEther(lockedEvent.args[3]),
+    };
   },
 );
 
