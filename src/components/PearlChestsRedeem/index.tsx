@@ -169,7 +169,7 @@ function NoteCard({
     dispatch(
       redeemAction({
         address,
-        networkID: chainID,
+        chainID,
         provider,
         noteAddress: lock.noteAddress,
         tokenId: lock.tokenId,
@@ -180,7 +180,7 @@ function NoteCard({
   const claimReward = useCallback(() => {
     dispatch(
       claimRewardAction({
-        networkID: chainID,
+        chainID,
         provider,
         noteAddress: lock.noteAddress,
         tokenId: lock.tokenId,

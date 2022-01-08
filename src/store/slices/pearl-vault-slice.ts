@@ -51,14 +51,14 @@ const initialState: IPearlVaultSliceState = {
 
 interface ILoadTermsDetails {
   address: string;
-  networkID: number;
+  chainID: number;
   provider: JsonRpcProvider;
 }
 
 interface IClaimRewardDetails {
   noteAddress: string;
   tokenId: string;
-  networkID: number;
+  chainID: number;
   address: string;
   provider: JsonRpcProvider;
 }
@@ -67,14 +67,14 @@ interface IRedeemDetails {
   noteAddress: string;
   address: string;
   tokenId: string;
-  networkID: number;
+  chainID: number;
   provider: JsonRpcProvider;
 }
 
 interface ILockDetails {
   noteAddress: string;
   amount: string;
-  networkID: number;
+  chainID: number;
   provider: JsonRpcProvider;
   address: string;
 }
@@ -82,7 +82,7 @@ interface ILockDetails {
 interface IExtendLockDetails {
   noteAddress: string;
   amount: string;
-  networkID: number;
+  chainID: number;
   provider: JsonRpcProvider;
   tokenId: string;
   address: string;
@@ -90,14 +90,14 @@ interface IExtendLockDetails {
 
 export const loadTermsDetails = createAsyncThunk(
   'pearlVault/loadTermsDetails',
-  async ({ address, networkID, provider }: ILoadTermsDetails) => {
-    const { terms, locks } = await getTermsAndLocks(address, networkID, provider);
+  async ({ address, chainID, provider }: ILoadTermsDetails) => {
+    const { terms, locks } = await getTermsAndLocks(address, chainID, provider);
     return { terms, locks };
   },
 );
 
-async function getTermsAndLocks(address: string, networkID: number, provider: JsonRpcProvider) {
-  const addresses = getAddresses(networkID);
+async function getTermsAndLocks(address: string, chainID: number, provider: JsonRpcProvider) {
+  const addresses = getAddresses(chainID);
   const pearlVaultContract = new ethers.Contract(addresses.PEARL_VAULT, PearlVault, provider);
 
   const termsCount = (await pearlVaultContract.termsCount()).toNumber();
@@ -173,8 +173,8 @@ async function getTermsAndLocks(address: string, networkID: number, provider: Js
 
 export const claimReward = createAsyncThunk(
   'pearlVault/claimReward',
-  async ({ networkID, provider, address, noteAddress, tokenId }: IClaimRewardDetails, { dispatch }) => {
-    const addresses = getAddresses(networkID);
+  async ({ chainID, provider, address, noteAddress, tokenId }: IClaimRewardDetails, { dispatch }) => {
+    const addresses = getAddresses(chainID);
     const pearlVaultContract = new ethers.Contract(addresses.PEARL_VAULT, PearlVault, provider);
     let tx;
 
@@ -188,7 +188,7 @@ export const claimReward = createAsyncThunk(
         }),
       );
       await tx.wait();
-      dispatch(loadTermsDetails({ address, networkID, provider }));
+      dispatch(loadTermsDetails({ address, chainID, provider }));
     } catch (err) {
       alert((err as Error).message);
     } finally {
@@ -201,8 +201,8 @@ export const claimReward = createAsyncThunk(
 
 export const redeem = createAsyncThunk(
   'pearlVault/redeem',
-  async ({ networkID, provider, noteAddress, address, tokenId }: IRedeemDetails, { dispatch }) => {
-    const addresses = getAddresses(networkID);
+  async ({ chainID, provider, noteAddress, address, tokenId }: IRedeemDetails, { dispatch }) => {
+    const addresses = getAddresses(chainID);
     const pearlVaultContract = new ethers.Contract(addresses.PEARL_VAULT, PearlVault, provider);
     let tx;
 
@@ -216,7 +216,7 @@ export const redeem = createAsyncThunk(
         }),
       );
       await tx.wait();
-      dispatch(loadTermsDetails({ address, networkID, provider }));
+      dispatch(loadTermsDetails({ address, chainID, provider }));
     } catch (err) {
       alert((err as Error).message);
     } finally {
@@ -229,14 +229,14 @@ export const redeem = createAsyncThunk(
 
 export const lock = createAsyncThunk(
   'pearlVault/lock',
-  async ({ networkID, provider, noteAddress, address, amount }: ILockDetails, { dispatch }) => {
-    const addresses = getAddresses(networkID);
+  async ({ chainID, provider, noteAddress, address, amount }: ILockDetails, { dispatch }) => {
+    const addresses = getAddresses(chainID);
     const pearlVaultContract = new ethers.Contract(addresses.PEARL_VAULT, PearlVault, provider);
     let tx;
     let lockedEvent: any;
 
     try {
-      await allowanceGuard(networkID, provider, address, amount);
+      await allowanceGuard(chainID, provider, address, amount);
       tx = await pearlVaultContract.connect(provider.getSigner()).lock(noteAddress, ethers.utils.parseEther(amount));
       dispatch(
         fetchPendingTxns({
@@ -247,7 +247,7 @@ export const lock = createAsyncThunk(
       );
       const result = await tx.wait();
       lockedEvent = result.events.find((event: any) => event.event === 'Locked');
-      dispatch(loadTermsDetails({ address, networkID, provider }));
+      dispatch(loadTermsDetails({ address, chainID, provider }));
     } catch (err) {
       alert((err as Error).message);
     } finally {
@@ -267,8 +267,8 @@ export const lock = createAsyncThunk(
   },
 );
 
-const allowanceGuard = async (networkID: number, provider: JsonRpcProvider, address: string, amount: string) => {
-  const addresses = getAddresses(networkID);
+const allowanceGuard = async (chainID: number, provider: JsonRpcProvider, address: string, amount: string) => {
+  const addresses = getAddresses(chainID);
   const pearlContract = new ethers.Contract(addresses.PEARL_ADDRESS, PearlTokenContract, provider);
   const allowance = await pearlContract.connect(provider.getSigner()).allowance(address, addresses.PEARL_VAULT);
   if (allowance.lt(ethers.utils.parseEther(amount))) {
@@ -278,14 +278,14 @@ const allowanceGuard = async (networkID: number, provider: JsonRpcProvider, addr
 
 export const extendLock = createAsyncThunk(
   'pearlVault/extendLock',
-  async ({ networkID, provider, noteAddress, amount, address, tokenId }: IExtendLockDetails, { dispatch }) => {
-    const addresses = getAddresses(networkID);
+  async ({ chainID, provider, noteAddress, amount, address, tokenId }: IExtendLockDetails, { dispatch }) => {
+    const addresses = getAddresses(chainID);
     const pearlVaultContract = new ethers.Contract(addresses.PEARL_VAULT, PearlVault, provider);
     let tx;
     let lockedEvent;
 
     try {
-      await allowanceGuard(networkID, provider, address, amount);
+      await allowanceGuard(chainID, provider, address, amount);
       tx = await pearlVaultContract
         .connect(provider.getSigner())
         .extendLock(noteAddress, tokenId, ethers.utils.parseEther(amount));
@@ -298,7 +298,7 @@ export const extendLock = createAsyncThunk(
       );
       const result = await tx.wait();
       lockedEvent = result.events.find((event: any) => event.event === 'Locked');
-      dispatch(loadTermsDetails({ address, networkID, provider }));
+      dispatch(loadTermsDetails({ address, chainID, provider }));
     } catch (err) {
       alert((err as Error).message);
     } finally {

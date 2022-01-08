@@ -1,12 +1,14 @@
 import { Paper, Tab, Tabs, TabsActions, Typography, Zoom } from '@material-ui/core';
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import CustomButton from 'src/components/Button/CustomButton';
 import PearlChestsLockup from 'src/components/PearlChestsLockup';
 import PearlChestsRedeem from 'src/components/PearlChestsRedeem';
 import { getTokenImage } from 'src/helpers';
 import { useWeb3Context } from 'src/hooks';
+import { loadTermsDetails } from 'src/store/slices/pearl-vault-slice';
 import chestOpenImage from './images/chest-open.png';
 import './styles.scss';
 
@@ -17,8 +19,12 @@ enum ChestTab {
 
 export default function PearlChests() {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
   const { tabValue, tabsActions, handleTabValueChangeEvent } = useTabs();
-  const { address, connect } = useWeb3Context();
+  const { address, connect, connected, chainID, provider } = useWeb3Context();
+  useEffect(() => {
+    dispatch(loadTermsDetails({ chainID, address, provider }));
+  }, [connected]);
 
   return (
     <Zoom in>

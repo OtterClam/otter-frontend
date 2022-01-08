@@ -82,7 +82,7 @@ export default function PearlChestLockupModal({
     if (lock) {
       result = await dispatch(
         extendLockAction({
-          networkID: chainID,
+          chainID,
           provider,
           noteAddress: noteAddress!,
           amount,
@@ -91,7 +91,7 @@ export default function PearlChestLockupModal({
         }),
       );
     } else {
-      result = await dispatch(lockAction({ networkID: chainID, provider, address, noteAddress: noteAddress!, amount }));
+      result = await dispatch(lockAction({ chainID, provider, address, noteAddress: noteAddress!, amount }));
     }
     if (result.payload) {
       onSuccess(result.payload);

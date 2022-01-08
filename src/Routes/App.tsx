@@ -80,12 +80,12 @@ function App() {
 
     if (whichDetails === 'app') {
       loadApp(loadProvider);
-      loadTerms(loadProvider);
+      // loadTerms(loadProvider);
     }
 
     if (whichDetails === 'account' && address && connected) {
       loadAccount(loadProvider);
-      loadTerms(loadProvider);
+      // loadTerms(loadProvider);
       if (isAppLoaded) return;
 
       loadApp(loadProvider);
@@ -106,13 +106,6 @@ function App() {
           calcBondDetails({ bondKey, value: null, provider: loadProvider, networkID: chainID, userBalance: '0' }),
         );
       });
-    },
-    [connected],
-  );
-
-  const loadTerms = useCallback(
-    loadProvider => {
-      dispatch(loadTermsDetails({ networkID: chainID, address, provider: loadProvider }));
     },
     [connected],
   );
