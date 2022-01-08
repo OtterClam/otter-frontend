@@ -97,6 +97,7 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
     if (
       Number(otherChainID) !== Networks.POLYGON_MAINNET &&
       Number(otherChainID) !== Networks.POLYGON_MUMBAI &&
+      Number(otherChainID) !== Networks.OTTER_FORK &&
       Number(otherChainID) !== Networks.HARDHAT
     ) {
       alert('Please switch your wallet to Polygon network to use OtterClam!');

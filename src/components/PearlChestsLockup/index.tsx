@@ -64,7 +64,6 @@ function LockupOption({ term, onSelect }: { term: ITerm; onSelect: (settings: IT
     return state.pendingTransactions;
   });
   const { address, connect } = useWeb3Context();
-  const apy = useSelector<IReduxState, number>(state => Math.floor(state.app.stakingAPY * 100));
 
   return (
     <Paper className="lockup-option">
@@ -109,7 +108,7 @@ function LockupOption({ term, onSelect }: { term: ITerm; onSelect: (settings: IT
             {t('pearlChests.lockUp.expectedAPY')} <InfoTooltip message="test" />
           </Typography>
           <Typography className="lockup-option__value" component="span">
-            {/* TODO: calculate APY {formatApy(apy * multiplier)}% */}
+            {formatApy(term.apy)}%
           </Typography>
         </div>
 

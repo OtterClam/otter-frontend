@@ -34,7 +34,7 @@ const POLYGON_MAINNET = {
   },
   CLAM_CIRCULATING_SUPPLY: '0x99ee91871cf39A44E3Fc842541274d7eA05AE4b3',
   IDO: '0x7f637ea843405dff10592f894292a8f1188166f9',
-  PEARL_VAULT: '0xAaC7D4A36DAb95955ef3c641c23F1fA46416CF71',
+  PEARL_VAULT: '0x0001760F6C44225fbCA1375c885388d1201C191A',
 };
 
 const POLYGON_MUMBAI = {
@@ -75,9 +75,9 @@ const POLYGON_MUMBAI = {
 };
 
 export const getAddresses = (networkID: number) => {
-  if (networkID === Networks.POLYGON_MAINNET) return POLYGON_MAINNET;
+  if (networkID === Networks.POLYGON_MAINNET || networkID === Networks.OTTER_FORK || networkID === Networks.HARDHAT)
+    return POLYGON_MAINNET;
   if (networkID === Networks.POLYGON_MUMBAI) return POLYGON_MUMBAI;
-  if (networkID === Networks.HARDHAT) return POLYGON_MAINNET;
 
   throw new Error("Network don't support");
 };

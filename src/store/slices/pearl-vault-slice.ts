@@ -16,6 +16,9 @@ export interface ITerm {
   lockPeriod: number;
   multiplier: number;
   enabled: boolean;
+  pearlBalance: number;
+  boostPoint: number;
+  apy: number;
   fallbackTerm?: ITerm;
 }
 
@@ -25,7 +28,7 @@ export interface INote {
   noteAddress: string;
 }
 
-export interface ILock {
+export interface ILockNote {
   name: string;
   tokenId: string;
   amount: string;
@@ -38,14 +41,14 @@ export interface ILock {
 export interface IPearlVaultSliceState {
   loading: boolean;
   terms: ITerm[];
-  locks: ILock[];
+  lockNotes: ILockNote[];
   selectedTerm?: ITerm;
 }
 
 const initialState: IPearlVaultSliceState = {
   loading: true,
   terms: [],
-  locks: [],
+  lockNotes: [],
   selectedTerm: undefined,
 };
 
@@ -71,7 +74,7 @@ interface IRedeemDetails {
   provider: JsonRpcProvider;
 }
 
-interface ILockDetails {
+interface ILockNoteDetails {
   noteAddress: string;
   amount: string;
   chainID: number;
@@ -91,18 +94,22 @@ interface IExtendLockDetails {
 export const loadTermsDetails = createAsyncThunk(
   'pearlVault/loadTermsDetails',
   async ({ address, chainID, provider }: ILoadTermsDetails) => {
-    const { terms, locks } = await getTermsAndLocks(address, chainID, provider);
-    return { terms, locks };
+    const { terms, lockNotes } = await getTermsAndLocks(address, chainID, provider);
+    return { terms, lockNotes };
   },
 );
 
 async function getTermsAndLocks(address: string, chainID: number, provider: JsonRpcProvider) {
   const addresses = getAddresses(chainID);
   const pearlVaultContract = new ethers.Contract(addresses.PEARL_VAULT, PearlVault, provider);
+  const pearlContract = new ethers.Contract(addresses.PEARL_ADDRESS, PearlTokenContract, provider);
 
   const termsCount = (await pearlVaultContract.termsCount()).toNumber();
+  const epoch = await pearlVaultContract.epochs(await pearlVaultContract.epoch());
+  const totalNextReward = Number(formatEther(epoch.reward));
   const actions: Promise<ITerm>[] = [];
-  const locks: ILock[] = [];
+  const lockNotes: ILockNote[] = [];
+  let totalBoostPoint = 0;
 
   for (let i = 0; i < termsCount; i += 1) {
     actions.push(
@@ -110,12 +117,13 @@ async function getTermsAndLocks(address: string, chainID: number, provider: Json
         const termAddress = await pearlVaultContract.termAddresses(i);
         const term = await pearlVaultContract.terms(termAddress);
         const noteContract = new ethers.Contract(term.note, PearlNote, provider);
-        const [locksCount, name, symbol] = await Promise.all([
+        const [lockNotesCount, name, symbol, pearlBalance] = await Promise.all([
           noteContract.balanceOf(address),
           noteContract.name(),
           noteContract.symbol(),
+          Number(formatEther(await pearlContract.balanceOf(term.note))),
         ]);
-        for (let j = 0; j < locksCount.toNumber(); j += 1) {
+        for (let j = 0; j < lockNotesCount.toNumber(); j += 1) {
           const id = await noteContract.tokenOfOwnerByIndex(address, j);
           const [lock, tokenURI, reward] = await Promise.all([
             noteContract.lockInfos(id),
@@ -130,7 +138,7 @@ async function getTermsAndLocks(address: string, chainID: number, provider: Json
             console.warn('get token meta failed: ' + tokenURI);
           }
 
-          locks.push({
+          lockNotes.push({
             name,
             imageUrl,
             noteAddress: term.note,
@@ -140,12 +148,18 @@ async function getTermsAndLocks(address: string, chainID: number, provider: Json
             endEpoch: lock.endEpoch.toNumber(),
           });
         }
+
+        const boostPoint = (pearlBalance * term.multiplier) / 100;
+        totalBoostPoint += boostPoint;
         return {
           noteAddress: term.note,
           lockPeriod: term.lockPeriod.toNumber() / 3, // epochs -> days
           minLockAmount: formatEther(term.minLockAmount),
           multiplier: term.multiplier,
           enabled: term.enabled,
+          pearlBalance,
+          boostPoint,
+          apy: 0,
           note: {
             name,
             symbol,
@@ -162,13 +176,16 @@ async function getTermsAndLocks(address: string, chainID: number, provider: Json
   const terms = Object.keys(groupedTerms).map(key => {
     const term = groupedTerms[key].find(term => Number(term.minLockAmount) > 0) || groupedTerms[key][0];
     const fallbackTerm = groupedTerms[key].find(term => Number(term.minLockAmount) === 0);
+    const nextReward = (term.boostPoint + (fallbackTerm?.boostPoint ?? 0) / totalBoostPoint) * totalNextReward;
+    const rewardRate = nextReward / (term.pearlBalance + (fallbackTerm?.pearlBalance ?? 0));
+    term.apy = (1 + rewardRate) ** 1095;
     return {
       ...term,
       fallbackTerm: fallbackTerm?.noteAddress === term.noteAddress ? undefined : fallbackTerm,
     };
   });
 
-  return { terms, locks };
+  return { terms, lockNotes };
 }
 
 export const claimReward = createAsyncThunk(
@@ -229,7 +246,7 @@ export const redeem = createAsyncThunk(
 
 export const lock = createAsyncThunk(
   'pearlVault/lock',
-  async ({ chainID, provider, noteAddress, address, amount }: ILockDetails, { dispatch }) => {
+  async ({ chainID, provider, noteAddress, address, amount }: ILockNoteDetails, { dispatch }) => {
     const addresses = getAddresses(chainID);
     const pearlVaultContract = new ethers.Contract(addresses.PEARL_VAULT, PearlVault, provider);
     let tx;

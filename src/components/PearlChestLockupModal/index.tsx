@@ -20,7 +20,12 @@ import Modal from 'src/components/Modal';
 import { trim } from 'src/helpers';
 import getNoteImage from 'src/helpers/get-note-image';
 import { useSelector } from 'src/store/hook';
-import { extendLock as extendLockAction, ILock, ITerm, lock as lockAction } from 'src/store/slices/pearl-vault-slice';
+import {
+  extendLock as extendLockAction,
+  ILockNote,
+  ITerm,
+  lock as lockAction,
+} from 'src/store/slices/pearl-vault-slice';
 import { ReactComponent as NoteIcon } from '../../assets/icons/note.svg';
 import { ReactComponent as RocketIcon } from '../../assets/icons/rocket.svg';
 import { useWeb3Context } from '../../hooks';
@@ -46,7 +51,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export interface PearlChestLockupModalProps {
-  lock?: ILock;
+  lockNote?: ILockNote;
   open?: boolean;
   term?: ITerm;
   discount: number;
@@ -56,7 +61,7 @@ export interface PearlChestLockupModalProps {
 
 export default function PearlChestLockupModal({
   open = false,
-  lock,
+  lockNote,
   term,
   discount,
   onClose,
@@ -77,7 +82,7 @@ export default function PearlChestLockupModal({
 
   const lockup = useCallback(async () => {
     let result: any;
-    if (lock) {
+    if (lockNote) {
       result = await dispatch(
         extendLockAction({
           chainID,
@@ -85,7 +90,7 @@ export default function PearlChestLockupModal({
           noteAddress: noteAddress!,
           amount,
           address,
-          tokenId: lock.tokenId,
+          tokenId: lockNote.tokenId,
         }),
       );
     } else {
@@ -94,13 +99,13 @@ export default function PearlChestLockupModal({
     if (result.payload) {
       onSuccess(result.payload);
     }
-  }, [lock, amount, onSuccess]);
+  }, [lockNote, amount, onSuccess]);
 
   useEffect(() => {
-    if (lock) {
-      setAmount(lock.amount);
+    if (lockNote) {
+      setAmount(lockNote.amount);
     }
-  }, [lock]);
+  }, [lockNote]);
 
   return (
     <Modal title={t('pearlChests.lockUpModal.title')} open={open} onClose={onClose}>
@@ -140,7 +145,7 @@ export default function PearlChestLockupModal({
             <FormControl className="ohm-input" variant="outlined" color="primary" fullWidth>
               <InputLabel htmlFor="outlined-adornment-amount"></InputLabel>
               <OutlinedInput
-                disabled={Boolean(lock)}
+                disabled={Boolean(lockNote)}
                 placeholder="0"
                 id="outlined-adornment-amount"
                 type="number"
@@ -154,7 +159,7 @@ export default function PearlChestLockupModal({
                       className="stake-input-btn"
                       onClick={e => {
                         e.preventDefault();
-                        if (!lock) {
+                        if (!lockNote) {
                           setAmount(account?.balances?.pearl ?? 0);
                         }
                       }}
@@ -176,7 +181,7 @@ export default function PearlChestLockupModal({
           </div>
 
           <Typography variant="caption" className="lockup-modal__approve-caption">
-            Note: Your first interaction with Pearl Chests includes an “Approve” transaction followed by a lock-up
+            Note: Your first interaction with Pearl Chests includes an “Approve” transaction followed by a lockNote-up
             transaction. Subsequent lockups will only require the “Lock Up” transaction.
           </Typography>
 
