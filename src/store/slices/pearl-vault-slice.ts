@@ -35,7 +35,9 @@ export interface ILockNote {
   endEpoch: number;
   imageUrl: string;
   noteAddress: string;
-  reward: string;
+  reward: number;
+  nextReward: number;
+  rewardRate: number;
 }
 
 export interface IPearlVaultSliceState {
@@ -144,8 +146,10 @@ async function getTermsAndLocks(address: string, chainID: number, provider: Json
             noteAddress: term.note,
             tokenId: id.toString(),
             amount: formatEther(lock.amount),
-            reward: formatEther(reward),
+            reward: Number(formatEther(reward)),
             endEpoch: lock.endEpoch.toNumber(),
+            nextReward: 0,
+            rewardRate: 0,
           });
         }
 
@@ -172,17 +176,26 @@ async function getTermsAndLocks(address: string, chainID: number, provider: Json
 
   const rawTerms = await Promise.all(actions);
   const groupedTerms = groupBy(rawTerms, term => term.lockPeriod);
+  const rewardRates: { [key: string]: number } = {};
 
   const terms = Object.keys(groupedTerms).map(key => {
     const term = groupedTerms[key].find(term => Number(term.minLockAmount) > 0) || groupedTerms[key][0];
     const fallbackTerm = groupedTerms[key].find(term => Number(term.minLockAmount) === 0);
-    const nextReward = (term.boostPoint + (fallbackTerm?.boostPoint ?? 0) / totalBoostPoint) * totalNextReward;
+    const nextReward = ((term.boostPoint + (fallbackTerm?.boostPoint ?? 0)) / totalBoostPoint) * totalNextReward;
     const rewardRate = nextReward / (term.pearlBalance + (fallbackTerm?.pearlBalance ?? 0));
     term.apy = (1 + rewardRate) ** 1095;
+    rewardRates[term.noteAddress] = rewardRate;
+    if (fallbackTerm) {
+      rewardRates[fallbackTerm.noteAddress] = rewardRate;
+    }
     return {
       ...term,
       fallbackTerm: fallbackTerm?.noteAddress === term.noteAddress ? undefined : fallbackTerm,
     };
+  });
+  lockNotes.forEach(n => {
+    n.rewardRate = rewardRates[n.noteAddress];
+    n.nextReward = Number(n.amount) * n.rewardRate;
   });
 
   return { terms, lockNotes };

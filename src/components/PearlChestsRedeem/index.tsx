@@ -26,7 +26,7 @@ import PearlChestLockupSuccessModal from '../PearlChestLockupSuccessModal';
 import { addDays } from 'date-fns';
 import getNoteImage from 'src/helpers/get-note-image';
 
-const numberFormatter = Intl.NumberFormat('en', { maximumFractionDigits: 0 });
+const numberFormatter = Intl.NumberFormat('en', { maximumFractionDigits: 3 });
 
 const extraBonus: { [k: number]: number } = {
   28: 5,
@@ -37,8 +37,6 @@ const extraBonus: { [k: number]: number } = {
 export interface Note {
   id: string;
   amount: string;
-  currentReward: string;
-  nextReward: number;
   lockedValue: number;
   marketValue: number;
   lockupPeriod: number;
@@ -96,8 +94,6 @@ export default function PearlChestsRedeem() {
             note={{
               id: lockNote.tokenId,
               amount: lockNote.amount,
-              currentReward: trim(lockNote.reward, 2),
-              nextReward: -1,
               lockedValue: -1,
               marketValue: Number(lockNote.amount) * pearlPrice,
               lockupPeriod: term.lockPeriod,
@@ -148,11 +144,11 @@ function NoteCard({
       after: <span className="note__peral-icon">{getTokenImage('pearl', 20)}</span>,
       value: note.amount,
     },
-    { label: 'pearlChests.currentReward', value: note.currentReward + ' PERAL' },
+    { label: 'pearlChests.currentReward', value: numberFormatter.format(lockNote.reward) + ' PERAL' },
     {
       label: 'pearlChests.nextReward',
-      value: numberFormatter.format(note.nextReward) + ' PERAL',
-      params: { boost: 2 },
+      value: numberFormatter.format(lockNote.nextReward) + ' PERAL',
+      params: { boost: (term.multiplier / 100).toFixed(2) },
     },
     { label: 'pearlChests.lockedValue', value: numberFormatter.format(note.lockedValue) + ' PERAL' },
     { label: 'pearlChests.marketValue', value: formatCurrency(note.marketValue) },
