@@ -201,6 +201,7 @@ export default function PearlChestLockupModal({
             </div> */}
             <div className="lockup-modal__account-detail">
               <Typography className="lockup-modal__account-detail-label">Next Reward Yield</Typography>
+              {/* FIXME: use real reward rate */}
               <Typography className="lockup-modal__account-detail-value">0.8 %</Typography>
             </div>
           </div>

@@ -162,7 +162,7 @@ function NoteCard({
     },
     {
       label: 'pearlChests.dueDate',
-      value: formatDate(note.dueDate, 'MMMM, d, Y, hh:mm a (O)'),
+      value: formatDate(note.dueDate, 'MMMM d, Y, hh:mm a (O)'),
     },
     // { label: 'pearlChests.apy', value: numberFormatter.format(term.apy) + '%' },
   ];
