@@ -170,7 +170,7 @@ function Calculator() {
                     </Box>
                   </Grid>
                   <Grid item xs={12} sm={4} md={4} lg={4}>
-                    <Typography className="metric-title">{t('calculator.yoursClamBalance')}</Typography>
+                    <Typography className="metric-title">{t('common.yourBalance')}</Typography>
                     <Box color="text.secondary" className="calculator-card-metrics">
                       {isAppLoading ? (
                         <Skeleton width="100px" />
@@ -180,7 +180,7 @@ function Calculator() {
                           {Number(pearlBalance) > 0 ? (
                             <Typography className="metric-sub">({trimmedPearlInsCLAM} as PEARL)</Typography>
                           ) : (
-                            <Typography className="metric-sub">&nbspc;</Typography>
+                            <Typography className="metric-sub">&nbsp;</Typography>
                           )}
                         </div>
                       )}
