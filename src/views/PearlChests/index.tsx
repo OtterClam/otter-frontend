@@ -49,7 +49,7 @@ export default function PearlChests() {
                 <CustomButton
                   className="pearl-chests__read-more"
                   type="outline"
-                  href="https://google.com"
+                  href="https://otterclam.medium.com/introducing-pearl-chests-and-pearl-notes-70a61748963f"
                   text={t('pearlChests.readMore')}
                 />
               </div>
