@@ -1,9 +1,7 @@
 import './nftCard.scss';
-import { ReactComponent as ArrowRightIcon } from '../../../assets/icons/arrow_right.svg';
 import { Box, Grid, makeStyles } from '@material-ui/core';
 
-import { OtterNft } from './type';
-import { DISCOUNT_NFTS } from './constants';
+import { NFTDiscountDetail } from './type';
 
 const useStyle = makeStyles(theme => {
   return {
@@ -14,49 +12,32 @@ const useStyle = makeStyles(theme => {
 });
 
 interface CardProps {
-  option: OtterNft;
-  onSelect(option: OtterNft): void;
+  option: NFTDiscountDetail;
+  selected: boolean;
+  onSelect(option: NFTDiscountDetail): void;
 }
-
-export const TabletNFTDiscountCard = ({ option, onSelect }: CardProps) => {
-  const nft = DISCOUNT_NFTS[option];
+const NFTDiscountCard = ({ option, selected, onSelect }: CardProps) => {
   const style = useStyle();
   return (
-    <Box key={nft.name} component="div" className={`otter-card ${style.nftCard}`}>
-      <Grid container direction="row">
-        <img className="otter-img" src={nft.image} />
-        <Box component="div" flex flexDirection="column">
-          <Box className="select-button" onClick={() => onSelect(option)}>
-            <Box className="select-text">Select</Box>
-            <Box>
-              <ArrowRightIcon className="arrow-icon icon" />
-            </Box>
-          </Box>
-          <h3 className="otter-name">{nft.name}</h3>
-          <p className="otter-discount">{nft.discount}% OFF</p>
+    <Box
+      key={option.name}
+      component="div"
+      className={`nft-discount-card ${selected ? 'selected' : ''} ${style.nftCard}`}
+    >
+      <Grid container direction="row" wrap="nowrap" onClick={() => onSelect(option)}>
+        <div className={`nft-img ${option.key}`} />
+        <Box component="div" flex flexDirection="column" className="nft-description">
+          <h3 className="nft-name">{option.name}</h3>
+          <p className="nft-discount">
+            {option.type === 'nft'
+              ? `Use this note to receive a ${option.discount} discount on any (4,4) bond.`
+              : `${option.discount} off in addition`}
+          </p>
+          <p className="nft-expire-time">{`Expiration date: ${option.expireAt}`}</p>
         </Box>
       </Grid>
     </Box>
   );
 };
 
-export const DesktopNFTDiscountCard = ({ option, onSelect }: CardProps) => {
-  const nft = DISCOUNT_NFTS[option];
-  return (
-    <Box
-      key={nft.name}
-      component="div"
-      className="desktop otter-card"
-      bgcolor="otter.white"
-      onClick={() => onSelect(option)}
-    >
-      <Grid container direction="column">
-        <img className="otter-img" src={nft.image} />
-        <Box component="div" flexDirection="row">
-          <h3 className="otter-name">{nft.name}</h3>
-          <p className="otter-discount">{nft.discount}% OFF</p>
-        </Box>
-      </Grid>
-    </Box>
-  );
-};
+export default NFTDiscountCard;

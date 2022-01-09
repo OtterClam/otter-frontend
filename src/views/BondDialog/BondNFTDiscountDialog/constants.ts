@@ -1,24 +1,37 @@
-import { OtterNft, NftDetail } from './type';
+import { NFTDiscountDetail } from './type';
 
-import NFT2 from '../../../components/NFTCards/images/nft2.jpg';
-import NFT3 from '../../../components/NFTCards/images/nft3.jpg';
-import NFT4 from '../../../components/NFTCards/images/nft4.jpg';
-
-export const DEFAULT_OPTIONS = [OtterNft.FurryHandOtter, OtterNft.StoneHandOtter, OtterNft.DiamondHandOtter];
-export const DISCOUNT_NFTS: Record<OtterNft, NftDetail> = {
-  [OtterNft.FurryHandOtter]: {
-    name: 'Furry-Hand Otter',
-    image: NFT2,
+// NOTE: this is mocked options
+export const MOCKED_NFT_OPTIONS: NFTDiscountDetail[] = [
+  {
+    id: '1',
+    key: 'nft1',
+    name: 'Saft-Hand Otter',
     discount: 5,
+    type: 'nft',
+    expireAt: '2022/1/18',
   },
-  [OtterNft.StoneHandOtter]: {
+  {
+    id: '2',
+    key: 'nft2',
+    name: 'Furry-Hand Otter',
+    discount: 5,
+    type: 'nft',
+    expireAt: '2022/1/18',
+  },
+  {
+    id: '3',
+    key: 'nft3',
     name: 'Stone-Hand Otter',
-    image: NFT3,
     discount: 10,
+    type: 'nft',
+    expireAt: '2022/1/18',
   },
-  [OtterNft.DiamondHandOtter]: {
+  {
+    id: '4',
+    key: 'nft4',
     name: 'Diamond-Hand Otter',
-    image: NFT4,
     discount: 15,
+    type: 'nft',
+    expireAt: '2022/1/18',
   },
-};
+];

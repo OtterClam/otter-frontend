@@ -3,8 +3,6 @@ import { useHistory } from 'react-router-dom';
 import { useAppSelector } from 'src/store/hook';
 import { useTranslation } from 'react-i18next';
 
-import { parse } from 'query-string';
-
 import { Backdrop, Box, Divider, Fade, Grid, Paper, Tab, Tabs, makeStyles } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import { Status, StatusChip } from 'src/components/Chip';
@@ -15,7 +13,7 @@ import BondRedeem from './BondRedeem';
 import './bond.scss';
 
 import { Bond as BondType, BondAction } from 'src/constants';
-import { OtterNft } from './BondNFTDiscountDialog/type';
+import { NFTDiscountDetail } from './BondNFTDiscountDialog/type';
 import { formatCurrency, trim } from '../../helpers';
 import { useWeb3Context } from '../../hooks';
 import { checkBondAction } from '../ChooseBond/utils';
@@ -38,9 +36,9 @@ const useStyle = makeStyles(theme => {
 interface IBondProps {
   bond: BondType;
   canSelect: boolean;
-  selection: OtterNft | undefined;
+  selection: NFTDiscountDetail | undefined;
   setBond: Dispatch<SetStateAction<BondType | undefined>>;
-  setSelection: Dispatch<SetStateAction<OtterNft | undefined>>;
+  setSelection: Dispatch<SetStateAction<NFTDiscountDetail | undefined>>;
   setNftDialogOpen: Dispatch<SetStateAction<boolean>>;
 }
 
