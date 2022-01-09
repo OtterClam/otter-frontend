@@ -5,8 +5,7 @@ import { Box, Paper } from '@material-ui/core';
 import { ReactComponent as ArrowRightIcon } from '../../assets/icons/arrow_right.svg';
 import { ReactComponent as ExcludeIcon } from '../../assets/icons/icon_exclude.svg';
 
-import { DISCOUNT_NFTS } from './BondNFTDiscountDialog/constants';
-import { OtterNft } from './BondNFTDiscountDialog/type';
+import { NFTDiscountDetail } from './BondNFTDiscountDialog/type';
 
 const description: Record<string, string> = {
   empty: 'None NFT selected',
@@ -16,12 +15,12 @@ const description: Record<string, string> = {
 
 interface BondNFTDiscountProps {
   disabled: boolean;
-  selection?: OtterNft;
-  setSelection: Dispatch<SetStateAction<OtterNft | undefined>>;
+  selection?: NFTDiscountDetail;
+  setSelection: Dispatch<SetStateAction<NFTDiscountDetail | undefined>>;
   onClick?(): void;
 }
 
-const NftRowRightArea = ({
+const NftRowLeftArea = ({
   disabled,
   selection,
   setSelection,
@@ -35,10 +34,10 @@ const NftRowRightArea = ({
   return (
     <>
       <ExcludeIcon className="delete-icon icon" onClick={() => setSelection(undefined)} />
-      <img className={`selection-image ${selection}`} />
+      <div className={`selection-image ${selection.key}`} />
       <p className="selection-text">
-        {DISCOUNT_NFTS[selection].name}
-        <span className="selection-discount">{DISCOUNT_NFTS[selection].discount}% OFF</span>
+        {selection.name}
+        <span className="selection-discount">{selection.discount}% OFF</span>
       </p>
     </>
   );
@@ -51,7 +50,7 @@ const BondNFTDiscount = ({ selection, setSelection, disabled, onClick }: BondNFT
       <Paper>
         <Box component="div" className="bond-nft-row">
           <Box className="selection-area">
-            <NftRowRightArea disabled={disabled} selection={selection} setSelection={setSelection} />
+            <NftRowLeftArea disabled={disabled} selection={selection} setSelection={setSelection} />
           </Box>
           <Box className="select-button" onClick={onClick}>
             <Box className="select-text">Select</Box>

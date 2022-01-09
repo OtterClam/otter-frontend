@@ -1,12 +1,8 @@
-// NOTE: this is mocked otter info for nft discount selection dialog
-export enum OtterNft {
-  FurryHandOtter = 'nft2',
-  StoneHandOtter = 'nft3',
-  DiamondHandOtter = 'nft4',
-}
-
-export interface NftDetail {
+export interface NFTDiscountDetail {
+  key: string; // nft image file name
+  id: string; // nft unique id
   name: string;
-  image: string;
   discount: number;
+  type: 'note' | 'nft';
+  expireAt: string;
 }

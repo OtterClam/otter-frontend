@@ -18,6 +18,7 @@ import { Skeleton } from '@material-ui/lab';
 import BondPurchaseDialog from './BondPurchaseDialog';
 import ActionButton from '../../components/Button/ActionButton';
 import BondNFTDiscount from './BondNFTDiscount';
+import { NFTDiscountDetail } from './BondNFTDiscountDialog/type';
 
 import { ethers } from 'ethers';
 
@@ -29,7 +30,6 @@ import { IReduxState } from '../../store/slices/state.interface';
 import { BondKey, getBond } from 'src/constants';
 import { shorten, trim, prettifySeconds } from '../../helpers';
 import { tabletMediaQuery } from 'src/themes/mediaQuery';
-import { OtterNft } from './BondNFTDiscountDialog/type';
 
 const useStyles = makeStyles(theme => ({
   input: {
@@ -53,8 +53,8 @@ interface IBondPurchaseProps {
   bondKey: BondKey;
   slippage: number;
   canSelect: boolean;
-  selection?: OtterNft;
-  setSelection: Dispatch<SetStateAction<OtterNft | undefined>>;
+  selection?: NFTDiscountDetail;
+  setSelection: Dispatch<SetStateAction<NFTDiscountDetail | undefined>>;
   setNftDialogOpen: Dispatch<SetStateAction<boolean>>;
 }
 

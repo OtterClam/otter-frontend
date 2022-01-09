@@ -1,74 +1,65 @@
 @import 'styles/_colors.scss';
+@import 'styles/_mixins.scss';
 
 .nft-dialog {
   z-index: 10 !important;
 
-  .otter-card {
-    padding: 16px;
-    margin: 0 10px;
+  .dialog {
+    padding: 20px;
+  }
+
+  .nft-discount-card {
+    width: 100%;
+    padding: 20px;
+    margin-bottom: 20px;
     border-radius: 10px;
-    border: 2px solid white;
-    transition: 0.3s;
-    &.desktop {
-      &:hover {
-        cursor: pointer;
-        border: 2px solid $light-gray400;
-        box-shadow: 0px 4px 20px 0px $light-gray200;
-      }
+    border: 1px solid $light-gray400;
+    transition: 0.25s all;
+    &.selected {
+      padding: 19px;
+      border: 2px solid $otter-blue;
     }
-  
-    .otter-img {
-      width: 194px;
+    &:nth-last-child(1) {
+      margin-bottom: 0;
     }
-  
-    .otter-name {
-      text-align: center;
-      margin: 14px 0px;
-    }
-  
-    .otter-discount {
-      color: $clam-pink;
-      font-size: 20px;
-      text-align: center;
-    }
-    .select-button {
-      display: flex;
-      align-items: center;
-      border-radius: 5px;
+    &:hover {
+      padding: 19px;
       cursor: pointer;
-      transition: 0.3s;
-      
-      .select-text {
-          color: $otter-blue;
-          margin-right: 10px;
+      border: 2px solid $light-gray400;
+      box-shadow: 0px 4px 20px 0px $light-gray200;
+    }
+
+    .nft-img {
+      width: 160px;
+      height: 104px;
+      @include background-image-setting;
+      @include otter-images;
+    }
+
+    .nft-description {
+      margin-left: 20px;
+
+      .nft-name {
+        font-size: 20px;
+        margin-top: 0;
+        margin-bottom: 10px;
+      }
+    
+      .nft-discount {
+        font-size: 16px;
+        color: $otter-blue;
+        margin-bottom: 10px;
       }
 
-      .arrow-icon {
-          fill: transparent;
-          stroke: $otter-dark;
+      .nft-expire-time {
+        font-size: 14px;
+        color: $dark-gray100;
+        font-weight: 500;
       }
     }
   }
 }
 
-  @media screen and (max-width: 960px)  {
-    .nft-dialog {
-    .otter-card {
-        margin: 10px 0;
-        .otter-img {
-            width: 100px;
-            margin-right: 20px;
-          }
-          .otter-name {
-            font-size: 20px;
-            text-align: left;
-            margin: 10px 0px;
-          }
-          .otter-discount {
-            font-size: 20px;
-            text-align: left;
-            color: $clam-pink;
-          }
-    }
-  }
-  }
+@media screen and (max-width: 598px) {
+  
+}

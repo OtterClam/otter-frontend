@@ -12,7 +12,7 @@ import BondLogo from '../../../components/BondLogo';
 import NFTDisplayRow from './NFTDisplayRow';
 
 import { Bond } from 'src/constants';
-import { OtterNft } from '../BondNFTDiscountDialog/type';
+import { NFTDiscountDetail } from '../BondNFTDiscountDialog/type';
 import { trim, prettifySeconds } from '../../../helpers';
 
 const DialogTitle = () => {
@@ -30,10 +30,11 @@ const DialogTitle = () => {
 
 interface Props {
   bond: Bond;
+  selection?: NFTDiscountDetail;
   open: boolean;
   setOpen: (value: boolean) => void;
 }
-const BondSuccessDialog = ({ bond, open, setOpen }: Props) => {
+const BondSuccessDialog = ({ bond, selection, open, setOpen }: Props) => {
   const { t } = useTranslation();
 
   const fiveDayRate = useAppSelector(state => state.app.fiveDayRate);
@@ -55,7 +56,7 @@ const BondSuccessDialog = ({ bond, open, setOpen }: Props) => {
       <Box className="success-subtitle">
         You will get <span className="highlight-text">123</span> CLAM!
       </Box>
-      <NFTDisplayRow selection={OtterNft.DiamondHandOtter} />
+      <NFTDisplayRow selection={selection} />
       <Typography variant="caption" color="secondary" className="helper-text">
         This NFT will be locked into this bond until you redeem.
       </Typography>

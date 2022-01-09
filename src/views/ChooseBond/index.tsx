@@ -21,7 +21,7 @@ import { Bond, BondKeys, getBond } from 'src/constants';
 import { getTokenImage, trim } from '../../helpers';
 import { IReduxState } from '../../store/slices/state.interface';
 import { checkBondKey } from './utils';
-import { OtterNft } from '../BondDialog/BondNFTDiscountDialog/type';
+import { NFTDiscountDetail } from '../BondDialog/BondNFTDiscountDialog/type';
 
 const useStyle = makeStyles(theme => {
   return {
@@ -69,7 +69,7 @@ query {
 
   const [selectedBond, setSelectedBond] = useState<Bond | undefined>(defaultBond);
   const [nftDialogOpen, setNftDialogOpen] = useState(false);
-  const [nftSelection, setNftSelection] = useState<OtterNft | undefined>(undefined);
+  const [nftSelection, setNftSelection] = useState<NFTDiscountDetail | undefined>(undefined);
 
   useEffect(() => {
     setSelectedBond(defaultBond);
@@ -166,7 +166,12 @@ query {
         />
       )}
       {selectedBond && (
-        <BondSuccessDialog bond={selectedBond} open={successDialogOpen} setOpen={setSuccessDialogOpen} />
+        <BondSuccessDialog
+          bond={selectedBond}
+          selection={nftSelection}
+          open={successDialogOpen}
+          setOpen={setSuccessDialogOpen}
+        />
       )}
     </div>
   );

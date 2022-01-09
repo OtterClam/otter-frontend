@@ -1,4 +1,5 @@
 @import 'styles/_colors.scss';
+@import 'styles/_mixins.scss';
 
 .bond-nft-row {
     display: flex;
@@ -68,15 +69,8 @@
             height: 60px;
             border-radius: 10px;
             margin: 0 10px 0 16px;
-            &.nft2 {
-                background: url('/components/NFTCards/images/nft2.jpg') center/cover no-repeat;
-            }
-            &.nft3 {
-                background: url('/components/NFTCards/images/nft3.jpg') center/cover no-repeat;
-            }
-            &.nft4 {
-                background: url('/components/NFTCards/images/nft4.jpg') center/cover no-repeat;
-            }
+            @include background-image-setting($color: white);
+            @include otter-images;
         }
 
 
