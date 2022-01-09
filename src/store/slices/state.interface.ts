@@ -5,7 +5,7 @@ import { IBond } from './bond-slice';
 import { IWhitelist } from './whitelist-slice';
 import { IDOState } from './ido-slice';
 import { MigrationState } from './migrate-slice';
-import { IPearlVaultSliceState } from './pearl-vault-slice';
+import { IOtterLakeSliceState } from './pearl-vault-slice';
 
 export interface IReduxState {
   pendingTransactions: IPendingTxn[];
@@ -15,5 +15,5 @@ export interface IReduxState {
   whitelist: IWhitelist;
   ido: IDOState;
   migrate: MigrationState;
-  pearlVault: IPearlVaultSliceState;
+  pearlVault: IOtterLakeSliceState;
 }

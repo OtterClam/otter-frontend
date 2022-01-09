@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { formatCurrency, formatApy } from 'src/helpers';
 import { useWeb3Context } from 'src/hooks';
 import { IPendingTxn } from 'src/store/slices/pending-txns-slice';
-import { IPearlVaultSliceState, ITerm, selectTerm as selectTermAction } from 'src/store/slices/pearl-vault-slice';
+import { IOtterLakeSliceState, ITerm, selectTerm as selectTermAction } from 'src/store/slices/pearl-vault-slice';
 import { IReduxState } from 'src/store/slices/state.interface';
 import ActionButton from '../Button/ActionButton';
 import InfoTooltip from '../InfoTooltip/InfoTooltip';
@@ -23,7 +23,7 @@ const extraBonus: { [k: number]: number } = {
 export default function PearlChestsLockup() {
   const { t } = useTranslation();
   const [lockupResult, setLockupResult] = useState<any>();
-  const pearlVault = useSelector<IReduxState, IPearlVaultSliceState>(state => state.pearlVault);
+  const pearlVault = useSelector<IReduxState, IOtterLakeSliceState>(state => state.pearlVault);
   const dispatch = useDispatch();
   const selectTerm = useCallback((term?: ITerm) => dispatch(selectTermAction(term)), []);
 

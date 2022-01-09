@@ -150,7 +150,7 @@ function NoteCard({
       value: numberFormatter.format(lockNote.nextReward) + ' PERAL',
       params: { boost: (term.multiplier / 100).toFixed(2) },
     },
-    { label: 'pearlChests.lockedValue', value: numberFormatter.format(note.lockedValue) + ' PERAL' },
+    // { label: 'pearlChests.lockedValue', value: numberFormatter.format(note.lockedValue) + ' PERAL' },
     { label: 'pearlChests.marketValue', value: formatCurrency(note.marketValue) },
     {
       label: 'pearlChests.lockupPeriod',
