@@ -1,3 +1,4 @@
+@import 'styles/_colors.scss';
 @import 'styles/_mixins.scss';
 
 
@@ -85,6 +86,13 @@
         padding: 0px 10px;
         &.first-col {
           text-align: left;
+        }
+        a {
+          transition: 0.25s;
+          &:hover {
+            text-decoration: underline;
+            text-decoration-color: $otter-blue;
+          }
         }
       }
 
