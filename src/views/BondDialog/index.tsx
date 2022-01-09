@@ -74,10 +74,10 @@ function BondDialog({ bond, canSelect, selection, setBond, setSelection, setNftD
   const matches = search.match(/(\?action=)([a-z]*)/);
   const actionMatch = matches ? matches[2] : '';
 
+  // NOTE: action query decides which tab view to show
   const defaultTab = checkBondAction(actionMatch) ? actionMatch : undefined;
   const [currentTab, setCurrentTab] = useState<BondAction | undefined>(defaultTab);
   const changeView = (_e: any, newView: BondAction) => {
-    setCurrentTab(newView);
     history.push({ pathname: `/bonds/${bond.key}`, search: `?action=${newView}` });
   };
 
@@ -90,8 +90,9 @@ function BondDialog({ bond, canSelect, selection, setBond, setSelection, setNftD
     }
   }, [defaultTab]);
 
+  // NOTE: update view tab value when action query updates
   useEffect(() => {
-    setCurrentTab(BondAction.Bond);
+    setCurrentTab(defaultTab);
   }, [defaultTab]);
 
   return (
@@ -145,7 +146,7 @@ function BondDialog({ bond, canSelect, selection, setBond, setSelection, setNftD
               </Grid>
             )}
 
-            {bond.key === 'mai_clam44' ? null : (
+            {bond.key === 'mai_clam44' ? null : bond.deprecated ? (
               <Tabs
                 centered
                 value={currentTab}
@@ -154,24 +155,32 @@ function BondDialog({ bond, canSelect, selection, setBond, setSelection, setNftD
                 aria-label="bond tabs"
                 className="bond-tabs"
               >
-                {!bond.deprecated && <Tab value={BondAction.Bond} label="Bond" {...a11yProps(0)} />}
+                <Tab value={BondAction.Redeem} label="Redeem" {...a11yProps(1)} />
+              </Tabs>
+            ) : (
+              <Tabs
+                centered
+                value={currentTab}
+                indicatorColor="primary"
+                onChange={changeView}
+                aria-label="bond tabs"
+                className="bond-tabs"
+              >
+                <Tab value={BondAction.Bond} label="Bond" {...a11yProps(0)} />
                 <Tab value={BondAction.Redeem} label="Redeem" {...a11yProps(1)} />
               </Tabs>
             )}
 
-            {!bond.deprecated && (
-              <TabPanel className="purchase-box" value={currentTab} index={BondAction.Bond}>
-                <BondPurchase
-                  bondKey={bond.key}
-                  canSelect={canSelect}
-                  slippage={slippage}
-                  selection={selection}
-                  setSelection={setSelection}
-                  setNftDialogOpen={setNftDialogOpen}
-                />
-              </TabPanel>
-            )}
-
+            <TabPanel className="purchase-box" value={currentTab} index={BondAction.Bond}>
+              <BondPurchase
+                bondKey={bond.key}
+                canSelect={canSelect}
+                slippage={slippage}
+                selection={selection}
+                setSelection={setSelection}
+                setNftDialogOpen={setNftDialogOpen}
+              />
+            </TabPanel>
             <TabPanel value={currentTab} index={BondAction.Redeem}>
               <BondRedeem bondKey={bond.key} />
             </TabPanel>
