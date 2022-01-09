@@ -346,14 +346,26 @@
   .data-row {
     .data-row-name {
       font-weight: 700;
-      font-size: 14px;
+      font-size: 16px;
       &-warmup {
         font-weight: 700;
         // color: $clam-pink;
       }
     }
-
+    .data-row-name-small {
+      font-weight: 600;
+      font-size: 14px;
+      &-warmup {
+        font-weight: 700;
+        // color: $clam-pink;
+      }
+      margin-left: 20px;
+    }
     .data-row-value {
+      font-size: 16px;
+      line-height: 17px;
+    }
+    .data-row-value-small {
       font-size: 14px;
       line-height: 17px;
     }
