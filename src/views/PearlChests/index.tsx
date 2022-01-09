@@ -8,7 +8,7 @@ import PearlChestsLockup from 'src/components/PearlChestsLockup';
 import PearlChestsRedeem from 'src/components/PearlChestsRedeem';
 import { getTokenImage } from 'src/helpers';
 import { useWeb3Context } from 'src/hooks';
-import { loadTermsDetails } from 'src/store/slices/pearl-vault-slice';
+import { loadTermsDetails } from 'src/store/slices/otter-lake-slice';
 import chestOpenImage from './images/chest-open.png';
 import './styles.scss';
 

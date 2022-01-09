@@ -24,7 +24,7 @@ export default function PearlChestLockupSuccessModal({
   actionResult,
   onClose,
 }: PearlChestLockupSuccessModalProps) {
-  const terms = useSelector(state => state.pearlVault.terms);
+  const terms = useSelector(state => state.lake.terms);
   const allTerms = useMemo(() => terms.flatMap(t => [t, t.fallbackTerm || t]), [terms]);
 
   const term = allTerms.find(term => term.noteAddress === actionResult?.note);

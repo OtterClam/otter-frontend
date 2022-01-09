@@ -17,7 +17,7 @@ import {
   ITerm,
   ILockNote,
   selectTerm as selectTermAction,
-} from 'src/store/slices/pearl-vault-slice';
+} from 'src/store/slices/otter-lake-slice';
 import { useWeb3Context } from 'src/hooks';
 import ActionButton from '../Button/ActionButton';
 import { IPendingTxn } from 'src/store/slices/pending-txns-slice';
@@ -49,9 +49,9 @@ export default function PearlChestsRedeem() {
   const [relockResult, setRelockResult] = useState<any>();
   const [selectedLockNote, setSelectedLock] = useState<ILockNote | undefined>();
   const currentEpoch = useSelector(state => state.app.currentEpoch);
-  const selectedTerm = useSelector(state => state.pearlVault.selectedTerm);
-  const lockNotes = useSelector(state => state.pearlVault.lockNotes);
-  const terms = useSelector(state => state.pearlVault.terms);
+  const selectedTerm = useSelector(state => state.lake.selectedTerm);
+  const lockNotes = useSelector(state => state.lake.lockNotes);
+  const terms = useSelector(state => state.lake.terms);
   const pearlPrice = useSelector(state => state.app.pearlPrice);
   const termsMap = useMemo(() => {
     return new Map(

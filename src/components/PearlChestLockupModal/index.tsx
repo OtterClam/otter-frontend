@@ -25,7 +25,7 @@ import {
   ILockNote,
   ITerm,
   lock as lockAction,
-} from 'src/store/slices/pearl-vault-slice';
+} from 'src/store/slices/otter-lake-slice';
 import { ReactComponent as NoteIcon } from '../../assets/icons/note.svg';
 import { ReactComponent as RocketIcon } from '../../assets/icons/rocket.svg';
 import { useWeb3Context } from '../../hooks';

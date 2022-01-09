@@ -102,7 +102,7 @@ interface IClaimAndLockPayload {
 }
 
 export const loadTermsDetails = createAsyncThunk(
-  'pearlVault/loadTermsDetails',
+  'otterLake/loadTermsDetails',
   async ({ address, chainID, provider }: ILoadTermsDetails) => {
     const { terms, lockNotes } = await getTermsAndLocks(address, chainID, provider);
     return { terms, lockNotes };
@@ -111,11 +111,11 @@ export const loadTermsDetails = createAsyncThunk(
 
 async function getTermsAndLocks(address: string, chainID: number, provider: JsonRpcProvider) {
   const addresses = getAddresses(chainID);
-  const pearlVaultContract = new ethers.Contract(addresses.OTTER_LAKE, OtterLake, provider);
+  const otterLakeContract = new ethers.Contract(addresses.OTTER_LAKE, OtterLake, provider);
   const pearlContract = new ethers.Contract(addresses.PEARL_ADDRESS, PearlTokenContract, provider);
 
-  const termsCount = (await pearlVaultContract.termsCount()).toNumber();
-  const epoch = await pearlVaultContract.epochs(await pearlVaultContract.epoch());
+  const termsCount = (await otterLakeContract.termsCount()).toNumber();
+  const epoch = await otterLakeContract.epochs(await otterLakeContract.epoch());
   const totalNextReward = Number(formatEther(epoch.reward));
   const actions: Promise<ITerm>[] = [];
   const lockNotes: ILockNote[] = [];
@@ -124,8 +124,8 @@ async function getTermsAndLocks(address: string, chainID: number, provider: Json
   for (let i = 0; i < termsCount; i += 1) {
     actions.push(
       (async (i: number) => {
-        const termAddress = await pearlVaultContract.termAddresses(i);
-        const term = await pearlVaultContract.terms(termAddress);
+        const termAddress = await otterLakeContract.termAddresses(i);
+        const term = await otterLakeContract.terms(termAddress);
         const noteContract = new ethers.Contract(term.note, PearlNote, provider);
         const [lockNotesCount, name, symbol, pearlBalance] = await Promise.all([
           noteContract.balanceOf(address),
@@ -138,7 +138,7 @@ async function getTermsAndLocks(address: string, chainID: number, provider: Json
           const [lock, tokenURI, reward] = await Promise.all([
             noteContract.lockInfos(id),
             noteContract.tokenURI(id),
-            pearlVaultContract.reward(term.note, id),
+            otterLakeContract.reward(term.note, id),
           ]);
           let imageUrl = '';
           try {
@@ -210,14 +210,14 @@ async function getTermsAndLocks(address: string, chainID: number, provider: Json
 }
 
 export const claimReward = createAsyncThunk(
-  'pearlVault/claimReward',
+  'otterLake/claimReward',
   async ({ chainID, provider, address, noteAddress, tokenId }: IClaimRewardDetails, { dispatch }) => {
     const addresses = getAddresses(chainID);
-    const pearlVaultContract = new ethers.Contract(addresses.OTTER_LAKE, OtterLake, provider);
+    const otterLakeContract = new ethers.Contract(addresses.OTTER_LAKE, OtterLake, provider);
     let tx;
 
     try {
-      tx = await pearlVaultContract.connect(provider.getSigner()).claimReward(noteAddress, tokenId);
+      tx = await otterLakeContract.connect(provider.getSigner()).claimReward(noteAddress, tokenId);
       dispatch(
         fetchPendingTxns({
           txnHash: tx.hash,
@@ -238,14 +238,14 @@ export const claimReward = createAsyncThunk(
 );
 
 export const redeem = createAsyncThunk(
-  'pearlVault/redeem',
+  'otterLake/redeem',
   async ({ chainID, provider, noteAddress, address, tokenId }: IRedeemDetails, { dispatch }) => {
     const addresses = getAddresses(chainID);
-    const pearlVaultContract = new ethers.Contract(addresses.OTTER_LAKE, OtterLake, provider);
+    const otterLakeContract = new ethers.Contract(addresses.OTTER_LAKE, OtterLake, provider);
     let tx;
 
     try {
-      tx = await pearlVaultContract.connect(provider.getSigner()).redeem(noteAddress, tokenId);
+      tx = await otterLakeContract.connect(provider.getSigner()).exit(noteAddress, tokenId);
       dispatch(
         fetchPendingTxns({
           txnHash: tx.hash,
@@ -266,16 +266,16 @@ export const redeem = createAsyncThunk(
 );
 
 export const lock = createAsyncThunk(
-  'pearlVault/lock',
+  'otterLake/lock',
   async ({ chainID, provider, noteAddress, address, amount }: ILockNoteDetails, { dispatch }) => {
     const addresses = getAddresses(chainID);
-    const pearlVaultContract = new ethers.Contract(addresses.OTTER_LAKE, OtterLake, provider);
+    const otterLakeContract = new ethers.Contract(addresses.OTTER_LAKE, OtterLake, provider);
     let tx;
     let lockedEvent: any;
 
     try {
       await allowanceGuard(chainID, provider, address, amount);
-      tx = await pearlVaultContract.connect(provider.getSigner()).lock(noteAddress, ethers.utils.parseEther(amount));
+      tx = await otterLakeContract.connect(provider.getSigner()).lock(noteAddress, ethers.utils.parseEther(amount));
       dispatch(
         fetchPendingTxns({
           txnHash: tx.hash,
@@ -313,16 +313,16 @@ const allowanceGuard = async (chainID: number, provider: JsonRpcProvider, addres
 };
 
 export const extendLock = createAsyncThunk(
-  'pearlVault/extendLock',
+  'otterLake/extendLock',
   async ({ chainID, provider, noteAddress, amount, address, tokenId }: IExtendLockDetails, { dispatch }) => {
     const addresses = getAddresses(chainID);
-    const pearlVaultContract = new ethers.Contract(addresses.OTTER_LAKE, OtterLake, provider);
+    const otterLakeContract = new ethers.Contract(addresses.OTTER_LAKE, OtterLake, provider);
     let tx;
     let lockedEvent;
 
     try {
       await allowanceGuard(chainID, provider, address, amount);
-      tx = await pearlVaultContract
+      tx = await otterLakeContract
         .connect(provider.getSigner())
         .extendLock(noteAddress, tokenId, ethers.utils.parseEther(amount));
       dispatch(
@@ -354,15 +354,15 @@ export const extendLock = createAsyncThunk(
 );
 
 export const claimAndLock = createAsyncThunk(
-  'pearlVault/claimAndLock',
+  'otterLake/claimAndLock',
   async ({ chainID, provider, noteAddress, address, tokenId }: IClaimAndLockPayload, { dispatch }) => {
     const addresses = getAddresses(chainID);
-    const pearlVaultContract = new ethers.Contract(addresses.OTTER_LAKE, OtterLake, provider);
+    const otterLakeContract = new ethers.Contract(addresses.OTTER_LAKE, OtterLake, provider);
     let tx;
     let lockedEvent;
 
     try {
-      tx = await pearlVaultContract.connect(provider.getSigner()).claimAndLock(noteAddress, tokenId);
+      tx = await otterLakeContract.connect(provider.getSigner()).claimAndLock(noteAddress, tokenId);
       dispatch(
         fetchPendingTxns({
           txnHash: tx.hash,
@@ -391,8 +391,8 @@ export const claimAndLock = createAsyncThunk(
   },
 );
 
-const pearlVaultSlice = createSlice({
-  name: 'pearl-vault',
+const otterLakeSlice = createSlice({
+  name: 'otter-lake',
   initialState,
   reducers: {
     selectTerm(state, action) {
@@ -417,8 +417,8 @@ const pearlVaultSlice = createSlice({
 
 const baseInfo = (state: { app: IOtterLakeSliceState }) => state.app;
 
-export default pearlVaultSlice.reducer;
+export default otterLakeSlice.reducer;
 
-export const { selectTerm } = pearlVaultSlice.actions;
+export const { selectTerm } = otterLakeSlice.actions;
 
-export const getOtterLakeState = createSelector(baseInfo, pearlVault => pearlVault);
+export const getOtterLakeState = createSelector(baseInfo, otterLake => otterLake);

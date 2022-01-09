@@ -1,18 +1,18 @@
 import { Divider, Paper, Typography } from '@material-ui/core';
+import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { formatCurrency, formatApy } from 'src/helpers';
+import { formatApy } from 'src/helpers';
+import getNoteImage from 'src/helpers/get-note-image';
 import { useWeb3Context } from 'src/hooks';
+import { IOtterLakeSliceState, ITerm, selectTerm as selectTermAction } from 'src/store/slices/otter-lake-slice';
 import { IPendingTxn } from 'src/store/slices/pending-txns-slice';
-import { IOtterLakeSliceState, ITerm, selectTerm as selectTermAction } from 'src/store/slices/pearl-vault-slice';
 import { IReduxState } from 'src/store/slices/state.interface';
 import ActionButton from '../Button/ActionButton';
 import InfoTooltip from '../InfoTooltip/InfoTooltip';
 import PearlChestLockupModal from '../PearlChestLockupModal';
 import PearlChestLockupSuccessModal from '../PearlChestLockupSuccessModal';
 import './styles.scss';
-import { useCallback, useState } from 'react';
-import getNoteImage from 'src/helpers/get-note-image';
 
 const extraBonus: { [k: number]: number } = {
   28: 0.5,
@@ -23,7 +23,7 @@ const extraBonus: { [k: number]: number } = {
 export default function PearlChestsLockup() {
   const { t } = useTranslation();
   const [lockupResult, setLockupResult] = useState<any>();
-  const pearlVault = useSelector<IReduxState, IOtterLakeSliceState>(state => state.pearlVault);
+  const otterLake = useSelector<IReduxState, IOtterLakeSliceState>(state => state.lake);
   const dispatch = useDispatch();
   const selectTerm = useCallback((term?: ITerm) => dispatch(selectTermAction(term)), []);
 
@@ -33,19 +33,19 @@ export default function PearlChestsLockup() {
         {t('pearlChests.lockUp.title')}
       </Typography>
       <div className="lockup__options">
-        {pearlVault.terms.map((term, i) => (
+        {otterLake.terms.map((term, i) => (
           <LockupOption key={i} term={term} onSelect={selectTerm} />
         ))}
       </div>
       <PearlChestLockupModal
-        open={Boolean(pearlVault.selectedTerm)}
+        open={Boolean(otterLake.selectedTerm)}
         onClose={() => selectTerm(undefined)}
         onSuccess={result => {
           selectTerm(undefined);
           setLockupResult(result);
         }}
-        discount={extraBonus[pearlVault.selectedTerm?.lockPeriod ?? 0] ?? 0}
-        term={pearlVault.selectedTerm}
+        discount={extraBonus[otterLake.selectedTerm?.lockPeriod ?? 0] ?? 0}
+        term={otterLake.selectedTerm}
       />
       <PearlChestLockupSuccessModal
         open={Boolean(lockupResult)}
