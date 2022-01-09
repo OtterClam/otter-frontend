@@ -13,6 +13,7 @@ import { useWeb3Context } from '../../hooks';
 
 import { BondKey, getBond } from 'src/constants';
 import { priceUnits, trim, prettyShortVestingPeriod, localeString } from '../../helpers';
+import { NFTDiscountDetail } from '../BondDialog/BondNFTDiscountDialog/type';
 
 const useStyles = makeStyles(theme => ({
   white: {
@@ -23,9 +24,10 @@ const useStyles = makeStyles(theme => ({
 }));
 interface IBondProps {
   bondKey: BondKey;
+  nft: NFTDiscountDetail;
 }
 
-function BondRow({ bondKey }: IBondProps) {
+function BondRow({ bondKey, nft }: IBondProps) {
   const { chainID } = useWeb3Context();
   // Use BondPrice as indicator of loading.
   const isBondLoading = useAppSelector(state => !state.bonding[bondKey]?.bondPrice ?? true);
@@ -67,6 +69,7 @@ function BondRow({ bondKey }: IBondProps) {
   const redirect = () => {
     history.push(`/bonds/${bondKey}?action=${redeemable}`);
   };
+
   return (
     <Grid container id={`${bondKey}--bond`} className={`bond-row ${styles.white}`} onClick={redirect}>
       <Grid item xs={1} className="bond-row-logo">
@@ -122,6 +125,11 @@ function BondRow({ bondKey }: IBondProps) {
       </Grid>
       <Grid item xs={2} className="bond-row-value">
         {myBalance ? `${trim(myBalance, 2)} ${bond.autostake ? 'sCLAM' : 'CLAM'}` : '-'}
+        {nft && (
+          <Box display="flex" alignItems="center" className="bond-card-nft-row">
+            <div className={`nft-image ${nft.key}`} /> bond with NFT
+          </Box>
+        )}
       </Grid>
       <Grid item xs={2} className="bond-row-value">
         {fullyVested ? (

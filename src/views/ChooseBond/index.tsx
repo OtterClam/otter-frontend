@@ -22,6 +22,7 @@ import { getTokenImage, trim } from '../../helpers';
 import { IReduxState } from '../../store/slices/state.interface';
 import { checkBondKey } from './utils';
 import { NFTDiscountDetail } from '../BondDialog/BondNFTDiscountDialog/type';
+import { MOCKED_NFT_OPTIONS } from '../BondDialog/BondNFTDiscountDialog/constants';
 
 const useStyle = makeStyles(theme => {
   return {
@@ -78,6 +79,8 @@ query {
   const canSelect = true; // TODO: selectable condition
   const [successDialogOpen, setSuccessDialogOpen] = useState(false);
 
+  // TODO: replace with fetched nft infos
+  const MOCKED_NFT = MOCKED_NFT_OPTIONS[0];
   return (
     <div id="choose-bond-view">
       <Paper className="bond-paper">
@@ -129,7 +132,7 @@ query {
             <Grid container className="bond-card-container">
               {bonds.map(bond => (
                 <Grid item xs={12} key={bond.key} onClick={() => setSelectedBond(bond)}>
-                  <BondCard key={bond.key} bondKey={bond.key} />
+                  <BondCard key={bond.key} bondKey={bond.key} nft={MOCKED_NFT} />
                 </Grid>
               ))}
             </Grid>
@@ -140,7 +143,7 @@ query {
               <BondRowHeader />
               {bonds.map(bond => (
                 <Box key={bond.key} onClick={() => setSelectedBond(bond)}>
-                  <BondRow bondKey={bond.key} />
+                  <BondRow bondKey={bond.key} nft={MOCKED_NFT} />
                 </Box>
               ))}
             </Grid>
