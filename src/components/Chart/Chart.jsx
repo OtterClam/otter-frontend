@@ -230,7 +230,7 @@ const renderLineChart = (
       padding={{ right: 20 }}
     />
     <YAxis
-      tickCount={6}
+      tickCount={3}
       axisLine={false}
       tick={yAxisTickProps}
       reversed={false}
@@ -238,7 +238,7 @@ const renderLineChart = (
       width={32}
       scale={scale}
       tickFormatter={number =>
-        number !== 0 ? (dataFormat !== 'percent' ? `${number}` : `${parseFloat(number) / 1000}k`) : ''
+        number !== 0 ? (dataFormat !== 'percent' ? `${number}` : `${trim(parseFloat(number) / 1000, 0)}k`) : ''
       }
       domain={domain}
       connectNulls={true}
