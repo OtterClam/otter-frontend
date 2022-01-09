@@ -83,15 +83,20 @@ function BondDialog({ bond, canSelect, selection, setBond, setSelection, setNftD
     if (bond.deprecated) {
       return history.push({ pathname: `/bonds/${bond.key}`, search: `?action=${BondAction.Redeem}` });
     }
-    if (defaultTab === undefined) {
+    if (currentTab === undefined) {
       return history.push({ pathname: `/bonds/${bond.key}`, search: `?action=${BondAction.Bond}` });
     }
-  }, [defaultTab]);
+  }, [currentTab]);
 
   // NOTE: update view tab value when action query updates
   useEffect(() => {
     setCurrentTab(defaultTab);
   }, [defaultTab]);
+
+  // NOTE: reset selection value when dialog is re-open
+  useEffect(() => {
+    setSelection(undefined);
+  }, [currentTab]);
 
   return (
     <Fade in={true} mountOnEnter unmountOnExit>
