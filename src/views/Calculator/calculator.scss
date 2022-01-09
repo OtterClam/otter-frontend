@@ -42,6 +42,10 @@
     height: 20px;
   }
 }
+.mode-selector {
+  display: inline-flex;
+  flex-direction: column;
+}
 
 .migrate-sohm-button {
   position: absolute;
@@ -86,6 +90,12 @@
   .metric-body {
     font-weight: 800;
     font-size: 24px;
+    line-height: 1.5;
+    max-width: 300px;
+  }
+  .metric-sub {
+    font-weight: 700;
+    font-size: 18px;
     line-height: 1.5;
     max-width: 300px;
   }
