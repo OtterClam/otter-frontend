@@ -170,7 +170,7 @@ function Calculator() {
                     </Box>
                   </Grid>
                   <Grid item xs={12} sm={4} md={4} lg={4}>
-                    <Typography className="metric-title">{t('common.yourBalance')}</Typography>
+                    <Typography className="metric-title">{t('calculator.yoursClamBalance')}</Typography>
                     <Box color="text.secondary" className="calculator-card-metrics">
                       {isAppLoading ? (
                         <Skeleton width="100px" />
