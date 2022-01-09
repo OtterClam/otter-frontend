@@ -158,20 +158,28 @@ query {
         />
       )}
       {selectedBond && (
-        <BondNTFDiscountDialog
-          open={nftDialogOpen}
-          selection={nftSelection}
-          setSelection={setNftSelection}
-          onClose={() => setNftDialogOpen(false)}
-        />
-      )}
-      {selectedBond && (
-        <BondSuccessDialog
-          bond={selectedBond}
-          selection={nftSelection}
-          open={successDialogOpen}
-          setOpen={setSuccessDialogOpen}
-        />
+        <>
+          <BondDialog
+            bond={selectedBond}
+            canSelect={canSelect}
+            selection={nftSelection}
+            setBond={setSelectedBond}
+            setSelection={setNftSelection}
+            setNftDialogOpen={setNftDialogOpen}
+          />
+          <BondNTFDiscountDialog
+            open={nftDialogOpen}
+            selection={nftSelection}
+            setSelection={setNftSelection}
+            onClose={() => setNftDialogOpen(false)}
+          />
+          <BondSuccessDialog
+            bond={selectedBond}
+            selection={nftSelection}
+            open={successDialogOpen}
+            setOpen={setSuccessDialogOpen}
+          />
+        </>
       )}
     </div>
   );
