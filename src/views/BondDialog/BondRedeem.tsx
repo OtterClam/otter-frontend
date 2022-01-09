@@ -88,6 +88,9 @@ function BondRedeem({ bondKey }: IBondRedeem) {
                 bgcolor="otter.otterBlue"
                 color="otter.white"
                 text={t('common.claim')}
+                padding="19px 30px"
+                height="auto"
+                fontSize="14px"
                 onClick={() => {
                   if (bond.autostake && !fullVested) {
                     window.alert(t('bonds.redeem.fullyVestedPopup'));
