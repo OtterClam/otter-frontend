@@ -101,12 +101,6 @@ export default function PearlChestLockupModal({
     }
   }, [lockNote, amount, onSuccess]);
 
-  useEffect(() => {
-    if (lockNote) {
-      setAmount(lockNote.amount);
-    }
-  }, [lockNote]);
-
   return (
     <Modal title={t('pearlChests.lockUpModal.title')} open={open} onClose={onClose}>
       <>

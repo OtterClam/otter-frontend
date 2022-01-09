@@ -1,7 +1,7 @@
 import { Divider, Paper, Typography } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 import { LabelChip } from '../Chip';
-import { getTokenImage, formatCurrency, trim } from 'src/helpers';
+import { getTokenImage, formatCurrency, trim, formatApy } from 'src/helpers';
 import formatDate from 'date-fns/format';
 import differenceInDays from 'date-fns/differenceInDays';
 import './styles.scss';
@@ -13,6 +13,7 @@ import {
   redeem as redeemAction,
   claimReward as claimRewardAction,
   extendLock as extendLockAction,
+  claimAndLock as claimAndLockAction,
   ITerm,
   ILockNote,
   selectTerm as selectTermAction,
@@ -26,7 +27,7 @@ import PearlChestLockupSuccessModal from '../PearlChestLockupSuccessModal';
 import { addDays } from 'date-fns';
 import getNoteImage from 'src/helpers/get-note-image';
 
-const numberFormatter = Intl.NumberFormat('en', { maximumFractionDigits: 3 });
+const numberFormatter = Intl.NumberFormat('en', { maximumFractionDigits: 4 });
 
 const extraBonus: { [k: number]: number } = {
   28: 5,
@@ -36,7 +37,6 @@ const extraBonus: { [k: number]: number } = {
 
 export interface Note {
   id: string;
-  amount: string;
   lockedValue: number;
   marketValue: number;
   lockupPeriod: number;
@@ -93,9 +93,8 @@ export default function PearlChestsRedeem() {
             claimAndRelock={claimAndRelock}
             note={{
               id: lockNote.tokenId,
-              amount: lockNote.amount,
               lockedValue: -1,
-              marketValue: Number(lockNote.amount) * pearlPrice,
+              marketValue: (Number(lockNote.amount) + lockNote.nextReward) * pearlPrice,
               lockupPeriod: term.lockPeriod,
               dueDate: addDays(Date.UTC(2021, 10, 3, 0, 0, 0), lockNote.endEpoch / 3),
               apy: 492391,
@@ -142,13 +141,17 @@ function NoteCard({
     {
       label: 'pearlChests.lockupAmount',
       after: <span className="note__peral-icon">{getTokenImage('pearl', 20)}</span>,
-      value: note.amount,
+      value: numberFormatter.format(lockNote.amount),
     },
     { label: 'pearlChests.currentReward', value: numberFormatter.format(lockNote.reward) + ' PERAL' },
     {
       label: 'pearlChests.nextReward',
       value: numberFormatter.format(lockNote.nextReward) + ' PERAL',
       params: { boost: (term.multiplier / 100).toFixed(2) },
+    },
+    {
+      label: 'pearlChests.rewardRate',
+      value: formatApy(lockNote.rewardRate) + '%',
     },
     // { label: 'pearlChests.lockedValue', value: numberFormatter.format(note.lockedValue) + ' PERAL' },
     { label: 'pearlChests.marketValue', value: formatCurrency(note.marketValue) },
@@ -161,7 +164,7 @@ function NoteCard({
       label: 'pearlChests.dueDate',
       value: formatDate(note.dueDate, 'MMMM, d, Y, hh:mm a (O)'),
     },
-    { label: 'pearlChests.apy', value: numberFormatter.format(note.apy) + '%' },
+    // { label: 'pearlChests.apy', value: numberFormatter.format(term.apy) + '%' },
   ];
 
   const redeem = useCallback(() => {
@@ -179,6 +182,17 @@ function NoteCard({
   const claimReward = useCallback(() => {
     dispatch(
       claimRewardAction({
+        chainID,
+        provider,
+        noteAddress: lockNote.noteAddress,
+        tokenId: lockNote.tokenId,
+        address,
+      }),
+    );
+  }, [lockNote, address]);
+  const claimAndLock = useCallback(() => {
+    dispatch(
+      claimAndLockAction({
         chainID,
         provider,
         noteAddress: lockNote.noteAddress,
@@ -220,10 +234,10 @@ function NoteCard({
           <>
             <ActionButton
               pendingTransactions={pendingTransactions}
-              type={'extend-lock_' + term.noteAddress + '_' + lockNote.tokenId}
+              type={'relock_' + term.noteAddress + '_' + lockNote.tokenId}
               start={t('pearlChests.claimRewardAndRelock')}
               progress="Processing..."
-              processTx={() => claimAndRelock(term, lockNote)}
+              processTx={claimAndLock}
               wrapper={({ onClick, text }) => <CustomButton className="note__action" text={text} onClick={onClick} />}
             />
             <ActionButton

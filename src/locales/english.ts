@@ -242,6 +242,7 @@ const English = {
       lockupAmount: 'Lock-up Amount',
       currentReward: 'Current Reward',
       nextReward: 'Next Reward (x{{boost}})',
+      rewardRate: 'Reward Rate',
       lockedValue: 'Locked Value',
       marketValue: 'Market Value',
       lockupPeriod: 'Lock-up Period',

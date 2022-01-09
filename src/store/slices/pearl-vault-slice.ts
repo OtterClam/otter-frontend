@@ -31,7 +31,7 @@ export interface INote {
 export interface ILockNote {
   name: string;
   tokenId: string;
-  amount: string;
+  amount: number;
   endEpoch: number;
   imageUrl: string;
   noteAddress: string;
@@ -93,6 +93,14 @@ interface IExtendLockDetails {
   address: string;
 }
 
+interface IClaimAndLockPayload {
+  chainID: number;
+  provider: JsonRpcProvider;
+  noteAddress: string;
+  tokenId: string;
+  address: string;
+}
+
 export const loadTermsDetails = createAsyncThunk(
   'pearlVault/loadTermsDetails',
   async ({ address, chainID, provider }: ILoadTermsDetails) => {
@@ -145,7 +153,7 @@ async function getTermsAndLocks(address: string, chainID: number, provider: Json
             imageUrl,
             noteAddress: term.note,
             tokenId: id.toString(),
-            amount: formatEther(lock.amount),
+            amount: Number(formatEther(lock.amount)),
             reward: Number(formatEther(reward)),
             endEpoch: lock.endEpoch.toNumber(),
             nextReward: 0,
@@ -322,6 +330,44 @@ export const extendLock = createAsyncThunk(
           txnHash: tx.hash,
           text: 'Extend Lock',
           type: 'extend-lock_' + noteAddress + '_' + tokenId,
+        }),
+      );
+      const result = await tx.wait();
+      lockedEvent = result.events.find((event: any) => event.event === 'Locked');
+      dispatch(loadTermsDetails({ address, chainID, provider }));
+    } catch (err) {
+      alert((err as Error).message);
+    } finally {
+      if (tx) {
+        dispatch(clearPendingTxn(tx.hash));
+      }
+    }
+    if (lockedEvent) {
+      return {
+        user: lockedEvent.args[0],
+        note: lockedEvent.args[1],
+        tokenId: lockedEvent.args[2].toString(),
+        amount: lockedEvent.args[3],
+      };
+    }
+  },
+);
+
+export const claimAndLock = createAsyncThunk(
+  'pearlVault/claimAndLock',
+  async ({ chainID, provider, noteAddress, address, tokenId }: IClaimAndLockPayload, { dispatch }) => {
+    const addresses = getAddresses(chainID);
+    const pearlVaultContract = new ethers.Contract(addresses.OTTER_LAKE, OtterLake, provider);
+    let tx;
+    let lockedEvent;
+
+    try {
+      tx = await pearlVaultContract.connect(provider.getSigner()).claimAndLock(noteAddress, tokenId);
+      dispatch(
+        fetchPendingTxns({
+          txnHash: tx.hash,
+          text: 'Relocking',
+          type: 'relock_' + noteAddress + '_' + tokenId,
         }),
       );
       const result = await tx.wait();
