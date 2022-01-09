@@ -214,14 +214,15 @@ const renderLineChart = (
   isExpanded,
   expandedGraphStrokeColor,
   scale,
+  domain,
 ) => (
   <LineChart data={data}>
     <XAxis
       dataKey="timestamp"
-      interval={100}
+      interval={30}
       axisLine={false}
       tick={xAxisTickProps}
-      tickCount={3}
+      tickCount={5}
       tickLine={false}
       reversed={true}
       connectNulls={true}
@@ -229,16 +230,17 @@ const renderLineChart = (
       padding={{ right: 20 }}
     />
     <YAxis
-      tickCount={scale == 'log' ? 1 : isExpanded ? expandedTickCount : tickCount}
+      tickCount={6}
       axisLine={false}
       tick={yAxisTickProps}
+      reversed={false}
       tickLine={false}
       width={32}
       scale={scale}
       tickFormatter={number =>
         number !== 0 ? (dataFormat !== 'percent' ? `${number}` : `${parseFloat(number) / 1000}k`) : ''
       }
-      domain={[scale == 'log' ? 'dataMin' : 0, 'auto']}
+      domain={domain}
       connectNulls={true}
       allowDataOverflow={false}
     />
@@ -355,7 +357,7 @@ function Chart({
   infoTooltipMessage,
   expandedGraphStrokeColor,
   isPOL,
-  domain = [0, 'auto'],
+  domain,
 }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -382,6 +384,7 @@ function Chart({
         isExpanded,
         expandedGraphStrokeColor,
         scale,
+        domain,
       );
     if (type === 'area')
       return renderAreaChart(

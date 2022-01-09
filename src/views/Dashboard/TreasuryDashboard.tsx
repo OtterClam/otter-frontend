@@ -117,7 +117,9 @@ function TreasuryDashboard() {
         apy: entry.currentAPY,
         timestamp: entry.timestamp,
       }));
-      setApy(apy);
+      //First data point seems to be bugged?
+      //Reports an APY of 3191769842703686000000, which messes with graph scale
+      setApy(apy.slice(0, -1));
 
       const latestMetrics = (r as any).data.protocolMetrics[0];
       setBackingPerClam(latestMetrics.treasuryMarketValue / latestMetrics.clamCirculatingSupply);
@@ -315,7 +317,7 @@ function TreasuryDashboard() {
                   // @ts-ignore
                   <Chart
                     type="line"
-                    scale="log"
+                    scale="auto"
                     data={apy}
                     dataKey={['apy']}
                     color={theme.palette.text.primary}
@@ -328,6 +330,7 @@ function TreasuryDashboard() {
                     itemNames={tooltipItems.apy}
                     itemType={itemType.percentage}
                     infoTooltipMessage={tooltipInfoMessages.apy}
+                    domain={[0, 800000]}
                     // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
                   />
                 }
