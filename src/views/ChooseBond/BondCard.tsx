@@ -13,12 +13,14 @@ import { useWeb3Context } from '../../hooks';
 
 import { BondKey, getBond } from 'src/constants';
 import { priceUnits, trim, prettyShortVestingPeriod } from '../../helpers';
+import { NFTDiscountDetail } from '../BondDialog/BondNFTDiscountDialog/type';
 
 interface IBondProps {
   bondKey: BondKey;
+  nft?: NFTDiscountDetail;
 }
 
-export function BondCard({ bondKey }: IBondProps) {
+export function BondCard({ bondKey, nft }: IBondProps) {
   const { chainID } = useWeb3Context();
   const bond = getBond(bondKey, chainID);
 
@@ -111,6 +113,11 @@ export function BondCard({ bondKey }: IBondProps) {
         <Grid item>{t('bonds.myBond')}</Grid>
         <Grid item className="bond-card-value">
           {myBalance ? `${trim(myBalance, 2)} ${bond.autostake ? 'sCLAM' : 'CLAM'}` : '-'}
+          {nft && (
+            <Box display="flex" alignItems="center" className="bond-card-nft-row">
+              <div className={`nft-image ${nft.key}`} /> bond with NFT
+            </Box>
+          )}
         </Grid>
       </Grid>
 

@@ -1,3 +1,6 @@
+@import 'styles/_mixins.scss';
+
+
 #choose-bond-view {
   padding: 0px 80px 20px 80px;
 
@@ -146,12 +149,27 @@
         .bond-card-value {
           text-align: right;
         }
-
+        
         .vesting-time-text {
           font-weight: 400;
           margin-top: -12px;
         }
       }
     }
+  }
+}
+
+.bond-card-nft-row {
+  font-weight: 500;
+  align-self: flex-end;
+
+  .nft-image {
+    width: 30px;
+    height: 30px;
+    border-radius: 4px;
+    margin-right: 8px;
+
+    @include otter-images;
+    @include background-image-setting($size: cover);
   }
 }
