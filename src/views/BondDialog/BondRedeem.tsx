@@ -80,21 +80,6 @@ function BondRedeem({ bondKey }: IBondRedeem) {
   return (
     <Box display="flex" flexDirection="column">
       <Box display="flex" justifyContent="space-around" flexWrap="wrap">
-        {bond.autostake && !fullVested && (
-          <Box
-            className="transaction-button app-otter-button"
-            bgcolor="otter.otterBlue"
-            color="otter.white"
-            onClick={() => {
-              if (bond.autostake && !fullVested) {
-                window.alert(t('bonds.redeem.fullyVestedPopup'));
-                return;
-              }
-            }}
-          >
-            <p>{t('common.claim')}</p>
-          </Box>
-        )}
         <Grid container spacing={2} justifyContent="center">
           {!(bond.autostake && !fullVested) && (
             <Grid item xs={6}>
