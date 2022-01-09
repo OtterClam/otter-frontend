@@ -6,6 +6,7 @@ import { ReactComponent as ArrowRightIcon } from '../../assets/icons/arrow_right
 import { ReactComponent as ExcludeIcon } from '../../assets/icons/icon_exclude.svg';
 
 import { NFTDiscountDetail } from './BondNFTDiscountDialog/type';
+import { NFT_IMAGES } from './BondNFTDiscountDialog/constants';
 
 const description: Record<string, string> = {
   empty: 'None NFT selected',
@@ -34,7 +35,7 @@ const NftRowLeftArea = ({
   return (
     <>
       <ExcludeIcon className="delete-icon icon" onClick={() => setSelection(undefined)} />
-      <div className={`selection-image ${selection.key}`} />
+      <img className="selection-image" src={`${NFT_IMAGES[selection.key]}`} />
       <p className="selection-text">
         {selection.name}
         <span className="selection-discount">{selection.discount}% OFF</span>

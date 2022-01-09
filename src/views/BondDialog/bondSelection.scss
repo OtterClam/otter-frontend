@@ -66,11 +66,7 @@
 
         .selection-image {
             width: 60px;
-            height: 60px;
-            border-radius: 10px;
             margin: 0 10px 0 16px;
-            @include background-image-setting($color: white);
-            @include otter-images;
         }
 
 

@@ -1,5 +1,18 @@
 import { NFTDiscountDetail } from './type';
 
+import NFT1 from 'src/components/NFTCards/images/nft1.jpg';
+import NFT2 from 'src/components/NFTCards/images/nft2.jpg';
+import NFT3 from 'src/components/NFTCards/images/nft3.jpg';
+import NFT4 from 'src/components/NFTCards/images/nft4.jpg';
+
+// TODO: add nft note images
+export const NFT_IMAGES: Record<string, any> = {
+  nft1: NFT1,
+  nft2: NFT2,
+  nft3: NFT3,
+  nft4: NFT4,
+};
+
 // NOTE: this is mocked options
 export const MOCKED_NFT_OPTIONS: NFTDiscountDetail[] = [
   {
