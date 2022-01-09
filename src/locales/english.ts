@@ -30,6 +30,7 @@ const English = {
       treasuryBalance: 'Treasury Balance',
       currentIndex: 'Current Index',
       yourBalance: 'Your Balance',
+      balance: 'Balance',
       currentApy: 'Current APY',
       dashboard: 'Dashboard',
       calculator: 'Calculator',

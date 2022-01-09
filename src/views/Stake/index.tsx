@@ -367,7 +367,7 @@ function Stake() {
                       </p>
                     </div>
                     <div className="data-row">
-                      <p className="data-row-name-small">sCLAM Balance</p>
+                      <p className="data-row-name-small">sCLAM {t('common.balance')}</p>
                       <p className="data-row-value-small">
                         {isAppLoading ? (
                           <Skeleton width="80px" />
@@ -377,7 +377,7 @@ function Stake() {
                       </p>
                     </div>
                     <div className="data-row">
-                      <p className="data-row-name-small">PEARL Balance</p>
+                      <p className="data-row-name-small">PEARL {t('common.balance')}</p>
                       <p className="data-row-value-small">
                         {isAppLoading ? (
                           <Skeleton width="80px" />
