@@ -10,6 +10,7 @@ import { IPendingTxn } from '../../store/slices/pending-txns-slice';
 import { IReduxState } from '../../store/slices/state.interface';
 import { useTranslation, Trans } from 'react-i18next';
 import BondRedeemDialog from './BondRedeemDialog';
+import CustomButton from 'src/components/Button/CustomButton';
 import ActionButton from '../../components/Button/ActionButton';
 
 interface IBondRedeem {
@@ -81,6 +82,19 @@ function BondRedeem({ bondKey }: IBondRedeem) {
     <Box display="flex" flexDirection="column">
       <Box display="flex" justifyContent="space-around" flexWrap="wrap">
         <Grid container spacing={2} justifyContent="center">
+          {bond.autostake && !fullVested && (
+            <CustomButton
+              bgcolor="otter.otterBlue"
+              color="otter.white"
+              text={t('common.claim')}
+              onClick={() => {
+                if (bond.autostake && !fullVested) {
+                  window.alert(t('bonds.redeem.fullyVestedPopup'));
+                  return;
+                }
+              }}
+            />
+          )}
           {!(bond.autostake && !fullVested) && (
             <Grid item xs={6}>
               <ActionButton
