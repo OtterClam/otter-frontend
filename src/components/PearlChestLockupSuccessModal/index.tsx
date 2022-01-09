@@ -26,10 +26,13 @@ export default function PearlChestLockupSuccessModal({
 }: PearlChestLockupSuccessModalProps) {
   const terms = useSelector(state => state.lake.terms);
   const allTerms = useMemo(() => terms.flatMap(t => [t, t.fallbackTerm || t]), [terms]);
+  const note = useSelector(state =>
+    state.lake.lockNotes.find(p => p.noteAddress === actionResult?.note && p.tokenId === actionResult?.tokenId),
+  );
 
   const term = allTerms.find(term => term.noteAddress === actionResult?.note);
 
-  if (!term) return <></>;
+  if (!actionResult || !term || !note) return <></>;
 
   return (
     <Modal title="Otter’standing!" open={open} onClose={onClose} contentClassName="lockup-success-modal__content">
@@ -37,12 +40,12 @@ export default function PearlChestLockupSuccessModal({
         <Typography variant="h1" component="span" className="lockup-success-modal__message">
           Your Chest lock-up was successful.
         </Typography>
-        <img className="lockup-success-modal__receipt" src={getNoteImage(term.note.name)} />
+        <img className="lockup-success-modal__receipt" src={note.imageUrl || getNoteImage(term.note.name)} />
         <Typography className="lockup-success-modal__message2">You got a {term.note.name}!</Typography>
         <Paper className="lockup-success-modal__details">
           <div className="lockup-success-modal__details-row">
             <Typography className="lockup-success-modal__label">Locked-up Amount</Typography>
-            <Typography className="lockup-success-modal__value">{actionResult && actionResult.amount} PEARL</Typography>
+            <Typography className="lockup-success-modal__value">{actionResult.amount} PEARL</Typography>
           </div>
           <div className="lockup-success-modal__details-row">
             <Typography className="lockup-success-modal__label">Lock-up Period</Typography>

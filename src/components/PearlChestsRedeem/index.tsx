@@ -212,8 +212,7 @@ function NoteCard({
 
       <div className="note__body">
         <div className="note__receipt-image">
-          {/* TODO: load image from NFT */}
-          <img src={getNoteImage(term.note.name)} />
+          <img src={lockNote.imageUrl || getNoteImage(term.note.name)} />
         </div>
         <Divider className="note__div" flexItem orientation="vertical" />
         <div className="note__details">
