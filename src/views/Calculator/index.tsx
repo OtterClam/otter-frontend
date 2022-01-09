@@ -180,7 +180,7 @@ function Calculator() {
                           {Number(pearlBalance) > 0 ? (
                             <Typography className="metric-sub">({trimmedPearlInsCLAM} as PEARL)</Typography>
                           ) : (
-                            <Typography className="metric-sub">&nbspc;</Typography>
+                            <Typography className="metric-sub">&nbsp;</Typography>
                           )}
                         </div>
                       )}
