@@ -29,6 +29,7 @@ import getNoteImage from 'src/helpers/get-note-image';
 import AddPearlToNoteModal from '../AddPearlToNodeModal';
 
 const numberFormatter = Intl.NumberFormat('en', { maximumFractionDigits: 4 });
+const percentageFormatter = Intl.NumberFormat('en', { style: 'percent', minimumFractionDigits: 2 });
 
 const extraBonus: { [k: number]: number } = {
   28: 5,
@@ -152,7 +153,7 @@ function NoteCard({
     },
     {
       label: 'pearlChests.rewardRate',
-      value: formatApy(lockNote.rewardRate) + '%',
+      value: percentageFormatter.format(lockNote.rewardRate),
     },
     // { label: 'pearlChests.lockedValue', value: numberFormatter.format(note.lockedValue) + ' PEARL' },
     { label: 'pearlChests.marketValue', value: formatCurrency(note.marketValue) },

@@ -24,4 +24,6 @@ export function formatCurrency(c: number, precision = 0) {
   }).format(c);
 }
 
-export const formatApy = (apy: number) => new Intl.NumberFormat('en-US').format(Number(apy));
+const apyFormatter = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
+
+export const formatApy = (apy: number) => apyFormatter.format(Number(apy));

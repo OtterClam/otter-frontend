@@ -350,7 +350,7 @@ export const extendLock = createAsyncThunk(
         user: lockedEvent.args[0],
         note: lockedEvent.args[1],
         tokenId: lockedEvent.args[2].toString(),
-        amount: lockedEvent.args[3],
+        amount: formatEther(lockedEvent.args[3]),
       };
     }
   },

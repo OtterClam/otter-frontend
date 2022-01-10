@@ -31,6 +31,8 @@ import { useWeb3Context } from '../../hooks';
 import ActionButton from '../Button/ActionButton';
 import './styles.scss';
 
+const percentageFormatter = Intl.NumberFormat('en', { style: 'percent', minimumFractionDigits: 2 });
+
 const useStyles = makeStyles(theme => ({
   input: {
     '& .MuiOutlinedInput-root': {
@@ -187,8 +189,9 @@ export default function AddPearlToNoteModal({
             </div> */}
             <div className="add-pearl-modal__account-detail">
               <Typography className="add-pearl-modal__account-detail-label">Next Reward Yield</Typography>
-              {/* FIXME: use real reward rate */}
-              <Typography className="add-pearl-modal__account-detail-value">0.8 %</Typography>
+              <Typography className="add-pearl-modal__account-detail-value">
+                {percentageFormatter.format(term?.rewardRate || 0)}
+              </Typography>
             </div>
           </div>
         </Paper>

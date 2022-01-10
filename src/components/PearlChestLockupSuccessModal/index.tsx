@@ -1,8 +1,7 @@
-import { useMemo } from 'react';
 import { Paper, Typography } from '@material-ui/core';
 import addDays from 'date-fns/addDays';
 import formateDate from 'date-fns/format';
-import { BigNumber } from 'ethers';
+import { useMemo } from 'react';
 import getNoteImage from 'src/helpers/get-note-image';
 import { useSelector } from 'src/store/hook';
 import Modal from '../Modal';
@@ -14,7 +13,7 @@ export interface PearlChestLockupSuccessModalProps {
     user: string;
     note: string;
     tokenId: string;
-    amount: BigNumber;
+    amount: string;
   };
   onClose: () => void;
 }
