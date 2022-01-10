@@ -175,7 +175,7 @@ export default function PearlChestLockupModal({
           </div>
 
           <Typography variant="caption" className="lockup-modal__approve-caption">
-            Note: Your first interaction with Pearl Chests includes an “Approve” transaction followed by a lockNote-up
+            Note: Your first interaction with Pearl Chests includes an “Approve” transaction followed by a lock up
             transaction. Subsequent lockups will only require the “Lock Up” transaction.
           </Typography>
 

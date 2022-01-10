@@ -140,20 +140,20 @@ function NoteCard({
   const details = [
     {
       label: 'pearlChests.lockupAmount',
-      after: <span className="note__peral-icon">{getTokenImage('pearl', 20)}</span>,
+      after: <span className="note__pearl-icon">{getTokenImage('pearl', 20)}</span>,
       value: numberFormatter.format(lockNote.amount),
     },
-    { label: 'pearlChests.currentReward', value: numberFormatter.format(lockNote.reward) + ' PERAL' },
+    { label: 'pearlChests.currentReward', value: numberFormatter.format(lockNote.reward) + ' PEARL' },
     {
       label: 'pearlChests.nextReward',
-      value: numberFormatter.format(lockNote.nextReward) + ' PERAL',
+      value: numberFormatter.format(lockNote.nextReward) + ' PEARL',
       params: { boost: (term.multiplier / 100).toFixed(2) },
     },
     {
       label: 'pearlChests.rewardRate',
       value: formatApy(lockNote.rewardRate) + '%',
     },
-    // { label: 'pearlChests.lockedValue', value: numberFormatter.format(note.lockedValue) + ' PERAL' },
+    // { label: 'pearlChests.lockedValue', value: numberFormatter.format(note.lockedValue) + ' PEARL' },
     { label: 'pearlChests.marketValue', value: formatCurrency(note.marketValue) },
     {
       label: 'pearlChests.lockupPeriod',
