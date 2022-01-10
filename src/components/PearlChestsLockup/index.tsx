@@ -133,9 +133,6 @@ function LockupOption({ term, onSelect }: { term: ITerm; onSelect: (settings: IT
               <Typography className="lockup-option__bonus-desc" variant="caption" component="span">
                 {t('pearlChests.lockUp.bonusDescription')}
               </Typography>
-              <Typography className="lockup-option__requirement" variant="caption" component="span">
-                {t('pearlChests.lockUp.nftRequirement', { amount: term.minLockAmount })}
-              </Typography>
             </>
           )}
           {!extraBonus[term.lockPeriod] && (
