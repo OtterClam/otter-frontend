@@ -45,9 +45,10 @@ function TreasuryDashboard() {
     currentIndex: t('dashboard.tooltipInfoMessages.currentIndex'),
   };
   const [data, setData] = useState<any>(null);
-  const [apy, setApy] = useState(null);
+  const [apy, setApy] = useState<any>(null);
   const [runway, setRunway] = useState(null);
   const [staked, setStaked] = useState(null);
+  const [apyScale, setApyScale] = useState<number>(0);
   const [backingPerClam, setBackingPerClam] = useState<number | null>(null);
   const theme = useTheme();
   const smallerScreen = useMediaQuery('(max-width: 650px)');
@@ -117,8 +118,17 @@ function TreasuryDashboard() {
         apy: entry.currentAPY,
         timestamp: entry.timestamp,
       }));
-      setApy(apy);
-
+      //First data point seems to be bugged?
+      //Reports an APY of 3191769842703686000000, which messes with graph scale
+      var sl_apy = apy.slice(0, -1);
+      setApy(sl_apy);
+      const apyMax = Math.max.apply(
+        Math,
+        (sl_apy as any).map(function (o: any) {
+          return o.apy;
+        }),
+      );
+      setApyScale(apyMax);
       const latestMetrics = (r as any).data.protocolMetrics[0];
       setBackingPerClam(latestMetrics.treasuryMarketValue / latestMetrics.clamCirculatingSupply);
     });
@@ -315,7 +325,7 @@ function TreasuryDashboard() {
                   // @ts-ignore
                   <Chart
                     type="line"
-                    scale="log"
+                    scale="auto"
                     data={apy}
                     dataKey={['apy']}
                     color={theme.palette.text.primary}
@@ -328,6 +338,8 @@ function TreasuryDashboard() {
                     itemNames={tooltipItems.apy}
                     itemType={itemType.percentage}
                     infoTooltipMessage={tooltipInfoMessages.apy}
+                    domain={[0, apyScale]}
+
                     // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
                   />
                 }
