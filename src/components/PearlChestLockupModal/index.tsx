@@ -145,7 +145,7 @@ export default function PearlChestLockupModal({
                 }
               />
             </FormControl>
-            {BigNumber.from(allowance).gt(0) ? (
+            {BigNumber.from(allowance).gt(parseEther(amount || '0')) ? (
               <ActionButton
                 className="lockup-modal__action-btn"
                 pendingTransactions={pendingTransactions}
