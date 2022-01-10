@@ -77,7 +77,7 @@ export default function PearlChestLockupModal({
   const noteAddress = useFallback ? term?.fallbackTerm!.noteAddress : term?.noteAddress;
 
   const lockup = useCallback(async () => {
-    let result: any = await dispatch(lockAction({ chainID, provider, address, noteAddress: noteAddress!, amount }));
+    const result: any = await dispatch(lockAction({ chainID, provider, address, noteAddress: noteAddress!, amount }));
     if (result.payload) {
       onSuccess(result.payload);
     }

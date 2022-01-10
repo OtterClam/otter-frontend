@@ -1,4 +1,4 @@
-import { Paper, Typography } from '@material-ui/core';
+import { CircularProgress, Paper, Typography } from '@material-ui/core';
 import addDays from 'date-fns/addDays';
 import formateDate from 'date-fns/format';
 import { useMemo } from 'react';
@@ -31,7 +31,7 @@ export default function PearlChestLockupSuccessModal({
 
   const term = allTerms.find(term => term.noteAddress === actionResult?.note);
 
-  if (!actionResult || !term || !note) return <></>;
+  if (!actionResult || !term) return <></>;
 
   return (
     <Modal title="Otter’standing!" open={open} onClose={onClose} contentClassName="lockup-success-modal__content">
@@ -39,7 +39,11 @@ export default function PearlChestLockupSuccessModal({
         <Typography variant="h1" component="span" className="lockup-success-modal__message">
           Your Chest lock-up was successful.
         </Typography>
-        <img className="lockup-success-modal__receipt" src={note.imageUrl || getNoteImage(term.note.name)} />
+        {note ? (
+          <img className="lockup-success-modal__receipt" src={note.imageUrl || getNoteImage(term.note.name)} />
+        ) : (
+          <CircularProgress />
+        )}
         <Typography className="lockup-success-modal__message2">You got a {term.note.name}!</Typography>
         <Paper className="lockup-success-modal__details">
           <div className="lockup-success-modal__details-row">
