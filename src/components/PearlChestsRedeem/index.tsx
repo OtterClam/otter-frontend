@@ -26,6 +26,7 @@ import PearlChestLockupModal from '../PearlChestLockupModal';
 import PearlChestLockupSuccessModal from '../PearlChestLockupSuccessModal';
 import { addDays } from 'date-fns';
 import getNoteImage from 'src/helpers/get-note-image';
+import AddPearlToNoteModal from '../AddPearlToNodeModal';
 
 const numberFormatter = Intl.NumberFormat('en', { maximumFractionDigits: 4 });
 
@@ -47,9 +48,9 @@ export interface Note {
 
 export default function PearlChestsRedeem() {
   const [relockResult, setRelockResult] = useState<any>();
-  const [selectedLockNote, setSelectedLock] = useState<ILockNote | undefined>();
+  const [selectedTerm, setSelectedTerm] = useState<ITerm | null>(null);
+  const [selectedLockNote, setSelectedLock] = useState<ILockNote | null>(null);
   const currentEpoch = useSelector(state => state.app.currentEpoch);
-  const selectedTerm = useSelector(state => state.lake.selectedTerm);
   const lockNotes = useSelector(state => state.lake.lockNotes);
   const terms = useSelector(state => state.lake.terms);
   const pearlPrice = useSelector(state => state.app.pearlPrice);
@@ -65,11 +66,11 @@ export default function PearlChestsRedeem() {
   const dispatch = useDispatch();
 
   const clearSelectedTerm = useCallback(() => {
-    dispatch(selectTermAction(undefined));
+    setSelectedTerm(null);
   }, []);
 
-  const claimAndRelock = useCallback((term, lockNote) => {
-    dispatch(selectTermAction(term));
+  const addPearlToNote = useCallback((term, lockNote) => {
+    setSelectedTerm(term);
     setSelectedLock(lockNote);
   }, []);
 
@@ -90,7 +91,7 @@ export default function PearlChestsRedeem() {
             key={i}
             term={term}
             lockNote={lockNote}
-            claimAndRelock={claimAndRelock}
+            addPearlToNote={addPearlToNote}
             note={{
               id: lockNote.tokenId,
               lockedValue: -1,
@@ -103,7 +104,7 @@ export default function PearlChestsRedeem() {
           />
         );
       })}
-      <PearlChestLockupModal
+      <AddPearlToNoteModal
         discount={extraBonus[Number(selectedTerm?.lockPeriod) ?? 0] ?? 0}
         open={Boolean(selectedTerm)}
         term={selectedTerm}
@@ -124,12 +125,12 @@ function NoteCard({
   note,
   term,
   lockNote,
-  claimAndRelock,
+  addPearlToNote,
 }: {
   note: Note;
   term: ITerm;
   lockNote: ILockNote;
-  claimAndRelock: (term: ITerm, lockNote: ILockNote) => void;
+  addPearlToNote: (term: ITerm, lockNote: ILockNote) => void;
 }) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -233,12 +234,22 @@ function NoteCard({
           <>
             <ActionButton
               pendingTransactions={pendingTransactions}
-              type={'relock_' + term.noteAddress + '_' + lockNote.tokenId}
-              start={t('pearlChests.claimRewardAndRelock')}
+              type={'extend-lock_' + term.noteAddress + '_' + lockNote.tokenId}
+              start={t('pearlChests.addPearl')}
               progress="Processing..."
-              processTx={claimAndLock}
+              processTx={() => addPearlToNote(term, lockNote)}
               wrapper={({ onClick, text }) => <CustomButton className="note__action" text={text} onClick={onClick} />}
             />
+            {lockNote.reward > 0 && (
+              <ActionButton
+                pendingTransactions={pendingTransactions}
+                type={'relock_' + term.noteAddress + '_' + lockNote.tokenId}
+                start={t('pearlChests.claimRewardAndRelock', { amount: numberFormatter.format(lockNote.reward) })}
+                progress="Processing..."
+                processTx={claimAndLock}
+                wrapper={({ onClick, text }) => <CustomButton className="note__action" text={text} onClick={onClick} />}
+              />
+            )}
             <ActionButton
               pendingTransactions={pendingTransactions}
               type={'claim-reward_' + term.noteAddress + '_' + lockNote.tokenId}

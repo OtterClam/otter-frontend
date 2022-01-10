@@ -59,7 +59,7 @@ export default function PearlChestsLockup() {
 function LockupOption({ term, onSelect }: { term: ITerm; onSelect: (settings: ITerm | undefined) => void }) {
   const { t } = useTranslation();
   const showBadge = term.lockPeriod >= 90;
-  const multiplier = (term.multiplier / 100).toFixed(2);
+  const multiplier = String(term.multiplier / 100);
   const pendingTransactions = useSelector<IReduxState, IPendingTxn[]>(state => {
     return state.pendingTransactions;
   });

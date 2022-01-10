@@ -10,7 +10,7 @@ import { formatCurrency, getTokenImage, trim } from '../../helpers';
 import apollo from '../../lib/apolloClient';
 import OtterKing from './otterking.png';
 import './treasury-dashboard.scss';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { bulletpoints, itemType, treasuryDataQuery } from './treasuryData.js';
 
 const percentFormatter = Intl.NumberFormat('en', { style: 'percent', minimumFractionDigits: 2 });

@@ -19,6 +19,7 @@ export interface ITerm {
   pearlBalance: number;
   boostPoint: number;
   apy: number;
+  rewardRate: number;
   fallbackTerm?: ITerm;
 }
 
@@ -166,12 +167,13 @@ async function getTermsAndLocks(address: string, chainID: number, provider: Json
         return {
           noteAddress: term.note,
           lockPeriod: term.lockPeriod.toNumber() / 3, // epochs -> days
-          minLockAmount: formatEther(term.minLockAmount),
+          minLockAmount: Number(formatEther(term.minLockAmount)).toFixed(0),
           multiplier: term.multiplier,
           enabled: term.enabled,
           pearlBalance,
           boostPoint,
           apy: 0,
+          rewardRate: 0,
           note: {
             name,
             symbol,
@@ -198,6 +200,7 @@ async function getTermsAndLocks(address: string, chainID: number, provider: Json
     }
     return {
       ...term,
+      rewardRate,
       fallbackTerm: fallbackTerm?.noteAddress === term.noteAddress ? undefined : fallbackTerm,
     };
   });

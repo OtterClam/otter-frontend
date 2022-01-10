@@ -1,0 +1,231 @@
+@import '../../styles/colors';
+
+.add-pearl-modal {
+  &__not-qualified {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  &__summary {
+    padding: 40px;
+    border-radius: 20px !important;
+  }
+
+  &__summary-label,
+  &__summary-period {
+    font-size: 16px !important;
+    line-height: 24px !important;
+  }
+
+  &__summary-period-wrapper {
+    display: flex;
+    align-items: center;
+  }
+
+  &__summary-period {
+    flex: 1;
+  }
+
+  &__summary-title {
+    font-size: 24px !important;
+    line-height: 36px !important;
+  }
+
+  &__summary-div {
+    margin: 20px 0 !important;
+  }
+
+  &__reward-label {
+    display: block;
+    margin-bottom: 5px !important;
+  }
+
+  &__reward {
+    display: flex;
+    align-items: center;
+    grid-gap: 10px;
+    margin-top: 5px !important;
+
+    &-icon {
+      flex: 0 0 24px;
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  &__approve-caption {
+    display: block;
+    text-align: center;
+    margin-top: 20px !important;
+  }
+
+  &__action-btn.transaction-button {
+    margin: 0 0 0 20px !important;
+  }
+
+  &__approve-caption {
+    margin-bottom: 20px !important;
+  }
+
+  &__form {
+    background: transparent !important;
+    margin-top: 20px;
+
+    .ohm-input {
+      margin: 0 !important;
+    }
+
+    &-title {
+      display: block;
+      font-size: 16px !important;
+      line-height: 24px !important;
+      font-weight: bold !important;
+      margin-bottom: 10px !important;
+    }
+
+    &-input {
+      border-radius: 10px;
+      outline: none;
+
+      .MuiOutlinedInput-input {
+        font-size: 16px;
+      }
+
+      .stake-input-btn {
+        cursor: pointer;
+
+        p {
+          font-weight: 600;
+          font-size: 18px;
+        }
+      }
+    }
+  }
+
+  &__no-discount {
+    color: $light-gray400;
+    font-size: 16px !important;
+    line-height: 24px !important;
+    font-weight: 700 !important;
+  }
+
+  &__card {
+    display: flex;
+    grid-gap: 20px;
+    margin-top: 20px;
+    border: 1px solid $light-gray300;
+    border-radius: 12px;
+    padding: 20px;
+
+    &-body {
+      display: flex;
+      flex-direction: column;
+      grid-gap: 10px;
+    }
+
+    &-title {
+      font-size: 16px !important;
+      line-height: 24px !important;
+      font-weight: bold !important;
+    }
+
+    &-receipt {
+      flex: 0 0 200px;
+      min-width: 0;
+      position: relative;
+
+      &-img {
+        width: 200px;
+        display: inherit;
+      }
+    }
+
+    &-discount {
+      font-size: 16px !important;
+      line-height: 24px !important;
+      color: $otter-blue;
+    }
+
+    &-requirement {
+      font-size: 14px !important;
+      line-height: 21px !important;
+      color: $clam-pink;
+      font-weight: normal !important;
+    }
+  }
+
+  &__account-details {
+    display: flex;
+    flex-direction: column;
+    grid-gap: 10px;
+  }
+
+  &__account-detail {
+    display: flex;
+  }
+
+  &__account-detail-label,
+  &__account-detail-value {
+    flex: 1 50%;
+    font-size: 16px !important;
+    line-height: 24px !important;
+  }
+
+  &__account-detail-value {
+    text-align: right;
+    font-weight: normal !important;
+  }
+
+  @media screen and (max-width: 768px) {
+    &__summary-label {
+      font-size: 14px !important;
+      line-height: 21px !important;
+    }
+
+    &__summary-title {
+      font-size: 20px !important;
+      line-height: 30px !important;
+    }
+
+    &__summary-period-wrapper {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    &__card {
+      flex-direction: column;
+      grid-gap: 10px;
+    }
+
+    &__card-title,
+    &__card-discount {
+      font-size: 14px !important;
+      line-height: 21px !important;
+    }
+
+    &__card-requirement {
+      font-size: 12px !important;
+      line-height: 18px !important;
+    }
+
+    &__card-receipt {
+      flex: 1 100%;
+
+      &-img {
+        width: 100%;
+      }
+    }
+
+    &__action-btn.transaction-button {
+      margin: 10px 0 0 0 !important;
+    }
+  }
+}
