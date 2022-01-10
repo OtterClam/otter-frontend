@@ -11,6 +11,7 @@ type Props = BoxProps & {
   type?: ButtonType;
   icon?: ElementType<any>;
   href?: string;
+  target?: string;
 };
 
 type ButtonConfig = Partial<Pick<BoxProps, 'bgcolor' | 'color' | 'border'>>;

@@ -52,6 +52,7 @@ export default function PearlChests() {
                   type="outline"
                   href="https://otterclam.medium.com/introducing-pearl-chests-and-pearl-notes-70a61748963f"
                   text={t('pearlChests.readMore')}
+                  target="_blank"
                 />
               </div>
             </div>
