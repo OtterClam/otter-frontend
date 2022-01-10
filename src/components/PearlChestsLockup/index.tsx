@@ -94,7 +94,8 @@ function LockupOption({ term, onSelect }: { term: ITerm; onSelect: (settings: IT
 
         <div>
           <Typography className="lockup-option__label" variant="caption" component="span">
-            {t('pearlChests.lockUp.rewardBoost')} <InfoTooltip message="test" />
+            {t('pearlChests.lockUp.rewardBoost')}
+            <InfoTooltip message="Amount of locked PEARL x static multiplier gives us boost points." />
           </Typography>
           <Typography className="lockup-option__value" component="span">
             x{multiplier}
@@ -105,10 +106,11 @@ function LockupOption({ term, onSelect }: { term: ITerm; onSelect: (settings: IT
 
         <div>
           <Typography className="lockup-option__label" variant="caption" component="span">
-            {t('pearlChests.lockUp.expectedAPY')} <InfoTooltip message="test" />
+            {t('pearlChests.lockUp.expectedAPY')}
           </Typography>
           <Typography className="lockup-option__value" component="span">
-            {formatApy(term.apy)}%
+            TBD
+            {/* {formatApy(term.apy)}% */}
           </Typography>
         </div>
 
