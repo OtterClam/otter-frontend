@@ -1,6 +1,6 @@
 import groupBy from 'lodash/groupBy';
 import { JsonRpcProvider } from '@ethersproject/providers';
-import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
+import { createAction, createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
 import { constants, ethers } from 'ethers';
 import { PearlNote, OtterLake, PearlTokenContract } from '../../abi';
 import { getAddresses } from '../../constants';
@@ -46,6 +46,7 @@ export interface IOtterLakeSliceState {
   terms: ITerm[];
   lockNotes: ILockNote[];
   selectedTerm?: ITerm;
+  allowance: string;
 }
 
 const initialState: IOtterLakeSliceState = {
@@ -53,10 +54,16 @@ const initialState: IOtterLakeSliceState = {
   terms: [],
   lockNotes: [],
   selectedTerm: undefined,
+  allowance: '0',
 };
 
 interface ILoadTermsDetails {
   address: string;
+  chainID: number;
+  provider: JsonRpcProvider;
+}
+
+interface IApproveSpendingPayload {
   chainID: number;
   provider: JsonRpcProvider;
 }
@@ -105,8 +112,8 @@ interface IClaimAndLockPayload {
 export const loadTermsDetails = createAsyncThunk(
   'otterLake/loadTermsDetails',
   async ({ address, chainID, provider }: ILoadTermsDetails) => {
-    const { terms, lockNotes } = await getTermsAndLocks(address, chainID, provider);
-    return { terms, lockNotes };
+    const { terms, lockNotes, allowance } = await getTermsAndLocks(address, chainID, provider);
+    return { terms, lockNotes, allowance };
   },
 );
 
@@ -117,6 +124,9 @@ async function getTermsAndLocks(address: string, chainID: number, provider: Json
 
   const termsCount = (await otterLakeContract.termsCount()).toNumber();
   const epoch = await otterLakeContract.epochs(await otterLakeContract.epoch());
+  const allowance = (
+    await pearlContract.connect(provider.getSigner()).allowance(address, addresses.OTTER_LAKE)
+  ).toString();
   const totalNextReward = Number(formatEther(epoch.reward));
   const actions: Promise<ITerm>[] = [];
   const lockNotes: ILockNote[] = [];
@@ -209,8 +219,37 @@ async function getTermsAndLocks(address: string, chainID: number, provider: Json
     n.nextReward = Number(n.amount) * n.rewardRate;
   });
 
-  return { terms, lockNotes };
+  return { allowance, terms, lockNotes };
 }
+
+const updateAllowance = createAction<string>('otterLake/updateAllowance');
+
+export const approveSpending = createAsyncThunk(
+  'otterLake/approveSpending',
+  async ({ chainID, provider }: IApproveSpendingPayload, { dispatch }) => {
+    const addresses = getAddresses(chainID);
+    const pearlContract = new ethers.Contract(addresses.PEARL_ADDRESS, PearlTokenContract, provider);
+    let tx: any;
+    try {
+      tx = await pearlContract.connect(provider.getSigner()).approve(addresses.OTTER_LAKE, constants.MaxUint256);
+      dispatch(
+        fetchPendingTxns({
+          txnHash: tx.hash,
+          text: 'Processing',
+          type: 'lake-approve_pearl',
+        }),
+      );
+      await tx.wait();
+      await dispatch(updateAllowance(constants.MaxInt256.toString()));
+    } catch (error: any) {
+      alert((error as Error).message);
+    } finally {
+      if (tx) {
+        dispatch(clearPendingTxn(tx.hash));
+      }
+    }
+  },
+);
 
 export const claimReward = createAsyncThunk(
   'otterLake/claimReward',
@@ -277,7 +316,6 @@ export const lock = createAsyncThunk(
     let lockedEvent: any;
 
     try {
-      await allowanceGuard(chainID, provider, address, amount);
       tx = await otterLakeContract.connect(provider.getSigner()).lock(noteAddress, ethers.utils.parseEther(amount));
       dispatch(
         fetchPendingTxns({
@@ -306,15 +344,6 @@ export const lock = createAsyncThunk(
   },
 );
 
-const allowanceGuard = async (chainID: number, provider: JsonRpcProvider, address: string, amount: string) => {
-  const addresses = getAddresses(chainID);
-  const pearlContract = new ethers.Contract(addresses.PEARL_ADDRESS, PearlTokenContract, provider);
-  const allowance = await pearlContract.connect(provider.getSigner()).allowance(address, addresses.OTTER_LAKE);
-  if (allowance.lt(ethers.utils.parseEther(amount))) {
-    await pearlContract.connect(provider.getSigner()).approve(addresses.OTTER_LAKE, constants.MaxUint256);
-  }
-};
-
 export const extendLock = createAsyncThunk(
   'otterLake/extendLock',
   async ({ chainID, provider, noteAddress, amount, address, tokenId }: IExtendLockDetails, { dispatch }) => {
@@ -324,7 +353,6 @@ export const extendLock = createAsyncThunk(
     let lockedEvent;
 
     try {
-      await allowanceGuard(chainID, provider, address, amount);
       tx = await otterLakeContract
         .connect(provider.getSigner())
         .extendLock(noteAddress, tokenId, ethers.utils.parseEther(amount));
@@ -401,6 +429,9 @@ const otterLakeSlice = createSlice({
     selectTerm(state, action) {
       state.selectedTerm = action.payload;
     },
+    updateAllowance(state, action) {
+      state.allowance = action.payload;
+    },
   },
   extraReducers: builder => {
     builder
@@ -414,6 +445,9 @@ const otterLakeSlice = createSlice({
       .addCase(loadTermsDetails.rejected, (state, { error }) => {
         state.loading = false;
         console.log(error);
+      })
+      .addCase(updateAllowance, (state, action) => {
+        state.allowance = action.payload;
       });
   },
 });

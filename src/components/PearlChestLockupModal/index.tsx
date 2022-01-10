@@ -13,6 +13,7 @@ import {
 } from '@material-ui/core';
 import addDays from 'date-fns/addDays';
 import formatDate from 'date-fns/format';
+import { BigNumber } from 'ethers';
 import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
@@ -20,7 +21,7 @@ import Modal from 'src/components/Modal';
 import { trim } from 'src/helpers';
 import getNoteImage from 'src/helpers/get-note-image';
 import { useSelector } from 'src/store/hook';
-import { ITerm, lock as lockAction } from 'src/store/slices/otter-lake-slice';
+import { approveSpending, ITerm, lock as lockAction } from 'src/store/slices/otter-lake-slice';
 import { ReactComponent as NoteIcon } from '../../assets/icons/note.svg';
 import { ReactComponent as RocketIcon } from '../../assets/icons/rocket.svg';
 import { useWeb3Context } from '../../hooks';
@@ -70,6 +71,7 @@ export default function PearlChestLockupModal({
   const multiplier = term ? Number((term.multiplier / 100).toFixed(1)) : 1;
   const useFallback = parseEther(amount || '0').lt(parseEther(term?.minLockAmount ?? '0'));
   const account = useSelector(state => state.account);
+  const allowance = useSelector(state => state.lake.allowance);
   const pendingTransactions = useSelector(state => state.pendingTransactions);
   const { provider, address, chainID } = useWeb3Context();
   const noteAddress = useFallback ? term?.fallbackTerm!.noteAddress : term?.noteAddress;
@@ -80,6 +82,8 @@ export default function PearlChestLockupModal({
       onSuccess(result.payload);
     }
   }, [noteAddress, amount, onSuccess]);
+
+  const approve = async () => await dispatch(approveSpending({ chainID, provider }));
 
   return (
     <Modal title={t('pearlChests.lockUpModal.title')} open={open} onClose={onClose}>
@@ -141,14 +145,25 @@ export default function PearlChestLockupModal({
                 }
               />
             </FormControl>
-            <ActionButton
-              className="lockup-modal__action-btn"
-              pendingTransactions={pendingTransactions}
-              type={'lock_' + noteAddress}
-              start="Lock Up"
-              progress="Processing..."
-              processTx={lockup}
-            />
+            {BigNumber.from(allowance).gt(0) ? (
+              <ActionButton
+                className="lockup-modal__action-btn"
+                pendingTransactions={pendingTransactions}
+                type={'lock_' + noteAddress}
+                start="Lock Up"
+                progress="Processing..."
+                processTx={lockup}
+              />
+            ) : (
+              <ActionButton
+                className="lockup-modal__action-btn"
+                pendingTransactions={pendingTransactions}
+                type="lake-approve_pearl"
+                start="Approve"
+                progress="Processing..."
+                processTx={approve}
+              />
+            )}
           </div>
 
           <Typography variant="caption" className="lockup-modal__approve-caption">
