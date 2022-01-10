@@ -1,0 +1,136 @@
+@import '../../styles/colors';
+
+.note {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  grid-gap: 10px;
+
+  &:not(:first-child) {
+    box-shadow: inset 0px 1px 0px $light-gray200;
+  }
+
+  &:first-child {
+    padding-top: 0;
+  }
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    grid-gap: 10px;
+    font-size: 18px !important;
+    line-height: 27px !important;
+    font-weight: bold !important;
+  }
+
+  &__id {
+    color: $dark-gray100;
+    font-weight: 400;
+    font-size: 12px;
+
+    &::before {
+      content: '#';
+    }
+  }
+
+  &__lock-status {
+    &--unlocked {
+      background: $otter-green !important;
+      color: #fff !important;
+    }
+  }
+
+  &__receipt-image {
+    flex: 0 243px;
+    min-width: 0;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  &__body {
+    flex: 1;
+    display: flex;
+    grid-gap: 20px;
+  }
+
+  &__pearl-icon {
+    display: flex;
+    margin-left: 10px;
+  }
+
+  &__details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    grid-gap: 2px;
+
+    &-row {
+      display: flex;
+      align-items: center;
+    }
+
+    &-label {
+      flex: 0 0 140px;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 21px;
+    }
+
+    &-value {
+      display: flex;
+      align-items: center;
+      flex: 1;
+      font-weight: bold;
+      font-size: 14px;
+      line-height: 21px;
+    }
+  }
+
+  &__countdown {
+    color: $clam-pink;
+    margin-left: 0.5em;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    grid-gap: 10px;
+    margin-top: 10px;
+  }
+
+  &__action {
+    display: inline-flex;
+  }
+
+  @media screen and (max-width: 768px) {
+    &__body {
+      flex-direction: column;
+    }
+
+    &__receipt-image {
+      flex: 1;
+    }
+
+    &__div {
+      display: none;
+    }
+
+    &__actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    &__title {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+}

@@ -2,7 +2,9 @@ import { Box, Container, Grid, Paper, Typography, useMediaQuery, Zoom } from '@m
 import { useTheme } from '@material-ui/core/styles';
 import { Skeleton } from '@material-ui/lab';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import DashboardHero from 'src/components/DashboardHero';
 import InfoTooltip from 'src/components/InfoTooltip/InfoTooltip.jsx';
 import { IReduxState } from 'src/store/slices/state.interface';
 import Chart from '../../components/Chart/Chart.jsx';
@@ -10,10 +12,8 @@ import { formatCurrency, getTokenImage, trim } from '../../helpers';
 import apollo from '../../lib/apolloClient';
 import OtterKing from './otterking.png';
 import './treasury-dashboard.scss';
-import { useTranslation, Trans } from 'react-i18next';
 import { bulletpoints, itemType, treasuryDataQuery } from './treasuryData.js';
 
-const percentFormatter = Intl.NumberFormat('en', { style: 'percent', minimumFractionDigits: 2 });
 const numberFormatter = Intl.NumberFormat('en', { maximumFractionDigits: 0 });
 
 function TreasuryDashboard() {
@@ -137,12 +137,7 @@ function TreasuryDashboard() {
   return (
     <div id="treasury-dashboard-view" className={`${smallerScreen && 'smaller'} ${verySmallScreen && 'very-small'}`}>
       <div className="hero">
-        <Box component="div" color="text.primary">
-          <p>Wen (3,3) becomes (🦦,🦦)</p>
-          <h1>{t('dashboard.otterKingdom')}</h1>
-          <h3>{t('dashboard.decentralized')}</h3>
-        </Box>
-        <img src={OtterKing} />
+        <DashboardHero />
       </div>
       <div className="wave" />
       <Container

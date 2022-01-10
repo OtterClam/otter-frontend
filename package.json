@@ -65,6 +65,7 @@
     "react-i18next": "^11.14.3",
     "react-qr-reader": "^2.2.1",
     "react-redux": "^7.2.4",
+    "react-responsive-carousel": "^3.2.22",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.3",
     "recharts": "^2.1.6",

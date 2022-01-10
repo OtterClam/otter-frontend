@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
 import Dashboard from 'src/views/Dashboard/TreasuryDashboard';
 import Migrate from 'src/views/Migrate';
+import PearlChests from 'src/views/PearlChests';
 import Calculator from 'src/views/Calculator';
 import TopBar from '../components/Header';
 import Loading from '../components/Loader';
@@ -14,6 +15,7 @@ import { BondKeys } from '../constants';
 import { useAddress, useWeb3Context } from '../hooks';
 import { calculateUserBondDetails, loadAccountDetails } from '../store/slices/account-slice';
 import { loadAppDetails } from '../store/slices/app-slice';
+import { loadTermsDetails } from '../store/slices/otter-lake-slice';
 import { calcBondDetails } from '../store/slices/bond-slice';
 import { IReduxState } from '../store/slices/state.interface';
 import { Bond, ChooseBond, Stake, Wrap } from '../views';
@@ -78,10 +80,12 @@ function App() {
 
     if (whichDetails === 'app') {
       loadApp(loadProvider);
+      // loadTerms(loadProvider);
     }
 
     if (whichDetails === 'account' && address && connected) {
       loadAccount(loadProvider);
+      // loadTerms(loadProvider);
       if (isAppLoaded) return;
 
       loadApp(loadProvider);
@@ -169,7 +173,7 @@ function App() {
         <div className={`${classes.content} ${isSmallerScreen && classes.contentShift}`}>
           <Switch>
             <Route exact path="/">
-              <Redirect to="/stake" />
+              <Redirect to="/dashboard" />
             </Route>
 
             <Route path="/dashboard">
@@ -182,6 +186,10 @@ function App() {
 
             <Route path="/wrap">
               <Wrap />
+            </Route>
+
+            <Route path="/pearl-chests">
+              <PearlChests />
             </Route>
 
             <Route path="/bonds">
