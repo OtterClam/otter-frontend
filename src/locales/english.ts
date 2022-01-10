@@ -233,7 +233,6 @@ const English = {
     },
     pearlChests: {
       title: 'PEARL Chests',
-      subtitle: '4 Hours, 30 Mins to Next Rebase',
       description:
         'PEARL Chests are like personal vaults where you can lock your PEARLs. Once your PEARLs are put into a Chest, they will be locked for a certain period of time, but will also yield a lot more CLAMs.',
       readMore: 'Read More',

@@ -6,6 +6,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import CustomButton from 'src/components/Button/CustomButton';
 import PearlChestsLockup from 'src/components/PearlChestsLockup';
 import PearlChestsRedeem from 'src/components/PearlChestsRedeem';
+import RebaseTimer from 'src/components/RebaseTimer/RebaseTimer';
 import { getTokenImage } from 'src/helpers';
 import { useWeb3Context } from 'src/hooks';
 import { loadTermsDetails } from 'src/store/slices/otter-lake-slice';
@@ -38,7 +39,7 @@ export default function PearlChests() {
               </Typography>
 
               <Typography className="pearl-chests__subtitle" variant="h5" component="h2">
-                {t('pearlChests.subtitle')}
+                <RebaseTimer />
               </Typography>
 
               <Typography className="pearl-chests__description" variant="h5" component="p">

@@ -139,7 +139,7 @@ function NavContent() {
               <Link
                 component={NavLink}
                 id="stake-nav"
-                to="/"
+                to="/stake"
                 isActive={(match: any, location: any) => {
                   return checkPage(location, 'stake');
                 }}
