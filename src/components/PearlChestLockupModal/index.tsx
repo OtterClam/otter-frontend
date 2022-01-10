@@ -90,7 +90,7 @@ export default function PearlChestLockupModal({
           </Typography>
           <Typography className="lockup-modal__summary-title">{term?.note.name}</Typography>
           <div className="lockup-modal__summary-period-wrapper">
-            <Typography className="lockup-modal__summary-period">{term?.lockPeriod} Days Locked-up Period</Typography>
+            <Typography className="lockup-modal__summary-period">{term?.lockPeriod}-Day Lock-up Period</Typography>
             <Typography variant="caption">
               Due date: {formatDate(addDays(new Date(), Number(term?.lockPeriod ?? 1)), 'MMM dd, yyyy')}
             </Typography>
@@ -112,7 +112,7 @@ export default function PearlChestLockupModal({
 
         <Paper className="lockup-modal__form">
           <Typography variant="h4" component="h4" className="lockup-modal__form-title">
-            Enter locked-up PEARL amount
+            Enter PEARL amount
           </Typography>
 
           <div className={styles.input + ' input-container'}>
@@ -152,7 +152,7 @@ export default function PearlChestLockupModal({
           </div>
 
           <Typography variant="caption" className="lockup-modal__approve-caption">
-            Note: Your first interaction with Pearl Chests includes an “Approve” transaction followed by a lock up
+            Note: Your first interaction with Pearl Chests includes an “Approve” transaction followed by a “Lock up”
             transaction. Subsequent lockups will only require the “Lock Up” transaction.
           </Typography>
 
@@ -206,7 +206,7 @@ function NoteCard({ term, discount, qualified }: { term: ITerm; discount: number
               Use this note to receive a {discount}% discount on any (4,4) bond.
             </Typography>
             <Typography className="lockup-modal__card-requirement">
-              (Minimum {term.minLockAmount} PEARL locked-up required to get this note)
+              (Minimum {term.minLockAmount} PEARL lockup required to get this note)
             </Typography>
           </>
         )}
