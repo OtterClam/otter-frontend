@@ -12,6 +12,8 @@ type Props = Omit<BoxProps, 'className'> & {
   mainColor?: string;
   secondaryColor?: string;
   icon?: ElementType<any>;
+  href?: string;
+  target?: string;
 };
 
 const ICON_BASE_STYLE: CSSProperties = { width: '20px', height: '20px', verticalAlign: 'middle' };

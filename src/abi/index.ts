@@ -27,3 +27,6 @@ export { abi as OtterPAWBondStakeDepository } from './OtterPAWBondStakeDepositor
 export { abi as AggregatorV3InterfaceABI } from './AggregatorV3InterfaceABI.json';
 
 export { abi as OtterPAW } from './tokens/OtterPAW.json';
+
+export { abi as PearlNote } from './PearlNote.json';
+export { abi as OtterLake } from './OtterLake.json';

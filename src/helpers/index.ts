@@ -23,3 +23,7 @@ export function formatCurrency(c: number, precision = 0) {
     minimumFractionDigits: precision,
   }).format(c);
 }
+
+const apyFormatter = new Intl.NumberFormat('en-US', { style: 'percent', maximumFractionDigits: 0 });
+
+export const formatApy = (apy: number) => apyFormatter.format(Number(apy));

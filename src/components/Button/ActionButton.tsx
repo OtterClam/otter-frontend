@@ -2,27 +2,40 @@ import { Box, BoxProps } from '@material-ui/core';
 import { IPendingTxn, isPendingTxn, txnButtonText } from '../../store/slices/pending-txns-slice';
 
 interface ActionButtonProps extends BoxProps {
+  className?: string;
   pendingTransactions: IPendingTxn[];
   type: string;
   start: string;
   progress: string;
   processTx: any;
+  wrapper?: (props: { onClick: () => void; text: string }) => JSX.Element;
 }
 
 function ActionButton(props: ActionButtonProps) {
-  const { pendingTransactions, type, start, progress, processTx, ...boxProps } = props;
+  const { pendingTransactions, type, start, progress, processTx, wrapper, className = '', ...boxProps } = props;
+
+  const text = txnButtonText(pendingTransactions, type, progress, start);
+
+  const handleClick = () => {
+    if (isPendingTxn(pendingTransactions, progress)) return;
+    processTx();
+  };
+
+  if (wrapper) {
+    return wrapper({
+      onClick: handleClick,
+      text,
+    });
+  }
 
   return (
     <Box
       className="wrap-tab-panel-btn stake-tab-panel-btn nft-card__button"
       bgcolor="otter.otterBlue"
-      onClick={() => {
-        if (isPendingTxn(pendingTransactions, progress)) return;
-        processTx();
-      }}
+      onClick={handleClick}
       {...boxProps}
     >
-      <p>{txnButtonText(pendingTransactions, type, progress, start)}</p>
+      <p>{text}</p>
     </Box>
   );
 }

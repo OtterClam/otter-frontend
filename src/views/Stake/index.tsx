@@ -14,6 +14,7 @@ import {
 } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import ActionButton from '../../components/Button/ActionButton';
 import RebaseTimer from '../../components/RebaseTimer/RebaseTimer';
@@ -23,12 +24,8 @@ import { useWeb3Context } from '../../hooks';
 import { IPendingTxn } from '../../store/slices/pending-txns-slice';
 import { changeApproval, changeStake, claimWarmup } from '../../store/slices/stake-thunk';
 import { IReduxState } from '../../store/slices/state.interface';
-import { useTranslation, Trans } from 'react-i18next';
 import './stake.scss';
 import StakeDialog from './StakeDialog';
-import { ethers } from 'ethers';
-import { getAddresses } from 'src/constants';
-import { ClamTokenContract } from 'src/abi';
 
 const useStyles = makeStyles(theme => ({
   root: {

@@ -8,6 +8,7 @@ import {
   OutlinedInput,
   makeStyles,
   Zoom,
+  Button,
   Slider,
   Paper,
   Box,
@@ -15,7 +16,8 @@ import {
 } from '@material-ui/core';
 import { trim } from '../../helpers';
 import { Skeleton } from '@material-ui/lab';
-import { IReduxState } from '../../store/slices/state.interface';
+import { useAppSelector, useAppDispatch } from 'src/store/hook';
+import { useWeb3Context } from 'src/hooks/web3';
 import { useTranslation, Trans } from 'react-i18next';
 
 const useStyles = makeStyles(theme => ({
@@ -57,24 +59,31 @@ function Calculator() {
     });
     return y.format(parseInt(x)).toString();
   };
-  const isAppLoading = useSelector<IReduxState, boolean>(state => state.app.loading);
-  const clamBalance = useSelector<IReduxState, string>(state => {
+  const isAppLoading = useAppSelector<boolean>(state => state.app.loading);
+  const clamBalance = useAppSelector<string>(state => {
     return state.account.balances && state.account.balances.clam;
   });
-  const sClamBalance = useSelector<IReduxState, string>(state => {
+  const sClamBalance = useAppSelector<string>(state => {
     return state.account.balances && state.account.balances.sClam;
   });
-  const marketPrice = useSelector<IReduxState, number>(state => state.app.marketPrice);
+  const marketPrice = useAppSelector<number>(state => state.app.marketPrice);
 
-  const stakingAPY = useSelector<IReduxState, number>(state => {
+  const stakingAPY = useAppSelector<number>(state => {
     return state.app.stakingAPY;
   });
+
+  const currentIndex = useAppSelector<string>(state => state.app.currentIndex);
+  const pearlBalance = useAppSelector<string>(state => state.account.balances?.pearl);
+
+  const totalBalance = new Intl.NumberFormat('en-US').format(
+    Number(sClamBalance) + Number(pearlBalance) * Number(currentIndex),
+  );
 
   const trimmedStakingAPY = trim(stakingAPY * 100, 1);
   const trimmedsClamBalance = new Intl.NumberFormat('en-US').format(Number(sClamBalance));
   const trimeMarketPrice = trim(marketPrice, 2);
 
-  const [sClamAmount, setsClamAmount] = useState(trimmedsClamBalance);
+  const [sClamAmount, setsClamAmount] = useState(totalBalance);
   const [rewardYield, setRewardYield] = useState(trimmedStakingAPY);
   const [priceAtPurchase, setPriceAtPurchase] = useState(trimeMarketPrice);
   const [futureMarketPrice, setFutureMarketPrice] = useState(trimeMarketPrice);
@@ -100,12 +109,7 @@ function Calculator() {
 
   const [initialInvestment, setInitialInvestment] = useState(calcInitialInvestment());
 
-  useEffect(() => {
-    const newInitialInvestment = calcInitialInvestment();
-    setInitialInvestment(newInitialInvestment);
-  }, [sClamAmount, priceAtPurchase]);
-
-  const calcNewBalance = () => {
+  function calcNewBalance() {
     let value = parseFloat(rewardYield) / 100;
     value = Math.pow(value + 1, 1 / (365 * 3)) - 1 || 0;
     let balance = Number(sClamAmount);
@@ -113,16 +117,23 @@ function Calculator() {
       balance += balance * value;
     }
     return balance;
-  };
+  }
 
   useEffect(() => {
-    const newBalance = calcNewBalance();
+    const newInitialInvestment = calcInitialInvestment();
+    setInitialInvestment(newInitialInvestment);
+    const newBalance = calcNewBalance(); //rewardYield + sclam
     setRewardsEstimation(trim(newBalance, 6));
     const newPotentialReturn = newBalance * (parseFloat(futureMarketPrice) || 0);
-    setPotentialReturn(trim(newPotentialReturn, 2));
     const newPercentageReturn = (newPotentialReturn / parseFloat(initialInvestment)) * 100 - 100;
+
+    setPotentialReturn(trim(newPotentialReturn, 2));
     setPotentialPercentageReturn(trim(newPercentageReturn, 2));
-  }, [days, rewardYield, futureMarketPrice, sClamAmount]);
+  }, [sClamAmount, days, rewardYield, futureMarketPrice, priceAtPurchase, percentagePotentialReturn]);
+
+  const trimmedPearlBalance = new Intl.NumberFormat('en-US').format(Number(pearlBalance));
+  const trimmedPearlInsCLAM = new Intl.NumberFormat('en-US').format(Number(pearlBalance) * Number(currentIndex));
+  const [pearlAndsCLAM, setpearlAndsCLAM] = useState(0);
 
   return (
     <div id="calculator-view" className={styles.root}>
@@ -164,7 +175,14 @@ function Calculator() {
                       {isAppLoading ? (
                         <Skeleton width="100px" />
                       ) : (
-                        <Typography className="metric-body">{trimmedsClamBalance} sCLAM</Typography>
+                        <div>
+                          <Typography className="metric-body">{totalBalance} sCLAM</Typography>
+                          {Number(pearlBalance) > 0 ? (
+                            <Typography className="metric-sub">({trimmedPearlInsCLAM} as PEARL)</Typography>
+                          ) : (
+                            <Typography className="metric-sub">&nbsp;</Typography>
+                          )}
+                        </div>
                       )}
                     </Box>
                   </Grid>
@@ -189,10 +207,7 @@ function Calculator() {
                           labelWidth={0}
                           endAdornment={
                             <InputAdornment className="adornment" position="end">
-                              <div
-                                onClick={() => setsClamAmount(trimmedsClamBalance)}
-                                className="stake-card-action-input-btn"
-                              >
+                              <div onClick={() => setsClamAmount(totalBalance)} className="stake-card-action-input-btn">
                                 <Typography>{t('common.max')}</Typography>
                               </div>
                             </InputAdornment>
@@ -299,12 +314,12 @@ function Calculator() {
                     </Typography>
                   </Box>
                   <Box className="data-row">
-                    <Typography className="data-row-name">C{t('calculator.rewardEstimation')}</Typography>
+                    <Typography className="data-row-name">s{t('calculator.rewardEstimation')}</Typography>
                     <Typography className="data-row-value">
                       {isAppLoading ? (
                         <Skeleton width="80px" />
                       ) : (
-                        <>{new Intl.NumberFormat('en-US').format(Number(rewardsEstimation))} CLAM</>
+                        <>{new Intl.NumberFormat('en-US').format(Number(rewardsEstimation))} sCLAM</>
                       )}
                     </Typography>
                   </Box>
@@ -320,7 +335,10 @@ function Calculator() {
                       {isAppLoading ? (
                         <Skeleton width="80px" />
                       ) : (
-                        <>+{new Intl.NumberFormat('en-US').format(Number(percentagePotentialReturn))}%</>
+                        <>
+                          {Number(percentagePotentialReturn) > 0 ? '+' : ''}
+                          {new Intl.NumberFormat('en-US').format(Number(percentagePotentialReturn))}%
+                        </>
                       )}
                     </Typography>
                   </Box>

@@ -1,0 +1,116 @@
+@import '../../styles/colors';
+
+.pearl-chests {
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  &__main-wrapper {
+    padding: 40px 40px 20px !important;
+    margin-bottom: 40px !important;
+  }
+
+  &__main {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  &__main-left {
+    flex: 1 100%;
+  }
+
+  &__main-right {
+    flex: 0 200px;
+    margin-left: 28px;
+  }
+
+  &__chest-image {
+    width: 200px;
+    height: 200px;
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    font-weight: bold !important;
+    font-size: 24px !important;
+    line-height: 36px !important;
+  }
+
+  &__subtitle, &__description {
+    font-size: 16px !important;
+    font-weight: bold !important;
+    line-height: 24px !important;
+  }
+
+  &__description {
+    margin-bottom: 20px !important;
+  }
+
+  &__subtitle {
+    margin-bottom: 10px !important;
+  }
+
+  &__pearl-image {
+    margin: 0 2px;
+    display: inherit;
+  }
+
+  &__tabs {
+    .MuiTab-wrapper {
+      white-space: nowrap;
+      word-wrap: break-word;
+      font-size: 18px;
+      line-height: 27px;
+      font-weight: bold;
+    }
+  }
+
+  &__tab-indicator {
+    height: 3px !important;
+    background-color: $otter-dark !important;
+  }
+
+  &__connect {
+    margin-top: 55px;
+    text-align: center;
+  }
+
+  &__connect-btn {
+    display: inline-flex;
+    margin-bottom: 20px;
+  }
+
+  &__connect-msg {
+    font-size: 14px !important;
+    line-height: 21px !important;
+    margin-bottom: 20px !important;
+  }
+
+  @media screen and (max-width: 768px) {
+    &__main {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    &__main-right {
+      margin: 0;
+    }
+
+    &__read-more-wrapper {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    &__title {
+      margin-bottom: 10px !important;
+    }
+
+    &__subtitle {
+      display: none;
+    }
+  }
+}

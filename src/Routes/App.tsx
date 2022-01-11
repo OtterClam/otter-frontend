@@ -8,21 +8,22 @@ import './style.scss';
 import { Hidden, useMediaQuery } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
+import Calculator from 'src/views/Calculator';
+import Dashboard from 'src/views/Dashboard/TreasuryDashboard';
+import Migrate from 'src/views/Migrate';
+import PearlChests from 'src/views/PearlChests';
 import TopBar from '../components/Header';
 import Loading from '../components/Loader';
 import Sidebar from '../components/Sidebar';
 import NavDrawer from '../components/Sidebar/NavDrawer';
-import Calculator from 'src/views/Calculator';
-import Dashboard from 'src/views/Dashboard/TreasuryDashboard';
-import Migrate from 'src/views/Migrate';
-import NotFound from '../views/404/NotFound';
-import { ChooseBond, Stake, Wrap } from '../views';
-
-import { calculateUserBondDetails, loadAccountDetails } from '../store/slices/account-slice';
-import { loadAppDetails } from '../store/slices/app-slice';
-import { batchGetBondDetails } from '../store/actions/bond-action';
 
 import { BondKeys } from '../constants';
+import { batchGetBondDetails } from '../store/actions/bond-action';
+import { calculateUserBondDetails, loadAccountDetails } from '../store/slices/account-slice';
+import { loadAppDetails } from '../store/slices/app-slice';
+import { ChooseBond, Stake, Wrap } from '../views';
+import NotFound from '../views/404/NotFound';
+import './style.scss';
 
 const drawerWidth = 280;
 const transitionDuration = 969;
@@ -82,10 +83,12 @@ function App() {
 
     if (whichDetails === 'app') {
       loadApp(loadProvider);
+      // loadTerms(loadProvider);
     }
 
     if (whichDetails === 'account' && address && connected) {
       loadAccount(loadProvider);
+      // loadTerms(loadProvider);
       if (isAppLoaded) return;
 
       loadApp(loadProvider);
@@ -169,7 +172,7 @@ function App() {
         <div className={`${classes.content} ${isSmallerScreen && classes.contentShift}`}>
           <Switch>
             <Route exact path="/">
-              <Redirect to="/stake" />
+              <Redirect to="/dashboard" />
             </Route>
 
             <Route path="/dashboard">
@@ -182,6 +185,10 @@ function App() {
 
             <Route path="/wrap">
               <Wrap />
+            </Route>
+
+            <Route path="/pearl-chests">
+              <PearlChests />
             </Route>
 
             <Route path="/bonds">

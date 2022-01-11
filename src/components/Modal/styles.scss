@@ -1,0 +1,51 @@
+.otter-modal {
+  &__content {
+    display: flex;
+    flex-direction: column;
+    z-index: 10 !important;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 800px;
+    width: calc(100% - 20px);
+    border-radius: 20px !important;
+    max-height: calc(100vh - 40px);
+  }
+
+  &__body {
+    flex: 1;
+    overflow-y: scroll;
+    padding: 0 40px 40px;
+  }
+
+  &__title {
+    flex: 0 36px;
+    text-align: center;
+    font-size: 24px !important;
+    line-height: 36px !important;
+    margin-bottom: 20px !important;
+    padding: 40px 40px 0;
+  }
+
+  &__close-btn {
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    display: flex;
+    width: 24px;
+    height: 24px;
+    background: transparent;
+    border: none;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  @media screen and (max-width: 768px) {
+    &__title {
+      font-size: 20px !important;
+      line-height: 30px !important;
+    }
+  }
+}

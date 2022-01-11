@@ -13813,6 +13813,15 @@ prop-types@^15.5.10, prop-types@^15.5.6, prop-types@^15.5.7, prop-types@^15.6.0,
     object-assign "^4.1.1"
     react-is "^16.8.1"
 
+prop-types@^15.5.8:
+  version "15.8.1"
+  resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
+  integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
+  dependencies:
+    loose-envify "^1.4.0"
+    object-assign "^4.1.1"
+    react-is "^16.13.1"
+
 protobufjs@^6.10.2:
   version "6.11.2"
   resolved "https://registry.yarnpkg.com/protobufjs/-/protobufjs-6.11.2.tgz#de39fabd4ed32beaa08e9bb1e30d08544c1edf8b"
@@ -14102,6 +14111,13 @@ react-dom@^16.14.0, react-dom@^16.8.6:
     prop-types "^15.6.2"
     scheduler "^0.19.1"
 
+react-easy-swipe@^0.0.21:
+  version "0.0.21"
+  resolved "https://registry.yarnpkg.com/react-easy-swipe/-/react-easy-swipe-0.0.21.tgz#ce9384d576f7a8529dc2ca377c1bf03920bac8eb"
+  integrity sha512-OeR2jAxdoqUMHIn/nS9fgreI5hSpgGoL5ezdal4+oO7YSSgJR8ga+PkYGJrSrJ9MKlPcQjMQXnketrD7WNmNsg==
+  dependencies:
+    prop-types "^15.5.8"
+
 react-error-overlay@^6.0.9:
   version "6.0.9"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.9.tgz#3c743010c9359608c375ecd6bc76f35d93995b0a"
@@ -14181,6 +14197,15 @@ react-resize-detector@^6.6.3:
     lodash.debounce "^4.0.8"
     lodash.throttle "^4.1.1"
     resize-observer-polyfill "^1.5.1"
+
+react-responsive-carousel@^3.2.22:
+  version "3.2.22"
+  resolved "https://registry.yarnpkg.com/react-responsive-carousel/-/react-responsive-carousel-3.2.22.tgz#6281603daa33656940d01e207f511b83c0093c70"
+  integrity sha512-/r7dsIaN+l417IYIS0Fr7Z5VlpK3KYnTIIsdVCWSqtuJRIZNM+qdBIA4RIbzQtuW/ZBTnQanBecblCxg0HCqLQ==
+  dependencies:
+    classnames "^2.2.5"
+    prop-types "^15.5.8"
+    react-easy-swipe "^0.0.21"
 
 react-router-dom@^5.2.0:
   version "5.2.0"

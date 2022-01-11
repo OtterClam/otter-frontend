@@ -120,23 +120,12 @@
 }
 
 .hero {
-  display: flex;
-  flex-direction: row;
-  color: $otter-dark;
-  gap: 8px;
+  max-width: 1280px;
+  padding: 0 3.3rem;
 
-  p {
-    font-size: 24px;
-  }
-
-  @media screen and (max-width: 596px) {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  img {
-    width: 226px;
-    height: 226px;
+  @media screen and (max-width: 600px) {
+    padding: 0;
+    margin-left: -8px;
+    margin-right: -8px;
   }
 }
