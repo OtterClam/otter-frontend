@@ -107,10 +107,10 @@ function LockupOption({ term, onSelect }: { term: ITerm; onSelect: (settings: IT
         <div>
           <Typography className="lockup-option__label" variant="caption" component="span">
             {t('pearlChests.lockUp.expectedAPY')}
-            <InfoTooltip message="The APY is including staking reward." />
           </Typography>
           <Typography className="lockup-option__value" component="span">
-            {formatApy(term.apy)}
+            TBD
+            {/* {formatApy(term.apy)}% */}
           </Typography>
         </div>
 
