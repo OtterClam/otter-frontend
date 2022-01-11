@@ -28,7 +28,6 @@ export default function PearlChestLockupSuccessModal({
   const note = useSelector(state =>
     state.lake.lockNotes.find(p => p.noteAddress === actionResult?.note && p.tokenId === actionResult?.tokenId),
   );
-
   const term = allTerms.find(term => term.noteAddress === actionResult?.note);
 
   if (!actionResult || !term) return <></>;
@@ -39,11 +38,7 @@ export default function PearlChestLockupSuccessModal({
         <Typography variant="h1" component="span" className="lockup-success-modal__message">
           Your Chest lock-up was successful.
         </Typography>
-        {note ? (
-          <img className="lockup-success-modal__receipt" src={note.imageUrl || getNoteImage(term.note.name)} />
-        ) : (
-          <CircularProgress />
-        )}
+        <img className="lockup-success-modal__receipt" src={note?.imageUrl ?? getNoteImage(term.note.name)} />
         <Typography className="lockup-success-modal__message2">You got a {term.note.name}!</Typography>
         <Paper className="lockup-success-modal__details">
           <div className="lockup-success-modal__details-row">
