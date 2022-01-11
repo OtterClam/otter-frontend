@@ -141,9 +141,7 @@ export default function AddPearlToNoteModal({
                       className="stake-input-btn"
                       onClick={e => {
                         e.preventDefault();
-                        if (!lockNote) {
-                          setAmount(account?.balances?.pearl ?? 0);
-                        }
+                        setAmount(account?.balances?.pearl ?? 0);
                       }}
                     >
                       <p>{t('common.max')}</p>
