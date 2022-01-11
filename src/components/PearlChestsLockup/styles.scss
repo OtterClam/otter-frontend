@@ -52,7 +52,8 @@
   }
 
   &__label {
-    display: block !important;
+    display: flex !important;
+    justify-content: center;
     font-size: 12px !important;
     line-height: 18px !important;
     margin-bottom: 5px !important;
