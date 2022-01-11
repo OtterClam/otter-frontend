@@ -111,116 +111,112 @@ interface IClaimAndLockPayload {
 
 export const loadTermsDetails = createAsyncThunk(
   'otterLake/loadTermsDetails',
-  async ({ address, chainID, provider }: ILoadTermsDetails) => {
-    const { terms, lockNotes, allowance } = await getTermsAndLocks(address, chainID, provider);
-    return { terms, lockNotes, allowance };
-  },
-);
+  async ({ address, chainID, provider }: ILoadTermsDetails, { getState }) => {
+    const stakingRebase = (getState() as any).app.stakingRebase;
+    const addresses = getAddresses(chainID);
+    const otterLakeContract = new ethers.Contract(addresses.OTTER_LAKE, OtterLake, provider);
+    const pearlContract = new ethers.Contract(addresses.PEARL_ADDRESS, PearlTokenContract, provider);
 
-async function getTermsAndLocks(address: string, chainID: number, provider: JsonRpcProvider) {
-  const addresses = getAddresses(chainID);
-  const otterLakeContract = new ethers.Contract(addresses.OTTER_LAKE, OtterLake, provider);
-  const pearlContract = new ethers.Contract(addresses.PEARL_ADDRESS, PearlTokenContract, provider);
+    const termsCount = (await otterLakeContract.termsCount()).toNumber();
+    const epoch = await otterLakeContract.epochs(await otterLakeContract.epoch());
+    const allowance = (
+      await pearlContract.connect(provider.getSigner()).allowance(address, addresses.OTTER_LAKE)
+    ).toString();
+    const totalNextReward = Number(formatEther(epoch.reward));
+    const actions: Promise<ITerm>[] = [];
+    const lockNotes: ILockNote[] = [];
+    let totalBoostPoint = 0;
 
-  const termsCount = (await otterLakeContract.termsCount()).toNumber();
-  const epoch = await otterLakeContract.epochs(await otterLakeContract.epoch());
-  const allowance = (
-    await pearlContract.connect(provider.getSigner()).allowance(address, addresses.OTTER_LAKE)
-  ).toString();
-  const totalNextReward = Number(formatEther(epoch.reward));
-  const actions: Promise<ITerm>[] = [];
-  const lockNotes: ILockNote[] = [];
-  let totalBoostPoint = 0;
-
-  for (let i = 0; i < termsCount; i += 1) {
-    actions.push(
-      (async (i: number) => {
-        const termAddress = await otterLakeContract.termAddresses(i);
-        const term = await otterLakeContract.terms(termAddress);
-        const noteContract = new ethers.Contract(term.note, PearlNote, provider);
-        const [lockNotesCount, name, symbol, pearlBalance] = await Promise.all([
-          noteContract.balanceOf(address),
-          noteContract.name(),
-          noteContract.symbol(),
-          Number(formatEther(await pearlContract.balanceOf(term.note))),
-        ]);
-        for (let j = 0; j < lockNotesCount.toNumber(); j += 1) {
-          const id = await noteContract.tokenOfOwnerByIndex(address, j);
-          const [lock, tokenURI, reward] = await Promise.all([
-            noteContract.lockInfos(id),
-            noteContract.tokenURI(id),
-            otterLakeContract.reward(term.note, id),
+    for (let i = 0; i < termsCount; i += 1) {
+      actions.push(
+        (async (i: number) => {
+          const termAddress = await otterLakeContract.termAddresses(i);
+          const term = await otterLakeContract.terms(termAddress);
+          const noteContract = new ethers.Contract(term.note, PearlNote, provider);
+          const [lockNotesCount, name, symbol, pearlBalance] = await Promise.all([
+            noteContract.balanceOf(address),
+            noteContract.name(),
+            noteContract.symbol(),
+            Number(formatEther(await pearlContract.balanceOf(term.note))),
           ]);
-          let imageUrl = '';
-          try {
-            const tokenMeta = await axios.get(tokenURI);
-            imageUrl = tokenMeta.data.image;
-          } catch (err) {
-            console.warn('get token meta failed: ' + tokenURI);
+          for (let j = 0; j < lockNotesCount.toNumber(); j += 1) {
+            const id = await noteContract.tokenOfOwnerByIndex(address, j);
+            const [lock, tokenURI, reward] = await Promise.all([
+              noteContract.lockInfos(id),
+              noteContract.tokenURI(id),
+              otterLakeContract.reward(term.note, id),
+            ]);
+            let imageUrl = '';
+            try {
+              const tokenMeta = await axios.get(tokenURI);
+              imageUrl = tokenMeta.data.image;
+            } catch (err) {
+              console.warn('get token meta failed: ' + tokenURI);
+            }
+
+            lockNotes.push({
+              name,
+              imageUrl,
+              noteAddress: term.note,
+              tokenId: id.toString(),
+              amount: Number(formatEther(lock.amount)),
+              reward: Number(formatEther(reward)),
+              endEpoch: lock.endEpoch.toNumber(),
+              nextReward: 0,
+              rewardRate: 0,
+            });
           }
 
-          lockNotes.push({
-            name,
-            imageUrl,
+          const boostPoint = (pearlBalance * term.multiplier) / 100;
+          totalBoostPoint += boostPoint;
+          return {
             noteAddress: term.note,
-            tokenId: id.toString(),
-            amount: Number(formatEther(lock.amount)),
-            reward: Number(formatEther(reward)),
-            endEpoch: lock.endEpoch.toNumber(),
-            nextReward: 0,
+            lockPeriod: term.lockPeriod.toNumber() / 3, // epochs -> days
+            minLockAmount: Number(formatEther(term.minLockAmount)).toFixed(0),
+            multiplier: term.multiplier,
+            enabled: term.enabled,
+            pearlBalance,
+            boostPoint,
+            apy: 0,
             rewardRate: 0,
-          });
-        }
-
-        const boostPoint = (pearlBalance * term.multiplier) / 100;
-        totalBoostPoint += boostPoint;
-        return {
-          noteAddress: term.note,
-          lockPeriod: term.lockPeriod.toNumber() / 3, // epochs -> days
-          minLockAmount: Number(formatEther(term.minLockAmount)).toFixed(0),
-          multiplier: term.multiplier,
-          enabled: term.enabled,
-          pearlBalance,
-          boostPoint,
-          apy: 0,
-          rewardRate: 0,
-          note: {
-            name,
-            symbol,
-            noteAddress: term.note,
-          },
-        };
-      })(i),
-    );
-  }
-
-  const rawTerms = await Promise.all(actions);
-  const groupedTerms = groupBy(rawTerms, term => term.lockPeriod);
-  const rewardRates: { [key: string]: number } = {};
-
-  const terms = Object.keys(groupedTerms).map(key => {
-    const term = groupedTerms[key].find(term => Number(term.minLockAmount) > 0) || groupedTerms[key][0];
-    const fallbackTerm = groupedTerms[key].find(term => Number(term.minLockAmount) === 0);
-    const nextReward = ((term.boostPoint + (fallbackTerm?.boostPoint ?? 0)) / totalBoostPoint) * totalNextReward;
-    const rewardRate = nextReward / (term.pearlBalance + (fallbackTerm?.pearlBalance ?? 0));
-    term.apy = (1 + rewardRate) ** 1095;
-    rewardRates[term.noteAddress] = rewardRate;
-    if (fallbackTerm) {
-      rewardRates[fallbackTerm.noteAddress] = rewardRate;
+            note: {
+              name,
+              symbol,
+              noteAddress: term.note,
+            },
+          };
+        })(i),
+      );
     }
-    return {
-      ...term,
-      rewardRate,
-      fallbackTerm: fallbackTerm?.noteAddress === term.noteAddress ? undefined : fallbackTerm,
-    };
-  });
-  lockNotes.forEach(n => {
-    n.rewardRate = rewardRates[n.noteAddress];
-    n.nextReward = Number(n.amount) * n.rewardRate;
-  });
 
-  return { allowance, terms, lockNotes };
-}
+    const rawTerms = await Promise.all(actions);
+    const groupedTerms = groupBy(rawTerms, term => term.lockPeriod);
+    const rewardRates: { [key: string]: number } = {};
+
+    const terms = Object.keys(groupedTerms).map(key => {
+      const term = groupedTerms[key].find(term => Number(term.minLockAmount) > 0) || groupedTerms[key][0];
+      const fallbackTerm = groupedTerms[key].find(term => Number(term.minLockAmount) === 0);
+      const nextReward = ((term.boostPoint + (fallbackTerm?.boostPoint ?? 0)) / totalBoostPoint) * totalNextReward;
+      const rewardRate = nextReward / (term.pearlBalance + (fallbackTerm?.pearlBalance ?? 0));
+      term.apy = (1 + (rewardRate + stakingRebase)) ** 1095;
+      rewardRates[term.noteAddress] = rewardRate;
+      if (fallbackTerm) {
+        rewardRates[fallbackTerm.noteAddress] = rewardRate;
+      }
+      return {
+        ...term,
+        rewardRate,
+        fallbackTerm: fallbackTerm?.noteAddress === term.noteAddress ? undefined : fallbackTerm,
+      };
+    });
+    lockNotes.forEach(n => {
+      n.rewardRate = rewardRates[n.noteAddress];
+      n.nextReward = Number(n.amount) * n.rewardRate;
+    });
+
+    return { allowance, terms, lockNotes };
+  },
+);
 
 const updateAllowance = createAction<string>('otterLake/updateAllowance');
 
