@@ -29,6 +29,7 @@ import ActionButton from '../Button/ActionButton';
 import './styles.scss';
 
 const percentageFormatter = Intl.NumberFormat('en', { style: 'percent', minimumFractionDigits: 2 });
+const pearlFormatter = Intl.NumberFormat('en', { maximumFractionDigits: 4 });
 
 const useStyles = makeStyles(theme => ({
   input: {
@@ -72,9 +73,11 @@ export default function PearlChestLockupModal({
   const useFallback = parseEther(amount || '0').lt(parseEther(term?.minLockAmount ?? '0'));
   const account = useSelector(state => state.account);
   const allowance = useSelector(state => state.lake.allowance);
+  const stakingRebase = useSelector(state => state.app.stakingRebase);
   const pendingTransactions = useSelector(state => state.pendingTransactions);
   const { provider, address, chainID } = useWeb3Context();
   const noteAddress = useFallback ? term?.fallbackTerm!.noteAddress : term?.noteAddress;
+  const nextRewardValue = pearlFormatter.format(Number(amount) * (term?.rewardRate ?? 0));
 
   const lockup = useCallback(async () => {
     const result: any = await dispatch(lockAction({ chainID, provider, address, noteAddress: noteAddress!, amount }));
@@ -178,10 +181,10 @@ export default function PearlChestLockupModal({
                 {trim(account?.balances?.pearl ?? 0, 4)} PEARL
               </Typography>
             </div>
-            {/* <div className="lockup-modal__account-detail">
-              <Typography className="lockup-modal__account-detail-label">Next Reward</Typography>
+            <div className="lockup-modal__account-detail">
+              <Typography className="lockup-modal__account-detail-label">Expected Next Reward</Typography>
               <Typography className="lockup-modal__account-detail-value">{nextRewardValue} PEARL</Typography>
-            </div> */}
+            </div>
             {/*
             <div className="lockup-modal__account-detail">
               <Typography className="lockup-modal__account-detail-label">Next Reward Bonus</Typography>
@@ -192,9 +195,10 @@ export default function PearlChestLockupModal({
               <Typography className="lockup-modal__account-detail-value">20 PEARL</Typography>
             </div> */}
             <div className="lockup-modal__account-detail">
-              <Typography className="lockup-modal__account-detail-label">Next Reward Yield</Typography>
+              <Typography className="lockup-modal__account-detail-label">Expected Next Reward Yield</Typography>
               <Typography className="lockup-modal__account-detail-value">
-                {percentageFormatter.format(term?.rewardRate ?? 0)}
+                {percentageFormatter.format(term?.rewardRate ?? 0)} + Staking{' '}
+                {percentageFormatter.format(stakingRebase)}
               </Typography>
             </div>
           </div>
