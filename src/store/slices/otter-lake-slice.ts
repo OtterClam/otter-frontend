@@ -58,7 +58,6 @@ const initialState: IOtterLakeSliceState = {
 };
 
 interface ILoadTermsDetails {
-  address: string;
   chainID: number;
   provider: JsonRpcProvider;
 }
@@ -111,7 +110,7 @@ interface IClaimAndLockPayload {
 
 export const loadTermsDetails = createAsyncThunk(
   'otterLake/loadTermsDetails',
-  async ({ address, chainID, provider }: ILoadTermsDetails, { getState }) => {
+  async ({ chainID, provider }: ILoadTermsDetails, { getState, dispatch }) => {
     const stakingRebase = (getState() as any).app.stakingRebase;
     const addresses = getAddresses(chainID);
     const otterLakeContract = new ethers.Contract(addresses.OTTER_LAKE, OtterLake, provider);
@@ -119,12 +118,8 @@ export const loadTermsDetails = createAsyncThunk(
 
     const termsCount = (await otterLakeContract.termsCount()).toNumber();
     const epoch = await otterLakeContract.epochs(await otterLakeContract.epoch());
-    const allowance = (
-      await pearlContract.connect(provider.getSigner()).allowance(address, addresses.OTTER_LAKE)
-    ).toString();
     const totalNextReward = Number(formatEther(epoch.reward));
     const actions: Promise<ITerm>[] = [];
-    const lockNotes: ILockNote[] = [];
     let totalBoostPoint = 0;
 
     for (let i = 0; i < termsCount; i += 1) {
@@ -133,40 +128,11 @@ export const loadTermsDetails = createAsyncThunk(
           const termAddress = await otterLakeContract.termAddresses(i);
           const term = await otterLakeContract.terms(termAddress);
           const noteContract = new ethers.Contract(term.note, PearlNote, provider);
-          const [lockNotesCount, name, symbol, pearlBalance] = await Promise.all([
-            noteContract.balanceOf(address),
+          const [name, symbol, pearlBalance] = await Promise.all([
             noteContract.name(),
             noteContract.symbol(),
             Number(formatEther(await pearlContract.balanceOf(term.note))),
           ]);
-          for (let j = 0; j < lockNotesCount.toNumber(); j += 1) {
-            const id = await noteContract.tokenOfOwnerByIndex(address, j);
-            const [lock, tokenURI, reward] = await Promise.all([
-              noteContract.lockInfos(id),
-              noteContract.tokenURI(id),
-              otterLakeContract.reward(term.note, id),
-            ]);
-            let imageUrl = '';
-            try {
-              const tokenMeta = await axios.get(tokenURI);
-              imageUrl = tokenMeta.data.image;
-            } catch (err) {
-              console.warn('get token meta failed: ' + tokenURI);
-            }
-
-            lockNotes.push({
-              name,
-              imageUrl,
-              noteAddress: term.note,
-              tokenId: id.toString(),
-              amount: Number(formatEther(lock.amount)),
-              reward: Number(formatEther(reward)),
-              endEpoch: lock.endEpoch.toNumber(),
-              nextReward: 0,
-              rewardRate: 0,
-            });
-          }
-
           const boostPoint = (pearlBalance * term.multiplier) / 100;
           totalBoostPoint += boostPoint;
           return {
@@ -209,12 +175,90 @@ export const loadTermsDetails = createAsyncThunk(
         fallbackTerm: fallbackTerm?.noteAddress === term.noteAddress ? undefined : fallbackTerm,
       };
     });
+    return { terms };
+  },
+);
+
+interface ILoadPearlAllowance {
+  address: string;
+  chainID: number;
+  provider: JsonRpcProvider;
+}
+
+export const loadPearlAllowance = createAsyncThunk(
+  'otterLake/loadPearlAllowance',
+  async ({ address, chainID, provider }: ILoadPearlAllowance, { dispatch }) => {
+    const addresses = getAddresses(chainID);
+    const pearlContract = new ethers.Contract(addresses.PEARL_ADDRESS, PearlTokenContract, provider);
+    const allowance = (
+      await pearlContract.connect(provider.getSigner()).allowance(address, addresses.OTTER_LAKE)
+    ).toString();
+    dispatch(updateAllowance(allowance));
+  },
+);
+
+interface ILoadLockNotesPayload {
+  address: string;
+  chainID: number;
+  provider: JsonRpcProvider;
+}
+
+export const loadLockedNotes = createAsyncThunk(
+  'otterLake/loadLockedNotes',
+  async ({ address, chainID, provider }: ILoadLockNotesPayload, { getState }) => {
+    const addresses = getAddresses(chainID);
+    const otterLakeContract = new ethers.Contract(addresses.OTTER_LAKE, OtterLake, provider);
+    const groupedTerms = (getState() as any).lake.terms as ITerm[];
+    const rewardRates: { [key: string]: number } = {};
+    const lockNotes: ILockNote[] = (
+      await Promise.all(
+        groupedTerms
+          .flatMap(t => [t, t.fallbackTerm])
+          .filter(Boolean)
+          .map(async term => {
+            const noteAddress = term!.noteAddress;
+            rewardRates[term!.noteAddress] = term!.rewardRate;
+            const noteContract = new ethers.Contract(noteAddress, PearlNote, provider);
+            const lockNotesCount = await noteContract.balanceOf(address);
+            const notes: ILockNote[] = [];
+            for (let j = 0; j < lockNotesCount.toNumber(); j += 1) {
+              const id = await noteContract.tokenOfOwnerByIndex(address, j);
+              const [lock, tokenURI, reward] = await Promise.all([
+                noteContract.lockInfos(id),
+                noteContract.tokenURI(id),
+                otterLakeContract.reward(noteAddress, id),
+              ]);
+              let imageUrl = '';
+              try {
+                const tokenMeta = await axios.get(tokenURI);
+                imageUrl = tokenMeta.data.image;
+              } catch (err) {
+                console.warn('get token meta failed: ' + tokenURI);
+              }
+
+              notes.push({
+                name: term!.note.name,
+                imageUrl,
+                noteAddress,
+                tokenId: id.toString(),
+                amount: Number(formatEther(lock.amount)),
+                reward: Number(formatEther(reward)),
+                endEpoch: lock.endEpoch.toNumber(),
+                nextReward: 0,
+                rewardRate: 0,
+              });
+            }
+            return notes;
+          }),
+      )
+    ).flatMap(t => t);
+
     lockNotes.forEach(n => {
       n.rewardRate = rewardRates[n.noteAddress];
       n.nextReward = Number(n.amount) * n.rewardRate;
     });
 
-    return { allowance, terms, lockNotes };
+    return { lockNotes };
   },
 );
 
@@ -264,7 +308,7 @@ export const claimReward = createAsyncThunk(
         }),
       );
       await tx.wait();
-      dispatch(loadTermsDetails({ address, chainID, provider }));
+      dispatch(loadLockedNotes({ address, chainID, provider }));
     } catch (err) {
       alert((err as Error).message);
     } finally {
@@ -292,7 +336,7 @@ export const redeem = createAsyncThunk(
         }),
       );
       await tx.wait();
-      dispatch(loadTermsDetails({ address, chainID, provider }));
+      dispatch(loadLockedNotes({ address, chainID, provider }));
     } catch (err) {
       alert((err as Error).message);
     } finally {
@@ -322,7 +366,7 @@ export const lock = createAsyncThunk(
       );
       const result = await tx.wait();
       lockedEvent = result.events.find((event: any) => event.event === 'Locked');
-      dispatch(loadTermsDetails({ address, chainID, provider }));
+      dispatch(loadLockedNotes({ address, chainID, provider }));
     } catch (err) {
       alert((err as Error).message);
     } finally {
@@ -361,7 +405,7 @@ export const extendLock = createAsyncThunk(
       );
       const result = await tx.wait();
       lockedEvent = result.events.find((event: any) => event.event === 'Locked');
-      dispatch(loadTermsDetails({ address, chainID, provider }));
+      dispatch(loadLockedNotes({ address, chainID, provider }));
     } catch (err) {
       alert((err as Error).message);
     } finally {
@@ -399,7 +443,7 @@ export const claimAndLock = createAsyncThunk(
       );
       const result = await tx.wait();
       lockedEvent = result.events.find((event: any) => event.event === 'Locked');
-      dispatch(loadTermsDetails({ address, chainID, provider }));
+      dispatch(loadLockedNotes({ address, chainID, provider }));
     } catch (err) {
       alert((err as Error).message);
     } finally {
@@ -444,6 +488,12 @@ const otterLakeSlice = createSlice({
       })
       .addCase(updateAllowance, (state, action) => {
         state.allowance = action.payload;
+      })
+      .addCase(loadLockedNotes.fulfilled, (state, action) => {
+        setAll(state, action.payload);
+      })
+      .addCase(loadLockedNotes.rejected, (state, { error }) => {
+        console.log(error);
       });
   },
 });

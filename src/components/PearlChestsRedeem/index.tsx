@@ -7,7 +7,7 @@ import differenceInDays from 'date-fns/differenceInDays';
 import './styles.scss';
 import CustomButton from '../Button/CustomButton';
 import { useSelector } from 'src/store/hook';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector as useReduxSelector } from 'react-redux';
 import {
   redeem as redeemAction,
@@ -17,6 +17,7 @@ import {
   ITerm,
   ILockNote,
   selectTerm as selectTermAction,
+  loadLockedNotes,
 } from 'src/store/slices/otter-lake-slice';
 import { useWeb3Context } from 'src/hooks';
 import ActionButton from '../Button/ActionButton';
@@ -51,6 +52,8 @@ export default function PearlChestsRedeem() {
   const [relockResult, setRelockResult] = useState<any>();
   const [selectedTerm, setSelectedTerm] = useState<ITerm | null>(null);
   const [selectedLockNote, setSelectedLock] = useState<ILockNote | null>(null);
+  const dispatch = useDispatch();
+  const { chainID, connected, address, provider } = useWeb3Context();
   const currentEpoch = useSelector(state => state.app.currentEpoch);
   const lockNotes = useSelector(state => state.lake.lockNotes);
   const terms = useSelector(state => state.lake.terms);
@@ -63,8 +66,6 @@ export default function PearlChestsRedeem() {
         .map(term => [term?.noteAddress, term]),
     );
   }, [terms]);
-
-  const dispatch = useDispatch();
 
   const clearSelectedTerm = useCallback(() => {
     setSelectedTerm(null);
@@ -82,6 +83,12 @@ export default function PearlChestsRedeem() {
     },
     [relockResult],
   );
+
+  useEffect(() => {
+    if (connected && terms.length > 0) {
+      dispatch(loadLockedNotes({ address, chainID, provider }));
+    }
+  }, [connected, address, terms]);
 
   return (
     <Paper className="ohm-card">

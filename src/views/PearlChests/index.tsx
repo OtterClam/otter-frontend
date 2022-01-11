@@ -9,7 +9,7 @@ import PearlChestsRedeem from 'src/components/PearlChestsRedeem';
 import RebaseTimer from 'src/components/RebaseTimer/RebaseTimer';
 import { getTokenImage } from 'src/helpers';
 import { useWeb3Context } from 'src/hooks';
-import { loadTermsDetails } from 'src/store/slices/otter-lake-slice';
+import { loadPearlAllowance, loadTermsDetails } from 'src/store/slices/otter-lake-slice';
 import chestOpenImage from './images/chest-open.png';
 import './styles.scss';
 
@@ -22,10 +22,15 @@ export default function PearlChests() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { tabValue, tabsActions, handleTabValueChangeEvent } = useTabs();
-  const { address, connect, connected, chainID, provider } = useWeb3Context();
+  const { address, connect, connected, chainID, provider, readOnlyProvider } = useWeb3Context();
   useEffect(() => {
-    dispatch(loadTermsDetails({ chainID, address, provider }));
-  }, [connected]);
+    dispatch(loadTermsDetails({ chainID, provider: readOnlyProvider }));
+  }, [readOnlyProvider]);
+  useEffect(() => {
+    if (connected) {
+      dispatch(loadPearlAllowance({ address, chainID, provider }));
+    }
+  }, [connected, address, chainID, provider]);
 
   return (
     <Zoom in>
