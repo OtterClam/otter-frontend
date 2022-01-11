@@ -13,6 +13,7 @@ const commonSettings = {
     fontFamily: 'Gilroy',
     h1: {
       fontSize: '3rem',
+      fontFamily: 'Gilroy',
     },
     h2: {
       fontSize: '2.25rem',
@@ -52,6 +53,10 @@ const commonSettings = {
     button: {
       textTransform: 'none',
       fontSize: '1.25rem',
+      fontFamily: 'Gilroy',
+    },
+    caption: {
+      fontFamily: 'Gilroy',
     },
   },
   overrides: {

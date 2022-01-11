@@ -165,13 +165,15 @@ export const loadTermsDetails = createAsyncThunk(
       const nextReward = ((term.boostPoint + (fallbackTerm?.boostPoint ?? 0)) / totalBoostPoint) * totalNextReward;
       const rewardRate = nextReward / (term.pearlBalance + (fallbackTerm?.pearlBalance ?? 0));
       term.apy = (1 + (rewardRate + stakingRebase)) ** 1095;
+      term.rewardRate = rewardRate;
       rewardRates[term.noteAddress] = rewardRate;
       if (fallbackTerm) {
         rewardRates[fallbackTerm.noteAddress] = rewardRate;
+        fallbackTerm.apy = term.apy;
+        fallbackTerm.rewardRate = term.rewardRate;
       }
       return {
         ...term,
-        rewardRate,
         fallbackTerm: fallbackTerm?.noteAddress === term.noteAddress ? undefined : fallbackTerm,
       };
     });
