@@ -1,3 +1,4 @@
+// CustomButton
 .custom-button {
     display: flex;
     justify-content: center;
@@ -21,4 +22,21 @@
 .icon-button {
     padding: 10px;
     border-radius: 10px;
+}
+
+// ActionButton
+.action-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: 100%;
+    padding: 19px 30px;
+    border-radius: 10px;
+    cursor: pointer;
+
+    color: white;
+    font-weight: 700;
+    font-size: 14px;
+    text-align: center;
 }
