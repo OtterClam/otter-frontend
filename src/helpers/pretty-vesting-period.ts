@@ -26,11 +26,11 @@ export const prettyShortVestingPeriod = (t: any, currentBlockTime: number, vesti
   // if redeem time is over 1 day, it shows: redeem in {number} day(s)
   if (d >= 1) {
     let hCount = h > 0 ? ', ' + h + (h == 1 ? ` ${t('time.hour')} ` : ` ${t('time.hours')} `) : '';
-    return d > 0 ? d + (d == 1 ? ` ${t('time.day')} ${hCount} ` : ` ${t('time.days')} ${hCount} `) : '';
+    return d > 0 ? d + (d == 1 ? ` ${t('time.day')}${hCount} ` : ` ${t('time.days')}${hCount} `) : '';
   }
   // if redeem time is within 1 day and over 1 hour it shows: redeem in 20 hours
   if (d < 1 && h >= 1) {
-    return h > 0 ? '~' + h + (h == 1 ? ` ${t('time.hour')} ` : ` ${t('time.hours')} `) : '';
+    return h > 0 ? h + (h == 1 ? ` ${t('time.hour')} ` : ` ${t('time.hours')} `) : '';
   }
   //if redeem time is within 1 hour it shows: redeem in 8 mins, 35 sec
   if (h == 0 && d == 0) {
