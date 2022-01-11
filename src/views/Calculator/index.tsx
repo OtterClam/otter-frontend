@@ -16,8 +16,8 @@ import {
 } from '@material-ui/core';
 import { trim } from '../../helpers';
 import { Skeleton } from '@material-ui/lab';
-import { IReduxState } from '../../store/slices/state.interface';
-import { useAppSelector, useAppDispatch, useWeb3Context } from 'src/hooks';
+import { useAppSelector, useAppDispatch } from 'src/store/hook';
+import { useWeb3Context } from 'src/hooks/web3';
 import { useTranslation, Trans } from 'react-i18next';
 
 const useStyles = makeStyles(theme => ({
@@ -59,16 +59,16 @@ function Calculator() {
     });
     return y.format(parseInt(x)).toString();
   };
-  const isAppLoading = useSelector<IReduxState, boolean>(state => state.app.loading);
-  const clamBalance = useSelector<IReduxState, string>(state => {
+  const isAppLoading = useAppSelector<boolean>(state => state.app.loading);
+  const clamBalance = useAppSelector<string>(state => {
     return state.account.balances && state.account.balances.clam;
   });
-  const sClamBalance = useSelector<IReduxState, string>(state => {
+  const sClamBalance = useAppSelector<string>(state => {
     return state.account.balances && state.account.balances.sClam;
   });
-  const marketPrice = useSelector<IReduxState, number>(state => state.app.marketPrice);
+  const marketPrice = useAppSelector<number>(state => state.app.marketPrice);
 
-  const stakingAPY = useSelector<IReduxState, number>(state => {
+  const stakingAPY = useAppSelector<number>(state => {
     return state.app.stakingAPY;
   });
 

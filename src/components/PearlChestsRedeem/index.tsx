@@ -1,33 +1,27 @@
 import { Divider, Paper, Typography } from '@material-ui/core';
-import { useTranslation } from 'react-i18next';
-import { LabelChip } from '../Chip';
-import { getTokenImage, formatCurrency, trim, formatApy } from 'src/helpers';
-import formatDate from 'date-fns/format';
-import differenceInDays from 'date-fns/differenceInDays';
-import './styles.scss';
-import CustomButton from '../Button/CustomButton';
-import { useSelector } from 'src/store/hook';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector as useReduxSelector } from 'react-redux';
-import {
-  redeem as redeemAction,
-  claimReward as claimRewardAction,
-  extendLock as extendLockAction,
-  claimAndLock as claimAndLockAction,
-  ITerm,
-  ILockNote,
-  selectTerm as selectTermAction,
-  loadLockedNotes,
-} from 'src/store/slices/otter-lake-slice';
-import { useWeb3Context } from 'src/hooks';
-import ActionButton from '../Button/ActionButton';
-import { IPendingTxn } from 'src/store/slices/pending-txns-slice';
-import { IReduxState } from 'src/store/slices/state.interface';
-import PearlChestLockupModal from '../PearlChestLockupModal';
-import PearlChestLockupSuccessModal from '../PearlChestLockupSuccessModal';
 import { addDays } from 'date-fns';
+import differenceInDays from 'date-fns/differenceInDays';
+import formatDate from 'date-fns/format';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { formatCurrency, getTokenImage } from 'src/helpers';
 import getNoteImage from 'src/helpers/get-note-image';
+import { useWeb3Context } from 'src/hooks';
+import { useAppDispatch, useAppSelector } from 'src/store/hook';
+import {
+  claimAndLock as claimAndLockAction,
+  claimReward as claimRewardAction,
+  ILockNote,
+  ITerm,
+  loadLockedNotes,
+  redeem as redeemAction,
+} from 'src/store/slices/otter-lake-slice';
 import AddPearlToNoteModal from '../AddPearlToNodeModal';
+import ActionButton from '../Button/ActionButton';
+import CustomButton from '../Button/CustomButton';
+import { LabelChip } from '../Chip';
+import PearlChestLockupSuccessModal from '../PearlChestLockupSuccessModal';
+import './styles.scss';
 
 const numberFormatter = Intl.NumberFormat('en', { maximumFractionDigits: 4 });
 const percentageFormatter = Intl.NumberFormat('en', { style: 'percent', minimumFractionDigits: 2 });
@@ -52,12 +46,12 @@ export default function PearlChestsRedeem() {
   const [relockResult, setRelockResult] = useState<any>();
   const [selectedTerm, setSelectedTerm] = useState<ITerm | null>(null);
   const [selectedLockNote, setSelectedLock] = useState<ILockNote | null>(null);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { chainID, connected, address, provider } = useWeb3Context();
-  const currentEpoch = useSelector(state => state.app.currentEpoch);
-  const lockNotes = useSelector(state => state.lake.lockNotes);
-  const terms = useSelector(state => state.lake.terms);
-  const pearlPrice = useSelector(state => state.app.pearlPrice);
+  const currentEpoch = useAppSelector(state => state.app.currentEpoch);
+  const lockNotes = useAppSelector(state => state.lake.lockNotes);
+  const terms = useAppSelector(state => state.lake.terms);
+  const pearlPrice = useAppSelector(state => state.app.pearlPrice);
   const termsMap = useMemo(() => {
     return new Map(
       terms
@@ -141,9 +135,9 @@ function NoteCard({
   addPearlToNote: (term: ITerm, lockNote: ILockNote) => void;
 }) {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { provider, address, chainID } = useWeb3Context();
-  const pendingTransactions = useReduxSelector<IReduxState, IPendingTxn[]>(state => {
+  const pendingTransactions = useAppSelector(state => {
     return state.pendingTransactions;
   });
   const details = [
@@ -246,7 +240,9 @@ function NoteCard({
               start={t('pearlChests.addPearl')}
               progress="Processing..."
               processTx={() => addPearlToNote(term, lockNote)}
-              wrapper={({ onClick, text }) => <CustomButton className="note__action" text={text} onClick={onClick} />}
+              wrapper={({ onClick, text }) => (
+                <CustomButton display="inline-flex" type="outline" text={text} onClick={onClick} />
+              )}
             />
             {lockNote.reward > 0 && (
               <ActionButton
@@ -255,7 +251,9 @@ function NoteCard({
                 start={t('pearlChests.claimRewardAndRelock', { amount: numberFormatter.format(lockNote.reward) })}
                 progress="Processing..."
                 processTx={claimAndLock}
-                wrapper={({ onClick, text }) => <CustomButton className="note__action" text={text} onClick={onClick} />}
+                wrapper={({ onClick, text }) => (
+                  <CustomButton display="inline-flex" text={text} type="outline" onClick={onClick} />
+                )}
               />
             )}
             <ActionButton
@@ -265,7 +263,7 @@ function NoteCard({
               progress="Processing..."
               processTx={claimReward}
               wrapper={({ onClick, text }) => (
-                <CustomButton className="note__action" type="outline" text={text} onClick={onClick} />
+                <CustomButton display="inline-flex" type="outline" text={text} onClick={onClick} />
               )}
             />
           </>
@@ -277,7 +275,7 @@ function NoteCard({
             start={t('pearlChests.redeemAll')}
             progress="Processing..."
             processTx={redeem}
-            wrapper={({ onClick, text }) => <CustomButton className="note__action" text={text} onClick={onClick} />}
+            wrapper={({ onClick, text }) => <CustomButton display="inline-flex" text={text} onClick={onClick} />}
           />
         )}
       </div>

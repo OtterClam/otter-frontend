@@ -1,4 +1,4 @@
-import { Paper, Tab, Tabs, TabsActions, Typography, Zoom } from '@material-ui/core';
+import { Paper, Tab, Tabs, TabsActions, Typography, useMediaQuery, Zoom } from '@material-ui/core';
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
@@ -10,6 +10,7 @@ import RebaseTimer from 'src/components/RebaseTimer/RebaseTimer';
 import { getTokenImage } from 'src/helpers';
 import { useWeb3Context } from 'src/hooks';
 import { loadPearlAllowance, loadTermsDetails } from 'src/store/slices/otter-lake-slice';
+import { mobileMediaQuery } from 'src/themes/mediaQuery';
 import chestOpenImage from './images/chest-open.png';
 import './styles.scss';
 
@@ -23,6 +24,8 @@ export default function PearlChests() {
   const dispatch = useDispatch();
   const { tabValue, tabsActions, handleTabValueChangeEvent } = useTabs();
   const { address, connect, connected, chainID, provider, readOnlyProvider } = useWeb3Context();
+  const isMobile = useMediaQuery(mobileMediaQuery);
+
   useEffect(() => {
     dispatch(loadTermsDetails({ chainID, provider: readOnlyProvider }));
   }, [readOnlyProvider]);
@@ -53,7 +56,7 @@ export default function PearlChests() {
 
               <div className="pearl-chests__read-more-wrapper">
                 <CustomButton
-                  className="pearl-chests__read-more"
+                  display="inline-flex"
                   type="outline"
                   href="https://otterclam.medium.com/introducing-pearl-chests-and-pearl-notes-70a61748963f"
                   text={t('pearlChests.readMore')}
@@ -79,7 +82,13 @@ export default function PearlChests() {
 
           {tabValue === ChestTab.Redeem && !address && (
             <div className="pearl-chests__connect">
-              <CustomButton className="pearl-chests__connect-btn" text={t('common.connectWallet')} onClick={connect} />
+              <CustomButton
+                display="inline-flex"
+                text={t('common.connectWallet')}
+                marginBottom="20px"
+                bgcolor="otter.otterBlue"
+                onClick={connect}
+              />
               <Typography variant="caption" component="p" className="pearl-chests__connect-msg">
                 {t('pearlChests.redeem.connect')}
               </Typography>

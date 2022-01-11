@@ -1,4 +1,4 @@
-@import '../../styles/colors';
+@import "../../styles/colors";
 
 .note {
   padding: 20px;
@@ -100,13 +100,9 @@
   &__actions {
     display: flex;
     align-items: center;
-    justify-content: end;
+    justify-content: flex-end;
     grid-gap: 10px;
     margin-top: 10px;
-  }
-
-  &__action {
-    display: inline-flex;
   }
 
   @media screen and (max-width: 768px) {
