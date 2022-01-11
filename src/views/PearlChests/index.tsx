@@ -1,4 +1,4 @@
-import { Paper, Tab, Tabs, TabsActions, Typography, useMediaQuery, Zoom } from '@material-ui/core';
+import { Paper, Tab, Tabs, TabsActions, Typography, useMediaQuery, Zoom, Link } from '@material-ui/core';
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
@@ -55,13 +55,12 @@ export default function PearlChests() {
               </Typography>
 
               <div className="pearl-chests__read-more-wrapper">
-                <CustomButton
-                  display="inline-flex"
-                  type="outline"
+                <Link
                   href="https://otterclam.medium.com/introducing-pearl-chests-and-pearl-notes-70a61748963f"
-                  text={t('pearlChests.readMore')}
                   target="_blank"
-                />
+                >
+                  <CustomButton display="inline-flex" type="outline" text={t('pearlChests.readMore')} />
+                </Link>
               </div>
             </div>
             <div className="pearl-chests__main-right">
