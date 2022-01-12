@@ -120,6 +120,7 @@
     "eject": "react-scripts eject",
     "start": "react-scripts start",
     "test": "react-scripts test",
+    "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache",
     "lint": "eslint --config ./.eslintrc.js --ignore-path ./.eslintignore ./src/",
     "ipfs": "node ./scripts/ipfs.js",
     "surge": "surge ./build",
