@@ -2,7 +2,7 @@ import { Divider, Paper, Typography } from '@material-ui/core';
 import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { formatApy } from 'src/helpers';
+import { formatApy, formatCurrency } from 'src/helpers';
 import getNoteImage from 'src/helpers/get-note-image';
 import { useWeb3Context } from 'src/hooks';
 import { IOtterLakeSliceState, ITerm, selectTerm as selectTermAction } from 'src/store/slices/otter-lake-slice';
@@ -13,12 +13,18 @@ import InfoTooltip from '../InfoTooltip/InfoTooltip';
 import PearlChestLockupModal from '../PearlChestLockupModal';
 import PearlChestLockupSuccessModal from '../PearlChestLockupSuccessModal';
 import './styles.scss';
+import PearlChest1 from './pearl-chest1.png';
+import PearlChest2 from './pearl-chest2.png';
+import PearlChest3 from './pearl-chest3.png';
+import PearlChest4 from './pearl-chest4.png';
 
 const extraBonus: { [k: number]: number } = {
   28: 0.5,
   90: 1,
   180: 2,
 };
+
+const PearlChestImages = [PearlChest1, PearlChest2, PearlChest3, PearlChest4];
 
 export default function PearlChestsLockup() {
   const { t } = useTranslation();
@@ -34,7 +40,7 @@ export default function PearlChestsLockup() {
       </Typography>
       <div className="lockup__options">
         {otterLake.terms.map((term, i) => (
-          <LockupOption key={i} term={term} onSelect={selectTerm} />
+          <LockupOption key={i} term={term} index={i} onSelect={selectTerm} />
         ))}
       </div>
       <PearlChestLockupModal
@@ -56,8 +62,17 @@ export default function PearlChestsLockup() {
   );
 }
 
-function LockupOption({ term, onSelect }: { term: ITerm; onSelect: (settings: ITerm | undefined) => void }) {
+function LockupOption({
+  term,
+  index,
+  onSelect,
+}: {
+  term: ITerm;
+  index: number;
+  onSelect: (settings: ITerm | undefined) => void;
+}) {
   const { t } = useTranslation();
+  const pearlPrice = useSelector<IReduxState, number>(state => state.app.pearlPrice);
   const showBadge = term.lockPeriod >= 90;
   const multiplier = String(term.multiplier / 100);
   const pendingTransactions = useSelector<IReduxState, IPendingTxn[]>(state => {
@@ -127,7 +142,7 @@ function LockupOption({ term, onSelect }: { term: ITerm; onSelect: (settings: IT
         </div>
 
         <div>
-          {extraBonus[term.lockPeriod] && (
+          {extraBonus[term.lockPeriod] ? (
             <>
               <Typography className="lockup-option__bonus-title" component="span">
                 {t('pearlChests.lockUp.bonusTitle', { percentage: extraBonus[term.lockPeriod] })}
@@ -136,12 +151,18 @@ function LockupOption({ term, onSelect }: { term: ITerm; onSelect: (settings: IT
                 {t('pearlChests.lockUp.bonusDescription')}
               </Typography>
             </>
-          )}
-          {!extraBonus[term.lockPeriod] && (
+          ) : (
             <Typography component="span" variant="caption">
               {t('pearlChests.lockUp.noExtraBonus')}
             </Typography>
           )}
+        </div>
+      </div>
+      <div className="lockup-option__tvl">
+        <img src={PearlChestImages[index]} />
+        <div>
+          <p className="lockup-option__tvl__title">PEARL in chest</p>
+          <p className="lockup-option__tvl__value">{formatCurrency(term.pearlBalance * pearlPrice)}</p>
         </div>
       </div>
 
