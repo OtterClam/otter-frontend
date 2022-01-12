@@ -1,33 +1,31 @@
 import { Divider, Paper, Typography } from '@material-ui/core';
-import { useTranslation } from 'react-i18next';
-import { LabelChip } from '../Chip';
-import { getTokenImage, formatCurrency, trim, formatApy } from 'src/helpers';
-import formatDate from 'date-fns/format';
+import { addHours } from 'date-fns';
 import differenceInDays from 'date-fns/differenceInDays';
-import './styles.scss';
-import CustomButton from '../Button/CustomButton';
-import { useSelector } from 'src/store/hook';
+import formatDate from 'date-fns/format';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector as useReduxSelector } from 'react-redux';
-import {
-  redeem as redeemAction,
-  claimReward as claimRewardAction,
-  extendLock as extendLockAction,
-  claimAndLock as claimAndLockAction,
-  ITerm,
-  ILockNote,
-  selectTerm as selectTermAction,
-  loadLockedNotes,
-} from 'src/store/slices/otter-lake-slice';
+import { formatCurrency, getTokenImage } from 'src/helpers';
+import getNoteImage from 'src/helpers/get-note-image';
 import { useWeb3Context } from 'src/hooks';
-import ActionButton from '../Button/ActionButton';
+import { useSelector } from 'src/store/hook';
+import {
+  claimAndLock as claimAndLockAction,
+  claimReward as claimRewardAction,
+  ILockNote,
+  ITerm,
+  loadLockedNotes,
+  redeem as redeemAction,
+} from 'src/store/slices/otter-lake-slice';
 import { IPendingTxn } from 'src/store/slices/pending-txns-slice';
 import { IReduxState } from 'src/store/slices/state.interface';
-import PearlChestLockupModal from '../PearlChestLockupModal';
-import PearlChestLockupSuccessModal from '../PearlChestLockupSuccessModal';
-import { addDays } from 'date-fns';
-import getNoteImage from 'src/helpers/get-note-image';
 import AddPearlToNoteModal from '../AddPearlToNodeModal';
+import ActionButton from '../Button/ActionButton';
+import CustomButton from '../Button/CustomButton';
+import { LabelChip } from '../Chip';
+import PearlChestLockupSuccessModal from '../PearlChestLockupSuccessModal';
+import './styles.scss';
+import NewPageIcon from 'src/assets/icons/icon_new_page.svg';
 
 const numberFormatter = Intl.NumberFormat('en', { maximumFractionDigits: 4 });
 const percentageFormatter = Intl.NumberFormat('en', { style: 'percent', minimumFractionDigits: 2 });
@@ -44,7 +42,6 @@ export interface Note {
   marketValue: number;
   lockupPeriod: number;
   dueDate: Date;
-  apy: number;
   locked: boolean;
 }
 
@@ -105,8 +102,7 @@ export default function PearlChestsRedeem() {
               lockedValue: -1,
               marketValue: (Number(lockNote.amount) + lockNote.nextReward) * pearlPrice,
               lockupPeriod: term.lockPeriod,
-              dueDate: addDays(Date.UTC(2021, 10, 3, 0, 0, 0), lockNote.endEpoch / 3),
-              apy: 492391,
+              dueDate: addHours(Date.UTC(2021, 10, 3, 0, 0, 0), lockNote.endEpoch * 8),
               locked: currentEpoch < lockNote.endEpoch,
             }}
           />
@@ -220,8 +216,15 @@ function NoteCard({
       </Typography>
 
       <div className="note__body">
-        <div className="note__receipt-image">
-          <img src={lockNote.imageUrl || getNoteImage(term.note.name)} />
+        <div className=" note__receipt-left">
+          <img className="note__receipt-left__image" src={lockNote.imageUrl || getNoteImage(term.note.name)} />
+          <a
+            className="note__receipt-left__link"
+            href={`https://opensea.io/assets/matic/${term.noteAddress}/${note.id}`}
+            target="_blank"
+          >
+            {t('pearlChests.redeem.viewOnOpenSea')} <img src={NewPageIcon} />
+          </a>
         </div>
         <Divider className="note__div" flexItem orientation="vertical" />
         <div className="note__details">

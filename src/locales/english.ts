@@ -269,10 +269,12 @@ const English = {
         bonusDescription: 'any (4,4) bond',
         nftRequirement: 'Minimum amount required: \n{{amount}} PEARL',
         select: 'Select',
+        lockedPearl: 'PEARL in chest',
       },
       redeem: {
         tabLabel: 'Redeem',
         connect: 'Connect your wallet to view your PEARL Chests!',
+        viewOnOpenSea: 'View on OpenSea',
       },
     },
   },
