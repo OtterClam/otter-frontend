@@ -1,4 +1,4 @@
-import { Divider, Paper, Typography } from '@material-ui/core';
+import { Box, Divider, Paper, Typography } from '@material-ui/core';
 import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -158,13 +158,15 @@ function LockupOption({
           )}
         </div>
       </div>
-      <div className="lockup-option__tvl">
+      <Box bgcolor="mode.lightGray100" className="lockup-option__tvl">
         <img src={PearlChestImages[index]} />
         <div>
           <p className="lockup-option__tvl__title">{t('pearlChests.lockUp.lockedPearl')}</p>
-          <p className="lockup-option__tvl__value">{formatCurrency(term.pearlBalance * pearlPrice)}</p>
+          <Typography color="textSecondary">
+            <p className="lockup-option__tvl__value">{formatCurrency(term.pearlBalance * pearlPrice)}</p>
+          </Typography>
         </div>
-      </div>
+      </Box>
 
       <ActionButton
         className="lockup-option__select-btn"
