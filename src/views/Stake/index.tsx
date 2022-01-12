@@ -10,6 +10,7 @@ import {
   Tab,
   Tabs,
   TabsActions,
+  Divider,
   Zoom,
 } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
@@ -41,6 +42,12 @@ const useStyles = makeStyles(theme => ({
     },
     '& .MuiOutlinedInput-notchedOutline': {
       borderColor: theme.palette.mode.lightGray300,
+    },
+    '& .data-row-name-small': {
+      color: theme.palette.mode.darkGray200,
+    },
+    '& .data-row-value-small': {
+      color: theme.palette.mode.darkGray200,
     },
   },
 }));
@@ -80,6 +87,8 @@ function Stake() {
   const stakingAPY = useSelector<IReduxState, number>(state => state.app.stakingAPY);
   const stakingTVL = useSelector<IReduxState, number>(state => state.app.stakingTVL);
   const pendingTransactions = useSelector<IReduxState, IPendingTxn[]>(state => state.pendingTransactions);
+
+  const pearlBalance = useSelector<IReduxState, string>(state => state.account.balances?.pearl);
 
   const setMax = () => {
     if (view === 0) {
@@ -135,10 +144,13 @@ function Stake() {
     setView(newView);
   };
 
+  const pearlInsCLAM = Number(pearlBalance) * Number(currentIndex);
+  const totalBalance = pearlInsCLAM + Number(sClamBalance);
   const trimmedSClamBalance = trim(Number(sClamBalance), 4);
+  const trimmedTotalBalance = trim(Number(totalBalance), 4);
   const stakingRebasePercentage = trim(stakingRebase * 100, 4);
   const nextRewardValue = trim(
-    (Number(stakingRebasePercentage) / 100) * (Number(trimmedSClamBalance) + Number(warmupBalance)),
+    (Number(stakingRebasePercentage) / 100) * (Number(trimmedTotalBalance) + Number(warmupBalance)),
     4,
   );
 
@@ -347,11 +359,31 @@ function Stake() {
                         {isAppLoading ? (
                           <Skeleton width="80px" />
                         ) : (
+                          <>{new Intl.NumberFormat('en-US').format(Number(trimmedTotalBalance))} sCLAM</>
+                        )}
+                      </p>
+                    </div>
+                    <div className="data-row">
+                      <p className="data-row-name-small">sCLAM {t('common.balance')}</p>
+                      <p className="data-row-value-small">
+                        {isAppLoading ? (
+                          <Skeleton width="80px" />
+                        ) : (
                           <>{new Intl.NumberFormat('en-US').format(Number(trimmedSClamBalance))} sCLAM</>
                         )}
                       </p>
                     </div>
-
+                    <div className="data-row">
+                      <p className="data-row-name-small">PEARL {t('common.balance')}</p>
+                      <p className="data-row-value-small">
+                        {isAppLoading ? (
+                          <Skeleton width="80px" />
+                        ) : (
+                          <>{new Intl.NumberFormat('en-US').format(Number(trim(pearlInsCLAM, 4)))} sCLAM</>
+                        )}
+                      </p>
+                    </div>
+                    <Divider />
                     <div className="data-row">
                       <p className="data-row-name">{t('stake.nextRewardAmount')}</p>
                       <p className="data-row-value">
