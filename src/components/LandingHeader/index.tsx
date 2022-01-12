@@ -32,9 +32,12 @@ export default function LandingHeader() {
       <a href="https://www.otterclam.finance" className="landing-header-logo">
         <img src={HeaderLogo} alt="logo" />
       </a>
+      <Link href="https://app.otterclam.finance/#/pearl-chests" className="nft-link">
+        PEARL Chests
+        <span className="landing-header__new">NEW!</span>
+      </Link>
       <Link href="/#/nft" className="nft-link">
         NFT
-        <span className="landing-header__new">NEW!</span>
       </Link>
       <Link href={TwitterLink}>Twitter</Link>
       <Link href={DiscordLink}>Discord</Link>
