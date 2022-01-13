@@ -8,14 +8,13 @@ import { BondKey, BondKeys, getAddresses, getBond } from '../../constants';
 interface NFTActionProps {
   address: string;
   provider: JsonRpcProvider;
+  wallet: string;
 }
 
 // [TODO:d0c0q] action for this view: https://www.figma.com/file/GOojXCnlNhX9cUCbnSZLA4/OtterClam-Internal?node-id=1193%3A9346
 export const listNFTDiscount = createAsyncThunk(
   'nft/listNFTDiscount',
-  async ({ provider, address }: NFTActionProps) => {
-    return listDiscounts({ provider, address });
-  },
+  async ({ provider, address }: NFTActionProps) => {},
 );
 
 // [TODO:d0c0q] action for this view: https://www.figma.com/file/GOojXCnlNhX9cUCbnSZLA4/OtterClam-Internal?node-id=1204%3A9961
@@ -24,11 +23,11 @@ export const listBondWithNFT = createAsyncThunk(
   async ({ provider, address }: NFTActionProps) => {},
 );
 
-const bondContract = ({ provider, address }: NFTActionProps) => {
+const bondContract = ({ provider, address }: Omit<NFTActionProps, 'wallet'>) => {
   return new ethers.Contract(address, OtterPAWBondStakeDepository, provider);
 };
 
-const allNFTContracts = async ({ provider, address }: NFTActionProps) => {
+const allNFTContracts = async ({ provider, address }: Omit<NFTActionProps, 'wallet'>) => {
   const bond = bondContract({ provider, address });
   const count = (await bond.pawCount()).toNumber();
   return await Promise.all(
@@ -41,8 +40,9 @@ const allNFTContracts = async ({ provider, address }: NFTActionProps) => {
   );
 };
 
-export const listDiscounts = async ({ provider, address }: NFTActionProps) => {
+export const listDiscounts = async ({ provider, address, wallet }: NFTActionProps) => {
   const bond = bondContract({ provider, address });
+  const nfts = listMyNFT({ provider, address, wallet });
   const contracts = await allNFTContracts({ provider, address });
   const discountInfo = await Promise.all(
     contracts.map(async c => {
@@ -54,21 +54,33 @@ export const listDiscounts = async ({ provider, address }: NFTActionProps) => {
   return discountInfo;
 };
 
-export const listMyNFT = async ({ provider, address, wallet }: NFTActionProps & { wallet: string }) => {
+export const listMyNFT = async ({ provider, address, wallet }: NFTActionProps) => {
+  const bond = bondContract({ provider, address });
   const contracts = await allNFTContracts({ provider, address });
   const nfts = await Promise.all(
     contracts.map(async c => {
       const name = await c.name();
       const n = (await c.balanceOf(wallet)).toNumber();
-      const ids = await Promise.all(
+      const tokens = await Promise.all(
         Array(n)
           .fill(0)
-          .map(async (_, i) => (await c.tokenOfOwnerByIndex(wallet, i)).toNumber()),
+          .map(async (_, i) => {
+            const id = (await c.tokenOfOwnerByIndex(wallet, i)).toNumber();
+            const [discount, endEpoch] = await Promise.all([
+              bond.discountOfToken(c.address, id),
+              bond.endEpochOf(c.address, id),
+            ]);
+            return {
+              id,
+              discount: discount.toNumber(),
+              endEpoch: endEpoch.toNumber(),
+            };
+          }),
       );
       return {
         name,
         balance: n,
-        ids,
+        tokens,
       };
     }),
   );

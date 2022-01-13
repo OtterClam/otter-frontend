@@ -31,6 +31,21 @@
           "internalType": "address",
           "name": "_bondCalculator",
           "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_epochLength",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_currentEpoch",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_currentEpochTime",
+          "type": "uint256"
         }
       ],
       "stateMutability": "nonpayable",
@@ -216,7 +231,7 @@
       "inputs": [
         {
           "internalType": "address",
-          "name": "_paw",
+          "name": "_nft",
           "type": "address"
         },
         {
@@ -226,7 +241,7 @@
         },
         {
           "internalType": "uint256",
-          "name": "_expiry",
+          "name": "_endEpoch",
           "type": "uint256"
         }
       ],
@@ -324,8 +339,13 @@
       "inputs": [
         {
           "internalType": "address",
-          "name": "_paw",
+          "name": "_nft",
           "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_tokenID",
+          "type": "uint256"
         }
       ],
       "name": "bondPrice",
@@ -343,8 +363,13 @@
       "inputs": [
         {
           "internalType": "address",
-          "name": "_paw",
+          "name": "_nft",
           "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_tokenID",
+          "type": "uint256"
         }
       ],
       "name": "bondPriceInUSD",
@@ -416,7 +441,7 @@
         },
         {
           "internalType": "address",
-          "name": "_paw",
+          "name": "_nft",
           "type": "address"
         },
         {
@@ -474,11 +499,35 @@
       "inputs": [
         {
           "internalType": "address",
-          "name": "_paw",
+          "name": "_nft",
           "type": "address"
         }
       ],
       "name": "discountOf",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_nft",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_tokenID",
+          "type": "uint256"
+        }
+      ],
+      "name": "discountOfToken",
       "outputs": [
         {
           "internalType": "uint256",
@@ -506,7 +555,7 @@
         },
         {
           "internalType": "uint256",
-          "name": "expiry",
+          "name": "endEpoch",
           "type": "uint256"
         }
       ],
@@ -517,11 +566,29 @@
       "inputs": [
         {
           "internalType": "address",
-          "name": "_paw",
+          "name": "_nft",
           "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_tokenID",
+          "type": "uint256"
         }
       ],
-      "name": "expiryOf",
+      "name": "endEpochOf",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "epochLength",
       "outputs": [
         {
           "internalType": "uint256",
@@ -603,6 +670,19 @@
     },
     {
       "inputs": [],
+      "name": "launchTime",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
       "name": "maxPayout",
       "outputs": [
         {
@@ -665,7 +745,7 @@
       "inputs": [
         {
           "internalType": "address",
-          "name": "_paw",
+          "name": "_nft",
           "type": "address"
         },
         {
@@ -750,8 +830,13 @@
         },
         {
           "internalType": "address",
-          "name": "_paw",
+          "name": "_nft",
           "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_tokenID",
+          "type": "uint256"
         }
       ],
       "name": "payoutFor",
@@ -957,7 +1042,7 @@
       "inputs": [
         {
           "internalType": "address",
-          "name": "_paw",
+          "name": "_nft",
           "type": "address"
         },
         {
