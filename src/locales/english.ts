@@ -172,11 +172,11 @@ const English = {
       unstakeSuccessful: 'Your unstake was successful',
       youReceived: 'You just received ',
       infoTooltips: {
-        sClamBalance: 'The amount of sCLAM currently in your wallet, available for wrapping or unstaking.',
+        sClamBalance: 'The amount of sCLAM in your wallet, currently available for wrapping or unstaking.',
         sClamBonded:
           'The total amount of sCLAM currently vested in bonds. Will be available for wrapping or unstaking once the vesting period is finished.',
         pearl:
-          'The amount of PEARL currently in your wallet. This value is multiplied by the Current Index to find the equivalent sCLAM balance, which is included in the total above. Pearls locked in Chests are currently not included.',
+          'The amount of PEARL in your wallet. This value is multiplied by the Current Index to find the equivalent sCLAM balance, which is included in the total above. Pearls locked in Chests are currently not included.',
         stakedBalance:
           'The sum total of sCLAM in your wallet, vested in bonds, and the equivalent sCLAM value of your held PEARL.',
         nextReward:
