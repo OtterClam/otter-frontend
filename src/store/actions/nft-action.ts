@@ -86,3 +86,23 @@ export const listMyNFT = async ({ provider, address, wallet }: NFTActionProps) =
   );
   return nfts;
 };
+
+export const listBondedNFT = async ({ provider, address, wallet }: NFTActionProps) => {
+  const bond = bondContract({ provider, address });
+  let nfts = [];
+  let n = 0;
+  // max = 10
+  for (let i = 0; i < 10; i++) {
+    try {
+      const info = await bond.discountInfo(wallet, i);
+      nfts.push({
+        discount: info.discount.toNumber(),
+        nftAddress: info.paw,
+        tokenID: info.tokenID.toNumber(),
+      });
+    } catch (err) {
+      // console.log(err);
+    }
+  }
+  return nfts;
+};
