@@ -5,7 +5,7 @@ import BondLogo from 'src/components/BondLogo';
 import CustomButton from 'src/components/Button/CustomButton';
 import './choose-bond.scss';
 
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAppSelector } from 'src/store/hook';
 import { useTranslation } from 'react-i18next';
@@ -14,6 +14,7 @@ import { useWeb3Context } from '../../hooks';
 import { BondKey, getBond } from 'src/constants';
 import { priceUnits, trim, prettyShortVestingPeriod } from '../../helpers';
 import { NFTDiscountDetail } from '../BondDialog/BondNFTDiscountDialog/type';
+import { listNFTDiscount } from 'src/store/actions/nft-action';
 
 interface IBondProps {
   bondKey: BondKey;
@@ -21,7 +22,7 @@ interface IBondProps {
 }
 
 export function BondCard({ bondKey, nft }: IBondProps) {
-  const { chainID } = useWeb3Context();
+  const { chainID, provider } = useWeb3Context();
   const bond = getBond(bondKey, chainID);
 
   const { bondPrice, bondDiscount, purchased, marketPrice } = useAppSelector(state => state.bonding[bondKey]);
