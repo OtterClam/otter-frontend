@@ -146,9 +146,6 @@ function Stake() {
 
   //Include PEARL balance
   const pearlInsCLAM = Number(pearlBalance) * Number(currentIndex);
-  const totalBalance = pearlInsCLAM + Number(sClamBalance);
-  const trimmedSClamBalance = trim(Number(sClamBalance), 4);
-  const trimmedTotalBalance = trim(Number(totalBalance), 4);
 
   //Include Bonded sCLAM balance
   const bonds = useBonds();
@@ -159,12 +156,15 @@ function Stake() {
   const totalBondedBalance = bondedBalances.reduce((a, b) => a + b, 0);
 
   //Find total value of all assets & use for nextRewardValue calculation
+  const totalBalance = pearlInsCLAM + Number(sClamBalance) + Number(totalBondedBalance);
+  const trimmedTotalBalance = trim(Number(totalBalance), 4);
+
   const stakingRebasePercentage = trim(stakingRebase * 100, 4);
   const nextRewardValue = trim(
-    (Number(stakingRebasePercentage) / 100) *
-      (Number(trimmedTotalBalance) + Number(warmupBalance) + Number(totalBondedBalance)),
+    (Number(stakingRebasePercentage) / 100) * (Number(trimmedTotalBalance) + Number(warmupBalance)),
     4,
   );
+  const trimmedSClamBalance = trim(Number(sClamBalance), 4);
 
   useEffect(() => {
     if (tabsActions.current) {
@@ -376,7 +376,7 @@ function Stake() {
                       </p>
                     </div>
                     <div className="data-row">
-                      <p className="data-row-name-small">sCLAM in Wallet</p>
+                      <p className="data-row-name-small">sCLAM {t('common.balance')}</p>
                       <p className="data-row-value-small">
                         {isAppLoading ? (
                           <Skeleton width="80px" />
@@ -386,7 +386,7 @@ function Stake() {
                       </p>
                     </div>
                     <div className="data-row">
-                      <p className="data-row-name-small">sCLAM in Bonds</p>
+                      <p className="data-row-name-small">sCLAM Bonded</p>
                       <p className="data-row-value-small">
                         {isAppLoading ? (
                           <Skeleton width="80px" />
@@ -396,7 +396,7 @@ function Stake() {
                       </p>
                     </div>
                     <div className="data-row">
-                      <p className="data-row-name-small">PEARL in Wallet</p>
+                      <p className="data-row-name-small">PEARL {t('common.balance')}</p>
                       <p className="data-row-value-small">
                         {isAppLoading ? (
                           <Skeleton width="80px" />
