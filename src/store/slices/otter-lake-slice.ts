@@ -8,6 +8,7 @@ import { setAll } from '../../helpers';
 import { fetchPendingTxns, clearPendingTxn } from './pending-txns-slice';
 import { formatEther } from '@ethersproject/units';
 import axios from 'axios';
+import { IReduxState } from './state.interface';
 
 export interface ITerm {
   note: INote;
@@ -83,14 +84,6 @@ interface IRedeemDetails {
   provider: JsonRpcProvider;
 }
 
-interface ILockNoteDetails {
-  noteAddress: string;
-  amount: string;
-  chainID: number;
-  provider: JsonRpcProvider;
-  address: string;
-}
-
 interface IExtendLockDetails {
   noteAddress: string;
   amount: string;
@@ -100,17 +93,13 @@ interface IExtendLockDetails {
   address: string;
 }
 
-interface IClaimAndLockPayload {
-  chainID: number;
-  provider: JsonRpcProvider;
-  noteAddress: string;
-  tokenId: string;
-  address: string;
+interface ThunkOptions {
+  state: IReduxState;
 }
 
 export const loadTermsDetails = createAsyncThunk(
   'otterLake/loadTermsDetails',
-  async ({ chainID, provider }: ILoadTermsDetails, { getState, dispatch }) => {
+  async ({ chainID, provider }: ILoadTermsDetails, { getState }) => {
     const stakingRebase = (getState() as any).app.stakingRebase;
     const addresses = getAddresses(chainID);
     const otterLakeContract = new ethers.Contract(addresses.OTTER_LAKE, OtterLake, provider);
@@ -157,8 +146,6 @@ export const loadTermsDetails = createAsyncThunk(
 
     const rawTerms = await Promise.all(actions);
     const groupedTerms = groupBy(rawTerms, term => term.lockPeriod);
-    const rewardRates: { [key: string]: number } = {};
-
     const terms = Object.keys(groupedTerms).map(key => {
       const term = groupedTerms[key].find(term => Number(term.minLockAmount) > 0) || groupedTerms[key][0];
       const fallbackTerm = groupedTerms[key].find(term => Number(term.minLockAmount) === 0);
@@ -166,9 +153,7 @@ export const loadTermsDetails = createAsyncThunk(
       const rewardRate = nextReward / (term.pearlBalance + (fallbackTerm?.pearlBalance ?? 0));
       term.apy = (1 + (rewardRate + stakingRebase)) ** 1095;
       term.rewardRate = rewardRate;
-      rewardRates[term.noteAddress] = rewardRate;
       if (fallbackTerm) {
-        rewardRates[fallbackTerm.noteAddress] = rewardRate;
         fallbackTerm.apy = term.apy;
         fallbackTerm.rewardRate = term.rewardRate;
       }
@@ -205,12 +190,12 @@ interface ILoadLockNotesPayload {
   provider: JsonRpcProvider;
 }
 
-export const loadLockedNotes = createAsyncThunk(
+export const loadLockedNotes = createAsyncThunk<{ lockNotes: ILockNote[] }, ILoadLockNotesPayload, ThunkOptions>(
   'otterLake/loadLockedNotes',
   async ({ address, chainID, provider }: ILoadLockNotesPayload, { getState }) => {
     const addresses = getAddresses(chainID);
     const otterLakeContract = new ethers.Contract(addresses.OTTER_LAKE, OtterLake, provider);
-    const groupedTerms = (getState() as any).lake.terms as ITerm[];
+    const groupedTerms = getState().lake.terms as ITerm[];
     const rewardRates: { [key: string]: number } = {};
     const lockNotes: ILockNote[] = (
       await Promise.all(
@@ -293,7 +278,7 @@ export const approveSpending = createAsyncThunk(
   },
 );
 
-export const claimReward = createAsyncThunk(
+export const claimReward = createAsyncThunk<void, IClaimRewardDetails, ThunkOptions>(
   'otterLake/claimReward',
   async ({ chainID, provider, address, noteAddress, tokenId }: IClaimRewardDetails, { dispatch }) => {
     const addresses = getAddresses(chainID);
@@ -321,7 +306,7 @@ export const claimReward = createAsyncThunk(
   },
 );
 
-export const redeem = createAsyncThunk(
+export const redeem = createAsyncThunk<void, IRedeemDetails, ThunkOptions>(
   'otterLake/redeem',
   async ({ chainID, provider, noteAddress, address, tokenId }: IRedeemDetails, { dispatch }) => {
     const addresses = getAddresses(chainID);
@@ -349,7 +334,22 @@ export const redeem = createAsyncThunk(
   },
 );
 
-export const lock = createAsyncThunk(
+interface LockActionResult {
+  user: string;
+  note: string;
+  tokenId: string;
+  amount: string;
+}
+
+interface ILockNoteDetails {
+  noteAddress: string;
+  amount: string;
+  chainID: number;
+  provider: JsonRpcProvider;
+  address: string;
+}
+
+export const lock = createAsyncThunk<LockActionResult | undefined, ILockNoteDetails, ThunkOptions>(
   'otterLake/lock',
   async ({ chainID, provider, noteAddress, address, amount }: ILockNoteDetails, { dispatch }) => {
     const addresses = getAddresses(chainID);
@@ -371,22 +371,25 @@ export const lock = createAsyncThunk(
       dispatch(loadLockedNotes({ address, chainID, provider }));
     } catch (err) {
       alert((err as Error).message);
+      return;
     } finally {
       if (tx) {
         dispatch(clearPendingTxn(tx.hash));
       }
     }
 
-    return {
-      user: lockedEvent.args[0],
-      note: lockedEvent.args[1],
-      tokenId: lockedEvent.args[2].toString(),
-      amount: ethers.utils.formatEther(lockedEvent.args[3]),
-    };
+    if (lockedEvent) {
+      return {
+        user: lockedEvent.args[0],
+        note: lockedEvent.args[1],
+        tokenId: lockedEvent.args[2].toString(),
+        amount: ethers.utils.formatEther(lockedEvent.args[3]),
+      };
+    }
   },
 );
 
-export const extendLock = createAsyncThunk(
+export const extendLock = createAsyncThunk<LockActionResult | undefined, IExtendLockDetails, ThunkOptions>(
   'otterLake/extendLock',
   async ({ chainID, provider, noteAddress, amount, address, tokenId }: IExtendLockDetails, { dispatch }) => {
     const addresses = getAddresses(chainID);
@@ -426,7 +429,15 @@ export const extendLock = createAsyncThunk(
   },
 );
 
-export const claimAndLock = createAsyncThunk(
+interface IClaimAndLockPayload {
+  chainID: number;
+  provider: JsonRpcProvider;
+  noteAddress: string;
+  tokenId: string;
+  address: string;
+}
+
+export const claimAndLock = createAsyncThunk<LockActionResult | undefined, IClaimAndLockPayload, ThunkOptions>(
   'otterLake/claimAndLock',
   async ({ chainID, provider, noteAddress, address, tokenId }: IClaimAndLockPayload, { dispatch }) => {
     const addresses = getAddresses(chainID);
