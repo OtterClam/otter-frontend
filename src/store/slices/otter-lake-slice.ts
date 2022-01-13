@@ -193,9 +193,10 @@ interface ILoadLockNotesPayload {
 export const loadLockedNotes = createAsyncThunk<{ lockNotes: ILockNote[] }, ILoadLockNotesPayload, ThunkOptions>(
   'otterLake/loadLockedNotes',
   async ({ address, chainID, provider }: ILoadLockNotesPayload, { getState }) => {
+    const groupedTerms = getState().lake.terms as ITerm[];
+    const epoch = getState().app.currentEpoch;
     const addresses = getAddresses(chainID);
     const otterLakeContract = new ethers.Contract(addresses.OTTER_LAKE, OtterLake, provider);
-    const groupedTerms = getState().lake.terms as ITerm[];
     const rewardRates: { [key: string]: number } = {};
     const lockNotes: ILockNote[] = (
       await Promise.all(
@@ -241,8 +242,10 @@ export const loadLockedNotes = createAsyncThunk<{ lockNotes: ILockNote[] }, ILoa
     ).flatMap(t => t);
 
     lockNotes.forEach(n => {
-      n.rewardRate = rewardRates[n.noteAddress];
-      n.nextReward = Number(n.amount) * n.rewardRate;
+      if (epoch < n.endEpoch) {
+        n.rewardRate = rewardRates[n.noteAddress];
+        n.nextReward = Number(n.amount) * n.rewardRate;
+      }
     });
 
     return { lockNotes };
