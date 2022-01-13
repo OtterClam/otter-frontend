@@ -21,7 +21,7 @@ import ActionButton from '../../components/Button/ActionButton';
 import RebaseTimer from '../../components/RebaseTimer/RebaseTimer';
 import TabPanel from '../../components/TabPanel';
 import { trim } from '../../helpers';
-import { useWeb3Context } from '../../hooks';
+import { useWeb3Context, useBonds } from '../../hooks';
 import { IPendingTxn } from '../../store/slices/pending-txns-slice';
 import { changeApproval, changeStake, claimWarmup } from '../../store/slices/stake-thunk';
 import { IReduxState } from '../../store/slices/state.interface';
@@ -144,13 +144,25 @@ function Stake() {
     setView(newView);
   };
 
+  //Include PEARL balance
   const pearlInsCLAM = Number(pearlBalance) * Number(currentIndex);
   const totalBalance = pearlInsCLAM + Number(sClamBalance);
   const trimmedSClamBalance = trim(Number(sClamBalance), 4);
   const trimmedTotalBalance = trim(Number(totalBalance), 4);
+
+  //Include Bonded sCLAM balance
+  const bonds = useBonds();
+  const bondedBalances = useSelector<IReduxState, any[]>(state => {
+    //@ts-ignore
+    return bonds.map(bond => state.account[bond.value] && state.account[bond.value].interestDue);
+  });
+  const totalBondedBalance = bondedBalances.reduce((a, b) => a + b, 0);
+
+  //Find total value of all assets & use for nextRewardValue calculation
   const stakingRebasePercentage = trim(stakingRebase * 100, 4);
   const nextRewardValue = trim(
-    (Number(stakingRebasePercentage) / 100) * (Number(trimmedTotalBalance) + Number(warmupBalance)),
+    (Number(stakingRebasePercentage) / 100) *
+      (Number(trimmedTotalBalance) + Number(warmupBalance) + Number(totalBondedBalance)),
     4,
   );
 
@@ -364,7 +376,7 @@ function Stake() {
                       </p>
                     </div>
                     <div className="data-row">
-                      <p className="data-row-name-small">sCLAM {t('common.balance')}</p>
+                      <p className="data-row-name-small">sCLAM in Wallet</p>
                       <p className="data-row-value-small">
                         {isAppLoading ? (
                           <Skeleton width="80px" />
@@ -374,12 +386,22 @@ function Stake() {
                       </p>
                     </div>
                     <div className="data-row">
-                      <p className="data-row-name-small">PEARL {t('common.balance')}</p>
+                      <p className="data-row-name-small">sCLAM in Bonds</p>
                       <p className="data-row-value-small">
                         {isAppLoading ? (
                           <Skeleton width="80px" />
                         ) : (
-                          <>{new Intl.NumberFormat('en-US').format(Number(trim(pearlInsCLAM, 4)))} sCLAM</>
+                          <>{new Intl.NumberFormat('en-US').format(Number(trim(totalBondedBalance, 4)))} sCLAM</>
+                        )}
+                      </p>
+                    </div>
+                    <div className="data-row">
+                      <p className="data-row-name-small">PEARL in Wallet</p>
+                      <p className="data-row-value-small">
+                        {isAppLoading ? (
+                          <Skeleton width="80px" />
+                        ) : (
+                          <>{new Intl.NumberFormat('en-US').format(Number(trim(pearlBalance, 4)))} PEARL</>
                         )}
                       </p>
                     </div>
