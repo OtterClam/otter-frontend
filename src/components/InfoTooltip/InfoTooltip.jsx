@@ -14,7 +14,7 @@ function InfoTooltip({ message }) {
   const id = open ? 'info-tooltip' : undefined;
 
   return (
-    <Box style={{ display: 'inline-flex', justifyContent: 'center', alignSelf: 'center' }}>
+    <Box style={{ display: 'inline-flex', justifyContent: 'left', alignSelf: 'left' }}>
       <SvgIcon
         component={Info}
         onMouseOver={handleHover}
