@@ -24,6 +24,7 @@ import { checkBondKey } from './utils';
 import { NFTDiscountDetail } from '../BondDialog/BondNFTDiscountDialog/type';
 import { MOCKED_NFT_OPTIONS } from '../BondDialog/BondNFTDiscountDialog/constants';
 import { batchListBondNFTDiscounts } from 'src/store/actions/nft-action';
+import { useAppSelector } from 'src/store/hook';
 
 const useStyle = makeStyles(theme => {
   return {
@@ -82,7 +83,7 @@ query {
     dispatch(batchListBondNFTDiscounts({ provider, networkId: chainID }));
   }, []);
 
-  const canSelect = true; // TODO: selectable condition
+  const canSelect = useAppSelector(state => state.account.nfts.ownedNFTs).length > 0;
   const [successDialogOpen, setSuccessDialogOpen] = useState(false);
 
   // TODO: replace with fetched nft infos

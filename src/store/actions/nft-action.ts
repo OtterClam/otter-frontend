@@ -120,6 +120,7 @@ export const listMyNFT = createAsyncThunk(
   'account/nft/list',
   async ({ provider, wallet, networkId }: ListMyNFTPayload) => {
     const addresses = getAddresses(networkId);
+    let ownedNFTs: string[] = [];
 
     // get owned nft infos
     const nftAddresses = [
@@ -136,6 +137,13 @@ export const listMyNFT = createAsyncThunk(
           await contract.symbol(),
           Number(await contract.balanceOf(wallet)),
         ]).then(res => res);
+        if (balance > 0) {
+          Array(balance)
+            .fill(0)
+            .map(() => {
+              ownedNFTs.push(symbol);
+            });
+        }
         return { type: 'nft' as NFTType, name: name as string, symbol: symbol as string, balance };
       }),
     );
@@ -155,12 +163,19 @@ export const listMyNFT = createAsyncThunk(
             await noteContract.symbol(),
             Number(await noteContract.balanceOf(wallet)),
           ]);
+          if (balance > 0) {
+            Array(balance)
+              .fill(0)
+              .map(() => {
+                ownedNFTs.push(symbol);
+              });
+          }
           return { type: 'note' as NFTType, name: name as string, symbol: symbol as string, balance };
         }),
     );
 
     // combine note and nft together
-    return [...myNFTInfos, ...myNoteInfos];
+    return { ownedNFTs, nftInfos: [...myNFTInfos, ...myNoteInfos] };
   },
 );
 
