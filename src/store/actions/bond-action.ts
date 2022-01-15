@@ -134,7 +134,7 @@ export const calcBondDetails = createAsyncThunk(
     const bondCalcContract = new ethers.Contract(addresses.CLAM_BONDING_CALC_ADDRESS, BondingCalcContract, provider);
     const payoutForValuation =
       bondKey === 'mai_clam44'
-        ? await bondContract.payoutFor(amountInWei, addresses.BONDS.MAI_CLAM)
+        ? await bondContract.payoutFor(amountInWei, zeroAddress, 0)
         : bond.type === 'lp'
         ? await (async () => {
             const valuation = await bondCalcContract.valuation(bond.reserve, amountInWei);
@@ -146,7 +146,7 @@ export const calcBondDetails = createAsyncThunk(
     // Calculate max bond that user can buy
     const maxQuoteOfUser =
       bondKey === 'mai_clam44'
-        ? ((await bondContract.payoutFor(userBalance, addresses.BONDS.MAI_CLAM)).div(1e9) as BigNumber)
+        ? ((await bondContract.payoutFor(userBalance, zeroAddress, 0)).div(1e9) as BigNumber)
         : ((await bondContract.payoutFor(userBalance)).div(1e9) as BigNumber);
     const originalMaxPayout = await bondContract.maxPayout();
     const isOverMaxPayout = maxQuoteOfUser.gte(originalMaxPayout);
