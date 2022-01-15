@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useWeb3Context } from '../../hooks';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -23,6 +23,7 @@ import { IReduxState } from '../../store/slices/state.interface';
 import { checkBondKey } from './utils';
 import { NFTDiscountDetail } from '../BondDialog/BondNFTDiscountDialog/type';
 import { MOCKED_NFT_OPTIONS } from '../BondDialog/BondNFTDiscountDialog/constants';
+import { batchListBondNFTDiscounts } from 'src/store/actions/nft-action';
 
 const useStyle = makeStyles(theme => {
   return {
@@ -34,7 +35,7 @@ const useStyle = makeStyles(theme => {
 
 function ChooseBond() {
   const { t } = useTranslation();
-  const { chainID } = useWeb3Context();
+  const { chainID, provider, address: walletAddress } = useWeb3Context();
   const style = useStyle();
   const bonds = useMemo(() => {
     return BondKeys.map(key => getBond(key, chainID));
@@ -75,6 +76,11 @@ query {
   useEffect(() => {
     setSelectedBond(defaultBond);
   }, [bondKey]);
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(batchListBondNFTDiscounts({ provider, networkId: chainID }));
+  }, []);
 
   const canSelect = true; // TODO: selectable condition
   const [successDialogOpen, setSuccessDialogOpen] = useState(false);

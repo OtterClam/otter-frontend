@@ -19,6 +19,7 @@ import NavDrawer from '../components/Sidebar/NavDrawer';
 
 import { BondKeys } from '../constants';
 import { batchGetBondDetails } from '../store/actions/bond-action';
+import { listMyNFT } from 'src/store/actions/nft-action';
 import { calculateUserBondDetails, loadAccountDetails } from '../store/slices/account-slice';
 import { loadAppDetails } from '../store/slices/app-slice';
 import { ChooseBond, Stake, Wrap } from '../views';
@@ -69,7 +70,15 @@ function App() {
   const isSmallerScreen = useMediaQuery('(max-width: 960px)');
   const isSmallScreen = useMediaQuery('(max-width: 600px)');
 
-  const { connect, provider, readOnlyProvider, hasCachedProvider, chainID, connected } = useWeb3Context();
+  const {
+    address: walletAddress,
+    chainID,
+    provider,
+    connected,
+    readOnlyProvider,
+    connect,
+    hasCachedProvider,
+  } = useWeb3Context();
   const address = useAddress();
 
   const [walletChecked, setWalletChecked] = useState(false);
@@ -105,6 +114,7 @@ function App() {
     loadProvider => {
       dispatch(loadAppDetails({ networkID: chainID, provider: loadProvider }));
       dispatch(batchGetBondDetails({ value: null, provider: loadProvider, networkID: chainID, userBalance: '0' }));
+      dispatch(listMyNFT({ provider, wallet: walletAddress, networkId: chainID }));
     },
     [connected],
   );
