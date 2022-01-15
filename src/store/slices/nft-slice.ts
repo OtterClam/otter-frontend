@@ -12,7 +12,8 @@ const nftSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: builder => {
-    // listMyNFT action will store owner's nfts into account
+    /** NOTE: listMyNFT action will store owner's nfts into account
+     */
     builder.addCase(listMyNFT.fulfilled, (state, action) => {
       state.account.nfts.data = action.payload;
       state.account.nfts.loading = false;
@@ -25,6 +26,12 @@ const nftSlice = createSlice({
       state.account.nfts.loading = true;
     });
 
+    /** NOTE: listBondNFTDiscounts vs. batchListBondNFTDiscounts
+     * List thunk stores bonds discount values rather than batch list thunk.
+     * The reason is that some bonds don't support nft discounts.
+     * In the batch list case, if we fetched a bond without nft discounts, redux will trigger the rejected event and store nothing.
+     * However, using list thunk to store will store bonds with discounts, and ignore those without.
+     *  */
     builder.addCase(listBondNFTDiscounts.fulfilled, (state, action) => {
       if (!state.bondNftDiscounts.indexes.includes(action.payload.bondKey)) {
         state.bondNftDiscounts.indexes = state.bondNftDiscounts.indexes.concat([action.payload.bondKey]);
