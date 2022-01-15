@@ -74,6 +74,8 @@ const POLYGON_MUMBAI = {
   OTTER_LAKE: '0xAaC7D4A36DAb95955ef3c641c23F1fA46416CF71',
 };
 
+export const zeroAddress = '0x0000000000000000000000000000000000000000';
+
 export const getAddresses = (networkID: number) => {
   if (networkID === Networks.POLYGON_MAINNET || networkID === Networks.OTTER_FORK || networkID === Networks.HARDHAT)
     return POLYGON_MAINNET;

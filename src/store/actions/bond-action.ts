@@ -10,7 +10,7 @@ import { JsonRpcProvider } from '@ethersproject/providers';
 import { BondingCalcContract, AggregatorV3InterfaceABI } from '../../abi';
 
 import { getMarketPrice, contractForBond, contractForReserve, getTokenPrice } from '../../helpers';
-import { BondKey, BondKeys, getAddresses, getBond } from '../../constants';
+import { BondKey, BondKeys, getAddresses, getBond, zeroAddress } from '../../constants';
 
 import {
   getBondDiscount,
@@ -123,8 +123,9 @@ export const calcBondDetails = createAsyncThunk(
     // Calculate bond discount
     const bondPriceInUSD =
       bondKey === 'mai_clam44'
-        ? await bondContract.bondPriceInUSD(addresses.BONDS.MAI_CLAM)
+        ? await bondContract.bondPriceInUSD(zeroAddress, 0)
         : await bondContract.bondPriceInUSD();
+
     const maiPrice = await getTokenPrice('MAI');
     const originalMarketPrice = ((await getMarketPrice(networkID, provider)) as BigNumber).mul(maiPrice);
     const bondDiscount = getBondDiscount({ originalMarketPrice, bondPriceInUSD });
