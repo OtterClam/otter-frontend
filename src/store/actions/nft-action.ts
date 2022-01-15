@@ -1,10 +1,9 @@
 import { ethers } from 'ethers';
-import { ERC721, OtterPAWBondStakeDepository } from 'src/abi';
 import { JsonRpcProvider } from '@ethersproject/providers';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { contractForBond } from 'src/helpers';
-import { useDispatch } from 'react-redux';
-import { BondKey, BondKeys, getAddresses, getBond, listBonds } from '../../constants';
+
+import { ERC721, OtterPAWBondStakeDepository, PearlNote, OtterPAW, OtterLake } from 'src/abi';
+import { BondKey, BondKeys, getAddresses, listBonds } from '../../constants';
 
 interface NFTActionProps {
   address: string;
@@ -99,39 +98,65 @@ interface NFT {
   tokens: Token[];
 }
 
+interface ListMyNFTPayload {
+  provider: JsonRpcProvider;
+  wallet: string;
+  networkId: number;
+}
+
+type NFTType = 'note' | 'nft';
+interface MyNFTInfos {
+  type: NFTType;
+  name: string;
+  symbol: string;
+  balance: number;
+}
+
 export const listMyNFT = createAsyncThunk(
-  'nft/myNft/list',
-  async ({ provider, address, wallet }: NFTActionProps): Promise<NFT[]> => {
-    const bond = bondContract({ provider, address });
-    const contracts = await allNFTContracts({ provider, address });
-    const nfts = await Promise.all(
-      contracts.map(async c => {
-        const name = await c.name();
-        const n = (await c.balanceOf(wallet)).toNumber();
-        const tokens = await Promise.all(
-          Array(n)
-            .fill(0)
-            .map(async (_, i) => {
-              const id = (await c.tokenOfOwnerByIndex(wallet, i)).toNumber();
-              const [discount, endEpoch] = await Promise.all([
-                bond.discountOfToken(c.address, id),
-                bond.endEpochOf(c.address, id),
-              ]);
-              return {
-                id,
-                discount: discount.toNumber(),
-                endEpoch: endEpoch.toNumber(),
-              };
-            }),
-        );
-        return {
-          name,
-          balance: n,
-          tokens,
-        };
+  'account/nft/list',
+  async ({ provider, wallet, networkId }: ListMyNFTPayload) => {
+    const addresses = getAddresses(networkId);
+
+    // get owned nft infos
+    const nftAddresses = [
+      addresses.NFTS.SAFE_HAND,
+      addresses.NFTS.FURRY_HAND,
+      addresses.NFTS.STONE_HAND,
+      addresses.NFTS.DIAMOND_HAND,
+    ];
+    const nftContracts = nftAddresses.map(address => new ethers.Contract(address, OtterPAW, provider.getSigner()));
+    const myNFTInfos = await Promise.all(
+      nftContracts.map(async contract => {
+        const [name, symbol, balance] = await Promise.all([
+          await contract.name(),
+          await contract.symbol(),
+          Number(await contract.balanceOf(wallet)),
+        ]).then(res => res);
+        return { type: 'nft' as NFTType, name: name as string, symbol: symbol as string, balance };
       }),
     );
-    return nfts;
+
+    // get owned notes infos
+    const otterLakeContract = new ethers.Contract(addresses.OTTER_LAKE, OtterLake, provider);
+    const termsCount = (await otterLakeContract.termsCount()).toNumber();
+    const myNoteInfos = await Promise.all(
+      Array(termsCount)
+        .fill(0)
+        .map(async (_, index) => {
+          const termAddress = await otterLakeContract.termAddresses(index);
+          const term = await otterLakeContract.terms(termAddress);
+          const noteContract = new ethers.Contract(term.note, PearlNote, provider);
+          const [name, symbol, balance] = await Promise.all([
+            await noteContract.name(),
+            await noteContract.symbol(),
+            Number(await noteContract.balanceOf(wallet)),
+          ]);
+          return { type: 'note' as NFTType, name: name as string, symbol: symbol as string, balance };
+        }),
+    );
+
+    // combine note and nft together
+    return [...myNFTInfos, ...myNoteInfos];
   },
 );
 

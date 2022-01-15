@@ -1,11 +1,11 @@
 import { JsonRpcProvider } from '@ethersproject/providers';
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
-import { BigNumber, ethers } from 'ethers';
+import { ethers } from 'ethers';
 import _ from 'lodash';
 import { ClamTokenContract, MAIContract, PearlTokenContract, StakedClamContract } from 'src/abi';
 import { BondKey, getAddresses, getBond } from 'src/constants';
 import { contractForBond, contractForReserve, setAll } from 'src/helpers';
-
+import { listMyNFT } from '../actions/nft-action';
 interface IState {
   [key: string]: any;
 }
@@ -211,6 +211,17 @@ const accountSlice = createSlice({
       .addCase(calculateUserBondDetails.rejected, (state, { error }) => {
         state.loading = false;
         console.log(error);
+      })
+      .addCase(listMyNFT.fulfilled, (state, { payload }) => {
+        state.nfts = payload;
+        state.loading = false;
+      })
+      .addCase(listMyNFT.rejected, (state, { error }) => {
+        state.loading = false;
+        console.log(error);
+      })
+      .addCase(listMyNFT.pending, state => {
+        state.loading = true;
       });
   },
 });
