@@ -3,12 +3,13 @@ import { ERC721, OtterPAWBondStakeDepository } from 'src/abi';
 import { JsonRpcProvider } from '@ethersproject/providers';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { contractForBond } from 'src/helpers';
-import { BondKey, BondKeys, getAddresses, getBond } from '../../constants';
+import { useDispatch } from 'react-redux';
+import { BondKey, BondKeys, getAddresses, getBond, listBonds } from '../../constants';
 
 interface NFTActionProps {
   address: string;
   provider: JsonRpcProvider;
-  wallet: string;
+  wallet?: string;
 }
 
 // [TODO:d0c0q] action for this view: https://www.figma.com/file/GOojXCnlNhX9cUCbnSZLA4/OtterClam-Internal?node-id=1193%3A9346
@@ -40,18 +41,51 @@ const allNFTContracts = async ({ provider, address }: Omit<NFTActionProps, 'wall
   );
 };
 
-export const listDiscounts = async ({ provider, address, wallet }: NFTActionProps) => {
-  const bond = bondContract({ provider, address });
-  const contracts = await allNFTContracts({ provider, address });
-  const discountInfo = await Promise.all(
-    contracts.map(async c => {
-      const discount = await bond.discountOf(c.address);
-      const name = await c.name();
-      return { name, discount: discount.toNumber() / 10000 };
-    }),
-  );
-  return discountInfo;
+type BondNFTDiscount = {
+  name: string;
+  discount: number;
 };
+
+interface ListBondNFTDiscountResponse extends Pick<ListBondNFTDiscountPayload, 'bondKey'> {
+  discounts: BondNFTDiscount[];
+}
+
+interface ListBondNFTDiscountPayload extends NFTActionProps {
+  bondKey: BondKey;
+}
+
+export const listBondNFTDiscounts = createAsyncThunk(
+  'nft/discount/list',
+  async ({ bondKey, provider, address }: ListBondNFTDiscountPayload): Promise<ListBondNFTDiscountResponse> => {
+    const bond = bondContract({ provider, address });
+    const contracts = await allNFTContracts({ provider, address });
+    const discounts = await Promise.all(
+      contracts.map(async c => {
+        const discount = await bond.discountOf(c.address);
+        const nftName = await c.name();
+        return { name: nftName, discount: discount.toNumber() / 10000 };
+      }),
+    );
+    return { bondKey, discounts };
+  },
+);
+
+interface BatchListBondNFTDiscountPayload {
+  provider: JsonRpcProvider;
+  networkId: number;
+}
+
+export const batchListBondNFTDiscounts = createAsyncThunk(
+  'nft/discount/batch',
+  async ({ networkId, provider }: BatchListBondNFTDiscountPayload, { dispatch }) => {
+    const bonds = listBonds(networkId);
+    await Promise.all(
+      BondKeys.map(bondKey => {
+        dispatch(listBondNFTDiscounts({ bondKey, provider, address: bonds[bondKey].address }));
+      }),
+    );
+  },
+);
 
 type Token = {
   id: string;
