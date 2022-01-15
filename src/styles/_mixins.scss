@@ -6,17 +6,28 @@
 }
 
 @mixin otter-images {
-    &.nft1 {
+    &.SAFE {
         background-image: url('/components/NFTCards/images/nft1.jpg');
     }
-    &.nft2 {
+    &.FURRY {
         background-image: url('/components/NFTCards/images/nft2.jpg');
     }
-    &.nft3 {
+    &.STONE {
         background-image: url('/components/NFTCards/images/nft3.jpg');
     }
-    &.nft4 {
+    &.DIAMOND {
         background-image: url('/components/NFTCards/images/nft4.jpg');
     }
-    // TODO: add pearl note images
+    &.SAFE_NOTE {
+        background-image: url('/assets/images/safe-hand-note.jpg');
+    }
+    &.FURRY_NOTE {
+        background-image: url('/assets/images/furry-hand-note.jpg');
+    }
+    &.STONE_NOTE {
+        background-image: url('/assets/images/stone-hand-note.jpg');
+    }
+    &.DIAMOND_NOTE {
+        background-image: url('/assets/images/diamond-hand-note.jpg');
+    }
 }

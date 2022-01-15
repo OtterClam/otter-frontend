@@ -18,18 +18,17 @@ import { Skeleton } from '@material-ui/lab';
 import BondPurchaseDialog from './BondPurchaseDialog';
 import ActionButton from '../../components/Button/ActionButton';
 import BondNFTDiscount from './BondNFTDiscount';
-import { NFTDiscountDetail } from './BondNFTDiscountDialog/type';
 
 import { ethers } from 'ethers';
 
 import { changeApproval, bondAsset, calcBondDetails } from '../../store/actions/bond-action';
-
 import { IPendingTxn } from '../../store/slices/pending-txns-slice';
 import { IReduxState } from '../../store/slices/state.interface';
 
 import { BondKey, getBond } from 'src/constants';
 import { shorten, trim, prettifySeconds } from '../../helpers';
 import { tabletMediaQuery } from 'src/themes/mediaQuery';
+import { NFTDiscountOption } from './types';
 
 const useStyles = makeStyles(theme => ({
   input: {
@@ -53,8 +52,8 @@ interface IBondPurchaseProps {
   bondKey: BondKey;
   slippage: number;
   canSelect: boolean;
-  selection?: NFTDiscountDetail;
-  setSelection: Dispatch<SetStateAction<NFTDiscountDetail | undefined>>;
+  selection?: NFTDiscountOption;
+  setSelection: Dispatch<SetStateAction<NFTDiscountOption | undefined>>;
   setNftDialogOpen: Dispatch<SetStateAction<boolean>>;
 }
 

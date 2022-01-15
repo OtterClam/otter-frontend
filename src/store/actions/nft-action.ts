@@ -41,13 +41,15 @@ const allNFTContracts = async ({ provider, address }: Omit<NFTActionProps, 'wall
   );
 };
 
-type BondNFTDiscount = {
+export type BondNFTDiscount = {
+  key: string;
   name: string;
   discount: number;
+  endDate: string;
 };
 
 interface ListBondNFTDiscountResponse extends Pick<ListBondNFTDiscountPayload, 'bondKey'> {
-  discounts: any;
+  discounts: BondNFTDiscount[];
 }
 
 interface ListBondNFTDiscountPayload extends NFTActionProps {
@@ -65,8 +67,9 @@ export const listBondNFTDiscounts = createAsyncThunk(
         const endEpoch = await bond.endEpochOf(c.address, token);
         const discount = (await bond.discountOf(c.address)).toNumber() / 10000;
         const name = await c.name();
+        const symbol = await c.symbol();
         const endDate = format(addDays(Date.UTC(2021, 10, 3, 0, 0, 0), endEpoch / 3), 'yyyy/MM/dd');
-        return { name, discount, endDate };
+        return { name, key: symbol, discount, endDate };
       }),
     );
     return { bondKey, discounts };
@@ -108,19 +111,19 @@ interface ListMyNFTPayload {
   networkId: number;
 }
 
-type NFTType = 'note' | 'nft';
-interface MyNFTInfos {
+export type NFTType = 'note' | 'nft';
+export type MyNFTInfo = {
   type: NFTType;
   name: string;
-  symbol: string;
+  key: string;
   balance: number;
-}
+};
 
 export const listMyNFT = createAsyncThunk(
   'account/nft/list',
-  async ({ provider, wallet, networkId }: ListMyNFTPayload) => {
+  async ({ provider, wallet, networkId }: ListMyNFTPayload): Promise<MyNFTInfo[]> => {
     const addresses = getAddresses(networkId);
-    let ownedNFTs: string[] = [];
+    let ownedNFTs: MyNFTInfo[] = [];
 
     // get owned nft infos
     const nftAddresses = [
@@ -130,7 +133,7 @@ export const listMyNFT = createAsyncThunk(
       addresses.NFTS.DIAMOND_HAND,
     ];
     const nftContracts = nftAddresses.map(address => new ethers.Contract(address, OtterPAW, provider.getSigner()));
-    const myNFTInfos = await Promise.all(
+    await Promise.all(
       nftContracts.map(async contract => {
         const [name, symbol, balance] = await Promise.all([
           await contract.name(),
@@ -141,17 +144,17 @@ export const listMyNFT = createAsyncThunk(
           Array(balance)
             .fill(0)
             .map(() => {
-              ownedNFTs.push(symbol);
+              ownedNFTs.push({ type: 'nft' as NFTType, name: name as string, key: symbol as string, balance });
             });
         }
-        return { type: 'nft' as NFTType, name: name as string, symbol: symbol as string, balance };
+        return { type: 'nft' as NFTType, name: name as string, key: symbol as string, balance };
       }),
     );
 
     // get owned notes infos
     const otterLakeContract = new ethers.Contract(addresses.OTTER_LAKE, OtterLake, provider);
     const termsCount = (await otterLakeContract.termsCount()).toNumber();
-    const myNoteInfos = await Promise.all(
+    await Promise.all(
       Array(termsCount)
         .fill(0)
         .map(async (_, index) => {
@@ -167,15 +170,15 @@ export const listMyNFT = createAsyncThunk(
             Array(balance)
               .fill(0)
               .map(() => {
-                ownedNFTs.push(symbol);
+                ownedNFTs.push({ type: 'note' as NFTType, name: name as string, key: symbol as string, balance });
               });
           }
-          return { type: 'note' as NFTType, name: name as string, symbol: symbol as string, balance };
+          return { type: 'note' as NFTType, name: name as string, key: symbol as string, balance };
         }),
     );
 
     // combine note and nft together
-    return { ownedNFTs, nftInfos: [...myNFTInfos, ...myNoteInfos] };
+    return ownedNFTs;
   },
 );
 

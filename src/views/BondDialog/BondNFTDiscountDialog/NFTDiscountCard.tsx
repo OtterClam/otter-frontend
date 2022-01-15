@@ -1,7 +1,7 @@
 import './nftCard.scss';
 import { Box, Grid, makeStyles } from '@material-ui/core';
 
-import { NFTDiscountDetail } from './type';
+import { NFTDiscountOption } from '../types';
 
 const useStyle = makeStyles(theme => {
   return {
@@ -12,9 +12,9 @@ const useStyle = makeStyles(theme => {
 });
 
 interface CardProps {
-  option: NFTDiscountDetail;
+  option: NFTDiscountOption;
   selected: boolean;
-  onSelect(option: NFTDiscountDetail): void;
+  onSelect(option: NFTDiscountOption): void;
 }
 const NFTDiscountCard = ({ option, selected, onSelect }: CardProps) => {
   const style = useStyle();
@@ -33,7 +33,7 @@ const NFTDiscountCard = ({ option, selected, onSelect }: CardProps) => {
               ? `Use this note to receive a ${option.discount} discount on any (4,4) bond.`
               : `${option.discount} off in addition`}
           </p>
-          <p className="nft-expire-time">{`Expiration date: ${option.expireAt}`}</p>
+          <p className="nft-expire-time">{`Expiration date: ${option.endDate}`}</p>
         </Box>
       </Grid>
     </Box>

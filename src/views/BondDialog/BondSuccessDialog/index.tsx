@@ -12,7 +12,7 @@ import BondLogo from '../../../components/BondLogo';
 import NFTDisplayRow from './NFTDisplayRow';
 
 import { Bond } from 'src/constants';
-import { NFTDiscountDetail } from '../BondNFTDiscountDialog/type';
+import { NFTDiscountOption } from '../types';
 import { trim, prettifySeconds } from '../../../helpers';
 
 const DialogTitle = () => {
@@ -30,7 +30,7 @@ const DialogTitle = () => {
 
 interface Props {
   bond: Bond;
-  selection?: NFTDiscountDetail;
+  selection?: NFTDiscountOption;
   open: boolean;
   setOpen: (value: boolean) => void;
 }

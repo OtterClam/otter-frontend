@@ -1,26 +1,36 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useMemo } from 'react';
+import { useAppSelector } from 'src/store/hook';
 
 import { BackdropProps, Grid } from '@material-ui/core';
 import Dialog from 'src/components/Dialog/Dialog';
 import NFTDiscountCard from './NFTDiscountCard';
 
-import { NFTDiscountDetail } from './type';
-import { MOCKED_NFT_OPTIONS } from './constants';
+import { Bond } from 'src/constants';
+import { BondNFTDiscount, MyNFTInfo } from 'src/store/actions/nft-action';
 
+import { NFTDiscountOption } from '../types';
 interface Props extends Omit<BackdropProps, 'children'> {
-  selection?: NFTDiscountDetail;
-  setSelection: Dispatch<SetStateAction<NFTDiscountDetail | undefined>>;
+  bond: Bond;
+  selection?: NFTDiscountOption;
+  setSelection: Dispatch<SetStateAction<NFTDiscountOption | undefined>>;
   onClose(): void;
 }
-const BondNTFDiscountDialog = ({ selection, setSelection, onClose, ...props }: Props) => {
-  const onSelect = (option: NFTDiscountDetail) => {
+const BondNTFDiscountDialog = ({ bond, selection, setSelection, onClose, ...props }: Props) => {
+  const bondNFTDiscounts = useAppSelector(state => state.nft.bondNftDiscounts.data[bond.key]);
+  const myNFTs = useAppSelector(state => state.account.nfts);
+  const options = useMemo<NFTDiscountOption[]>(() => {
+    return myNFTs.map((NFT: MyNFTInfo) => {
+      return bondNFTDiscounts.find((discount: BondNFTDiscount) => discount.key === NFT.key);
+    });
+  }, []);
+  const onSelect = (option: NFTDiscountOption) => {
     setSelection(option);
     onClose();
   };
   return (
     <Dialog {...props} className="nft-dialog" title="Select Discount NFT" onClose={onClose}>
       <Grid container direction="column" justifyContent="center">
-        {MOCKED_NFT_OPTIONS.map(option => (
+        {options.map(option => (
           <NFTDiscountCard
             key={option.key}
             option={option}

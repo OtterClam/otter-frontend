@@ -13,7 +13,7 @@ import BondRedeem from './BondRedeem';
 import './bond.scss';
 
 import { Bond as BondType, BondAction } from 'src/constants';
-import { NFTDiscountDetail } from './BondNFTDiscountDialog/type';
+import { NFTDiscountOption } from './types';
 import { formatCurrency, trim } from '../../helpers';
 import { useWeb3Context } from '../../hooks';
 import { checkBondAction } from '../ChooseBond/utils';
@@ -36,9 +36,9 @@ const useStyle = makeStyles(theme => {
 interface IBondProps {
   bond: BondType;
   canSelect: boolean;
-  selection: NFTDiscountDetail | undefined;
+  selection: NFTDiscountOption | undefined;
   setBond: Dispatch<SetStateAction<BondType | undefined>>;
-  setSelection: Dispatch<SetStateAction<NFTDiscountDetail | undefined>>;
+  setSelection: Dispatch<SetStateAction<NFTDiscountOption | undefined>>;
   setNftDialogOpen: Dispatch<SetStateAction<boolean>>;
 }
 

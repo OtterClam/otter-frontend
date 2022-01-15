@@ -2,10 +2,10 @@ import './successDialog.scss';
 import '../bondSelection.scss';
 import { Box, Paper } from '@material-ui/core';
 
-import { NFTDiscountDetail } from '../BondNFTDiscountDialog/type';
+import { NFTDiscountOption } from '../types';
 
 interface CardProps {
-  selection?: NFTDiscountDetail;
+  selection?: NFTDiscountOption;
 }
 
 export const NFTDisplayRow = ({ selection }: CardProps) => {

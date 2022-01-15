@@ -19,7 +19,7 @@ import NavDrawer from '../components/Sidebar/NavDrawer';
 
 import { BondKeys } from '../constants';
 import { batchGetBondDetails } from '../store/actions/bond-action';
-import { listMyNFT } from 'src/store/actions/nft-action';
+import { listMyNFT, batchListBondNFTDiscounts } from 'src/store/actions/nft-action';
 import { calculateUserBondDetails, loadAccountDetails } from '../store/slices/account-slice';
 import { loadAppDetails } from '../store/slices/app-slice';
 import { ChooseBond, Stake, Wrap } from '../views';
@@ -114,6 +114,7 @@ function App() {
     loadProvider => {
       dispatch(loadAppDetails({ networkID: chainID, provider: loadProvider }));
       dispatch(batchGetBondDetails({ value: null, provider: loadProvider, networkID: chainID, userBalance: '0' }));
+      dispatch(batchListBondNFTDiscounts({ provider, networkId: chainID }));
       dispatch(listMyNFT({ provider, wallet: walletAddress, networkId: chainID }));
     },
     [connected],

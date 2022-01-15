@@ -21,9 +21,8 @@ import { Bond, BondKeys, getBond } from 'src/constants';
 import { getTokenImage, trim } from '../../helpers';
 import { IReduxState } from '../../store/slices/state.interface';
 import { checkBondKey } from './utils';
-import { NFTDiscountDetail } from '../BondDialog/BondNFTDiscountDialog/type';
+import { NFTDiscountOption } from '../BondDialog/types';
 import { MOCKED_NFT_OPTIONS } from '../BondDialog/BondNFTDiscountDialog/constants';
-import { batchListBondNFTDiscounts } from 'src/store/actions/nft-action';
 import { useAppSelector } from 'src/store/hook';
 
 const useStyle = makeStyles(theme => {
@@ -72,18 +71,13 @@ query {
 
   const [selectedBond, setSelectedBond] = useState<Bond | undefined>(defaultBond);
   const [nftDialogOpen, setNftDialogOpen] = useState(false);
-  const [nftSelection, setNftSelection] = useState<NFTDiscountDetail | undefined>(undefined);
+  const [nftSelection, setNftSelection] = useState<NFTDiscountOption | undefined>(undefined);
 
   useEffect(() => {
     setSelectedBond(defaultBond);
   }, [bondKey]);
 
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(batchListBondNFTDiscounts({ provider, networkId: chainID }));
-  }, []);
-
-  const canSelect = useAppSelector(state => state.account.nfts.ownedNFTs).length > 0;
+  const canSelect = useAppSelector(state => state.account.nfts).length > 0;
   const [successDialogOpen, setSuccessDialogOpen] = useState(false);
 
   // TODO: replace with fetched nft infos
@@ -179,6 +173,7 @@ query {
           />
           <BondNTFDiscountDialog
             open={nftDialogOpen}
+            bond={selectedBond}
             selection={nftSelection}
             setSelection={setNftSelection}
             onClose={() => setNftDialogOpen(false)}
