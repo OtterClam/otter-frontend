@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { listMyNFT, listBondNFTDiscounts } from '../actions/nft-action';
+import { listBondNFTDiscounts } from '../actions/nft-action';
 interface IState {
   [key: string]: any;
 }
@@ -12,35 +12,21 @@ const nftSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: builder => {
-    /** NOTE: listMyNFT action will store owner's nfts into account
-     */
-    builder.addCase(listMyNFT.fulfilled, (state, action) => {
-      state.account.nfts.data = action.payload;
-      state.account.nfts.loading = false;
-    });
-    builder.addCase(listMyNFT.rejected, (state, action) => {
-      state.account.nfts.loading = false;
-      throw new Error(action.error.message);
-    });
-    builder.addCase(listMyNFT.pending, state => {
-      state.account.nfts.loading = true;
-    });
-
     /** NOTE: listBondNFTDiscounts vs. batchListBondNFTDiscounts
-     * List thunk stores bonds discount values rather than batch list thunk.
-     * The reason is that some bonds don't support nft discounts.
-     * In the batch list case, if we fetched a bond without nft discounts, redux will trigger the rejected event and store nothing.
+     * Use list thunk to store bonds' discount values rather than batch list thunk.
+     * The reason is that some bonds don't support nft discounts now.
+     * In the batch list case, if we fetch a bond without nft discounts, redux will trigger the rejected event and store nothing.
      * However, using list thunk to store will store bonds with discounts, and ignore those without.
      *  */
-    builder.addCase(listBondNFTDiscounts.fulfilled, (state, action) => {
-      if (!state.bondNftDiscounts.indexes.includes(action.payload.bondKey)) {
-        state.bondNftDiscounts.indexes = state.bondNftDiscounts.indexes.concat([action.payload.bondKey]);
-        state.bondNftDiscounts.data = state.bondNftDiscounts.data.concat(action.payload);
+    builder.addCase(listBondNFTDiscounts.fulfilled, (state, { payload }) => {
+      if (!state.bondNftDiscounts.indexes.includes(payload.bondKey)) {
+        state.bondNftDiscounts.indexes = state.bondNftDiscounts.indexes.concat([payload.bondKey]);
+        state.bondNftDiscounts.data[payload.bondKey] = payload.discounts;
       }
       state.bondNftDiscounts.loading = false;
     });
     builder.addCase(listBondNFTDiscounts.pending, state => {
-      const data = { data: [], indexes: [], loading: true };
+      const data = { data: {}, indexes: [], loading: true };
       state['bondNftDiscounts'] = data;
     });
   },

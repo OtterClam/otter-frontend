@@ -1,6 +1,7 @@
 import { ethers } from 'ethers';
 import { JsonRpcProvider } from '@ethersproject/providers';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { addDays, format } from 'date-fns';
 
 import { ERC721, OtterPAWBondStakeDepository, PearlNote, OtterPAW, OtterLake } from 'src/abi';
 import { BondKey, BondKeys, getAddresses, listBonds } from '../../constants';
@@ -46,7 +47,7 @@ type BondNFTDiscount = {
 };
 
 interface ListBondNFTDiscountResponse extends Pick<ListBondNFTDiscountPayload, 'bondKey'> {
-  discounts: BondNFTDiscount[];
+  discounts: any;
 }
 
 interface ListBondNFTDiscountPayload extends NFTActionProps {
@@ -57,12 +58,15 @@ export const listBondNFTDiscounts = createAsyncThunk(
   'nft/discount/list',
   async ({ bondKey, provider, address }: ListBondNFTDiscountPayload): Promise<ListBondNFTDiscountResponse> => {
     const bond = bondContract({ provider, address });
-    const contracts = await allNFTContracts({ provider, address });
+    const nftContracts = await allNFTContracts({ provider, address });
     const discounts = await Promise.all(
-      contracts.map(async c => {
-        const discount = await bond.discountOf(c.address);
-        const nftName = await c.name();
-        return { name: nftName, discount: discount.toNumber() / 10000 };
+      nftContracts.map(async (c, index) => {
+        const token = await c.tokenByIndex(index);
+        const endEpoch = await bond.endEpochOf(c.address, token);
+        const discount = (await bond.discountOf(c.address)).toNumber() / 10000;
+        const name = await c.name();
+        const endDate = format(addDays(Date.UTC(2021, 10, 3, 0, 0, 0), endEpoch / 3), 'yyyy/MM/dd');
+        return { name, discount, endDate };
       }),
     );
     return { bondKey, discounts };
