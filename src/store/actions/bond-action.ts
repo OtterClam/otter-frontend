@@ -135,7 +135,7 @@ export const calcBondDetails = createAsyncThunk(
     const bondCalcContract = new ethers.Contract(addresses.CLAM_BONDING_CALC_ADDRESS, BondingCalcContract, provider);
     const payoutForValuation =
       bondKey === 'mai_clam44'
-        ? await bondContract.payoutFor(amountInWei, zeroAddress, 0)
+        ? await bondContract.payoutFor(await bondCalcContract.valuation(bond.reserve, amountInWei), zeroAddress, 0)
         : bond.type === 'lp'
         ? await (async () => {
             const valuation = await bondCalcContract.valuation(bond.reserve, amountInWei);
@@ -249,7 +249,7 @@ export const bondAsset = createAsyncThunk(
     try {
       const depositPayload =
         bondKey === 'mai_clam44'
-          ? [parseEther('1000'), maxPremium, depositorAddress, ...tokenMeta]
+          ? [valueInWei, maxPremium, depositorAddress, ...tokenMeta]
           : [valueInWei, maxPremium, depositorAddress];
       bondTx = await bondContract.deposit(...depositPayload);
       dispatch(fetchPendingTxns({ txnHash: bondTx.hash, text: 'Bonding ' + bond.name, type: 'bond_' + bondKey }));
