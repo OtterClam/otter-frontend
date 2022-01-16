@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, Dispatch, SetStateAction } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { useAppDispatch } from 'src/store/hook';
 import { useTranslation } from 'react-i18next';
 import { useWeb3Context } from '../../hooks';
 
@@ -25,7 +26,7 @@ import { changeApproval, bondAsset, calcBondDetails } from '../../store/actions/
 import { IPendingTxn } from '../../store/slices/pending-txns-slice';
 import { IReduxState } from '../../store/slices/state.interface';
 
-import { BondKey, getBond } from 'src/constants';
+import { BondKey, getBond, getPAWAddress } from 'src/constants';
 import { shorten, trim, prettifySeconds } from '../../helpers';
 import { tabletMediaQuery } from 'src/themes/mediaQuery';
 import { NFTDiscountOption } from './types';
@@ -60,7 +61,7 @@ interface IBondPurchaseProps {
 function BondPurchase({ bondKey, slippage, canSelect, selection, setSelection, setNftDialogOpen }: IBondPurchaseProps) {
   const isTablet = useMediaQuery(tabletMediaQuery);
   const styles = useStyles();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { provider, address, chainID } = useWeb3Context();
   const bond = getBond(bondKey, chainID);
   const [recipientAddress, setRecipientAddress] = useState(address);
@@ -131,11 +132,13 @@ function BondPurchase({ bondKey, slippage, canSelect, selection, setSelection, s
 
   async function onBond() {
     if (quantity === '') {
-      alert(t('bonds.purchase.noValue'));
+      return alert(t('bonds.purchase.noValue'));
       //@ts-ignore
-    } else if (isNaN(quantity)) {
-      alert(t('bonds.purchase.invalidValue'));
-    } else if (interestDue > 0 || pendingPayout > 0) {
+    }
+    if (isNaN(+quantity)) {
+      return alert(t('bonds.purchase.invalidValue'));
+    }
+    if (interestDue > 0 || pendingPayout > 0) {
       const shouldProceed = window.confirm(
         bond.autostake ? t('bonds.purchase.resetVestingAutostake') : t('bonds.purchase.resetVesting'),
       );
@@ -151,24 +154,29 @@ function BondPurchase({ bondKey, slippage, canSelect, selection, setSelection, s
           }),
         );
         if (bondTx.payload == true) {
-          handleOpenDialog();
+          return handleOpenDialog();
         }
+        return;
       }
-    } else {
-      let bondTx: any = await dispatch(
-        //@ts-ignore
-        bondAsset({
-          value: quantity,
-          slippage,
-          bondKey,
-          networkID: chainID,
-          provider,
-          address: recipientAddress || address,
-        }),
-      );
-      if (bondTx.payload == true) {
-        handleOpenDialog();
+    }
+    const bondAssetPayload = (() => {
+      const basePayload = {
+        value: quantity,
+        slippage,
+        bondKey,
+        networkID: chainID,
+        provider,
+      };
+      if (selection) {
+        const nftAddress = getPAWAddress(selection?.key, chainID);
+        const tokenId = selection.id;
+        return { ...basePayload, address, nftAddress, tokenId };
       }
+      return { ...basePayload, address: recipientAddress || address };
+    })();
+    const bondTx = await dispatch(bondAsset(bondAssetPayload));
+    if (bondTx.payload) {
+      handleOpenDialog();
     }
   }
 

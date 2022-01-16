@@ -20,7 +20,8 @@ const BondNTFDiscountDialog = ({ bond, selection, setSelection, onClose, ...prop
   const myNFTs = useAppSelector(state => state.account.nfts);
   const options = useMemo<NFTDiscountOption[]>(() => {
     return myNFTs.map((NFT: MyNFTInfo) => {
-      return bondNFTDiscounts.find((discount: BondNFTDiscount) => discount.key === NFT.key);
+      const discountInfo = bondNFTDiscounts.find((discount: BondNFTDiscount) => discount.key === NFT.key);
+      return { ...discountInfo, id: NFT.id };
     });
   }, []);
   const onSelect = (option: NFTDiscountOption) => {

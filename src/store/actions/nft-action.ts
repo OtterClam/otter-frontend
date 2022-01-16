@@ -5,6 +5,7 @@ import { addDays, format } from 'date-fns';
 
 import { ERC721, OtterPAWBondStakeDepository, PearlNote, OtterPAW, OtterLake } from 'src/abi';
 import { BondKey, BondKeys, getAddresses, listBonds } from '../../constants';
+import { NFT } from '../../views/BondDialog/BondNFTDiscountDialog/constants';
 
 interface NFTActionProps {
   address: string;
@@ -42,7 +43,7 @@ const allNFTContracts = async ({ provider, address }: Omit<NFTActionProps, 'wall
 };
 
 export type BondNFTDiscount = {
-  key: string;
+  key: NFT;
   name: string;
   discount: number;
   endDate: string;
@@ -99,12 +100,6 @@ type Token = {
   endEpoch: number; // this is otter time unit, 1 epoch means 1 hour after the first day of Otter Era lol;
 };
 
-interface NFT {
-  name: string;
-  balance: number;
-  tokens: Token[];
-}
-
 interface ListMyNFTPayload {
   provider: JsonRpcProvider;
   wallet: string;
@@ -114,8 +109,9 @@ interface ListMyNFTPayload {
 export type NFTType = 'note' | 'nft';
 export type MyNFTInfo = {
   type: NFTType;
+  id: number;
   name: string;
-  key: string;
+  key: NFT;
   balance: number;
 };
 
@@ -132,7 +128,7 @@ export const listMyNFT = createAsyncThunk(
       addresses.NFTS.STONE_HAND,
       addresses.NFTS.DIAMOND_HAND,
     ];
-    const nftContracts = nftAddresses.map(address => new ethers.Contract(address, OtterPAW, provider.getSigner()));
+    const nftContracts = nftAddresses.map(address => new ethers.Contract(address, ERC721, provider.getSigner()));
     await Promise.all(
       nftContracts.map(async contract => {
         const [name, symbol, balance] = await Promise.all([
@@ -140,14 +136,15 @@ export const listMyNFT = createAsyncThunk(
           await contract.symbol(),
           Number(await contract.balanceOf(wallet)),
         ]).then(res => res);
+        const basicInfos = { type: 'nft' as NFTType, name: name as string, key: symbol as NFT, balance };
         if (balance > 0) {
           Array(balance)
             .fill(0)
-            .map(() => {
-              ownedNFTs.push({ type: 'nft' as NFTType, name: name as string, key: symbol as string, balance });
+            .map(async (_, index) => {
+              const id = (await contract.tokenOfOwnerByIndex(wallet, index)).toNumber();
+              ownedNFTs.push({ ...basicInfos, id });
             });
         }
-        return { type: 'nft' as NFTType, name: name as string, key: symbol as string, balance };
       }),
     );
 
@@ -166,14 +163,15 @@ export const listMyNFT = createAsyncThunk(
             await noteContract.symbol(),
             Number(await noteContract.balanceOf(wallet)),
           ]);
+          const basicInfos = { type: 'note' as NFTType, name: name as string, key: symbol as NFT, balance };
           if (balance > 0) {
             Array(balance)
               .fill(0)
-              .map(() => {
-                ownedNFTs.push({ type: 'note' as NFTType, name: name as string, key: symbol as string, balance });
+              .map(async () => {
+                const id = (await noteContract.tokenOfOwnerByIndex(wallet, index)).toNumber();
+                ownedNFTs.push({ ...basicInfos, id });
               });
           }
-          return { type: 'note' as NFTType, name: name as string, key: symbol as string, balance };
         }),
     );
 

@@ -1,4 +1,5 @@
 import { Networks } from './blockchain';
+import { NFT } from 'src/views/BondDialog/BondNFTDiscountDialog/constants';
 
 const POLYGON_MAINNET = {
   sCLAM_ADDRESS: '0xAAc144Dc08cE39Ed92182dd85ded60E5000C9e67',
@@ -82,4 +83,20 @@ export const getAddresses = (networkID: number) => {
   if (networkID === Networks.POLYGON_MUMBAI) return POLYGON_MUMBAI;
 
   throw new Error("Network don't support");
+};
+
+export const getPAWAddress = (key: NFT, networkID: number) => {
+  const addresses = getAddresses(networkID);
+  switch (key) {
+    case 'DIAMOND':
+      return addresses.NFTS.DIAMOND_HAND;
+    case 'FURRY':
+      return addresses.NFTS.FURRY_HAND;
+    case 'SAFE':
+      return addresses.NFTS.SAFE_HAND;
+    case 'STONE':
+      return addresses.NFTS.STONE_HAND;
+    default:
+      return addresses.OTTER_LAKE; // this is for nft note
+  }
 };

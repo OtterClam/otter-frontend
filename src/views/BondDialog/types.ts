@@ -1,5 +1,6 @@
-import { BondNFTDiscount, NFTType } from 'src/store/actions/nft-action';
+import { BondNFTDiscount, NFTType, MyNFTInfo } from 'src/store/actions/nft-action';
 
 export interface NFTDiscountOption extends BondNFTDiscount {
-  type: NFTType;
+  type: MyNFTInfo['type'];
+  id: MyNFTInfo['id'];
 }

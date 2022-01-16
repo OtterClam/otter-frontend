@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { parseEther } from '@ethersproject/units';
 
 import { fetchAccountSuccess } from '../slices/account-slice';
 import { calculateUserBondDetails, getBalances } from '../slices/account-slice';
@@ -224,11 +225,13 @@ interface IBondAsset {
   networkID: number;
   provider: JsonRpcProvider;
   slippage: number;
+  tokenId?: number;
+  nftAddress?: string;
 }
 
 export const bondAsset = createAsyncThunk(
   'bonding/bondAsset',
-  async ({ value, address, bondKey, networkID, provider, slippage }: IBondAsset, { dispatch }) => {
+  async ({ value, address, bondKey, networkID, provider, slippage, tokenId, nftAddress }: IBondAsset, { dispatch }) => {
     const depositorAddress = address;
     const acceptedSlippage = slippage / 100 || 0.005;
     const valueInWei = ethers.utils.parseEther(value);
@@ -236,13 +239,19 @@ export const bondAsset = createAsyncThunk(
     const signer = provider.getSigner();
     const bondContract = contractForBond(bondKey, networkID, signer);
 
-    const calculatePremium = await bondContract.bondPrice();
+    const tokenMeta = bondKey === 'mai_clam44' ? [zeroAddress, 0] : [nftAddress, tokenId];
+    const calculatePremium =
+      bondKey === 'mai_clam44' ? await bondContract.bondPrice(...tokenMeta) : await bondContract.bondPrice();
     const maxPremium = Math.round(calculatePremium * (1 + acceptedSlippage));
     const bond = getBond(bondKey, networkID);
 
     let bondTx;
     try {
-      bondTx = await bondContract.deposit(valueInWei, maxPremium, depositorAddress);
+      const depositPayload =
+        bondKey === 'mai_clam44'
+          ? [parseEther('1000'), maxPremium, depositorAddress, ...tokenMeta]
+          : [valueInWei, maxPremium, depositorAddress];
+      bondTx = await bondContract.deposit(...depositPayload);
       dispatch(fetchPendingTxns({ txnHash: bondTx.hash, text: 'Bonding ' + bond.name, type: 'bond_' + bondKey }));
       await bondTx.wait();
       dispatch(calculateUserBondDetails({ address, bondKey, networkID, provider }));
@@ -250,7 +259,7 @@ export const bondAsset = createAsyncThunk(
     } catch (error: any) {
       if (error.code === -32603 && error.message.indexOf('ds-math-sub-underflow') >= 0) {
         alert('You may be trying to bond more than your balance! Error code: 32603. Message: ds-math-sub-underflow');
-      } else alert(error.message);
+      } else alert(JSON.stringify(error));
       return;
     } finally {
       if (bondTx) {
