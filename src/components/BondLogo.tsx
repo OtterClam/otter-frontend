@@ -25,7 +25,7 @@ function BondLogo({ bond, size = 32 }: IBondHeaderProps) {
 
   return (
     <Box display="flex" alignItems="center" justifyContent="center" width="74px">
-      {bond.type === 'lp' ? getPairImage(bond.key) : reserveAssetImg(bond.key)}
+      {bond.type === 'lp' ? getPairImage(bond.key, size) : reserveAssetImg(bond.key)}
     </Box>
   );
 }
