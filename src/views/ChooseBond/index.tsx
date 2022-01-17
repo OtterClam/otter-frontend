@@ -12,18 +12,39 @@ import BondRowHeader from './BondRowHeader';
 import BondRow from './BondRow';
 import BondCard from './BondCard';
 import BondDialog from '../BondDialog';
-import BondSuccessDialog from '../BondDialog/BondSuccessDialog';
+import BondSuccessDialog from '../BondDialog/SuccessDialog/BondSuccessDialog';
 import BondNTFDiscountDialog from '../BondDialog/BondNFTDiscountDialog';
+import RedeemSuccessDialog from '../BondDialog/SuccessDialog/RedeemSuccessDialog';
 import './choose-bond.scss';
 
 import apollo from 'src/lib/apolloClient';
-import { Bond, BondKeys, getBond } from 'src/constants';
+import { Bonding, Bond, BondKeys, getBond } from 'src/constants';
 import { getTokenImage, trim } from '../../helpers';
 import { IReduxState } from '../../store/slices/state.interface';
 import { checkBondKey } from './utils';
 import { NFTDiscountOption } from '../BondDialog/types';
-import { MOCKED_NFT_OPTIONS } from '../BondDialog/BondNFTDiscountDialog/constants';
+import { MOCKED_NFT_OPTIONS, NFT } from '../BondDialog/BondNFTDiscountDialog/constants';
 import { useAppSelector } from 'src/store/hook';
+import { NFTType } from 'src/store/actions/nft-action';
+
+const MOCKED_NFT_ROW_DATA = [
+  {
+    name: 'Furry-Hand Otter (2021 Winter)',
+    type: 'nft' as NFTType,
+    id: 123,
+    key: 'FURRY' as NFT,
+    discount: 0.05,
+    endDate: new Date(),
+  },
+  {
+    name: 'Furry-Hand Otter (2021 Winterrrrrrr)',
+    type: 'nft' as NFTType,
+    id: 123,
+    key: 'FURRY' as NFT,
+    discount: 0.05,
+    endDate: new Date(),
+  },
+];
 
 const useStyle = makeStyles(theme => {
   return {
@@ -80,6 +101,8 @@ query {
   const canSelect = useAppSelector(state => state.account.nfts).length > 0;
   const [successDialogOpen, setSuccessDialogOpen] = useState(false);
 
+  const selectedAccountBond = useAppSelector(state => state.account?.[bondKey || '']);
+  const selectedBonding = useAppSelector(state => state.bonding?.[bondKey || '']);
   // TODO: replace with fetched nft infos
   const MOCKED_NFT = MOCKED_NFT_OPTIONS[0];
   return (
@@ -156,21 +179,15 @@ query {
           bond={selectedBond}
           canSelect={canSelect}
           selection={nftSelection}
+          selectedBonding={selectedBonding}
+          selectedAccountBond={selectedAccountBond}
           setBond={setSelectedBond}
           setSelection={setNftSelection}
           setNftDialogOpen={setNftDialogOpen}
         />
       )}
-      {selectedBond && (
+      {selectedBond && bondKey === 'mai_clam44' && (
         <>
-          <BondDialog
-            bond={selectedBond}
-            canSelect={canSelect}
-            selection={nftSelection}
-            setBond={setSelectedBond}
-            setSelection={setNftSelection}
-            setNftDialogOpen={setNftDialogOpen}
-          />
           <BondNTFDiscountDialog
             open={nftDialogOpen}
             bond={selectedBond}
@@ -178,13 +195,29 @@ query {
             setSelection={setNftSelection}
             onClose={() => setNftDialogOpen(false)}
           />
-          <BondSuccessDialog
-            bond={selectedBond}
-            selection={nftSelection}
-            open={successDialogOpen}
-            setOpen={setSuccessDialogOpen}
-          />
         </>
+      )}
+      {/** TODO: connect selected bonded data */}
+      {selectedBond && bondKey === 'mai_clam44' && nftSelection && (
+        <BondSuccessDialog
+          bond={selectedBond}
+          selection={nftSelection}
+          selectedBonding={selectedBonding}
+          selectedAccountBond={selectedAccountBond}
+          open={false}
+          onClose={() => setSuccessDialogOpen(false)}
+        />
+      )}
+      {/** TODO: connect selected redeemed data */}
+      {selectedBond && (
+        <RedeemSuccessDialog
+          bond={selectedBond}
+          selections={MOCKED_NFT_ROW_DATA}
+          open={false}
+          onClose={() => {}}
+          balance={'100'}
+          pendingPayout={'0'}
+        />
       )}
     </div>
   );

@@ -26,7 +26,7 @@ import { changeApproval, bondAsset, calcBondDetails } from '../../store/actions/
 import { IPendingTxn } from '../../store/slices/pending-txns-slice';
 import { IReduxState } from '../../store/slices/state.interface';
 
-import { BondKey, getBond, getPAWAddress } from 'src/constants';
+import { Bonding, BondKey, AccountBond, getBond, getPAWAddress } from 'src/constants';
 import { shorten, trim, prettifySeconds } from '../../helpers';
 import { tabletMediaQuery } from 'src/themes/mediaQuery';
 import { NFTDiscountOption } from './types';
@@ -54,11 +54,22 @@ interface IBondPurchaseProps {
   slippage: number;
   canSelect: boolean;
   selection?: NFTDiscountOption;
+  selectedAccountBond: AccountBond;
+  selectedBonding: Bonding;
   setSelection: Dispatch<SetStateAction<NFTDiscountOption | undefined>>;
   setNftDialogOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-function BondPurchase({ bondKey, slippage, canSelect, selection, setSelection, setNftDialogOpen }: IBondPurchaseProps) {
+function BondPurchase({
+  bondKey,
+  slippage,
+  canSelect,
+  selectedBonding,
+  selectedAccountBond,
+  selection,
+  setSelection,
+  setNftDialogOpen,
+}: IBondPurchaseProps) {
   const isTablet = useMediaQuery(tabletMediaQuery);
   const styles = useStyles();
   const dispatch = useAppDispatch();
@@ -77,47 +88,12 @@ function BondPurchase({ bondKey, slippage, canSelect, selection, setSelection, s
   };
 
   const isBondLoading = useSelector<IReduxState, boolean>(state => state.bonding.loading ?? true);
-  const vestingTerm = useSelector<IReduxState, number>(state => {
-    return state.bonding[bondKey] && state.bonding[bondKey].vestingTerm;
-  });
-
-  const bondDiscount = useSelector<IReduxState, number>(state => {
-    return state.bonding[bondKey] && state.bonding[bondKey].bondDiscount;
-  });
-  const maxPayout = useSelector<IReduxState, number>(state => {
-    return state.bonding[bondKey] && state.bonding[bondKey].maxPayout;
-  });
-  const interestDue = useSelector<IReduxState, number>(state => {
-    //@ts-ignore
-    return state.account[bondKey] && state.account[bondKey].interestDue;
-  });
-  const pendingPayout = useSelector<IReduxState, number>(state => {
-    //@ts-ignore
-    return state.account[bondKey] && state.account[bondKey].pendingPayout;
-  });
-  const debtRatio = useSelector<IReduxState, number>(state => {
-    return state.bonding[bondKey] && state.bonding[bondKey].debtRatio;
-  });
-  const bondQuote = useSelector<IReduxState, number>(state => {
-    return state.bonding[bondKey] && state.bonding[bondKey].bondQuote;
-  });
-  const balance = useSelector<IReduxState, number>(state => {
-    //@ts-ignore
-    return state.account[bondKey]?.balance;
-  });
-  const rawBalance = useSelector<IReduxState, string>(state => {
-    //@ts-ignore
-    return state.account[bondKey]?.rawBalance;
-  });
-  const allowance = useSelector<IReduxState, number>(state => {
-    //@ts-ignore
-    return state.account[bondKey] && state.account[bondKey].allowance;
-  });
   const pendingTransactions = useSelector<IReduxState, IPendingTxn[]>(state => {
     return state.pendingTransactions;
   });
+  const { interestDue, pendingPayout, balance, rawBalance, allowance } = selectedAccountBond;
+  const { debtRatio, bondQuote, vestingTerm, maxPayout, maxUserCanBuy, bondDiscount } = selectedBonding;
   const { t } = useTranslation();
-  const maxUserCanBuy = useSelector<IReduxState, string>(state => state.bonding[bondKey]?.maxUserCanBuy);
   const vestingPeriod = () => {
     return prettifySeconds(t, vestingTerm, 'day');
   };
@@ -130,7 +106,7 @@ function BondPurchase({ bondKey, slippage, canSelect, selection, setSelection, s
     setOpen(false);
   };
 
-  async function onBond() {
+  const onBond = useCallback(async () => {
     if (quantity === '') {
       return alert(t('bonds.purchase.noValue'));
       //@ts-ignore
@@ -178,7 +154,7 @@ function BondPurchase({ bondKey, slippage, canSelect, selection, setSelection, s
     if (bondTx.payload) {
       handleOpenDialog();
     }
-  }
+  }, [quantity, interestDue, pendingPayout, chainID, recipientAddress, address]);
 
   const hasAllowance = useCallback(() => {
     return allowance > 0;

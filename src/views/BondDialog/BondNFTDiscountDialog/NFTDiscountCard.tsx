@@ -1,3 +1,5 @@
+import { format } from 'date-fns';
+
 import './nftCard.scss';
 import { Box, Grid, makeStyles } from '@material-ui/core';
 
@@ -33,7 +35,7 @@ const NFTDiscountCard = ({ option, selected, onSelect }: CardProps) => {
               ? `Use this note to receive a ${option.discount} discount on any (4,4) bond.`
               : `${option.discount} off in addition`}
           </p>
-          <p className="nft-expire-time">{`Expiration date: ${option.endDate}`}</p>
+          <p className="nft-expire-time">{`Expiration date: ${format(option.endDate, 'yyyy/MM/dd')}`}</p>
         </Box>
       </Grid>
     </Box>

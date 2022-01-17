@@ -47,9 +47,9 @@ const NftRowLeftArea = ({
 
 const BondNFTDiscount = ({ selection, setSelection, disabled, onClick }: BondNFTDiscountProps) => {
   return (
-    <Box>
+    <Box id="bond-nft-discount">
       <p className="bond-balance-title">Discount NFT Selection</p>
-      <Paper>
+      <Paper style={{ marginTop: '10px' }}>
         <Box component="div" className="bond-nft-row">
           <Box className="selection-area">
             <NftRowLeftArea disabled={disabled} selection={selection} setSelection={setSelection} />

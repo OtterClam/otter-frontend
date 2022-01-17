@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 import { JsonRpcProvider } from '@ethersproject/providers';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { addDays, format } from 'date-fns';
+import { addDays } from 'date-fns';
 
 import { ERC721, OtterPAWBondStakeDepository, PearlNote, OtterPAW, OtterLake } from 'src/abi';
 import { BondKey, BondKeys, getAddresses, listBonds } from '../../constants';
@@ -46,7 +46,7 @@ export type BondNFTDiscount = {
   key: NFT;
   name: string;
   discount: number;
-  endDate: string;
+  endDate: Date;
 };
 
 interface ListBondNFTDiscountResponse extends Pick<ListBondNFTDiscountPayload, 'bondKey'> {
@@ -69,7 +69,7 @@ export const listBondNFTDiscounts = createAsyncThunk(
         const discount = (await bond.discountOf(c.address)).toNumber() / 10000;
         const name = await c.name();
         const symbol = await c.symbol();
-        const endDate = format(addDays(Date.UTC(2021, 10, 3, 0, 0, 0), endEpoch / 3), 'yyyy/MM/dd');
+        const endDate = addDays(Date.UTC(2021, 10, 3, 0, 0, 0), endEpoch / 3);
         return { name, key: symbol, discount, endDate };
       }),
     );

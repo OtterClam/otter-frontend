@@ -12,7 +12,7 @@ import BondPurchase from './BondPurchase';
 import BondRedeem from './BondRedeem';
 import './bond.scss';
 
-import { Bond as BondType, BondAction } from 'src/constants';
+import { Bonding, Bond as BondType, AccountBond, BondAction } from 'src/constants';
 import { NFTDiscountOption } from './types';
 import { formatCurrency, trim } from '../../helpers';
 import { useWeb3Context } from '../../hooks';
@@ -37,19 +37,29 @@ interface IBondProps {
   bond: BondType;
   canSelect: boolean;
   selection: NFTDiscountOption | undefined;
+  selectedAccountBond: AccountBond;
+  selectedBonding: Bonding;
   setBond: Dispatch<SetStateAction<BondType | undefined>>;
   setSelection: Dispatch<SetStateAction<NFTDiscountOption | undefined>>;
   setNftDialogOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-function BondDialog({ bond, canSelect, selection, setBond, setSelection, setNftDialogOpen }: IBondProps) {
+function BondDialog({
+  bond,
+  canSelect,
+  selection,
+  selectedBonding,
+  selectedAccountBond,
+  setBond,
+  setSelection,
+  setNftDialogOpen,
+}: IBondProps) {
   const { t } = useTranslation();
   const style = useStyle();
   const { provider, address } = useWeb3Context();
 
   const isBondLoading = useAppSelector(state => state.bonding.loading);
-  const marketPrice = useAppSelector(state => state.bonding[bond.key])?.marketPrice;
-  const bondPrice = useAppSelector(state => state.bonding[bond.key])?.bondPrice;
+  const { marketPrice, bondPrice } = useAppSelector(state => state.bonding[bond.key]);
   const priceDiff = (Number(marketPrice) ?? 0) - (bondPrice ?? 0);
 
   const [recipientAddress, setRecipientAddress] = useState(address);
@@ -179,6 +189,8 @@ function BondDialog({ bond, canSelect, selection, setBond, setSelection, setNftD
                 bondKey={bond.key}
                 canSelect={canSelect}
                 slippage={slippage}
+                selectedBonding={selectedBonding}
+                selectedAccountBond={selectedAccountBond}
                 selection={selection}
                 setSelection={setSelection}
                 setNftDialogOpen={setNftDialogOpen}

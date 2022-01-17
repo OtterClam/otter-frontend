@@ -56,6 +56,30 @@ type BondMap = {
   [key in BondKey]: Bond;
 };
 
+export interface AccountBond {
+  bond: BondKey;
+  allowance: number;
+  balance: number;
+  rawBalance: string;
+  interestDue: number;
+  bondMaturationTime: number;
+  pendingPayout: number;
+}
+
+export interface Bonding {
+  loading: boolean;
+  bond: BondKey;
+  bondDiscount: number;
+  debtRatio: number;
+  bondQuote: number;
+  purchased: number;
+  vestingTerm: number;
+  maxPayout: number;
+  bondPrice: number;
+  marketPrice: string;
+  maxUserCanBuy: string;
+}
+
 export function listBonds(chainId: number): BondMap {
   const { BONDS, RESERVES, MAI_ADDRESS, CLAM_ADDRESS } = getAddresses(chainId);
   return {
