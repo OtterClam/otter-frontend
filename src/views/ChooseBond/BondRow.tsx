@@ -5,13 +5,13 @@ import BondLogo from 'src/components/BondLogo';
 import CustomButton from 'src/components/Button/CustomButton';
 import './choose-bond.scss';
 
-import { useMemo } from 'react';
+import { useMemo, MouseEvent } from 'react';
 import { NavLink, useHistory } from 'react-router-dom';
 import { useAppSelector } from 'src/store/hook';
 import { useTranslation } from 'react-i18next';
 import { useWeb3Context } from '../../hooks';
 
-import { BondKey, getBond } from 'src/constants';
+import { BondKey, getBond, Bond } from 'src/constants';
 import { priceUnits, trim, prettyShortVestingPeriod, localeString } from '../../helpers';
 import { NFTDiscountDetail } from '../BondDialog/BondNFTDiscountDialog/type';
 
@@ -25,13 +25,15 @@ const useStyles = makeStyles(theme => ({
 interface IBondProps {
   bondKey: BondKey;
   nft: NFTDiscountDetail;
+  setRedeemedBond(value: Bond): void;
 }
 
-function BondRow({ bondKey, nft }: IBondProps) {
+function BondRow({ bondKey, nft, setRedeemedBond }: IBondProps) {
   const { chainID } = useWeb3Context();
   // Use BondPrice as indicator of loading.
   const isBondLoading = useAppSelector(state => !state.bonding[bondKey]?.bondPrice ?? true);
   const bond = getBond(bondKey, chainID);
+  const bonding = useAppSelector(state => state.bonding[bondKey]);
 
   const bondPrice = useAppSelector(state => {
     return state.bonding[bondKey] && state.bonding[bondKey].bondPrice;
@@ -66,11 +68,16 @@ function BondRow({ bondKey, nft }: IBondProps) {
 
   const redeemable = fullyVested ? 'redeem' : 'bond';
   const history = useHistory();
-  const redirect = () => {
+  const redirect = (e: any) => {
     if (bond.key === 'mai_clam44') {
-      history.push(`/bonds/${bondKey}?action=bond`);
+      return history.push(`/bonds/${bondKey}?action=bond`);
     }
     history.push(`/bonds/${bondKey}?action=${redeemable}`);
+  };
+
+  const handleMaiClamRedeem = (e: MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+    setRedeemedBond(bond);
   };
 
   return (
@@ -136,10 +143,25 @@ function BondRow({ bondKey, nft }: IBondProps) {
       </Grid>
       <Grid item xs={2} className="bond-row-value">
         {fullyVested ? (
-          <Link component={NavLink} to={`/bonds/${bondKey}?action=redeem`}>
-            {/* FIXME: modify desc from redeem to clain now */}
-            <CustomButton bgcolor="otter.otterBlue" color="otter.white" text={`${t('common.redeem')}`} />
-          </Link>
+          <>
+            {(() => {
+              if (bondKey === 'mai_clam44')
+                return (
+                  <CustomButton
+                    bgcolor="otter.otterBlue"
+                    color="otter.white"
+                    text={`${t('common.redeem')}`}
+                    onClick={handleMaiClamRedeem}
+                  />
+                );
+              return (
+                <Link component={NavLink} to={`/bonds/${bondKey}?action=redeem`}>
+                  {/* FIXME: modify desc from redeem to clain now */}
+                  <CustomButton bgcolor="otter.otterBlue" color="otter.white" text={`${t('common.redeem')}`} />
+                </Link>
+              );
+            })()}
+          </>
         ) : vestingTime ? (
           <div>
             <p>

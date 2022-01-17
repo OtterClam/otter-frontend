@@ -18,7 +18,7 @@ import RedeemSuccessDialog from '../BondDialog/SuccessDialog/RedeemSuccessDialog
 import './choose-bond.scss';
 
 import apollo from 'src/lib/apolloClient';
-import { Bonding, Bond, BondKeys, getBond } from 'src/constants';
+import { Bond, BondKeys, getBond } from 'src/constants';
 import { getTokenImage, trim } from '../../helpers';
 import { IReduxState } from '../../store/slices/state.interface';
 import { checkBondKey } from './utils';
@@ -101,10 +101,17 @@ query {
   const canSelect = useAppSelector(state => state.account.nfts).length > 0;
   const [successDialogOpen, setSuccessDialogOpen] = useState(false);
 
-  const selectedAccountBond = useAppSelector(state => state.account?.[bondKey || '']);
-  const selectedBonding = useAppSelector(state => state.bonding?.[bondKey || '']);
+  const [redeemedBond, setRedeemedBond] = useState<Bond>();
+  const selectedBondKey = useMemo(() => {
+    if (redeemedBond) return redeemedBond?.key;
+    if (bondKey) return bondKey;
+    return '';
+  }, [redeemedBond, bondKey]);
+  const selectedAccountBond = useAppSelector(state => state.account?.[selectedBondKey]);
+  const selectedBonding = useAppSelector(state => state.bonding?.[selectedBondKey]);
   // TODO: replace with fetched nft infos
   const MOCKED_NFT = MOCKED_NFT_OPTIONS[0];
+  console.log(selectedBond);
   return (
     <div id="choose-bond-view">
       <Paper className="bond-paper">
@@ -155,8 +162,8 @@ query {
           <Slide direction="up" in={true}>
             <Grid container className="bond-card-container">
               {bonds.map(bond => (
-                <Grid item xs={12} key={bond.key} onClick={() => setSelectedBond(bond)}>
-                  <BondCard key={bond.key} bondKey={bond.key} nft={MOCKED_NFT} />
+                <Grid item xs={12} key={bond.key}>
+                  <BondCard key={bond.key} bondKey={bond.key} nft={MOCKED_NFT} setRedeemedBond={setRedeemedBond} />
                 </Grid>
               ))}
             </Grid>
@@ -167,7 +174,7 @@ query {
               <BondRowHeader />
               {bonds.map(bond => (
                 <Box key={bond.key} onClick={() => setSelectedBond(bond)}>
-                  <BondRow bondKey={bond.key} nft={MOCKED_NFT} />
+                  <BondRow bondKey={bond.key} nft={MOCKED_NFT} setRedeemedBond={setRedeemedBond} />
                 </Box>
               ))}
             </Grid>
@@ -209,14 +216,13 @@ query {
         />
       )}
       {/** TODO: connect selected redeemed data */}
-      {selectedBond && (
+      {redeemedBond && selectedAccountBond && (
         <RedeemSuccessDialog
-          bond={selectedBond}
+          bond={redeemedBond}
           selections={MOCKED_NFT_ROW_DATA}
-          open={false}
-          onClose={() => {}}
-          balance={'100'}
-          pendingPayout={'0'}
+          open={!!redeemedBond}
+          onClose={() => setRedeemedBond(undefined)}
+          selectedAccountBond={selectedAccountBond}
         />
       )}
     </div>

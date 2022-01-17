@@ -11,7 +11,7 @@ import { useAppSelector } from 'src/store/hook';
 import { useTranslation } from 'react-i18next';
 import { useWeb3Context } from '../../hooks';
 
-import { BondKey, getBond } from 'src/constants';
+import { Bond, BondKey, getBond } from 'src/constants';
 import { priceUnits, trim, prettyShortVestingPeriod } from '../../helpers';
 import { NFTDiscountDetail } from '../BondDialog/BondNFTDiscountDialog/type';
 import { listNFTDiscount } from 'src/store/actions/nft-action';
@@ -19,9 +19,10 @@ import { listNFTDiscount } from 'src/store/actions/nft-action';
 interface IBondProps {
   bondKey: BondKey;
   nft?: NFTDiscountDetail;
+  setRedeemedBond(value: Bond): void;
 }
 
-export function BondCard({ bondKey, nft }: IBondProps) {
+export function BondCard({ bondKey, nft, setRedeemedBond }: IBondProps) {
   const { chainID, provider } = useWeb3Context();
   const bond = getBond(bondKey, chainID);
 
@@ -131,7 +132,7 @@ export function BondCard({ bondKey, nft }: IBondProps) {
         </Grid>
       )}
 
-      <Grid container spacing={4}>
+      <Grid className="bond-card-btn-area" container spacing={1}>
         <Grid item xs={12}>
           <Link component={NavLink} to={`/bonds/${bondKey}`}>
             <CustomButton
@@ -141,10 +142,29 @@ export function BondCard({ bondKey, nft }: IBondProps) {
               text={`${t('common.bond')} ${bond.name}`}
             />
           </Link>
+        </Grid>
+        <Grid item xs={12}>
           {fullyVested && (
-            <Link component={NavLink} to={`/bonds/${bondKey}?action=redeem`}>
-              <CustomButton color="otter.otterBlue" bgcolor="" text={`${t('common.redeem')} ${bond.name}`} />
-            </Link>
+            <>
+              {(() => {
+                if (bondKey === 'mai_clam44') {
+                  return (
+                    <CustomButton
+                      type="outline"
+                      color="otter.otterBlue"
+                      text={`${t('common.redeem')}`}
+                      onClick={() => setRedeemedBond(bond)}
+                    />
+                  );
+                }
+                return (
+                  <Link component={NavLink} to={`/bonds/${bondKey}?action=redeem`}>
+                    {/* FIXME: modify desc from redeem to clain now */}
+                    <CustomButton type="outline" color="otter.otterBlue" text={`${t('common.redeem')}`} />
+                  </Link>
+                );
+              })()}
+            </>
           )}
         </Grid>
       </Grid>

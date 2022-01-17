@@ -5,22 +5,18 @@ import { Typography } from '@material-ui/core';
 import BaseDialog from './BaseDialog';
 import { getTokenImage } from 'src/helpers';
 
-import { Bond } from 'src/constants';
+import { Bond, AccountBond } from 'src/constants';
 import { NFTDiscountOption } from '../types';
 
-interface AccountRedeem {
-  balance: string;
-  pendingPayout: string;
-}
-
-interface BondDialogProps extends AccountRedeem {
+interface BondDialogProps {
   bond: Bond;
   open: boolean;
   onClose(): void;
   selections: NFTDiscountOption[];
+  selectedAccountBond: AccountBond;
 }
 
-function RedeemSuccessDialog({ bond, selections, open, onClose, balance, pendingPayout }: BondDialogProps) {
+function RedeemSuccessDialog({ bond, selections, selectedAccountBond, open, onClose }: BondDialogProps) {
   const { t } = useTranslation();
   return (
     <BaseDialog
@@ -29,7 +25,7 @@ function RedeemSuccessDialog({ bond, selections, open, onClose, balance, pending
       action="bond"
       subtitle={
         <>
-          {t('stake.youReceived')} <span className="highlight-text">{pendingPayout}</span> sCLAM!
+          {t('stake.youReceived')} <span className="highlight-text">{selectedAccountBond.pendingPayout}</span> sCLAM!
         </>
       }
       renderRowDescription={(selection: NFTDiscountOption) => (
@@ -41,7 +37,9 @@ function RedeemSuccessDialog({ bond, selections, open, onClose, balance, pending
       selections={selections}
       onClose={onClose}
     >
-      <BaseDialog.DetailRow title={t('calculator.yoursClamBalance')}>{balance} sCLAM</BaseDialog.DetailRow>
+      <BaseDialog.DetailRow title={t('calculator.yoursClamBalance')}>
+        {selectedAccountBond.balance} sCLAM
+      </BaseDialog.DetailRow>
     </BaseDialog>
   );
 }
