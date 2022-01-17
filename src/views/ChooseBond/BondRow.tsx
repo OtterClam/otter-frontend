@@ -67,6 +67,9 @@ function BondRow({ bondKey, nft }: IBondProps) {
   const redeemable = fullyVested ? 'redeem' : 'bond';
   const history = useHistory();
   const redirect = () => {
+    if (bond.key === 'mai_clam44') {
+      history.push(`/bonds/${bondKey}?action=bond`);
+    }
     history.push(`/bonds/${bondKey}?action=${redeemable}`);
   };
 
