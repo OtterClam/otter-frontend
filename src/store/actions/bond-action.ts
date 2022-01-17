@@ -134,12 +134,11 @@ export const calcBondDetails = createAsyncThunk(
     // Calculate bond quote
     const bondCalcContract = new ethers.Contract(addresses.CLAM_BONDING_CALC_ADDRESS, BondingCalcContract, provider);
     const payoutForValuation =
-      bondKey === 'mai_clam44'
-        ? await bondContract.payoutFor(await bondCalcContract.valuation(bond.reserve, amountInWei), zeroAddress, 0)
-        : bond.type === 'lp'
+      bond.type === 'lp'
         ? await (async () => {
             const valuation = await bondCalcContract.valuation(bond.reserve, amountInWei);
-            return await bondContract.payoutFor(valuation);
+            const payoutForPayload = bondKey === 'mai_clam44' ? [valuation, zeroAddress, 0] : [valuation];
+            return await bondContract.payoutFor(...payoutForPayload);
           })()
         : await bondContract.payoutFor(amountInWei);
     const bondQuote = getBondQuote({ bondType: bond.type, payoutForValuation });
