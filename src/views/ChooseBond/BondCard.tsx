@@ -5,7 +5,7 @@ import BondLogo from 'src/components/BondLogo';
 import CustomButton from 'src/components/Button/CustomButton';
 import './choose-bond.scss';
 
-import { useMemo, useEffect } from 'react';
+import { useMemo } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAppSelector } from 'src/store/hook';
 import { useTranslation } from 'react-i18next';
@@ -13,16 +13,17 @@ import { useWeb3Context } from '../../hooks';
 
 import { Bond, BondKey, getBond } from 'src/constants';
 import { priceUnits, trim, prettyShortVestingPeriod } from '../../helpers';
-import { NFTDiscountDetail } from '../BondDialog/BondNFTDiscountDialog/type';
-import { listNFTDiscount } from 'src/store/actions/nft-action';
+import { MyNFTInfo } from '../../store/actions/nft-action';
+
+import BondNFTDisplay from './BondNFTDisplay';
 
 interface IBondProps {
   bondKey: BondKey;
-  nft?: NFTDiscountDetail;
+  NFTs?: MyNFTInfo[];
   setRedeemedBond(value: Bond): void;
 }
 
-export function BondCard({ bondKey, nft, setRedeemedBond }: IBondProps) {
+export function BondCard({ bondKey, NFTs, setRedeemedBond }: IBondProps) {
   const { chainID, provider } = useWeb3Context();
   const bond = getBond(bondKey, chainID);
 
@@ -115,11 +116,7 @@ export function BondCard({ bondKey, nft, setRedeemedBond }: IBondProps) {
         <Grid item>{t('bonds.myBond')}</Grid>
         <Grid item className="bond-card-value">
           {myBalance ? `${trim(myBalance, 2)} ${bond.autostake ? 'sCLAM' : 'CLAM'}` : '-'}
-          {nft && (
-            <Box display="flex" alignItems="center" className="bond-card-nft-row">
-              <div className={`nft-image ${nft.key}`} /> bond with NFT
-            </Box>
-          )}
+          {NFTs && NFTs.length && <BondNFTDisplay NFTs={NFTs} />}
         </Grid>
       </Grid>
 

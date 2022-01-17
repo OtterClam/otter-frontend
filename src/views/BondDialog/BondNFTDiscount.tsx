@@ -32,7 +32,7 @@ const NftRowLeftArea = ({
   if (!selection) {
     return <p className="description">{description.empty}</p>;
   }
-  const imageMapKey = /([A-Z]+)([0-9]*)/.exec(selection.key)?.[0] || '';
+  const imageMapKey = /([A-Z]+)([0-9]*)/.exec(selection.key)?.[1] || '';
   return (
     <>
       <ExcludeIcon className="delete-icon icon" onClick={() => setSelection(undefined)} />

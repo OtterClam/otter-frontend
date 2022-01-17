@@ -203,18 +203,3 @@
     }
   }
 }
-
-.bond-card-nft-row {
-  font-weight: 500;
-  align-self: flex-end;
-
-  .nft-image {
-    width: 30px;
-    height: 30px;
-    border-radius: 4px;
-    margin-right: 8px;
-
-    @include otter-images;
-    @include background-image-setting($size: cover);
-  }
-}

@@ -23,7 +23,8 @@ import { getTokenImage, trim } from '../../helpers';
 import { IReduxState } from '../../store/slices/state.interface';
 import { checkBondKey } from './utils';
 import { NFTDiscountOption } from '../BondDialog/types';
-import { MOCKED_NFT_OPTIONS, NFT } from '../BondDialog/BondNFTDiscountDialog/constants';
+import { NFT } from '../BondDialog/BondNFTDiscountDialog/constants';
+import { MyNFTInfo } from '../../store/actions/nft-action';
 import { useAppSelector } from 'src/store/hook';
 import { NFTType } from 'src/store/actions/nft-action';
 
@@ -43,6 +44,30 @@ const MOCKED_NFT_ROW_DATA = [
     key: 'FURRY' as NFT,
     discount: 0.05,
     endDate: new Date(),
+  },
+];
+
+const MOCKED_MY_NFT_DATA: MyNFTInfo[] = [
+  {
+    type: 'nft',
+    id: 123,
+    name: '',
+    key: 'FURRY',
+    balance: 10,
+  },
+  {
+    type: 'note',
+    id: 345,
+    name: '',
+    key: 'SAFE180',
+    balance: 1000,
+  },
+  {
+    type: 'note',
+    id: 345,
+    name: '',
+    key: 'SAFE180',
+    balance: 1000,
   },
 ];
 
@@ -110,7 +135,7 @@ query {
   const selectedAccountBond = useAppSelector(state => state.account?.[selectedBondKey]);
   const selectedBonding = useAppSelector(state => state.bonding?.[selectedBondKey]);
   // TODO: replace with fetched nft infos
-  const MOCKED_NFT = MOCKED_NFT_OPTIONS[0];
+  const MOCKED_NFT = MOCKED_NFT_ROW_DATA[0];
   console.log(selectedBond);
   return (
     <div id="choose-bond-view">
@@ -163,7 +188,12 @@ query {
             <Grid container className="bond-card-container">
               {bonds.map(bond => (
                 <Grid item xs={12} key={bond.key}>
-                  <BondCard key={bond.key} bondKey={bond.key} nft={MOCKED_NFT} setRedeemedBond={setRedeemedBond} />
+                  <BondCard
+                    key={bond.key}
+                    bondKey={bond.key}
+                    NFTs={MOCKED_MY_NFT_DATA}
+                    setRedeemedBond={setRedeemedBond}
+                  />
                 </Grid>
               ))}
             </Grid>
@@ -174,7 +204,7 @@ query {
               <BondRowHeader />
               {bonds.map(bond => (
                 <Box key={bond.key} onClick={() => setSelectedBond(bond)}>
-                  <BondRow bondKey={bond.key} nft={MOCKED_NFT} setRedeemedBond={setRedeemedBond} />
+                  <BondRow bondKey={bond.key} NFTs={MOCKED_MY_NFT_DATA} setRedeemedBond={setRedeemedBond} />
                 </Box>
               ))}
             </Grid>
