@@ -141,25 +141,6 @@ function BondPurchase({
         }
       }
     }
-    const bondAssetPayload = (() => {
-      const basePayload = {
-        value: quantity,
-        slippage,
-        bondKey,
-        networkID: chainID,
-        provider,
-      };
-      if (selection) {
-        const nftAddress = getPAWAddress(selection?.key, chainID);
-        const tokenId = selection.id;
-        return { ...basePayload, address, nftAddress, tokenId };
-      }
-      return { ...basePayload, address: recipientAddress || address };
-    })();
-    const bondTx = await dispatch(bondAsset(bondAssetPayload));
-    if (bondTx.payload) {
-      handleOpenDialog();
-    }
   }, [quantity, interestDue, pendingPayout, chainID, recipientAddress, address]);
 
   const hasAllowance = useCallback(() => {
