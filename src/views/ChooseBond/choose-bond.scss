@@ -97,7 +97,14 @@
       }
 
       .bond-price-text {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
         margin-bottom: 4px;
+        .currency-icon {
+          display: inline-block;
+          margin-right: 4px;
+        }
       }
     }
   }
