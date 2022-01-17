@@ -66,7 +66,7 @@ const MOCKED_MY_NFT_DATA: MyNFTInfo[] = [
     type: 'note',
     id: 345,
     name: '',
-    key: 'SAFE180',
+    key: 'STONE90',
     balance: 1000,
   },
 ];
