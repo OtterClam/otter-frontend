@@ -31,12 +31,12 @@ const bondContract = ({ provider, address }: Omit<NFTActionProps, 'wallet'>) => 
 
 const allNFTContracts = async ({ provider, address }: Omit<NFTActionProps, 'wallet'>) => {
   const bond = bondContract({ provider, address });
-  const count = (await bond.pawCount()).toNumber();
+  const count = (await bond.nftCount()).toNumber();
   return await Promise.all(
     Array(count)
       .fill(0)
       .map(async (_, i) => {
-        const address = await bond.pawAddresses(i);
+        const address = await bond.nftAddresses(i);
         return new ethers.Contract(address, ERC721, provider);
       }),
   );
@@ -182,20 +182,17 @@ export const listMyNFT = createAsyncThunk(
 
 export const listBondedNFT = async ({ provider, address, wallet }: NFTActionProps) => {
   const bond = bondContract({ provider, address });
-  let nfts = [];
-  let n = 0;
-  // max = 10
-  for (let i = 0; i < 10; i++) {
-    try {
-      const info = await bond.discountInfo(wallet, i);
-      nfts.push({
-        discount: info.discount.toNumber(),
-        nftAddress: info.paw,
-        tokenID: info.tokenID.toNumber(),
-      });
-    } catch (err) {
-      // console.log(err);
-    }
-  }
-  return nfts;
+  const info = await bond.bondInfo(wallet);
+  return await Promise.all(
+    Array(info.discountsCount)
+      .fill(0)
+      .map(async (_, i) => {
+        const discount = await bond.discountsUsed(wallet, i);
+        return {
+          discount: discount.discount.toNumber(),
+          nftAddress: discount.nft,
+          tokenID: discount.tokenID.toNumber(),
+        };
+      }),
+  );
 };

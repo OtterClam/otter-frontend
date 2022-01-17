@@ -245,7 +245,7 @@
           "type": "uint256"
         }
       ],
-      "name": "addDiscountTerms",
+      "name": "addDiscountTerm",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -329,6 +329,11 @@
         {
           "internalType": "uint256",
           "name": "gonsPayout",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "discountsCount",
           "type": "uint256"
         }
       ],
@@ -465,40 +470,6 @@
       "inputs": [
         {
           "internalType": "address",
-          "name": "",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "name": "discountInfo",
-      "outputs": [
-        {
-          "internalType": "contract IERC721",
-          "name": "paw",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "tokenID",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "discount",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
           "name": "_nft",
           "type": "address"
         }
@@ -556,6 +527,40 @@
         {
           "internalType": "uint256",
           "name": "endEpoch",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "discountsUsed",
+      "outputs": [
+        {
+          "internalType": "contract IERC721",
+          "name": "nft",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "tokenID",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "discount",
           "type": "uint256"
         }
       ],
@@ -697,6 +702,62 @@
     {
       "inputs": [
         {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "nftAddresses",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "nftCount",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "nftOwners",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
           "internalType": "address",
           "name": "",
           "type": "address"
@@ -755,62 +816,6 @@
         }
       ],
       "name": "ownerOf",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "name": "pawAddresses",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "pawCount",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "name": "pawOwners",
       "outputs": [
         {
           "internalType": "address",
@@ -967,7 +972,7 @@
           "type": "uint256"
         }
       ],
-      "name": "removeDiscountTermsAt",
+      "name": "removeDiscountTermAt",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -1056,7 +1061,7 @@
           "type": "uint256"
         }
       ],
-      "name": "setDiscountTerms",
+      "name": "setDiscountTerm",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
