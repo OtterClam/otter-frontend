@@ -3,7 +3,7 @@ import { JsonRpcProvider } from '@ethersproject/providers';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { addDays } from 'date-fns';
 
-import { ERC721, OtterPAWBondStakeDepository, PearlNote, OtterPAW, OtterLake } from 'src/abi';
+import { ERC721, OtterPAWBondStakeDepository, PearlNote, OtterLake } from 'src/abi';
 import { BondKey, BondKeys, getAddresses, listBonds } from '../../constants';
 import { NFT } from '../../views/BondDialog/BondNFTDiscountDialog/constants';
 
