@@ -174,7 +174,7 @@ query {
           </Zoom>
         )}
       </Paper>
-      {selectedBond && (
+      {selectedBond && selectedAccountBond && selectedBonding && (
         <BondDialog
           bond={selectedBond}
           canSelect={canSelect}

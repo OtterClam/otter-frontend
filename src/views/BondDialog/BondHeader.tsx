@@ -43,7 +43,7 @@ function BondHeader({
 
   useEscape(() => {
     if (open) handleSettingClose;
-    else history.push('/bonds');
+    history.push('/bonds');
   });
 
   return (

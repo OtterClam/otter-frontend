@@ -91,6 +91,7 @@ function BondPurchase({
   const pendingTransactions = useSelector<IReduxState, IPendingTxn[]>(state => {
     return state.pendingTransactions;
   });
+
   const { interestDue, pendingPayout, balance, rawBalance, allowance } = selectedAccountBond;
   const { debtRatio, bondQuote, vestingTerm, maxPayout, maxUserCanBuy, bondDiscount } = selectedBonding;
   const { t } = useTranslation();
