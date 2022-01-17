@@ -13,6 +13,7 @@
       height: 30px;
       border-radius: 4px;
       margin-right: 8px;
+      border: 2px solid white;
   
       @include otter-images; // NOTE: nft image class settings, see src/styles/_mixins.scss
       @include background-image-setting($size: cover); // NOTE: nft image bg settings, see src/styles/_mixins.scss
