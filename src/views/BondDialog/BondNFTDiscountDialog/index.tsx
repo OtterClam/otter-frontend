@@ -31,9 +31,9 @@ const BondNTFDiscountDialog = ({ bond, selection, setSelection, onClose, ...prop
   return (
     <Dialog {...props} className="nft-dialog" title="Select Discount NFT" onClose={onClose}>
       <Grid container direction="column" justifyContent="center">
-        {options.map(option => (
+        {options.map((option, index) => (
           <NFTDiscountCard
-            key={option.key}
+            key={`${option.key}-${index}`}
             option={option}
             selected={option.key === selection?.key}
             onSelect={onSelect}

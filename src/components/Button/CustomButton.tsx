@@ -31,7 +31,7 @@ const CustomButton = forwardRef<any, Props>(({ type = 'solid', text, icon, class
     <Box
       {...({ ref } as any)}
       className={`custom-button ${className}`}
-      border={type === 'outline' && '2px solid'}
+      border={type === 'outline' ? '2px solid' : ''}
       {...props}
     >
       {icon && <SvgIcon component={icon} style={{ ...ICON_BASE_STYLE, ...ICON_SPACING }} />}

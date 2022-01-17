@@ -28,7 +28,7 @@ const NFTDiscountCard = ({ option, selected, onSelect }: CardProps) => {
     >
       <Grid container direction="row" wrap="nowrap" onClick={() => onSelect(option)}>
         <div className={`nft-img ${option.key}`} />
-        <Box component="div" flex flexDirection="column" className="nft-description">
+        <Box component="div" flexDirection="column" className="nft-description">
           <h3 className="nft-name">{option.name}</h3>
           <p className="nft-discount">
             {option.type === 'nft'

@@ -13,7 +13,7 @@ export const NFTDisplayRow = ({ selections, renderRowDescription }: CardProps) =
       <p className="bond-nft-title">Discount NFT return</p>
       <Paper style={{ marginTop: '10px' }}>
         {selections.map((selection, index) => (
-          <>
+          <div key={`${selection.id}-${index}`}>
             <Box className="bond-nft-row" component="div">
               <Box className="selection-area">
                 <img className={`selection-image ${selection.key}`} />
@@ -24,7 +24,7 @@ export const NFTDisplayRow = ({ selections, renderRowDescription }: CardProps) =
               </Box>
             </Box>
             {index !== selections?.length - 1 && <Divider style={{ margin: 0 }} />}
-          </>
+          </div>
         ))}
       </Paper>
     </Box>
