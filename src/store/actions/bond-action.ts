@@ -291,7 +291,8 @@ export const redeemBond = createAsyncThunk(
 
     let redeemTx;
     try {
-      redeemTx = await bondContract.redeem(address);
+      const redeemArgs = [address, ...(bondKey === 'mai_clam44' ? [] : [autostake])];
+      redeemTx = await bondContract.redeem(...redeemArgs);
       const pendingTxnType = 'redeem_bond_' + bond.key + (autostake === true ? '_autostake' : '');
       dispatch(fetchPendingTxns({ txnHash: redeemTx.hash, text: 'Redeeming ' + bond.name, type: pendingTxnType }));
       await redeemTx.wait();
