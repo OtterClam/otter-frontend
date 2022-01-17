@@ -38,7 +38,11 @@ export default function PearlChestLockupSuccessModal({
         <Typography variant="h1" component="span" className="lockup-success-modal__message">
           Your Chest lock-up was successful.
         </Typography>
-        <img className="lockup-success-modal__receipt" src={note?.imageUrl ?? getNoteImage(term.note.name)} />
+        {note ? (
+          <img className="lockup-success-modal__receipt" src={note.imageUrl || getNoteImage(term.note.name)} />
+        ) : (
+          <CircularProgress />
+        )}
         <Typography className="lockup-success-modal__message2">You got a {term.note.name}!</Typography>
         <Paper className="lockup-success-modal__details">
           <div className="lockup-success-modal__details-row">

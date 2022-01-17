@@ -141,9 +141,7 @@ export default function AddPearlToNoteModal({
                       className="stake-input-btn"
                       onClick={e => {
                         e.preventDefault();
-                        if (!lockNote) {
-                          setAmount(account?.balances?.pearl ?? 0);
-                        }
+                        setAmount(account?.balances?.pearl ?? 0);
                       }}
                     >
                       <p>{t('common.max')}</p>
@@ -155,7 +153,7 @@ export default function AddPearlToNoteModal({
             <ActionButton
               className="add-pearl-modal__action-btn"
               pendingTransactions={pendingTransactions}
-              type={'lock_' + lockNote?.noteAddress}
+              type={'extend-lock_' + lockNote?.noteAddress + '_' + lockNote?.tokenId}
               start="Lock Up"
               progress="Processing..."
               processTx={lockup}

@@ -152,9 +152,41 @@
 
   &__select-btn.transaction-button {
     min-width: 0 !important;
+    width: 100%;
+    margin: 0 !important;
   }
 
   @media screen and (max-width: 768px) {
     min-width: 195px;
+  }
+
+  &__tvl {
+    display: flex;
+    height: 64px;
+    align-items: center;
+    justify-content: center;
+    // background-color: $light-gray100;
+    border-radius: 8px;
+    gap: 5px;
+    margin-bottom: 15px;
+
+    img {
+      width: 36px;
+      height: 30px;
+    }
+
+    div {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    &__title {
+      font-size: 12px;
+    }
+
+    // &__value {
+    //   font-size: 16px;
+    // }
   }
 }

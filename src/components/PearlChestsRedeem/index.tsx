@@ -1,13 +1,14 @@
 import { Divider, Paper, Typography } from '@material-ui/core';
-import { addDays } from 'date-fns';
+import { addHours } from 'date-fns';
 import differenceInDays from 'date-fns/differenceInDays';
 import formatDate from 'date-fns/format';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector as useReduxSelector } from 'react-redux';
 import { formatCurrency, getTokenImage } from 'src/helpers';
 import getNoteImage from 'src/helpers/get-note-image';
 import { useWeb3Context } from 'src/hooks';
-import { useAppDispatch, useAppSelector } from 'src/store/hook';
+import { useAppSelector } from 'src/store/hook';
 import {
   claimAndLock as claimAndLockAction,
   claimReward as claimRewardAction,
@@ -16,12 +17,15 @@ import {
   loadLockedNotes,
   redeem as redeemAction,
 } from 'src/store/slices/otter-lake-slice';
+import { IPendingTxn } from 'src/store/slices/pending-txns-slice';
+import { IReduxState } from 'src/store/slices/state.interface';
 import AddPearlToNoteModal from '../AddPearlToNodeModal';
 import ActionButton from '../Button/ActionButton';
 import CustomButton from '../Button/CustomButton';
 import { LabelChip } from '../Chip';
 import PearlChestLockupSuccessModal from '../PearlChestLockupSuccessModal';
 import './styles.scss';
+import NewPageIcon from 'src/assets/icons/icon_new_page.svg';
 
 const numberFormatter = Intl.NumberFormat('en', { maximumFractionDigits: 4 });
 const percentageFormatter = Intl.NumberFormat('en', { style: 'percent', minimumFractionDigits: 2 });
@@ -38,7 +42,6 @@ export interface Note {
   marketValue: number;
   lockupPeriod: number;
   dueDate: Date;
-  apy: number;
   locked: boolean;
 }
 
@@ -46,7 +49,7 @@ export default function PearlChestsRedeem() {
   const [relockResult, setRelockResult] = useState<any>();
   const [selectedTerm, setSelectedTerm] = useState<ITerm | null>(null);
   const [selectedLockNote, setSelectedLock] = useState<ILockNote | null>(null);
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
   const { chainID, connected, address, provider } = useWeb3Context();
   const currentEpoch = useAppSelector(state => state.app.currentEpoch);
   const lockNotes = useAppSelector(state => state.lake.lockNotes);
@@ -99,8 +102,7 @@ export default function PearlChestsRedeem() {
               lockedValue: -1,
               marketValue: (Number(lockNote.amount) + lockNote.nextReward) * pearlPrice,
               lockupPeriod: term.lockPeriod,
-              dueDate: addDays(Date.UTC(2021, 10, 3, 0, 0, 0), lockNote.endEpoch / 3),
-              apy: 492391,
+              dueDate: addHours(Date.UTC(2021, 10, 3, 0, 0, 0), lockNote.endEpoch * 8),
               locked: currentEpoch < lockNote.endEpoch,
             }}
           />
@@ -135,9 +137,9 @@ function NoteCard({
   addPearlToNote: (term: ITerm, lockNote: ILockNote) => void;
 }) {
   const { t } = useTranslation();
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
   const { provider, address, chainID } = useWeb3Context();
-  const pendingTransactions = useAppSelector(state => {
+  const pendingTransactions = useReduxSelector<IReduxState, IPendingTxn[]>(state => {
     return state.pendingTransactions;
   });
   const details = [
@@ -214,8 +216,15 @@ function NoteCard({
       </Typography>
 
       <div className="note__body">
-        <div className="note__receipt-image">
-          <img src={lockNote.imageUrl || getNoteImage(term.note.name)} />
+        <div className=" note__receipt-left">
+          <img className="note__receipt-left__image" src={lockNote.imageUrl || getNoteImage(term.note.name)} />
+          <a
+            className="note__receipt-left__link"
+            href={`https://opensea.io/assets/matic/${term.noteAddress}/${note.id}`}
+            target="_blank"
+          >
+            {t('pearlChests.redeem.viewOnOpenSea')} <img src={NewPageIcon} />
+          </a>
         </div>
         <Divider className="note__div" flexItem orientation="vertical" />
         <div className="note__details">
@@ -240,9 +249,7 @@ function NoteCard({
               start={t('pearlChests.addPearl')}
               progress="Processing..."
               processTx={() => addPearlToNote(term, lockNote)}
-              wrapper={({ onClick, text }) => (
-                <CustomButton display="inline-flex" type="outline" text={text} onClick={onClick} />
-              )}
+              wrapper={({ onClick, text }) => <CustomButton className="note__action" text={text} onClick={onClick} />}
             />
             {lockNote.reward > 0 && (
               <ActionButton
@@ -251,9 +258,7 @@ function NoteCard({
                 start={t('pearlChests.claimRewardAndRelock', { amount: numberFormatter.format(lockNote.reward) })}
                 progress="Processing..."
                 processTx={claimAndLock}
-                wrapper={({ onClick, text }) => (
-                  <CustomButton display="inline-flex" text={text} type="outline" onClick={onClick} />
-                )}
+                wrapper={({ onClick, text }) => <CustomButton className="note__action" text={text} onClick={onClick} />}
               />
             )}
             <ActionButton
@@ -263,7 +268,7 @@ function NoteCard({
               progress="Processing..."
               processTx={claimReward}
               wrapper={({ onClick, text }) => (
-                <CustomButton display="inline-flex" type="outline" text={text} onClick={onClick} />
+                <CustomButton className="note__action" type="outline" text={text} onClick={onClick} />
               )}
             />
           </>
@@ -275,7 +280,7 @@ function NoteCard({
             start={t('pearlChests.redeemAll')}
             progress="Processing..."
             processTx={redeem}
-            wrapper={({ onClick, text }) => <CustomButton display="inline-flex" text={text} onClick={onClick} />}
+            wrapper={({ onClick, text }) => <CustomButton className="note__action" text={text} onClick={onClick} />}
           />
         )}
       </div>

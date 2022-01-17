@@ -9,6 +9,7 @@ import {
   makeStyles,
   Zoom,
   Button,
+  Divider,
   Slider,
   Paper,
   Box,
@@ -16,8 +17,9 @@ import {
 } from '@material-ui/core';
 import { trim } from '../../helpers';
 import { Skeleton } from '@material-ui/lab';
-import { useAppSelector, useAppDispatch } from 'src/store/hook';
-import { useWeb3Context } from 'src/hooks/web3';
+import { IReduxState } from '../../store/slices/state.interface';
+import { useAppSelector } from 'src/store/hook';
+import { useBonds } from 'src/hooks';
 import { useTranslation, Trans } from 'react-i18next';
 
 const useStyles = makeStyles(theme => ({
@@ -40,6 +42,9 @@ const useStyles = makeStyles(theme => ({
     },
     '& .MuiSlider-thumb': {
       border: `1px ${theme.palette.background.default} solid`,
+    },
+    '& .metric-sub': {
+      color: theme.palette.mode.darkGray200,
     },
     // '& .MuiOutlinedInput-inputAdornedEnd': {
     //   width: '320px',
@@ -75,8 +80,18 @@ function Calculator() {
   const currentIndex = useAppSelector<string>(state => state.app.currentIndex);
   const pearlBalance = useAppSelector<string>(state => state.account.balances?.pearl);
 
+  //Include Bonded sCLAM balance
+  const bonds = useBonds();
+  const bondedBalances = useSelector<IReduxState, any[]>(state => {
+    //@ts-ignore
+    return bonds.map(bond => state.account[bond.value] && state.account[bond.value].interestDue);
+  });
+  const totalBondedBalance = bondedBalances.reduce((a, b) => a + b, 0);
+
+  const trimmedBondedBalance = new Intl.NumberFormat('en-US').format(Number(totalBondedBalance));
+
   const totalBalance = new Intl.NumberFormat('en-US').format(
-    Number(sClamBalance) + Number(pearlBalance) * Number(currentIndex),
+    Number(sClamBalance) + Number(pearlBalance) * Number(currentIndex) + Number(totalBondedBalance),
   );
 
   const trimmedStakingAPY = trim(stakingAPY * 100, 1);
@@ -177,11 +192,17 @@ function Calculator() {
                       ) : (
                         <div>
                           <Typography className="metric-body">{totalBalance} sCLAM</Typography>
-                          {Number(pearlBalance) > 0 ? (
-                            <Typography className="metric-sub">({trimmedPearlInsCLAM} as PEARL)</Typography>
-                          ) : (
-                            <Typography className="metric-sub">&nbsp;</Typography>
-                          )}
+                          {
+                            /*Number(pearlBalance) > 0*/ true ? (
+                              <div>
+                                <Divider />
+                                <Typography className="metric-sub">{trimmedBondedBalance} sCLAM</Typography>
+                                <Typography className="metric-sub">{trimmedPearlBalance} PEARL</Typography>
+                              </div>
+                            ) : (
+                              <Typography className="metric-sub">&nbsp;</Typography>
+                            )
+                          }
                         </div>
                       )}
                     </Box>

@@ -181,6 +181,7 @@ function NavContent() {
                 <div className="dapp-menu-item">
                   {checkPage(location, 'pearl-chests') ? <ActiveMenuIcon /> : <InactiveMenuIcon />}
                   <p>{t('common.pearlChests')}</p>
+                  <div className="dapp-menu-item__new">NEW</div>
                 </div>
               </Link>
 
@@ -231,7 +232,6 @@ function NavContent() {
                 <div className="dapp-menu-item">
                   <InactiveMenuIcon />
                   <p>NFT</p>
-                  <div className="dapp-menu-item__new">NEW!</div>
                 </div>
               </Link>
 

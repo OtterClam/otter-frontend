@@ -4,6 +4,7 @@ import Ad2 from './ad-02.jpg';
 import Ad3 from './ad-03.jpg';
 import Ad4 from './ad-04.jpg';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import './styles.scss';
 
 export default function DashboardHero() {
   const ads = [
@@ -25,7 +26,7 @@ export default function DashboardHero() {
     },
   ];
   return (
-    <Carousel showThumbs={false} showArrows={false} showStatus={false} autoPlay infiniteLoop>
+    <Carousel className="dashboard-hero" showThumbs={false} showArrows={false} showStatus={false} autoPlay infiniteLoop>
       {ads.map(({ image, link }, i) => (
         <a key={i} href={link} target="_blank" style={{ display: 'block' }}>
           <img src={image} />

@@ -31,6 +31,7 @@ const English = {
       treasuryBalance: 'Treasury Balance',
       currentIndex: 'Current Index',
       yourBalance: 'Your Balance',
+      balance: 'Balance',
       currentApy: 'Current APY',
       dashboard: 'Dashboard',
       calculator: 'Calculator',
@@ -170,8 +171,19 @@ const English = {
       stakeSuccessful: 'Your stake was successful',
       unstakeSuccessful: 'Your unstake was successful',
       youReceived: 'You just received ',
+      infoTooltips: {
+        sClamBalance: 'The amount of sCLAM in your wallet, currently available for wrapping or unstaking.',
+        sClamBonded:
+          'The total amount of sCLAM currently vested in bonds. Will be available for wrapping or unstaking once the vesting period is finished.',
+        pearl:
+          'The amount of PEARL in your wallet. This value is multiplied by the Current Index to find the equivalent sCLAM balance, which is included in the total above. Pearls locked in Chests are currently not included.',
+        stakedBalance:
+          'The sum total of sCLAM in your wallet, vested in bonds, and the equivalent sCLAM value of your held PEARL.',
+        nextReward:
+          'Total sCLAM rewards which will be earned from your sCLAM balance, bonded sCLAM, and PEARL balance upon the next rebase.',
+      },
     },
-    // src\views\Stake
+    // src\views\Wrap
     wrap: {
       wrapsClam: 'Wrap sCLAM',
       connectWalletDescription: 'Connect your wallet to wrap your sCLAM!',
@@ -268,10 +280,12 @@ const English = {
         bonusDescription: 'any (4,4) bond',
         nftRequirement: 'Minimum amount required: \n{{amount}} PEARL',
         select: 'Select',
+        lockedPearl: 'PEARL in chest',
       },
       redeem: {
         tabLabel: 'Redeem',
         connect: 'Connect your wallet to view your PEARL Chests!',
+        viewOnOpenSea: 'View on OpenSea',
       },
     },
   },
