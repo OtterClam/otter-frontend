@@ -121,29 +121,8 @@ function BondPurchase({
       const shouldProceed = window.confirm(
         bond.autostake ? t('bonds.purchase.resetVestingAutostake') : t('bonds.purchase.resetVesting'),
       );
-      if (shouldProceed) {
-        const bondAssetPayload = (() => {
-          const basePayload = {
-            value: quantity,
-            slippage,
-            bondKey,
-            networkID: chainID,
-            provider,
-          };
-          if (selection) {
-            const nftAddress = getPAWAddress(selection?.key, chainID);
-            const tokenId = selection.id;
-            return { ...basePayload, address, nftAddress, tokenId };
-          }
-          return { ...basePayload, address: recipientAddress || address };
-        })();
-        const bondTx = await dispatch(bondAsset(bondAssetPayload));
-        if (bondTx.payload) {
-          if (selection) {
-            return setSuccessDialogOpen(true);
-          }
-          handleOpenDialog();
-        }
+      if (!shouldProceed) {
+        return;
       }
     }
     const bondAssetPayload = (() => {
@@ -163,6 +142,9 @@ function BondPurchase({
     })();
     const bondTx = await dispatch(bondAsset(bondAssetPayload));
     if (bondTx.payload) {
+      if (selection) {
+        return setSuccessDialogOpen(true);
+      }
       handleOpenDialog();
     }
   }, [quantity, interestDue, pendingPayout, chainID, recipientAddress, address]);
