@@ -9,16 +9,22 @@ import FURRY_NOTE from 'src/assets/images/furry-hand-note.jpg';
 import STONE_NOTE from 'src/assets/images/stone-hand-note.jpg';
 import DIAMOND_NOTE from 'src/assets/images/diamond-hand-note.jpg';
 
-// TODO: add nft note images
 export const NFT_IMAGES: Record<string, any> = {
   SAFE,
   FURRY,
   STONE,
   DIAMOND,
   SAFE_NOTE,
+  SAFE14: SAFE_NOTE,
+  SAFE28: SAFE_NOTE,
+  SAFE90: SAFE_NOTE,
+  SAFE180: SAFE_NOTE,
   FURRY_NOTE,
+  FURRY28: FURRY_NOTE,
   STONE_NOTE,
+  STONE90: STONE_NOTE,
   DIAMOND_NOTE,
+  DIAMOND180: DIAMOND_NOTE,
 };
 
 export type NFT =
@@ -47,39 +53,3 @@ export const NFTTitleMap: Record<NFT, string> = {
   ['DIAMOND']: 'Diamond-Hand Otter',
   ['DIAMOND180']: 'Diamond-Hand 180-Day Note',
 };
-
-// NOTE: this is mocked options
-export const MOCKED_NFT_OPTIONS: NFTDiscountDetail[] = [
-  {
-    id: '1',
-    key: 'nft1',
-    name: 'Saft-Hand Otter',
-    discount: 5,
-    type: 'nft',
-    expireAt: '2022/1/18',
-  },
-  {
-    id: '2',
-    key: 'nft2',
-    name: 'Furry-Hand Otter',
-    discount: 5,
-    type: 'nft',
-    expireAt: '2022/1/18',
-  },
-  {
-    id: '3',
-    key: 'nft3',
-    name: 'Stone-Hand Otter',
-    discount: 10,
-    type: 'nft',
-    expireAt: '2022/1/18',
-  },
-  {
-    id: '4',
-    key: 'nft4',
-    name: 'Diamond-Hand Otter',
-    discount: 15,
-    type: 'nft',
-    expireAt: '2022/1/18',
-  },
-];

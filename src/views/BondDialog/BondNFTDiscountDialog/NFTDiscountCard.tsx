@@ -32,8 +32,8 @@ const NFTDiscountCard = ({ option, selected, onSelect }: CardProps) => {
           <h3 className="nft-name">{option.name}</h3>
           <p className="nft-discount">
             {option.type === 'nft'
-              ? `Use this note to receive a ${option.discount} discount on any (4,4) bond.`
-              : `${option.discount} off in addition`}
+              ? `Use this note to receive a ${option.discount * 100}% discount on any (4,4) bond.`
+              : `${option.discount * 100}% off in addition`}
           </p>
           <p className="nft-expire-time">{`Expiration date: ${format(option.endDate, 'yyyy/MM/dd')}`}</p>
         </Box>

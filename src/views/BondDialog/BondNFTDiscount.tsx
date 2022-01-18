@@ -32,14 +32,13 @@ const NftRowLeftArea = ({
   if (!selection) {
     return <p className="description">{description.empty}</p>;
   }
-  const imageMapKey = /([A-Z]+)([0-9]*)/.exec(selection.key)?.[1] || '';
   return (
     <>
       <ExcludeIcon className="delete-icon icon" onClick={() => setSelection(undefined)} />
-      <img className="selection-image" src={`${NFT_IMAGES[imageMapKey]}`} />
+      <img className="selection-image" src={`${NFT_IMAGES[selection.key]}`} />
       <p className="selection-text">
         {selection.name}
-        <span className="selection-discount">{selection.discount}% OFF</span>
+        <span className="selection-discount">{selection.discount * 100}% OFF</span>
       </p>
     </>
   );

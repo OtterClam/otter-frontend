@@ -117,74 +117,79 @@ export const listMyNFT = createAsyncThunk(
   'account/nft/list',
   async ({ provider, wallet, networkID }: ListMyNFTPayload): Promise<MyNFTInfo[]> => {
     const addresses = getAddresses(networkID);
-    const ownedPAWs: MyNFTInfo[] = [];
-    const ownedNOTEs: MyNFTInfo[] = [];
     const nftAddresses = pawAddresses(networkID);
     // get owned nft infos
     const nftContracts = nftAddresses.map(address => new ethers.Contract(address, ERC721, provider.getSigner()));
-    await Promise.all(
-      nftContracts.map(async contract => {
-        const [name, symbol, rawBalance] = await Promise.all([
-          contract.name(),
-          contract.symbol(),
-          contract.balanceOf(wallet),
-        ]);
-        const balance = rawBalance.toNumber();
-        const basicInfos = {
-          type: 'nft' as NFTType,
-          name: name as string,
-          key: symbol as NFT,
-          balance: balance as number,
-          address: contract.address,
-        };
-        if (rawBalance > 0) {
-          Array(rawBalance)
-            .fill(0)
-            .map(async (_, index) => {
-              const id = (await contract.tokenOfOwnerByIndex(wallet, index)).toNumber();
-              ownedPAWs.push({ ...basicInfos, id: id as number });
-            });
-        }
-      }),
-    );
+    const paws = (
+      await Promise.all(
+        nftContracts.map(async contract => {
+          const [name, symbol, rawBalance] = await Promise.all([
+            contract.name(),
+            contract.symbol(),
+            contract.balanceOf(wallet),
+          ]);
+          const balance = rawBalance.toNumber();
+          const basicInfos = {
+            type: 'nft' as NFTType,
+            name: name as string,
+            key: symbol as NFT,
+            balance: balance as number,
+            address: contract.address,
+          };
+          const ids = await Promise.all(
+            Array(rawBalance)
+              .fill(0)
+              .map(async (_, index) => {
+                return (await contract.tokenOfOwnerByIndex(wallet, index)).toNumber();
+              }),
+          );
+          return ids.map(id => ({
+            ...basicInfos,
+            id,
+          }));
+        }),
+      )
+    ).flat(1);
 
     // get owned notes infos
     const otterLakeContract = new ethers.Contract(addresses.OTTER_LAKE, OtterLake, provider);
     const termsCount = (await otterLakeContract.termsCount()).toNumber();
-    await Promise.all(
-      Array(termsCount)
-        .fill(0)
-        .map(async (_, index) => {
-          const termAddress = await otterLakeContract.termAddresses(index);
-          const term = await otterLakeContract.terms(termAddress);
-          const noteContract = new ethers.Contract(term.note, PearlNote, provider);
-          const [name, symbol, rawBalance] = await Promise.all([
-            noteContract.name(),
-            noteContract.symbol(),
-            noteContract.balanceOf(wallet),
-          ]);
-          const balance = rawBalance.toNumber();
-          const basicInfos = {
-            type: 'note' as NFTType,
-            name: name as string,
-            key: symbol as NFT,
-            balance: balance as number,
-            address: noteContract.address,
-          };
-          if (rawBalance > 0) {
-            Array(balance)
-              .fill(0)
-              .map(async (_, index) => {
-                const id = (await noteContract.tokenOfOwnerByIndex(wallet, index)).toNumber() as number;
-                const data = { ...basicInfos, id };
-                ownedNOTEs.push(data);
-              });
-          }
-        }),
-    );
-
-    // combine note and nft together
-    return [...ownedPAWs, ...ownedNOTEs];
+    const notes = (
+      await Promise.all(
+        Array(termsCount)
+          .fill(0)
+          .map(async (_, index) => {
+            const termAddress = await otterLakeContract.termAddresses(index);
+            const term = await otterLakeContract.terms(termAddress);
+            const noteContract = new ethers.Contract(term.note, PearlNote, provider);
+            const [name, symbol, rawBalance] = await Promise.all([
+              noteContract.name(),
+              noteContract.symbol(),
+              noteContract.balanceOf(wallet),
+            ]);
+            const balance = rawBalance.toNumber();
+            const basicInfos = {
+              type: 'note' as NFTType,
+              name: name as string,
+              key: symbol as NFT,
+              balance: balance as number,
+              address: noteContract.address,
+            };
+            const ids = await Promise.all(
+              Array(balance)
+                .fill(0)
+                .map(async (_, index) => {
+                  return (await noteContract.tokenOfOwnerByIndex(wallet, index)).toNumber() as number;
+                }),
+            );
+            return ids.map(id => ({
+              ...basicInfos,
+              id,
+            }));
+          }),
+      )
+    ).flat(1);
+    return [...paws, ...notes];
   },
 );
 

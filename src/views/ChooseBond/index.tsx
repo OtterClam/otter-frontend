@@ -139,8 +139,6 @@ query {
   }, [redeemedBond, bondKey]);
   const selectedAccountBond = useAppSelector(state => state.account?.[selectedBondKey]);
   const selectedBonding = useAppSelector(state => state.bonding?.[selectedBondKey]);
-  // TODO: replace with fetched nft infos
-  const MOCKED_NFT = MOCKED_NFT_ROW_DATA[0];
 
   return (
     <div id="choose-bond-view">
@@ -240,7 +238,6 @@ query {
           />
         </>
       )}
-      {/** TODO: connect selected bonded data */}
       {selectedBond && bondKey === 'mai_clam44' && nftSelection && (
         <BondSuccessDialog
           bond={selectedBond}
