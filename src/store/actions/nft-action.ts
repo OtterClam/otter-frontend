@@ -196,7 +196,7 @@ interface ListLockedNFTPayload {
 }
 
 export type LockedNFT = Omit<MyNFTInfo, 'balance'>;
-interface ListLockedNFTDetail {
+export interface ListLockedNFTDetail {
   lockedNFTs: LockedNFT[];
   bondKey: BondKey;
 }

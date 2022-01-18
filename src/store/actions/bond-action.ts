@@ -1,4 +1,4 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, unwrapResult } from '@reduxjs/toolkit';
 import { parseEther } from '@ethersproject/units';
 
 import { fetchAccountSuccess } from '../slices/account-slice';
@@ -8,8 +8,9 @@ import { BondDetails } from '../slices/bond-slice';
 
 import { ethers, constants, BigNumber } from 'ethers';
 import { JsonRpcProvider } from '@ethersproject/providers';
-import { BondingCalcContract, AggregatorV3InterfaceABI, ERC721 } from '../../abi';
+import { BondingCalcContract, AggregatorV3InterfaceABI, ERC721, StakedClamContract } from '../../abi';
 
+import { LockedNFT } from './nft-action';
 import { getMarketPrice, contractForBond, contractForReserve, getTokenPrice } from '../../helpers';
 import { BondKey, BondKeys, getAddresses, getBond, zeroAddress } from '../../constants';
 
@@ -85,6 +86,7 @@ export const changeApproval = createAsyncThunk(
 );
 
 interface CalcBondDetailsPayload {
+  wallet?: string;
   bondKey: BondKey;
   value?: string | null;
   provider: JsonRpcProvider;
@@ -110,15 +112,10 @@ const DEPRECATED_BOND_STATIC_VALUES = {
 
 export const calcBondDetails = createAsyncThunk(
   'bonding/calcBondDetails',
-  async ({
-    bondKey,
-    value,
-    provider,
-    networkID,
-    userBalance,
-    nftAddress,
-    tokenId,
-  }: CalcBondDetailsPayload): Promise<BondDetails> => {
+  async (
+    { wallet, bondKey, value, provider, networkID, userBalance, nftAddress, tokenId }: CalcBondDetailsPayload,
+    { dispatch },
+  ): Promise<BondDetails> => {
     const amountInWei = !value
       ? ethers.utils.parseEther('0.0001') // Use a realistic SLP ownership
       : ethers.utils.parseEther(value);
@@ -192,6 +189,22 @@ export const calcBondDetails = createAsyncThunk(
     const terms = await bondContract.terms();
     const vestingTerm = +terms.vestingTerm;
 
+    // Patch locked nft into bond details
+    let lockedNFTs: LockedNFT[] = [];
+    if (wallet) {
+      const { lockedNFTs: lockedNFTsResult } = unwrapResult(
+        await dispatch(
+          listLockededNFT({
+            bondKey,
+            wallet: wallet,
+            networkID: networkID,
+            provider,
+          }),
+        ),
+      );
+      lockedNFTs = lockedNFTsResult;
+    }
+
     // Display error if user tries to exceed maximum.
     const maxPayout = getTransformedMaxPayout({ originalMaxPayout });
     if (!!value && bondQuote > maxPayout) {
@@ -214,6 +227,7 @@ export const calcBondDetails = createAsyncThunk(
       marketPrice,
       maxUserCanBuy,
       nftApproved,
+      lockedNFTs,
     };
   },
 );
@@ -251,7 +265,10 @@ interface IBondAsset {
 
 export const bondAsset = createAsyncThunk(
   'bonding/bondAsset',
-  async ({ value, address, bondKey, networkID, provider, slippage, tokenId, nftAddress }: IBondAsset, { dispatch }) => {
+  async (
+    { value, address, bondKey, networkID, provider, slippage, tokenId, nftAddress }: IBondAsset,
+    { dispatch },
+  ): Promise<{ bondKey: string; interestDue: number } | undefined> => {
     const depositorAddress = address;
     const acceptedSlippage = slippage / 100 || 0.005;
     const valueInWei = ethers.utils.parseEther(value);
@@ -270,16 +287,19 @@ export const bondAsset = createAsyncThunk(
       dispatch(fetchPendingTxns({ txnHash: bondTx.hash, text: 'Bonding ' + bond.name, type: 'bond_' + bondKey }));
       dispatch(listMyNFT({ wallet: address, networkID: networkID, provider }));
       await bondTx.wait();
-      return;
+      const addresses = getAddresses(networkID);
+      const sCLAM = new ethers.Contract(addresses.sCLAM_ADDRESS, StakedClamContract, provider);
+      const bondDetails = await bondContract.bondInfo(address);
+      const interestDue =
+        (bond.autostake ? await sCLAM.balanceForGons(bondDetails.gonsPayout) : bondDetails.payout) / 1e9;
+      return { bondKey, interestDue }; // NOTE: for updating bond balance after bonding
     } catch (error: any) {
       if (error.code === -32603 && error.message.indexOf('ds-math-sub-underflow') >= 0) {
         alert('You may be trying to bond more than your balance! Error code: 32603. Message: ds-math-sub-underflow');
       } else alert(JSON.stringify(error));
-      return;
     } finally {
       if (bondTx) {
         dispatch(clearPendingTxn(bondTx.hash));
-        return true;
       }
     }
   },

@@ -141,7 +141,7 @@ query {
   const selectedBonding = useAppSelector(state => state.bonding?.[selectedBondKey]);
   // TODO: replace with fetched nft infos
   const MOCKED_NFT = MOCKED_NFT_ROW_DATA[0];
-  console.log(selectedBond);
+
   return (
     <div id="choose-bond-view">
       <Paper className="bond-paper">

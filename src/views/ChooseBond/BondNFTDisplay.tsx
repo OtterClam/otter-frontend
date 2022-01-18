@@ -12,7 +12,6 @@ const BondNFTDisplay = ({ NFTs }: Props) => {
         {NFTs.map((nft, index) => {
           const otterType = /([A-Z]+)([0-9]*)/.exec(nft.key)?.[1] || '';
           const nftType = nft.type === 'nft' ? '' : '_NOTE';
-          console.log(/([A-Z]+)([0-9]*)/.exec(nft.key));
           return (
             <Box
               className={`nft-image ${otterType}${nftType}`}

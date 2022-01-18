@@ -122,6 +122,7 @@ function BondPurchase({
         return;
       }
     }
+
     const bondTx = await dispatch(
       bondAsset({
         value: quantity,
@@ -157,6 +158,7 @@ function BondPurchase({
           bondKey,
           value: quantity,
           provider,
+          wallet: address,
           networkID: chainID,
           userBalance: rawBalance,
           nftAddress: selection?.address || zeroAddress,

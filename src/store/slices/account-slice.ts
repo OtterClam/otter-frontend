@@ -6,6 +6,7 @@ import { ClamTokenContract, MAIContract, PearlTokenContract, StakedClamContract 
 import { BondKey, getAddresses, getBond } from 'src/constants';
 import { contractForBond, contractForReserve, setAll } from 'src/helpers';
 import { listMyNFT } from '../actions/nft-action';
+import { bondAsset } from '../actions/bond-action';
 interface IState {
   [key: string]: any;
 }
@@ -138,6 +139,9 @@ export const calculateUserBondDetails = createAsyncThunk(
     const bondDetails = await bondContract.bondInfo(address);
     const interestDue =
       (bond.autostake ? await sCLAM.balanceForGons(bondDetails.gonsPayout) : bondDetails.payout) / 1e9;
+    if (bondKey === 'mai_clam' || bondKey === 'mai_clam44') {
+      console.log(bondKey, bondDetails, interestDue);
+    }
     const bondMaturationTime = +bondDetails.vesting + +bondDetails.lastTimestamp;
     const pendingPayout = await bondContract.pendingPayoutFor(address);
 
@@ -225,6 +229,10 @@ const accountSlice = createSlice({
       })
       .addCase(listMyNFT.pending, state => {
         state.loading = true;
+      })
+      .addCase(bondAsset.fulfilled, (state, { payload }) => {
+        if (!payload) return;
+        state[payload.bondKey].interestDue = payload.interestDue;
       });
   },
 });
