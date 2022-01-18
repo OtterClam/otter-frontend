@@ -221,6 +221,7 @@ query {
           setBond={setSelectedBond}
           setSelection={setNftSelection}
           setNftDialogOpen={setNftDialogOpen}
+          setSuccessDialogOpen={setSuccessDialogOpen}
         />
       )}
       {selectedBond && bondKey === 'mai_clam44' && (

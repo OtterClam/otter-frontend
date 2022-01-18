@@ -42,6 +42,7 @@ interface IBondProps {
   setBond: Dispatch<SetStateAction<BondType | undefined>>;
   setSelection: Dispatch<SetStateAction<NFTDiscountOption | undefined>>;
   setNftDialogOpen: Dispatch<SetStateAction<boolean>>;
+  setSuccessDialogOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 function BondDialog({
@@ -53,6 +54,7 @@ function BondDialog({
   setBond,
   setSelection,
   setNftDialogOpen,
+  setSuccessDialogOpen,
 }: IBondProps) {
   const { t } = useTranslation();
   const style = useStyle();
@@ -194,6 +196,7 @@ function BondDialog({
                 selection={selection}
                 setSelection={setSelection}
                 setNftDialogOpen={setNftDialogOpen}
+                setSuccessDialogOpen={setSuccessDialogOpen}
               />
             </TabPanel>
             <TabPanel value={currentTab} index={BondAction.Redeem}>

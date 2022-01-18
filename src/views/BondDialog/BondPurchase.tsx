@@ -58,6 +58,7 @@ interface IBondPurchaseProps {
   selectedBonding: Bonding;
   setSelection: Dispatch<SetStateAction<NFTDiscountOption | undefined>>;
   setNftDialogOpen: Dispatch<SetStateAction<boolean>>;
+  setSuccessDialogOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 function BondPurchase({
@@ -69,6 +70,7 @@ function BondPurchase({
   selection,
   setSelection,
   setNftDialogOpen,
+  setSuccessDialogOpen,
 }: IBondPurchaseProps) {
   const isTablet = useMediaQuery(tabletMediaQuery);
   const styles = useStyles();
@@ -137,6 +139,9 @@ function BondPurchase({
         })();
         const bondTx = await dispatch(bondAsset(bondAssetPayload));
         if (bondTx.payload) {
+          if (selection) {
+            return setSuccessDialogOpen(true);
+          }
           handleOpenDialog();
         }
       }
