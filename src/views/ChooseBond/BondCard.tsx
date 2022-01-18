@@ -20,15 +20,16 @@ import BondNFTDisplay from './BondNFTDisplay';
 
 interface IBondProps {
   bondKey: BondKey;
-  NFTs?: MyNFTInfo[];
   setRedeemedBond(value: Bond): void;
 }
 
-export function BondCard({ bondKey, NFTs, setRedeemedBond }: IBondProps) {
+export function BondCard({ bondKey, setRedeemedBond }: IBondProps) {
   const { chainID, provider } = useWeb3Context();
   const bond = getBond(bondKey, chainID);
 
-  const { bondPrice, bondDiscount, purchased, marketPrice } = useAppSelector(state => state.bonding[bondKey]);
+  const { bondPrice, bondDiscount, purchased, marketPrice, lockedNFTs } = useAppSelector(
+    state => state.bonding[bondKey],
+  );
   const isBondLoading = useAppSelector(state => !state.bonding[bondKey]?.bondPrice ?? true);
   const fiveDayRate = useAppSelector(state => state.app.fiveDayRate);
   const priceDiff = (Number(marketPrice) ?? 0) - (bondPrice ?? 0);
@@ -117,7 +118,7 @@ export function BondCard({ bondKey, NFTs, setRedeemedBond }: IBondProps) {
         <Grid item>{t('bonds.myBond')}</Grid>
         <Grid item className="bond-card-value">
           {myBalance ? `${trim(myBalance, 2)} ${bond.autostake ? 'sCLAM' : 'CLAM'}` : '-'}
-          {NFTs && NFTs.length && <BondNFTDisplay NFTs={NFTs} />}
+          {lockedNFTs && lockedNFTs.length && <BondNFTDisplay NFTs={lockedNFTs} />}
         </Grid>
       </Grid>
 

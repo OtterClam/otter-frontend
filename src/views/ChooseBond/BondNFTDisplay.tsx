@@ -1,9 +1,9 @@
 import { Box } from '@material-ui/core';
-import { MyBondedNFTInfo } from 'src/store/actions/nft-action';
+import { LockedNFT } from 'src/store/actions/nft-action';
 import './nft-display.scss';
 
 interface Props {
-  NFTs: MyBondedNFTInfo[];
+  NFTs: LockedNFT[];
 }
 const BondNFTDisplay = ({ NFTs }: Props) => {
   return (

@@ -3,6 +3,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { addDays } from 'date-fns';
 import { ethers } from 'ethers';
 import { ERC721, OtterLake, OtterPAWBondStakeDepository, PearlNote } from 'src/abi';
+import { contractForBond } from 'src/helpers';
 import { BondKey, BondKeys, getAddresses, getBond, listBonds } from '../../constants';
 import { NFT } from '../../views/BondDialog/BondNFTDiscountDialog/constants';
 
@@ -14,6 +15,11 @@ interface NFTActionProps {
 
 const bondContract = ({ provider, bondAddress }: Omit<NFTActionProps, 'wallet'>) => {
   return new ethers.Contract(bondAddress, OtterPAWBondStakeDepository, provider);
+};
+
+const pawAddresses = (networkID: number) => {
+  const addresses = getAddresses(networkID);
+  return [addresses.NFTS.FURRY_HAND, addresses.NFTS.STONE_HAND, addresses.NFTS.DIAMOND_HAND];
 };
 
 const allNFTContracts = async ({ provider, bondAddress }: Omit<NFTActionProps, 'wallet'>) => {
@@ -69,13 +75,13 @@ export const listBondNFTDiscounts = createAsyncThunk(
 
 interface BatchListBondNFTDiscountPayload {
   provider: JsonRpcProvider;
-  networkId: number;
+  networkID: number;
 }
 
 export const batchListBondNFTDiscounts = createAsyncThunk(
   'nft/discount/batch',
-  async ({ networkId, provider }: BatchListBondNFTDiscountPayload, { dispatch }) => {
-    const bonds = listBonds(networkId);
+  async ({ networkID, provider }: BatchListBondNFTDiscountPayload, { dispatch }) => {
+    const bonds = listBonds(networkID);
     await Promise.all(
       BondKeys.filter(k => k === 'mai_clam44').map(bondKey => {
         dispatch(listBondNFTDiscounts({ bondKey, provider, bondAddress: bonds[bondKey].address }));
@@ -93,7 +99,7 @@ type Token = {
 interface ListMyNFTPayload {
   provider: JsonRpcProvider;
   wallet: string;
-  networkId: number;
+  networkID: number;
 }
 
 export type NFTType = 'note' | 'nft';
@@ -109,12 +115,11 @@ export type MyBondedNFTInfo = Pick<MyNFTInfo, 'type' | 'key'>;
 
 export const listMyNFT = createAsyncThunk(
   'account/nft/list',
-  async ({ provider, wallet, networkId }: ListMyNFTPayload): Promise<MyNFTInfo[]> => {
-    const addresses = getAddresses(networkId);
+  async ({ provider, wallet, networkID }: ListMyNFTPayload): Promise<MyNFTInfo[]> => {
+    const addresses = getAddresses(networkID);
     let ownedNFTs: MyNFTInfo[] = [];
-
+    const nftAddresses = pawAddresses(networkID);
     // get owned nft infos
-    const nftAddresses = [addresses.NFTS.FURRY_HAND, addresses.NFTS.STONE_HAND, addresses.NFTS.DIAMOND_HAND];
     const nftContracts = nftAddresses.map(address => new ethers.Contract(address, ERC721, provider.getSigner()));
     await Promise.all(
       nftContracts.map(async contract => {
@@ -179,22 +184,50 @@ export const listMyNFT = createAsyncThunk(
   },
 );
 
-export const listBondedNFT = async ({ provider, bondAddress, wallet }: NFTActionProps) => {
-  const bond = bondContract({ provider, bondAddress });
-  const info = await bond.bondInfo(wallet);
-  return await Promise.all(
-    Array(info.discountsCount)
-      .fill(0)
-      .map(async (_, i) => {
-        const discount = await bond.discountsUsed(wallet, i);
-        return {
-          discount: discount.discount.toNumber(),
-          nftAddress: discount.nft,
-          tokenID: discount.tokenID.toNumber(),
-        };
-      }),
-  );
-};
+interface ListLockedNFTPayload {
+  provider: JsonRpcProvider;
+  wallet?: string;
+  networkID: number;
+  bondKey: BondKey;
+}
+
+export type LockedNFT = Omit<MyNFTInfo, 'balance'>;
+interface ListLockedNFTDetail {
+  lockedNFTs: LockedNFT[];
+  bondKey: BondKey;
+}
+
+export const listLockededNFT = createAsyncThunk(
+  'bond/nft/locked/list',
+  async ({ provider, networkID, wallet, bondKey }: ListLockedNFTPayload): Promise<ListLockedNFTDetail> => {
+    if (!wallet || bondKey != 'mai_clam44') return { bondKey, lockedNFTs: [] };
+    const addresses = getAddresses(networkID);
+    const bond = contractForBond(bondKey, networkID, provider);
+    const nftAddresses = pawAddresses(networkID);
+    const info = await bond.bondInfo(wallet);
+    const count = info.discountsCount.toNumber();
+    const nfts = await Promise.all(
+      Array(count)
+        .fill(0)
+        .map(async (_, i) => {
+          const discount = await bond.discountsUsed(wallet, i);
+          const nftContract = new ethers.Contract(discount.nft, ERC721, provider);
+          const [name, symbol] = await Promise.all([nftContract.name(), nftContract.symbol()]);
+          return {
+            id: discount.tokenID.toNumber() as number,
+            address: discount.nft as string,
+            type: nftAddresses.includes(discount.nft) ? 'nft' : ('note' as NFTType),
+            key: symbol as NFT,
+            name: name as string,
+          };
+        }),
+    );
+    return {
+      lockedNFTs: nfts,
+      bondKey,
+    };
+  },
+);
 
 interface ApproveNFTPayload {
   address: string;

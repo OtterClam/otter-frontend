@@ -23,7 +23,7 @@ import {
   getTransformedMarketPrice,
   getTransformedMaxPayout,
 } from '../utils';
-import { listMyNFT } from './nft-action';
+import { listMyNFT, listLockededNFT } from './nft-action';
 
 interface IChangeApproval {
   bondKey: BondKey;
@@ -105,6 +105,7 @@ const DEPRECATED_BOND_STATIC_VALUES = {
   marketPrice: '0.0',
   maxUserCanBuy: '0.0',
   nftApproved: true,
+  lockedNFTs: [],
 };
 
 export const calcBondDetails = createAsyncThunk(
@@ -217,13 +218,21 @@ export const calcBondDetails = createAsyncThunk(
   },
 );
 
-type BatchGetBondDetailsPayload = Omit<CalcBondDetailsPayload, 'bondKey'>;
+type BatchGetBondDetailsPayload = Omit<CalcBondDetailsPayload, 'bondKey'> & { address?: string };
 export const batchGetBondDetails = createAsyncThunk(
   'bonding/batchGetBondDetails',
   async (payload: BatchGetBondDetailsPayload, { dispatch }) => {
     await Promise.all(
       BondKeys.map(async bondKey => {
         await dispatch(calcBondDetails({ bondKey, ...payload }));
+        await dispatch(
+          listLockededNFT({
+            bondKey,
+            wallet: payload.address,
+            networkID: payload.networkID,
+            provider: payload.provider,
+          }),
+        );
       }),
     );
   },
@@ -259,7 +268,7 @@ export const bondAsset = createAsyncThunk(
     try {
       bondTx = await bondContract.deposit(...[valueInWei, maxPremium, depositorAddress, ...discountArgs]);
       dispatch(fetchPendingTxns({ txnHash: bondTx.hash, text: 'Bonding ' + bond.name, type: 'bond_' + bondKey }));
-      dispatch(listMyNFT({ wallet: address, networkId: networkID, provider }));
+      dispatch(listMyNFT({ wallet: address, networkID: networkID, provider }));
       await bondTx.wait();
       return;
     } catch (error: any) {
@@ -304,7 +313,7 @@ export const redeemBond = createAsyncThunk(
       dispatch(fetchPendingTxns({ txnHash: redeemTx.hash, text: 'Redeeming ' + bond.name, type: pendingTxnType }));
       await redeemTx.wait();
       await dispatch(calculateUserBondDetails({ address, bondKey, networkID, provider }));
-      await dispatch(listMyNFT({ wallet: address, networkId: networkID, provider }));
+      await dispatch(listMyNFT({ wallet: address, networkID: networkID, provider }));
       dispatch(getBalances({ address, networkID, provider }));
       return;
     } catch (error: any) {

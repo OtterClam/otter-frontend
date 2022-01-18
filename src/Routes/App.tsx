@@ -115,6 +115,7 @@ function App() {
       dispatch(loadAppDetails({ networkID: chainID, provider: loadProvider }));
       dispatch(
         batchGetBondDetails({
+          address,
           value: null,
           provider: loadProvider,
           networkID: chainID,
@@ -123,8 +124,8 @@ function App() {
           tokenId: 0,
         }),
       );
-      dispatch(batchListBondNFTDiscounts({ provider, networkId: chainID }));
-      dispatch(listMyNFT({ provider, wallet: walletAddress, networkId: chainID }));
+      dispatch(batchListBondNFTDiscounts({ provider, networkID: chainID }));
+      dispatch(listMyNFT({ provider, wallet: walletAddress, networkID: chainID }));
     },
     [connected],
   );

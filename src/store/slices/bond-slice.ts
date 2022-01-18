@@ -1,6 +1,6 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
 import { calcBondDetails, batchGetBondDetails, bondAsset } from '../actions/bond-action';
-import { approveNFT } from '../actions/nft-action';
+import { approveNFT, listLockededNFT, LockedNFT } from '../actions/nft-action';
 import { BondKey } from '../../constants';
 
 export interface BondDetails {
@@ -15,6 +15,7 @@ export interface BondDetails {
   marketPrice: string;
   maxUserCanBuy: string;
   nftApproved: boolean;
+  lockedNFTs?: LockedNFT[];
 }
 
 export type IBond = {
@@ -58,6 +59,12 @@ const bondingSlice = createSlice({
         state[action.payload].nftApproved = true;
       })
       .addCase(approveNFT.rejected, (_state, { error, ...payload }) => {
+        console.log(payload, error);
+      })
+      .addCase(listLockededNFT.fulfilled, (state, action) => {
+        state[action.payload.bondKey].lockedNFTs = action.payload.lockedNFTs;
+      })
+      .addCase(listLockededNFT.rejected, (_state, { error, ...payload }) => {
         console.log(payload, error);
       });
   },

@@ -27,17 +27,18 @@ const useStyles = makeStyles(theme => ({
 }));
 interface IBondProps {
   bondKey: BondKey;
-  NFTs?: MyBondedNFTInfo[];
   setRedeemedBond(value: Bond): void;
 }
 
-function BondRow({ bondKey, NFTs, setRedeemedBond }: IBondProps) {
+function BondRow({ bondKey, setRedeemedBond }: IBondProps) {
   const { chainID, address, provider } = useWeb3Context();
   const dispatch = useAppDispatch();
   // Use BondPrice as indicator of loading.
   const isBondLoading = useAppSelector(state => !state.bonding[bondKey]?.bondPrice ?? true);
   const bond = getBond(bondKey, chainID);
   const bonding = useAppSelector(state => state.bonding[bondKey]);
+
+  const lockedNFTs = useAppSelector(state => state.bonding[bondKey].lockedNFTs);
 
   const bondPrice = useAppSelector(state => {
     return state.bonding[bondKey] && state.bonding[bondKey].bondPrice;
@@ -50,10 +51,7 @@ function BondRow({ bondKey, NFTs, setRedeemedBond }: IBondProps) {
   });
   const fiveDayRate = useAppSelector(state => state.app.fiveDayRate);
   const marketPrice = useAppSelector(state => state.bonding[bondKey]?.marketPrice);
-  const myBalance = useAppSelector(state => {
-    //@ts-ignore
-    return state.account[bondKey] && state.account[bondKey].interestDue;
-  });
+  const myBalance = useAppSelector(state => state.account[bondKey]?.interestDue);
   const priceDiff = (Number(marketPrice) ?? 0) - (bondPrice ?? 0);
   const { t, i18n } = useTranslation();
   const currentBlockTime = useAppSelector(state => state.app.currentBlockTime);
@@ -140,7 +138,7 @@ function BondRow({ bondKey, NFTs, setRedeemedBond }: IBondProps) {
       </Grid>
       <Grid item xs={2} className="bond-row-value">
         {myBalance ? `${trim(myBalance, 2)} ${bond.autostake ? 'sCLAM' : 'CLAM'}` : '-'}
-        {NFTs && NFTs.length && <BondNFTDisplay NFTs={NFTs} />}
+        {lockedNFTs && lockedNFTs.length ? <BondNFTDisplay NFTs={lockedNFTs} /> : ''}
       </Grid>
       <Grid item xs={2} className="bond-row-value">
         {fullyVested ? (
