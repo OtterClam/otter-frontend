@@ -14,7 +14,7 @@ import { useWeb3Context } from '../../hooks';
 import { NFTDiscountOption } from '../BondDialog/types';
 import { BondKey, getBond, Bond } from 'src/constants';
 import { priceUnits, trim, prettyShortVestingPeriod, localeString } from '../../helpers';
-import { MyBondedNFTInfo } from 'src/store/actions/nft-action';
+import { listLockededNFT } from 'src/store/actions/nft-action';
 import { redeemBond, batchGetBondDetails } from 'src/store/actions/bond-action';
 import { zeroAddress } from 'src/constants';
 
@@ -82,20 +82,19 @@ function BondRow({ bondKey, setRedeemedBond, setSelection }: IBondProps) {
 
   const handleMaiClamRedeem = async (e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
-    dispatch(redeemBond({ address, bondKey, networkID: chainID, provider, autostake: true }));
-    dispatch(
-      batchGetBondDetails({
-        address,
-        value: null,
-        provider,
-        networkID: chainID,
-        userBalance: '0',
-        nftAddress: zeroAddress,
-        tokenId: 0,
-      }),
-    );
-    setRedeemedBond(bond);
-    setSelection(undefined);
+    const redeemed = await dispatch(redeemBond({ address, bondKey, networkID: chainID, provider, autostake: true }));
+    if (redeemed.payload) {
+      dispatch(
+        listLockededNFT({
+          bondKey,
+          wallet: address,
+          networkID: chainID,
+          provider: provider,
+        }),
+      );
+      setRedeemedBond(bond);
+      setSelection(undefined);
+    }
   };
 
   return (

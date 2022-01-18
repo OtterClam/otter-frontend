@@ -1,23 +1,18 @@
 import { Box, Grid, Link, Paper, Tooltip } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
-import { LabelChip, Status, StatusChip } from 'src/components/Chip';
+import { Dispatch, SetStateAction, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { NavLink } from 'react-router-dom';
 import BondLogo from 'src/components/BondLogo';
 import CustomButton from 'src/components/Button/CustomButton';
-import './choose-bond.scss';
-
-import { useMemo, Dispatch, SetStateAction } from 'react';
-import { NavLink } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from 'src/store/hook';
-import { useTranslation } from 'react-i18next';
-import { useWeb3Context } from '../../hooks';
-
+import { LabelChip, Status, StatusChip } from 'src/components/Chip';
 import { Bond, BondKey, getBond } from 'src/constants';
+import { useAppSelector } from 'src/store/hook';
+import { prettyShortVestingPeriod, priceUnits, trim } from '../../helpers';
+import { useWeb3Context } from '../../hooks';
 import { NFTDiscountOption } from '../BondDialog/types';
-import { priceUnits, trim, prettyShortVestingPeriod } from '../../helpers';
-import { MyNFTInfo } from '../../store/actions/nft-action';
-import { redeemBond } from '../../store/actions/bond-action';
-
 import BondNFTDisplay from './BondNFTDisplay';
+import './choose-bond.scss';
 
 interface IBondProps {
   bondKey: BondKey;

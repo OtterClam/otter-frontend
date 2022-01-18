@@ -239,14 +239,6 @@ export const batchGetBondDetails = createAsyncThunk(
     await Promise.all(
       BondKeys.map(async bondKey => {
         await dispatch(calcBondDetails({ bondKey, ...payload }));
-        await dispatch(
-          listLockededNFT({
-            bondKey,
-            wallet: payload.address,
-            networkID: payload.networkID,
-            provider: payload.provider,
-          }),
-        );
       }),
     );
   },
