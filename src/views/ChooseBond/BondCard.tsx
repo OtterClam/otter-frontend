@@ -5,13 +5,14 @@ import BondLogo from 'src/components/BondLogo';
 import CustomButton from 'src/components/Button/CustomButton';
 import './choose-bond.scss';
 
-import { useMemo } from 'react';
+import { useMemo, Dispatch, SetStateAction } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from 'src/store/hook';
 import { useTranslation } from 'react-i18next';
 import { useWeb3Context } from '../../hooks';
 
 import { Bond, BondKey, getBond } from 'src/constants';
+import { NFTDiscountOption } from '../BondDialog/types';
 import { priceUnits, trim, prettyShortVestingPeriod } from '../../helpers';
 import { MyNFTInfo } from '../../store/actions/nft-action';
 import { redeemBond } from '../../store/actions/bond-action';
@@ -21,6 +22,7 @@ import BondNFTDisplay from './BondNFTDisplay';
 interface IBondProps {
   bondKey: BondKey;
   setRedeemedBond(value: Bond): void;
+  setSelection: Dispatch<SetStateAction<NFTDiscountOption | undefined>>;
 }
 
 export function BondCard({ bondKey, setRedeemedBond }: IBondProps) {

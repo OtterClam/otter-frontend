@@ -5,12 +5,13 @@ import BondLogo from 'src/components/BondLogo';
 import CustomButton from 'src/components/Button/CustomButton';
 import './choose-bond.scss';
 
-import { useMemo, MouseEvent } from 'react';
+import { useMemo, MouseEvent, Dispatch, SetStateAction } from 'react';
 import { NavLink, useHistory } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from 'src/store/hook';
 import { useTranslation } from 'react-i18next';
 import { useWeb3Context } from '../../hooks';
 
+import { NFTDiscountOption } from '../BondDialog/types';
 import { BondKey, getBond, Bond } from 'src/constants';
 import { priceUnits, trim, prettyShortVestingPeriod, localeString } from '../../helpers';
 import { MyBondedNFTInfo } from 'src/store/actions/nft-action';
@@ -28,9 +29,10 @@ const useStyles = makeStyles(theme => ({
 interface IBondProps {
   bondKey: BondKey;
   setRedeemedBond(value: Bond): void;
+  setSelection: Dispatch<SetStateAction<NFTDiscountOption | undefined>>;
 }
 
-function BondRow({ bondKey, setRedeemedBond }: IBondProps) {
+function BondRow({ bondKey, setRedeemedBond, setSelection }: IBondProps) {
   const { chainID, address, provider } = useWeb3Context();
   const dispatch = useAppDispatch();
   // Use BondPrice as indicator of loading.
@@ -79,8 +81,9 @@ function BondRow({ bondKey, setRedeemedBond }: IBondProps) {
 
   const handleMaiClamRedeem = async (e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
-    await dispatch(redeemBond({ address, bondKey, networkID: chainID, provider, autostake: true }));
+    dispatch(redeemBond({ address, bondKey, networkID: chainID, provider, autostake: true }));
     setRedeemedBond(bond);
+    setSelection(undefined);
   };
 
   return (

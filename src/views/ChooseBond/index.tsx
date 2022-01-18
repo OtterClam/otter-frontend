@@ -193,7 +193,12 @@ query {
             <Grid container className="bond-card-container">
               {bonds.map(bond => (
                 <Grid item xs={12} key={bond.key}>
-                  <BondCard key={bond.key} bondKey={bond.key} setRedeemedBond={setRedeemedBond} />
+                  <BondCard
+                    key={bond.key}
+                    bondKey={bond.key}
+                    setRedeemedBond={setRedeemedBond}
+                    setSelection={setNftSelection}
+                  />
                 </Grid>
               ))}
             </Grid>
@@ -204,7 +209,7 @@ query {
               <BondRowHeader />
               {bonds.map(bond => (
                 <Box key={bond.key} onClick={() => setSelectedBond(bond)}>
-                  <BondRow bondKey={bond.key} setRedeemedBond={setRedeemedBond} />
+                  <BondRow bondKey={bond.key} setRedeemedBond={setRedeemedBond} setSelection={setNftSelection} />
                 </Box>
               ))}
             </Grid>

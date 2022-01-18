@@ -23,7 +23,8 @@ const BondNTFDiscountDialog = ({ bond, selection, setSelection, onClose, ...prop
       const discountsUsed = bondNFTDiscounts.find((discount: BondNFTDiscount) => discount.key === NFT.key);
       return { ...discountsUsed, id: NFT.id };
     });
-  }, []);
+  }, [myNFTs]);
+  console.log(options);
   const onSelect = (option: NFTDiscountOption) => {
     setSelection(option);
     onClose();
