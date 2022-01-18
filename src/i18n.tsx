@@ -2,6 +2,7 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import English from './locales/english';
+import Chinese from './locales/chinese';
 import Norwegian from './locales/norwegian';
 import BahasaIndonesia from './locales/indonesian';
 import Tagalog from './locales/tagalog';
@@ -28,6 +29,7 @@ i18n
     },
     resources: {
       en: English,
+      zh: Chinese,
       de: German,
       fr: French,
       it: Italian,
