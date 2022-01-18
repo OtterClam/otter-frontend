@@ -1,4 +1,4 @@
-const English = {
+const Chinese = {
   translation: {
     common: {
       //Only change the text on the right in quote marks!
@@ -271,4 +271,4 @@ const English = {
     },
   },
 };
-export default English;
+export default Chinese;
