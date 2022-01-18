@@ -78,6 +78,7 @@ export interface Bonding {
   bondPrice: number;
   marketPrice: string;
   maxUserCanBuy: string;
+  nftApproved: boolean;
 }
 
 export function listBonds(chainId: number): BondMap {

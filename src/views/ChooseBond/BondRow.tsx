@@ -7,13 +7,14 @@ import './choose-bond.scss';
 
 import { useMemo, MouseEvent } from 'react';
 import { NavLink, useHistory } from 'react-router-dom';
-import { useAppSelector } from 'src/store/hook';
+import { useAppDispatch, useAppSelector } from 'src/store/hook';
 import { useTranslation } from 'react-i18next';
 import { useWeb3Context } from '../../hooks';
 
 import { BondKey, getBond, Bond } from 'src/constants';
 import { priceUnits, trim, prettyShortVestingPeriod, localeString } from '../../helpers';
-import { MyNFTInfo } from 'src/store/actions/nft-action';
+import { MyBondedNFTInfo } from 'src/store/actions/nft-action';
+import { redeemBond } from 'src/store/actions/bond-action';
 
 import BondNFTDisplay from './BondNFTDisplay';
 
@@ -26,12 +27,13 @@ const useStyles = makeStyles(theme => ({
 }));
 interface IBondProps {
   bondKey: BondKey;
-  NFTs?: MyNFTInfo[];
+  NFTs?: MyBondedNFTInfo[];
   setRedeemedBond(value: Bond): void;
 }
 
 function BondRow({ bondKey, NFTs, setRedeemedBond }: IBondProps) {
-  const { chainID } = useWeb3Context();
+  const { chainID, address, provider } = useWeb3Context();
+  const dispatch = useAppDispatch();
   // Use BondPrice as indicator of loading.
   const isBondLoading = useAppSelector(state => !state.bonding[bondKey]?.bondPrice ?? true);
   const bond = getBond(bondKey, chainID);
@@ -77,8 +79,9 @@ function BondRow({ bondKey, NFTs, setRedeemedBond }: IBondProps) {
     history.push(`/bonds/${bondKey}?action=${redeemable}`);
   };
 
-  const handleMaiClamRedeem = (e: MouseEvent<HTMLElement>) => {
+  const handleMaiClamRedeem = async (e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
+    await dispatch(redeemBond({ address, bondKey, networkID: chainID, provider, autostake: true }));
     setRedeemedBond(bond);
   };
 

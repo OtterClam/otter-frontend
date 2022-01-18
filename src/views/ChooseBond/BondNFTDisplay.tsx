@@ -1,11 +1,9 @@
 import { Box } from '@material-ui/core';
-import { isNumber } from 'lodash';
-import { MyNFTInfo } from 'src/store/actions/nft-action';
-
+import { MyBondedNFTInfo } from 'src/store/actions/nft-action';
 import './nft-display.scss';
 
 interface Props {
-  NFTs: MyNFTInfo[];
+  NFTs: MyBondedNFTInfo[];
 }
 const BondNFTDisplay = ({ NFTs }: Props) => {
   return (

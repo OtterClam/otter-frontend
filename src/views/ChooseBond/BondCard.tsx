@@ -7,13 +7,14 @@ import './choose-bond.scss';
 
 import { useMemo } from 'react';
 import { NavLink } from 'react-router-dom';
-import { useAppSelector } from 'src/store/hook';
+import { useAppDispatch, useAppSelector } from 'src/store/hook';
 import { useTranslation } from 'react-i18next';
 import { useWeb3Context } from '../../hooks';
 
 import { Bond, BondKey, getBond } from 'src/constants';
 import { priceUnits, trim, prettyShortVestingPeriod } from '../../helpers';
 import { MyNFTInfo } from '../../store/actions/nft-action';
+import { redeemBond } from '../../store/actions/bond-action';
 
 import BondNFTDisplay from './BondNFTDisplay';
 

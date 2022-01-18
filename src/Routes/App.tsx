@@ -17,7 +17,7 @@ import Loading from '../components/Loader';
 import Sidebar from '../components/Sidebar';
 import NavDrawer from '../components/Sidebar/NavDrawer';
 
-import { BondKeys } from '../constants';
+import { BondKeys, zeroAddress } from '../constants';
 import { batchGetBondDetails } from '../store/actions/bond-action';
 import { listMyNFT, batchListBondNFTDiscounts } from 'src/store/actions/nft-action';
 import { calculateUserBondDetails, loadAccountDetails } from '../store/slices/account-slice';
@@ -113,7 +113,16 @@ function App() {
   const loadApp = useCallback(
     loadProvider => {
       dispatch(loadAppDetails({ networkID: chainID, provider: loadProvider }));
-      dispatch(batchGetBondDetails({ value: null, provider: loadProvider, networkID: chainID, userBalance: '0' }));
+      dispatch(
+        batchGetBondDetails({
+          value: null,
+          provider: loadProvider,
+          networkID: chainID,
+          userBalance: '0',
+          nftAddress: zeroAddress,
+          tokenId: 0,
+        }),
+      );
       dispatch(batchListBondNFTDiscounts({ provider, networkId: chainID }));
       dispatch(listMyNFT({ provider, wallet: walletAddress, networkId: chainID }));
     },

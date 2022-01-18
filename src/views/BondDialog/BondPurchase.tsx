@@ -22,11 +22,11 @@ import BondNFTDiscount from './BondNFTDiscount';
 
 import { ethers } from 'ethers';
 
-import { changeApproval, bondAsset, calcBondDetails } from '../../store/actions/bond-action';
+import { changeApproval, bondAsset, calcBondDetails, approveNFT } from '../../store/actions/bond-action';
 import { IPendingTxn } from '../../store/slices/pending-txns-slice';
 import { IReduxState } from '../../store/slices/state.interface';
 
-import { Bonding, BondKey, AccountBond, getBond, getPAWAddress } from 'src/constants';
+import { Bonding, BondKey, AccountBond, getBond, getPAWAddress, zeroAddress } from 'src/constants';
 import { shorten, trim, prettifySeconds } from '../../helpers';
 import { tabletMediaQuery } from 'src/themes/mediaQuery';
 import { NFTDiscountOption } from './types';
@@ -95,7 +95,7 @@ function BondPurchase({
   });
 
   const { interestDue, pendingPayout, balance, rawBalance, allowance } = selectedAccountBond;
-  const { debtRatio, bondQuote, vestingTerm, maxPayout, maxUserCanBuy, bondDiscount } = selectedBonding;
+  const { debtRatio, bondQuote, vestingTerm, maxPayout, maxUserCanBuy, bondDiscount, nftApproved } = selectedBonding;
   const { t } = useTranslation();
   const vestingPeriod = () => {
     return prettifySeconds(t, vestingTerm, 'day');
@@ -125,29 +125,25 @@ function BondPurchase({
         return;
       }
     }
-    const bondAssetPayload = (() => {
-      const basePayload = {
+    const bondTx = await dispatch(
+      bondAsset({
         value: quantity,
         slippage,
         bondKey,
         networkID: chainID,
         provider,
-      };
-      if (selection) {
-        const nftAddress = getPAWAddress(selection?.key, chainID);
-        const tokenId = selection.id;
-        return { ...basePayload, address, nftAddress, tokenId };
-      }
-      return { ...basePayload, address: recipientAddress || address };
-    })();
-    const bondTx = await dispatch(bondAsset(bondAssetPayload));
+        address,
+        nftAddress: selection?.address || zeroAddress,
+        tokenId: selection?.id || 0,
+      }),
+    );
     if (bondTx.payload) {
       if (selection) {
         return setSuccessDialogOpen(true);
       }
       handleOpenDialog();
     }
-  }, [quantity, interestDue, pendingPayout, chainID, recipientAddress, address]);
+  }, [quantity, interestDue, pendingPayout, chainID, recipientAddress, address, selection]);
 
   const hasAllowance = useCallback(() => {
     return allowance > 0;
@@ -158,19 +154,40 @@ function BondPurchase({
   const fiveDayRate = useSelector<IReduxState, number>(state => state.app.fiveDayRate);
 
   async function loadBondDetails() {
-    if (provider)
+    if (provider) {
       await dispatch(
-        calcBondDetails({ bondKey, value: quantity, provider, networkID: chainID, userBalance: rawBalance }),
+        calcBondDetails({
+          bondKey,
+          value: quantity,
+          provider,
+          networkID: chainID,
+          userBalance: rawBalance,
+          nftAddress: selection?.address || zeroAddress,
+          tokenId: selection?.id || 0,
+        }),
       );
+    }
   }
 
   useEffect(() => {
     loadBondDetails();
     if (address) setRecipientAddress(address);
-  }, [provider, quantity, address, rawBalance]);
+  }, [provider, quantity, address, rawBalance, selection]);
 
-  const onSeekApproval = async () => {
+  const onClickApprove = async () => {
     await dispatch(changeApproval({ bondKey, provider, networkID: chainID, address }));
+  };
+  const onClickApproveNFT = async () => {
+    await dispatch(
+      approveNFT({
+        bondKey,
+        provider,
+        networkID: chainID,
+        address,
+        nftAddress: selection?.address as string,
+        tokenId: selection?.id as number,
+      }),
+    );
   };
 
   const bondUnit = bond.autostake ? 'sCLAM' : 'CLAM';
@@ -200,21 +217,29 @@ function BondPurchase({
           </FormControl>
         </Grid>
         <Grid item xs={12} md={3}>
-          {hasAllowance() ? (
+          {!hasAllowance() ? (
+            <ActionButton
+              pendingTransactions={pendingTransactions}
+              type={'approve_' + bond.key}
+              start="Approve"
+              progress="Approving..."
+              processTx={() => onClickApprove()}
+            ></ActionButton>
+          ) : selection && !nftApproved ? (
+            <ActionButton
+              pendingTransactions={pendingTransactions}
+              type={'approve_nft' + bond.key}
+              start="Approve NFT"
+              progress="Approving..."
+              processTx={() => onClickApproveNFT()}
+            ></ActionButton>
+          ) : (
             <ActionButton
               pendingTransactions={pendingTransactions}
               type={'bond_' + bond.key}
               start="Bond"
               progress="Bonding..."
               processTx={() => onBond()}
-            ></ActionButton>
-          ) : (
-            <ActionButton
-              pendingTransactions={pendingTransactions}
-              type={'approve_' + bond.key}
-              start="Approve"
-              progress="Approving..."
-              processTx={() => onSeekApproval()}
             ></ActionButton>
           )}
         </Grid>

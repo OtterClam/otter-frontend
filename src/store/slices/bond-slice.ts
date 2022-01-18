@@ -1,5 +1,5 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
-import { calcBondDetails, batchGetBondDetails } from '../actions/bond-action';
+import { calcBondDetails, batchGetBondDetails, approveNFT, bondAsset } from '../actions/bond-action';
 import { BondKey } from '../../constants';
 
 export interface BondDetails {
@@ -13,6 +13,7 @@ export interface BondDetails {
   bondPrice: number;
   marketPrice: string;
   maxUserCanBuy: string;
+  nftApproved: boolean;
 }
 
 export type IBond = {
@@ -50,6 +51,12 @@ const bondingSlice = createSlice({
       })
       .addCase(batchGetBondDetails.rejected, (state, { error, ...payload }) => {
         state.loading = false;
+        console.log(payload, error);
+      })
+      .addCase(approveNFT.fulfilled, (state, action) => {
+        state[action.payload].nftApproved = true;
+      })
+      .addCase(approveNFT.rejected, (_state, { error, ...payload }) => {
         console.log(payload, error);
       });
   },

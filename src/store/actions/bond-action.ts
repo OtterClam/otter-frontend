@@ -8,7 +8,7 @@ import { BondDetails } from '../slices/bond-slice';
 
 import { ethers, constants, BigNumber } from 'ethers';
 import { JsonRpcProvider } from '@ethersproject/providers';
-import { BondingCalcContract, AggregatorV3InterfaceABI } from '../../abi';
+import { BondingCalcContract, AggregatorV3InterfaceABI, ERC721 } from '../../abi';
 
 import { getMarketPrice, contractForBond, contractForReserve, getTokenPrice } from '../../helpers';
 import { BondKey, BondKeys, getAddresses, getBond, zeroAddress } from '../../constants';
@@ -23,6 +23,7 @@ import {
   getTransformedMarketPrice,
   getTransformedMaxPayout,
 } from '../utils';
+import { listMyNFT } from './nft-action';
 
 interface IChangeApproval {
   bondKey: BondKey;
@@ -89,6 +90,8 @@ interface CalcBondDetailsPayload {
   provider: JsonRpcProvider;
   networkID: number;
   userBalance: string;
+  nftAddress: string;
+  tokenId: number;
 }
 
 const DEPRECATED_BOND_STATIC_VALUES = {
@@ -101,11 +104,20 @@ const DEPRECATED_BOND_STATIC_VALUES = {
   bondPrice: 1,
   marketPrice: '0.0',
   maxUserCanBuy: '0.0',
+  nftApproved: true,
 };
 
 export const calcBondDetails = createAsyncThunk(
   'bonding/calcBondDetails',
-  async ({ bondKey, value, provider, networkID, userBalance }: CalcBondDetailsPayload): Promise<BondDetails> => {
+  async ({
+    bondKey,
+    value,
+    provider,
+    networkID,
+    userBalance,
+    nftAddress,
+    tokenId,
+  }: CalcBondDetailsPayload): Promise<BondDetails> => {
     const amountInWei = !value
       ? ethers.utils.parseEther('0.0001') // Use a realistic SLP ownership
       : ethers.utils.parseEther(value);
@@ -113,6 +125,11 @@ export const calcBondDetails = createAsyncThunk(
     const bond = getBond(bondKey, networkID);
     const bondContract = contractForBond(bondKey, networkID, provider);
     const addresses = getAddresses(networkID);
+    const nftContract = new ethers.Contract(nftAddress, ERC721, provider);
+    let nftApproved = false;
+    if (nftAddress != zeroAddress && (await nftContract.getApproved(tokenId)) == bond.address) {
+      nftApproved = true;
+    }
 
     if (bond.deprecated) {
       return {
@@ -121,11 +138,9 @@ export const calcBondDetails = createAsyncThunk(
       };
     }
 
+    const discountArgs = bondKey === 'mai_clam44' ? [nftAddress, tokenId] : [];
     // Calculate bond discount
-    const bondPriceInUSD =
-      bondKey === 'mai_clam44'
-        ? await bondContract.bondPriceInUSD(zeroAddress, 0)
-        : await bondContract.bondPriceInUSD();
+    const bondPriceInUSD = await bondContract.bondPriceInUSD(...discountArgs);
 
     const maiPrice = await getTokenPrice('MAI');
     const originalMarketPrice = ((await getMarketPrice(networkID, provider)) as BigNumber).mul(maiPrice);
@@ -137,17 +152,13 @@ export const calcBondDetails = createAsyncThunk(
       bond.type === 'lp'
         ? await (async () => {
             const valuation = await bondCalcContract.valuation(bond.reserve, amountInWei);
-            const payoutForPayload = bondKey === 'mai_clam44' ? [valuation, zeroAddress, 0] : [valuation];
-            return await bondContract.payoutFor(...payoutForPayload);
+            return await bondContract.payoutFor(...[valuation, ...discountArgs]);
           })()
         : await bondContract.payoutFor(amountInWei);
     const bondQuote = getBondQuote({ bondType: bond.type, payoutForValuation });
 
     // Calculate max bond that user can buy
-    const maxQuoteOfUser =
-      bondKey === 'mai_clam44'
-        ? ((await bondContract.payoutFor(userBalance, zeroAddress, 0)).div(1e9) as BigNumber)
-        : ((await bondContract.payoutFor(userBalance)).div(1e9) as BigNumber);
+    const maxQuoteOfUser = (await bondContract.payoutFor(...[userBalance, ...discountArgs])).div(1e9) as BigNumber;
     const originalMaxPayout = await bondContract.maxPayout();
     const isOverMaxPayout = maxQuoteOfUser.gte(originalMaxPayout);
     const maxUserCanBuy = getMaxUserCanBuy({ isOverMaxPayout, originalMaxPayout, bondPriceInUSD, userBalance });
@@ -201,6 +212,7 @@ export const calcBondDetails = createAsyncThunk(
       bondPrice,
       marketPrice,
       maxUserCanBuy,
+      nftApproved,
     };
   },
 );
@@ -224,8 +236,8 @@ interface IBondAsset {
   networkID: number;
   provider: JsonRpcProvider;
   slippage: number;
-  tokenId?: number;
-  nftAddress?: string;
+  tokenId: number;
+  nftAddress: string;
 }
 
 export const bondAsset = createAsyncThunk(
@@ -238,22 +250,17 @@ export const bondAsset = createAsyncThunk(
     const signer = provider.getSigner();
     const bondContract = contractForBond(bondKey, networkID, signer);
 
-    const tokenMeta = bondKey === 'mai_clam44' ? [zeroAddress, 0] : [nftAddress, tokenId];
-    const calculatePremium =
-      bondKey === 'mai_clam44' ? await bondContract.bondPrice(...tokenMeta) : await bondContract.bondPrice();
+    const discountArgs = bondKey === 'mai_clam44' ? [nftAddress, tokenId] : [];
+    const calculatePremium = await bondContract.bondPrice(...discountArgs);
     const maxPremium = Math.round(calculatePremium * (1 + acceptedSlippage));
     const bond = getBond(bondKey, networkID);
 
     let bondTx;
     try {
-      const depositPayload =
-        bondKey === 'mai_clam44'
-          ? [valueInWei, maxPremium, depositorAddress, ...tokenMeta]
-          : [valueInWei, maxPremium, depositorAddress];
-      bondTx = await bondContract.deposit(...depositPayload);
+      bondTx = await bondContract.deposit(...[valueInWei, maxPremium, depositorAddress, ...discountArgs]);
       dispatch(fetchPendingTxns({ txnHash: bondTx.hash, text: 'Bonding ' + bond.name, type: 'bond_' + bondKey }));
+      dispatch(listMyNFT({ wallet: address, networkId: networkID, provider }));
       await bondTx.wait();
-      dispatch(calculateUserBondDetails({ address, bondKey, networkID, provider }));
       return;
     } catch (error: any) {
       if (error.code === -32603 && error.message.indexOf('ds-math-sub-underflow') >= 0) {
@@ -297,6 +304,7 @@ export const redeemBond = createAsyncThunk(
       dispatch(fetchPendingTxns({ txnHash: redeemTx.hash, text: 'Redeeming ' + bond.name, type: pendingTxnType }));
       await redeemTx.wait();
       await dispatch(calculateUserBondDetails({ address, bondKey, networkID, provider }));
+      await dispatch(listMyNFT({ wallet: address, networkId: networkID, provider }));
       dispatch(getBalances({ address, networkID, provider }));
       return;
     } catch (error: any) {
@@ -307,5 +315,25 @@ export const redeemBond = createAsyncThunk(
         return true;
       }
     }
+  },
+);
+
+interface ApproveNFTPayload {
+  address: string;
+  bondKey: BondKey;
+  networkID: number;
+  provider: JsonRpcProvider;
+  nftAddress: string;
+  tokenId: number;
+}
+
+export const approveNFT = createAsyncThunk(
+  'account/nft/approve',
+  async ({ address, bondKey, networkID, provider, nftAddress, tokenId }: ApproveNFTPayload): Promise<string> => {
+    const bond = getBond(bondKey, networkID);
+    const signer = provider.getSigner();
+    const nftContract = new ethers.Contract(nftAddress, ERC721, signer);
+    await (await nftContract.approve(bond.address, tokenId)).wait();
+    return bondKey;
   },
 );

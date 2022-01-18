@@ -36,6 +36,7 @@ const MOCKED_NFT_ROW_DATA = [
     key: 'FURRY' as NFT,
     discount: 0.05,
     endDate: new Date(),
+    address: '',
   },
   {
     name: 'Furry-Hand Otter (2021 Winterrrrrrr)',
@@ -44,6 +45,7 @@ const MOCKED_NFT_ROW_DATA = [
     key: 'FURRY' as NFT,
     discount: 0.05,
     endDate: new Date(),
+    address: '',
   },
 ];
 
@@ -54,6 +56,7 @@ const MOCKED_MY_NFT_DATA: MyNFTInfo[] = [
     name: '',
     key: 'FURRY',
     balance: 10,
+    address: '',
   },
   {
     type: 'note',
@@ -61,6 +64,7 @@ const MOCKED_MY_NFT_DATA: MyNFTInfo[] = [
     name: '',
     key: 'SAFE180',
     balance: 1000,
+    address: '',
   },
   {
     type: 'note',
@@ -68,6 +72,7 @@ const MOCKED_MY_NFT_DATA: MyNFTInfo[] = [
     name: '',
     key: 'STONE90',
     balance: 1000,
+    address: '',
   },
 ];
 
@@ -242,7 +247,7 @@ query {
           selection={nftSelection}
           selectedBonding={selectedBonding}
           selectedAccountBond={selectedAccountBond}
-          open={false}
+          open={successDialogOpen}
           onClose={() => setSuccessDialogOpen(false)}
         />
       )}

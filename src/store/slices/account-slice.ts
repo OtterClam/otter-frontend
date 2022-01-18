@@ -28,6 +28,7 @@ interface IUserBondDetails {
   interestDue?: number;
   bondMaturationTime?: number;
   pendingPayout?: number;
+  // nftApproved?: boolean;
 }
 
 export interface IAccount {
@@ -123,25 +124,27 @@ export const calculateUserBondDetails = createAsyncThunk(
     bondKey,
     networkID,
     provider,
-  }: CalculateUserBondDetailsActionPayload): Promise<IUserBondDetails> => {
+  }: // nftAddress,
+  CalculateUserBondDetailsActionPayload): Promise<IUserBondDetails> => {
     if (!address) return {};
 
     const addresses = getAddresses(networkID);
     const bond = getBond(bondKey, networkID);
     const bondContract = contractForBond(bondKey, networkID, provider);
+    // const nftContract = new ethers.Contract(nftAddress, ERC721, provider);
     const reserveContract = contractForReserve(bondKey, networkID, provider);
     const sCLAM = new ethers.Contract(addresses.sCLAM_ADDRESS, StakedClamContract, provider);
 
-    let interestDue, pendingPayout, bondMaturationTime;
-
     const bondDetails = await bondContract.bondInfo(address);
-    interestDue = (bond.autostake ? await sCLAM.balanceForGons(bondDetails.gonsPayout) : bondDetails.payout) / 1e9;
-    bondMaturationTime = +bondDetails.vesting + +bondDetails.lastTimestamp;
-    pendingPayout = await bondContract.pendingPayoutFor(address);
+    const interestDue =
+      (bond.autostake ? await sCLAM.balanceForGons(bondDetails.gonsPayout) : bondDetails.payout) / 1e9;
+    const bondMaturationTime = +bondDetails.vesting + +bondDetails.lastTimestamp;
+    const pendingPayout = await bondContract.pendingPayoutFor(address);
 
     const allowance = await reserveContract.allowance(address, bond.address);
     const rawBalance = (await reserveContract.balanceOf(address)).toString();
     const balance = ethers.utils.formatEther(rawBalance);
+    // const nftApproved = await nftContract.isApprovedForAll(address, bond.address);
 
     return {
       bond: bondKey,
