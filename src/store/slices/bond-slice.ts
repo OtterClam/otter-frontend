@@ -1,5 +1,6 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
-import { calcBondDetails, batchGetBondDetails, approveNFT, bondAsset } from '../actions/bond-action';
+import { calcBondDetails, batchGetBondDetails, bondAsset } from '../actions/bond-action';
+import { approveNFT } from '../actions/nft-action';
 import { BondKey } from '../../constants';
 
 export interface BondDetails {

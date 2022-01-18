@@ -1,10 +1,9 @@
-import { ethers } from 'ethers';
 import { JsonRpcProvider } from '@ethersproject/providers';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { addDays } from 'date-fns';
-
-import { ERC721, OtterPAWBondStakeDepository, PearlNote, OtterLake } from 'src/abi';
-import { BondKey, BondKeys, getAddresses, listBonds } from '../../constants';
+import { ethers } from 'ethers';
+import { ERC721, OtterLake, OtterPAWBondStakeDepository, PearlNote } from 'src/abi';
+import { BondKey, BondKeys, getAddresses, getBond, listBonds } from '../../constants';
 import { NFT } from '../../views/BondDialog/BondNFTDiscountDialog/constants';
 
 interface NFTActionProps {
@@ -196,3 +195,23 @@ export const listBondedNFT = async ({ provider, bondAddress, wallet }: NFTAction
       }),
   );
 };
+
+interface ApproveNFTPayload {
+  address: string;
+  bondKey: BondKey;
+  networkID: number;
+  provider: JsonRpcProvider;
+  nftAddress: string;
+  tokenId: number;
+}
+
+export const approveNFT = createAsyncThunk(
+  'account/nft/approve',
+  async ({ address, bondKey, networkID, provider, nftAddress, tokenId }: ApproveNFTPayload): Promise<string> => {
+    const bond = getBond(bondKey, networkID);
+    const signer = provider.getSigner();
+    const nftContract = new ethers.Contract(nftAddress, ERC721, signer);
+    await (await nftContract.approve(bond.address, tokenId)).wait();
+    return bondKey;
+  },
+);

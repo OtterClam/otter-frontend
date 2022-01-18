@@ -317,23 +317,3 @@ export const redeemBond = createAsyncThunk(
     }
   },
 );
-
-interface ApproveNFTPayload {
-  address: string;
-  bondKey: BondKey;
-  networkID: number;
-  provider: JsonRpcProvider;
-  nftAddress: string;
-  tokenId: number;
-}
-
-export const approveNFT = createAsyncThunk(
-  'account/nft/approve',
-  async ({ address, bondKey, networkID, provider, nftAddress, tokenId }: ApproveNFTPayload): Promise<string> => {
-    const bond = getBond(bondKey, networkID);
-    const signer = provider.getSigner();
-    const nftContract = new ethers.Contract(nftAddress, ERC721, signer);
-    await (await nftContract.approve(bond.address, tokenId)).wait();
-    return bondKey;
-  },
-);

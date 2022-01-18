@@ -1,34 +1,31 @@
-import { useState, useEffect, useCallback, Dispatch, SetStateAction } from 'react';
-import { useSelector } from 'react-redux';
-import { useAppDispatch } from 'src/store/hook';
-import { useTranslation } from 'react-i18next';
-import { useWeb3Context } from '../../hooks';
-
 import {
   Box,
-  Grid,
-  InputLabel,
-  OutlinedInput,
-  InputAdornment,
-  Slide,
   FormControl,
+  Grid,
+  InputAdornment,
+  InputLabel,
   makeStyles,
+  OutlinedInput,
+  Slide,
   useMediaQuery,
 } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
-import BondPurchaseDialog from './BondPurchaseDialog';
-import ActionButton from '../../components/Button/ActionButton';
-import BondNFTDiscount from './BondNFTDiscount';
-
 import { ethers } from 'ethers';
-
-import { changeApproval, bondAsset, calcBondDetails, approveNFT } from '../../store/actions/bond-action';
+import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { AccountBond, Bonding, BondKey, getBond, zeroAddress } from 'src/constants';
+import { useAppDispatch } from 'src/store/hook';
+import { tabletMediaQuery } from 'src/themes/mediaQuery';
+import ActionButton from '../../components/Button/ActionButton';
+import { prettifySeconds, shorten, trim } from '../../helpers';
+import { useWeb3Context } from '../../hooks';
+import { bondAsset, calcBondDetails, changeApproval } from '../../store/actions/bond-action';
+import { approveNFT } from '../../store/actions/nft-action';
 import { IPendingTxn } from '../../store/slices/pending-txns-slice';
 import { IReduxState } from '../../store/slices/state.interface';
-
-import { Bonding, BondKey, AccountBond, getBond, getPAWAddress, zeroAddress } from 'src/constants';
-import { shorten, trim, prettifySeconds } from '../../helpers';
-import { tabletMediaQuery } from 'src/themes/mediaQuery';
+import BondNFTDiscount from './BondNFTDiscount';
+import BondPurchaseDialog from './BondPurchaseDialog';
 import { NFTDiscountOption } from './types';
 
 const useStyles = makeStyles(theme => ({
