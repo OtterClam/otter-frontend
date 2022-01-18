@@ -62,7 +62,8 @@ const bondingSlice = createSlice({
         console.log(payload, error);
       })
       .addCase(listLockededNFT.fulfilled, (state, action) => {
-        state[action.payload.bondKey].lockedNFTs = action.payload.lockedNFTs;
+        const bondKey = action.payload.bondKey;
+        if (state[bondKey]) state[action.payload.bondKey].lockedNFTs = action.payload.lockedNFTs;
       })
       .addCase(listLockededNFT.rejected, (_state, { error, ...payload }) => {
         console.log(payload, error);

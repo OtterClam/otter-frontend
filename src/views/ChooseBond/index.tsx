@@ -128,7 +128,7 @@ query {
     setSelectedBond(defaultBond);
   }, [bondKey]);
 
-  const canSelect = useAppSelector(state => state.account.nfts).length > 0;
+  const canSelect = useAppSelector(state => state.account.nfts)?.length > 0;
   const [successDialogOpen, setSuccessDialogOpen] = useState(false);
 
   const [redeemedBond, setRedeemedBond] = useState<Bond>();

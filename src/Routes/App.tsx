@@ -115,7 +115,7 @@ function App() {
       dispatch(loadAppDetails({ networkID: chainID, provider: loadProvider }));
       dispatch(
         batchGetBondDetails({
-          address,
+          wallet: address,
           value: null,
           provider: loadProvider,
           networkID: chainID,

@@ -41,7 +41,7 @@ function BondRow({ bondKey, setRedeemedBond, setSelection }: IBondProps) {
   const bond = getBond(bondKey, chainID);
   const bonding = useAppSelector(state => state.bonding[bondKey]);
 
-  const lockedNFTs = useAppSelector(state => state.bonding[bondKey].lockedNFTs);
+  const lockedNFTs = useAppSelector(state => state.bonding[bondKey]?.lockedNFTs);
 
   const bondPrice = useAppSelector(state => {
     return state.bonding[bondKey] && state.bonding[bondKey].bondPrice;

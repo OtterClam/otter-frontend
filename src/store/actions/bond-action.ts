@@ -196,8 +196,8 @@ export const calcBondDetails = createAsyncThunk(
         await dispatch(
           listLockededNFT({
             bondKey,
-            wallet: wallet,
-            networkID: networkID,
+            wallet,
+            networkID,
             provider,
           }),
         ),
@@ -232,7 +232,7 @@ export const calcBondDetails = createAsyncThunk(
   },
 );
 
-type BatchGetBondDetailsPayload = Omit<CalcBondDetailsPayload, 'bondKey'> & { address?: string };
+type BatchGetBondDetailsPayload = Omit<CalcBondDetailsPayload, 'bondKey'> & { wallet?: string };
 export const batchGetBondDetails = createAsyncThunk(
   'bonding/batchGetBondDetails',
   async (payload: BatchGetBondDetailsPayload, { dispatch }) => {

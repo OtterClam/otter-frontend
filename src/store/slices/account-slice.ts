@@ -139,9 +139,9 @@ export const calculateUserBondDetails = createAsyncThunk(
     const bondDetails = await bondContract.bondInfo(address);
     const interestDue =
       (bond.autostake ? await sCLAM.balanceForGons(bondDetails.gonsPayout) : bondDetails.payout) / 1e9;
-    if (bondKey === 'mai_clam' || bondKey === 'mai_clam44') {
-      console.log(bondKey, bondDetails, interestDue);
-    }
+    // if (bondKey === 'mai_clam' || bondKey === 'mai_clam44') {
+    //   console.log(bondKey, bondDetails, interestDue);
+    // }
     const bondMaturationTime = +bondDetails.vesting + +bondDetails.lastTimestamp;
     const pendingPayout = await bondContract.pendingPayoutFor(address);
 

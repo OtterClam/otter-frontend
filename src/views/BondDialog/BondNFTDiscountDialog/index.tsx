@@ -17,7 +17,7 @@ interface Props extends Omit<BackdropProps, 'children'> {
 }
 const BondNTFDiscountDialog = ({ bond, selection, setSelection, onClose, ...props }: Props) => {
   const bondNFTDiscounts = useAppSelector(state => state.nft.bondNftDiscounts.data[bond.key]);
-  const myNFTs = useAppSelector(state => state.account.nfts);
+  const myNFTs = useAppSelector(state => state.account?.nfts || []);
   const options = useMemo<NFTDiscountOption[]>(() => {
     return myNFTs.map((NFT: MyNFTInfo) => {
       const discountsUsed = bondNFTDiscounts.find((discount: BondNFTDiscount) => discount.key === NFT.key);
