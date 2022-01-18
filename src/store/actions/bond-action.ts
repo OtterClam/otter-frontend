@@ -1,30 +1,23 @@
-import { createAsyncThunk, unwrapResult } from '@reduxjs/toolkit';
-import { parseEther } from '@ethersproject/units';
-
-import { fetchAccountSuccess } from '../slices/account-slice';
-import { calculateUserBondDetails, getBalances } from '../slices/account-slice';
-import { fetchPendingTxns, clearPendingTxn } from '../slices/pending-txns-slice';
-import { BondDetails } from '../slices/bond-slice';
-
-import { ethers, constants, BigNumber } from 'ethers';
 import { JsonRpcProvider } from '@ethersproject/providers';
-import { BondingCalcContract, AggregatorV3InterfaceABI, ERC721, StakedClamContract } from '../../abi';
-
-import { LockedNFT } from './nft-action';
-import { getMarketPrice, contractForBond, contractForReserve, getTokenPrice } from '../../helpers';
+import { createAsyncThunk, unwrapResult } from '@reduxjs/toolkit';
+import { BigNumber, constants, ethers } from 'ethers';
+import { AggregatorV3InterfaceABI, BondingCalcContract, ERC721, StakedClamContract } from '../../abi';
 import { BondKey, BondKeys, getAddresses, getBond, zeroAddress } from '../../constants';
-
+import { contractForBond, contractForReserve, getMarketPrice, getTokenPrice } from '../../helpers';
+import { calculateUserBondDetails, fetchAccountSuccess, getBalances } from '../slices/account-slice';
+import { BondDetails } from '../slices/bond-slice';
+import { clearPendingTxn, fetchPendingTxns } from '../slices/pending-txns-slice';
 import {
   getBondDiscount,
   getBondQuote,
-  getMaxUserCanBuy,
   getDebtRatio,
+  getMaxUserCanBuy,
   getPurchasedBonds,
   getTransformedBondPrice,
   getTransformedMarketPrice,
   getTransformedMaxPayout,
 } from '../utils';
-import { listMyNFT, listLockededNFT } from './nft-action';
+import { listLockededNFT, LockedNFT } from './nft-action';
 
 interface IChangeApproval {
   bondKey: BondKey;
@@ -277,7 +270,6 @@ export const bondAsset = createAsyncThunk(
     try {
       bondTx = await bondContract.deposit(...[valueInWei, maxPremium, depositorAddress, ...discountArgs]);
       dispatch(fetchPendingTxns({ txnHash: bondTx.hash, text: 'Bonding ' + bond.name, type: 'bond_' + bondKey }));
-      dispatch(listMyNFT({ wallet: address, networkID: networkID, provider }));
       await bondTx.wait();
       const addresses = getAddresses(networkID);
       const sCLAM = new ethers.Contract(addresses.sCLAM_ADDRESS, StakedClamContract, provider);
@@ -325,7 +317,6 @@ export const redeemBond = createAsyncThunk(
       dispatch(fetchPendingTxns({ txnHash: redeemTx.hash, text: 'Redeeming ' + bond.name, type: pendingTxnType }));
       await redeemTx.wait();
       await dispatch(calculateUserBondDetails({ address, bondKey, networkID, provider }));
-      await dispatch(listMyNFT({ wallet: address, networkID: networkID, provider }));
       dispatch(getBalances({ address, networkID, provider }));
       return;
     } catch (error: any) {

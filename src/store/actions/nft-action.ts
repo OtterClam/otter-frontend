@@ -137,7 +137,7 @@ export const listMyNFT = createAsyncThunk(
             address: contract.address,
           };
           const ids = await Promise.all(
-            Array(rawBalance)
+            Array(balance)
               .fill(0)
               .map(async (_, index) => {
                 return (await contract.tokenOfOwnerByIndex(wallet, index)).toNumber();
@@ -151,6 +151,7 @@ export const listMyNFT = createAsyncThunk(
       )
     ).flat(1);
 
+    console.log(`paws: ${JSON.stringify(paws)}`);
     // get owned notes infos
     const otterLakeContract = new ethers.Contract(addresses.OTTER_LAKE, OtterLake, provider);
     const termsCount = (await otterLakeContract.termsCount()).toNumber();
@@ -189,6 +190,7 @@ export const listMyNFT = createAsyncThunk(
           }),
       )
     ).flat(1);
+    console.log(`notes: ${JSON.stringify(notes)}`);
     return [...paws, ...notes];
   },
 );

@@ -245,7 +245,10 @@ query {
           selectedBonding={selectedBonding}
           selectedAccountBond={selectedAccountBond}
           open={successDialogOpen}
-          onClose={() => setSuccessDialogOpen(false)}
+          onClose={() => {
+            setSuccessDialogOpen(false);
+            setNftSelection(undefined);
+          }}
         />
       )}
       {/** TODO: connect selected redeemed data */}
