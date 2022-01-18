@@ -21,13 +21,8 @@ interface Props {
 }
 const BondSuccessDialog = ({ bond, selection, selectedBonding, selectedAccountBond, open, onClose }: Props) => {
   const { t } = useTranslation();
-  const { loading: isBondLoading, bondDiscount, vestingTerm } = selectedBonding;
+  const { loading: isBondLoading, bondQuote, bondDiscount, vestingTerm } = selectedBonding;
   const { balance } = selectedAccountBond;
-
-  const fiveDayRate = useAppSelector(state => state.app.fiveDayRate);
-  const vestingPeriod = useMemo(() => {
-    return prettifySeconds(t, vestingTerm, 'day');
-  }, [t, vestingTerm]);
 
   return (
     <BaseDialog
@@ -36,15 +31,17 @@ const BondSuccessDialog = ({ bond, selection, selectedBonding, selectedAccountBo
       action="bond"
       subtitle={
         <>
-          You will get <span className="highlight-text">123</span> CLAM!
+          {t('bonds.purchase.youWillGet')} <span className="highlight-text">{bondQuote}</span> sCLAM!
         </>
       }
-      helperText="This NFT will be locked into this bond until you redeem."
-      renderRowDescription={(selection: NFTDiscountOption) => (
-        <p className="selection-discount">{selection?.discount}% off</p>
-      )}
+      // TODO: to be translated: components.bondWithNftHint
+      helperText={selection && 'This NFT will be locked into this bond until you redeem.'}
+      renderRowDescription={
+        selection &&
+        ((selection: NFTDiscountOption) => <p className="selection-discount">{selection?.discount}% off</p>)
+      }
       open={open}
-      selections={[selection]}
+      selections={selection && [selection]}
       onClose={onClose}
     >
       <BaseDialog.DetailRow title={t('common.yourBalance')}>
@@ -55,12 +52,12 @@ const BondSuccessDialog = ({ bond, selection, selectedBonding, selectedAccountBo
           <Skeleton width="100px" />
         ) : (
           <>
-            {trim(bondDiscount * 100, 2)}%{bond.autostake && `+ staking ${trim(fiveDayRate * 100, 2)}%`}
+            {trim(bondDiscount * 100, 2)}%{bond.autostake && `+ ${t('common.staking')}`}
           </>
         )}
       </BaseDialog.DetailRow>
       <BaseDialog.DetailRow title={t('bonds.vestingTerm')}>
-        {isBondLoading ? <Skeleton width="100px" /> : vestingPeriod}
+        {prettifySeconds(t, vestingTerm, 'day')}
       </BaseDialog.DetailRow>
     </BaseDialog>
   );

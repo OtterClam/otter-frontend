@@ -37,7 +37,7 @@ interface Props {
   onClose(): void;
   bond: Bond;
   action: 'bond' | 'redeem';
-  selections: NFTDiscountOption[];
+  selections?: NFTDiscountOption[];
   logoEl: ReactNode;
   helperText?: string;
   subtitle: ReactNode;
@@ -59,7 +59,7 @@ const BaseDialog = ({
     <Dialog id="success-dialog" title={() => <DialogTitle action={action} />} open={open} onClose={onClose}>
       <Box className="bond-logo">{logoEl}</Box>
       <Box className="success-subtitle">{subtitle}</Box>
-      <NFTDisplayRow selections={selections} renderRowDescription={renderRowDescription} />
+      {selections && <NFTDisplayRow selections={selections} renderRowDescription={renderRowDescription} />}
       {helperText && (
         <Box className="helper-text">
           <Typography variant="caption" className={`${style.helperText} helper-text`}>
