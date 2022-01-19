@@ -191,7 +191,7 @@ export function BondCard({ bondKey, setRedeemedBond, setNftRedeemed, setRedeemed
                       type="outline"
                       color="otter.otterBlue"
                       text={`${t('common.redeem')}`}
-                      onClick={() => setRedeemedBond(bond)}
+                      onClick={handleMaiClamRedeem}
                     />
                   );
                 }
