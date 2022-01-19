@@ -1,23 +1,24 @@
-import { format } from 'date-fns';
-
-import { useTranslation } from 'react-i18next';
 import { Typography } from '@material-ui/core';
-import BaseDialog from './BaseDialog';
+import { format } from 'date-fns';
+import { useTranslation } from 'react-i18next';
+import { Bond } from 'src/constants';
 import { getTokenImage } from 'src/helpers';
-
-import { Bond, AccountBond } from 'src/constants';
+import { useAppSelector } from 'src/store/hook';
 import { NFTDiscountOption } from '../types';
+import BaseDialog from './BaseDialog';
 
 interface BondDialogProps {
   bond: Bond;
   open: boolean;
+  amount: number;
   onClose(): void;
-  selections: NFTDiscountOption[];
-  selectedAccountBond: AccountBond;
+  selections?: NFTDiscountOption[];
 }
 
-function RedeemSuccessDialog({ bond, selections, selectedAccountBond, open, onClose }: BondDialogProps) {
+function RedeemSuccessDialog({ bond, open, onClose, selections, amount }: BondDialogProps) {
   const { t } = useTranslation();
+  const balance = useAppSelector(state => state.account.balances.sClam);
+
   return (
     <BaseDialog
       bond={bond}
@@ -25,21 +26,19 @@ function RedeemSuccessDialog({ bond, selections, selectedAccountBond, open, onCl
       action="bond"
       subtitle={
         <>
-          {t('stake.youReceived')} <span className="highlight-text">{selectedAccountBond.pendingPayout}</span> sCLAM!
+          {t('stake.youReceived')} <span className="highlight-text">{amount}</span> sCLAM!
         </>
       }
       renderRowDescription={(selection: NFTDiscountOption) => (
         <Typography variant="caption">
-          The discount NFT is available until {format(selection.endDate, 'MMM do')}!
+          The discount NFT is available until {format(new Date(selection.endDate), 'MMM do')}!
         </Typography>
       )}
       open={open}
       selections={selections}
       onClose={onClose}
     >
-      <BaseDialog.DetailRow title={t('calculator.yoursClamBalance')}>
-        {selectedAccountBond.balance} sCLAM
-      </BaseDialog.DetailRow>
+      <BaseDialog.DetailRow title={t('calculator.yoursClamBalance')}>{balance} sCLAM</BaseDialog.DetailRow>
     </BaseDialog>
   );
 }

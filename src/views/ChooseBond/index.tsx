@@ -1,80 +1,27 @@
-import { useEffect, useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { useTranslation } from 'react-i18next';
-import { useWeb3Context } from '../../hooks';
+import { Box, Grid, makeStyles, Paper, Slide, Typography, Zoom } from '@material-ui/core';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { tabletMediaQuery } from 'src/themes/mediaQuery';
-
-import { Box, Grid, Paper, Zoom, Slide, Typography, makeStyles } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
-import BondRowHeader from './BondRowHeader';
-import BondRow from './BondRow';
-import BondCard from './BondCard';
-import BondDialog from '../BondDialog';
-import BondSuccessDialog from '../BondDialog/SuccessDialog/BondSuccessDialog';
-import BondNTFDiscountDialog from '../BondDialog/BondNFTDiscountDialog';
-import RedeemSuccessDialog from '../BondDialog/SuccessDialog/RedeemSuccessDialog';
-import './choose-bond.scss';
-
-import apollo from 'src/lib/apolloClient';
+import { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { Bond, BondKeys, getBond } from 'src/constants';
-import { getTokenImage, trim } from '../../helpers';
-import { IReduxState } from '../../store/slices/state.interface';
-import { checkBondKey } from './utils';
-import { NFTDiscountOption } from '../BondDialog/types';
-import { NFT } from '../BondDialog/BondNFTDiscountDialog/constants';
-import { MyNFTInfo } from '../../store/actions/nft-action';
+import apollo from 'src/lib/apolloClient';
 import { useAppSelector } from 'src/store/hook';
-import { NFTType } from 'src/store/actions/nft-action';
-
-const MOCKED_NFT_ROW_DATA = [
-  {
-    name: 'Furry-Hand Otter (2021 Winter)',
-    type: 'nft' as NFTType,
-    id: 123,
-    key: 'FURRY' as NFT,
-    discount: 0.05,
-    endDate: new Date(),
-    address: '',
-  },
-  {
-    name: 'Furry-Hand Otter (2021 Winterrrrrrr)',
-    type: 'nft' as NFTType,
-    id: 123,
-    key: 'FURRY' as NFT,
-    discount: 0.05,
-    endDate: new Date(),
-    address: '',
-  },
-];
-
-const MOCKED_MY_NFT_DATA: MyNFTInfo[] = [
-  {
-    type: 'nft',
-    id: 123,
-    name: '',
-    key: 'FURRY',
-    balance: 10,
-    address: '',
-  },
-  {
-    type: 'note',
-    id: 345,
-    name: '',
-    key: 'SAFE180',
-    balance: 1000,
-    address: '',
-  },
-  {
-    type: 'note',
-    id: 345,
-    name: '',
-    key: 'STONE90',
-    balance: 1000,
-    address: '',
-  },
-];
+import { tabletMediaQuery } from 'src/themes/mediaQuery';
+import { getTokenImage, trim } from '../../helpers';
+import { useWeb3Context } from '../../hooks';
+import { IReduxState } from '../../store/slices/state.interface';
+import BondDialog from '../BondDialog';
+import BondNTFDiscountDialog from '../BondDialog/BondNFTDiscountDialog';
+import BondSuccessDialog from '../BondDialog/SuccessDialog/BondSuccessDialog';
+import RedeemSuccessDialog from '../BondDialog/SuccessDialog/RedeemSuccessDialog';
+import { NFTDiscountOption } from '../BondDialog/types';
+import BondCard from './BondCard';
+import BondRow from './BondRow';
+import BondRowHeader from './BondRowHeader';
+import './choose-bond.scss';
+import { checkBondKey } from './utils';
 
 const useStyle = makeStyles(theme => {
   return {
@@ -131,6 +78,9 @@ query {
   const canSelect = useAppSelector(state => state.account.nfts)?.length > 0;
   const [successDialogOpen, setSuccessDialogOpen] = useState(false);
 
+  const [nftRedeemed, setNftRedeemed] = useState<NFTDiscountOption[] | undefined>(undefined);
+  const [nftRedeemeds, setRedeemValue] = useState<NFTDiscountOption[] | undefined>(undefined);
+  const [redeemedAmount, setRedeemedAmount] = useState(0);
   const [redeemedBond, setRedeemedBond] = useState<Bond>();
   const selectedBondKey = useMemo(() => {
     if (redeemedBond) return redeemedBond?.key;
@@ -195,6 +145,8 @@ query {
                     key={bond.key}
                     bondKey={bond.key}
                     setRedeemedBond={setRedeemedBond}
+                    setRedeemedAmount={setRedeemedAmount}
+                    setNftRedeemed={setNftRedeemed}
                     setSelection={setNftSelection}
                   />
                 </Grid>
@@ -207,7 +159,13 @@ query {
               <BondRowHeader />
               {bonds.map(bond => (
                 <Box key={bond.key} onClick={() => setSelectedBond(bond)}>
-                  <BondRow bondKey={bond.key} setRedeemedBond={setRedeemedBond} setSelection={setNftSelection} />
+                  <BondRow
+                    bondKey={bond.key}
+                    setRedeemedBond={setRedeemedBond}
+                    setSelection={setNftSelection}
+                    setRedeemedAmount={setRedeemedAmount}
+                    setNftRedeemed={setNftRedeemed}
+                  />
                 </Box>
               ))}
             </Grid>
@@ -255,10 +213,14 @@ query {
       {redeemedBond && selectedAccountBond && (
         <RedeemSuccessDialog
           bond={redeemedBond}
-          selections={MOCKED_NFT_ROW_DATA}
+          amount={redeemedAmount}
+          selections={nftRedeemed}
           open={!!redeemedBond}
-          onClose={() => setRedeemedBond(undefined)}
-          selectedAccountBond={selectedAccountBond}
+          onClose={() => {
+            setRedeemedBond(undefined);
+            setNftRedeemed(undefined);
+            setRedeemedAmount(0);
+          }}
         />
       )}
     </div>

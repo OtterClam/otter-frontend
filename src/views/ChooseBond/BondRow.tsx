@@ -1,24 +1,20 @@
-import { Box, Grid, Link, Paper, Tooltip, makeStyles } from '@material-ui/core';
+import { Box, Grid, Link, makeStyles, Tooltip } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
-import { LabelChip, Status, StatusChip } from 'src/components/Chip';
+import { Dispatch, MouseEvent, SetStateAction, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { NavLink, useHistory } from 'react-router-dom';
 import BondLogo from 'src/components/BondLogo';
 import CustomButton from 'src/components/Button/CustomButton';
-import './choose-bond.scss';
-
-import { useMemo, MouseEvent, Dispatch, SetStateAction } from 'react';
-import { NavLink, useHistory } from 'react-router-dom';
+import { LabelChip, Status, StatusChip } from 'src/components/Chip';
+import { Bond, BondKey, getBond } from 'src/constants';
+import { redeemBond } from 'src/store/actions/bond-action';
+import { BondNFTDiscount, listLockededNFT, listMyNFT, LockedNFT } from 'src/store/actions/nft-action';
 import { useAppDispatch, useAppSelector } from 'src/store/hook';
-import { useTranslation } from 'react-i18next';
+import { localeString, prettyShortVestingPeriod, priceUnits, trim } from '../../helpers';
 import { useWeb3Context } from '../../hooks';
-
 import { NFTDiscountOption } from '../BondDialog/types';
-import { BondKey, getBond, Bond } from 'src/constants';
-import { priceUnits, trim, prettyShortVestingPeriod, localeString } from '../../helpers';
-import { listLockededNFT, listMyNFT } from 'src/store/actions/nft-action';
-import { redeemBond, batchGetBondDetails } from 'src/store/actions/bond-action';
-import { zeroAddress } from 'src/constants';
-
 import BondNFTDisplay from './BondNFTDisplay';
+import './choose-bond.scss';
 
 const useStyles = makeStyles(theme => ({
   white: {
@@ -30,10 +26,12 @@ const useStyles = makeStyles(theme => ({
 interface IBondProps {
   bondKey: BondKey;
   setRedeemedBond(value: Bond): void;
+  setRedeemedAmount(value: number): void;
+  setNftRedeemed(value: NFTDiscountOption[]): void;
   setSelection: Dispatch<SetStateAction<NFTDiscountOption | undefined>>;
 }
 
-function BondRow({ bondKey, setRedeemedBond, setSelection }: IBondProps) {
+function BondRow({ bondKey, setRedeemedBond, setSelection, setNftRedeemed, setRedeemedAmount }: IBondProps) {
   const { chainID, address, provider } = useWeb3Context();
   const dispatch = useAppDispatch();
   // Use BondPrice as indicator of loading.
@@ -42,6 +40,7 @@ function BondRow({ bondKey, setRedeemedBond, setSelection }: IBondProps) {
   const bonding = useAppSelector(state => state.bonding[bondKey]);
 
   const lockedNFTs = useAppSelector(state => state.bonding[bondKey]?.lockedNFTs);
+  const nftDiscounts = useAppSelector<BondNFTDiscount[]>(state => state.nft.bondNftDiscounts.data[bond.key]);
 
   const bondPrice = useAppSelector(state => {
     return state.bonding[bondKey] && state.bonding[bondKey].bondPrice;
@@ -82,6 +81,23 @@ function BondRow({ bondKey, setRedeemedBond, setSelection }: IBondProps) {
 
   const handleMaiClamRedeem = async (e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
+
+    const mapDiscounts = nftDiscounts.reduce<Record<string, BondNFTDiscount>>((acc, cur) => {
+      acc[cur.address] = cur;
+      return acc;
+    }, {});
+    const selections = lockedNFTs.map(
+      (e: LockedNFT): NFTDiscountOption => ({
+        id: e.id,
+        address: e.address,
+        type: mapDiscounts[e.address].name.includes('Note') ? 'note' : 'nft',
+        key: mapDiscounts[e.address].key,
+        name: mapDiscounts[e.address].name,
+        discount: mapDiscounts[e.address].discount,
+        endDate: mapDiscounts[e.address].endDate,
+      }),
+    );
+    console.log(`${bond.key} ${JSON.stringify(selections)}`);
     const redeemed = await dispatch(redeemBond({ address, bondKey, networkID: chainID, provider, autostake: true }));
     if (redeemed.payload) {
       dispatch(listMyNFT({ wallet: address, networkID: chainID, provider }));
@@ -93,7 +109,9 @@ function BondRow({ bondKey, setRedeemedBond, setSelection }: IBondProps) {
           provider: provider,
         }),
       );
+      setNftRedeemed(selections);
       setRedeemedBond(bond);
+      setRedeemedAmount(myBalance);
       setSelection(undefined);
     }
   };

@@ -1,13 +1,15 @@
 import { Box, Grid, Link, Paper, Tooltip } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
-import { Dispatch, SetStateAction, useMemo } from 'react';
+import { Dispatch, MouseEvent, SetStateAction, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 import BondLogo from 'src/components/BondLogo';
 import CustomButton from 'src/components/Button/CustomButton';
 import { LabelChip, Status, StatusChip } from 'src/components/Chip';
 import { Bond, BondKey, getBond } from 'src/constants';
-import { useAppSelector } from 'src/store/hook';
+import { redeemBond } from 'src/store/actions/bond-action';
+import { BondNFTDiscount, listLockededNFT, listMyNFT, LockedNFT } from 'src/store/actions/nft-action';
+import { useAppDispatch, useAppSelector } from 'src/store/hook';
 import { prettyShortVestingPeriod, priceUnits, trim } from '../../helpers';
 import { useWeb3Context } from '../../hooks';
 import { NFTDiscountOption } from '../BondDialog/types';
@@ -17,16 +19,20 @@ import './choose-bond.scss';
 interface IBondProps {
   bondKey: BondKey;
   setRedeemedBond(value: Bond): void;
+  setRedeemedAmount(value: number): void;
+  setNftRedeemed(value: NFTDiscountOption[]): void;
   setSelection: Dispatch<SetStateAction<NFTDiscountOption | undefined>>;
 }
 
-export function BondCard({ bondKey, setRedeemedBond }: IBondProps) {
-  const { chainID, provider } = useWeb3Context();
+export function BondCard({ bondKey, setRedeemedBond, setNftRedeemed, setRedeemedAmount, setSelection }: IBondProps) {
+  const { chainID, provider, address } = useWeb3Context();
   const bond = getBond(bondKey, chainID);
+  const dispatch = useAppDispatch();
 
   const { bondPrice, bondDiscount, purchased, marketPrice, lockedNFTs } = useAppSelector(
     state => state.bonding[bondKey],
   );
+  const nftDiscounts = useAppSelector<BondNFTDiscount[]>(state => state.nft.bondNftDiscounts.data[bond.key]);
   const isBondLoading = useAppSelector(state => !state.bonding[bondKey]?.bondPrice ?? true);
   const fiveDayRate = useAppSelector(state => state.app.fiveDayRate);
   const priceDiff = (Number(marketPrice) ?? 0) - (bondPrice ?? 0);
@@ -48,6 +54,42 @@ export function BondCard({ bondKey, setRedeemedBond }: IBondProps) {
     return state.account[bondKey] && state.account[bondKey].interestDue;
   });
 
+  const handleMaiClamRedeem = async (e: MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+
+    const mapDiscounts = nftDiscounts.reduce<Record<string, BondNFTDiscount>>((acc, cur) => {
+      acc[cur.address] = cur;
+      return acc;
+    }, {});
+    const selections = lockedNFTs.map(
+      (e: LockedNFT): NFTDiscountOption => ({
+        id: e.id,
+        address: e.address,
+        type: mapDiscounts[e.address].name.includes('Note') ? 'note' : 'nft',
+        key: mapDiscounts[e.address].key,
+        name: mapDiscounts[e.address].name,
+        discount: mapDiscounts[e.address].discount,
+        endDate: mapDiscounts[e.address].endDate,
+      }),
+    );
+    console.log(`${bond.key} ${JSON.stringify(selections)}`);
+    const redeemed = await dispatch(redeemBond({ address, bondKey, networkID: chainID, provider, autostake: true }));
+    if (redeemed.payload) {
+      dispatch(listMyNFT({ wallet: address, networkID: chainID, provider }));
+      dispatch(
+        listLockededNFT({
+          bondKey,
+          wallet: address,
+          networkID: chainID,
+          provider: provider,
+        }),
+      );
+      setNftRedeemed(selections);
+      setRedeemedBond(bond);
+      setRedeemedAmount(myBalance);
+      setSelection(undefined);
+    }
+  };
   return (
     <Paper id={`${bond}--bond`} className="bond-card">
       <Grid container xs={12} alignItems="center" className="bond-avatar-row">
