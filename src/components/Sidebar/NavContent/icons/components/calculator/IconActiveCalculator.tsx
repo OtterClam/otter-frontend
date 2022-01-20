@@ -1,7 +1,7 @@
-import IconActivatedCalculator from 'src/components/Sidebar/NavContent/icons/images/calculator/active.png';
+import IconActiveCalculatorImage from 'src/components/Sidebar/NavContent/icons/images/calculator/active.png';
 
 const IconActiveCalculator = () => {
-  return <img src={IconActivatedCalculator} />;
+  return <img src={IconActiveCalculatorImage} />;
 };
 
 export default IconActiveCalculator;

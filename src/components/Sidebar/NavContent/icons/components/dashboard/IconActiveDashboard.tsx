@@ -1,7 +1,7 @@
-import IconActivatedDashboard from 'src/components/Sidebar/NavContent/icons/images/dashboard/active.png';
+import IconActiveDashboardImage from 'src/components/Sidebar/NavContent/icons/images/dashboard/active.png';
 
 const IconActiveDashboard = () => {
-  return <img src={IconActivatedDashboard} />;
+  return <img src={IconActiveDashboardImage} />;
 };
 
 export default IconActiveDashboard;

@@ -1,7 +1,7 @@
-import IconActivatedWrap from 'src/components/Sidebar/NavContent/icons/images/wrap/active.png';
+import IconActiveWrapImage from 'src/components/Sidebar/NavContent/icons/images/wrap/active.png';
 
 const IconActiveWrap = () => {
-  return <img src={IconActivatedWrap} />;
+  return <img src={IconActiveWrapImage} />;
 };
 
 export default IconActiveWrap;

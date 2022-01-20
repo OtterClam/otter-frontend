@@ -1,7 +1,7 @@
-import IconActivatedBond from 'src/components/Sidebar/NavContent/icons/images/bond/active.png';
+import IconActiveBondImage from 'src/components/Sidebar/NavContent/icons/images/bond/active.png';
 
 const IconActiveBond = () => {
-  return <img src={IconActivatedBond} />;
+  return <img src={IconActiveBondImage} />;
 };
 
 export default IconActiveBond;

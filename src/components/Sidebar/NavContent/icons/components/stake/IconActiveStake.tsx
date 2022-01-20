@@ -1,7 +1,7 @@
-import IconActivatedStake from 'src/components/Sidebar/NavContent/icons/images/stake/active.png';
+import IconActiveStakeImage from 'src/components/Sidebar/NavContent/icons/images/stake/active.png';
 
 const IconActiveStake = () => {
-  return <img src={IconActivatedStake} />;
+  return <img src={IconActiveStakeImage} />;
 };
 
 export default IconActiveStake;
