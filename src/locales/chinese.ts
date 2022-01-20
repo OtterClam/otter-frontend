@@ -3,13 +3,13 @@ const Chinese = {
     common: {
       //Only change the text on the right in quote marks!
       language: '語言',
-      bond: '結合',
-      wrap: '打包',
-      stake: '抵押',
-      unstake: '取消抵押',
+      bond: '債券',
+      wrap: '採珍珠',
+      stake: '質押',
+      unstake: '取消質押',
       staking: '抵押中',
       migrate: '遷移',
-      pearlChests: 'Pearl Chests',
+      pearlChests: '珍珠寶盒',
       roi: '投資報酬率（ROI）', //Return on Investment
       max: '最大值',
       apy: '年度百分比收益率（APY）', //Annualised Percentage Yield
@@ -21,7 +21,7 @@ const Chinese = {
       pending: '待定',
       notEligible: '不符合資格',
       clamPrice: 'CLAM 價格',
-      pearlPrice: 'PEARL 價格',
+      pearlPrice: '珍珠價格',
       connectWallet: '連結錢包',
       price: '價格',
       buy: '購買',
@@ -50,7 +50,7 @@ const Chinese = {
     // src\views\Dashboard
     dashboard: {
       marketCap: '市值',
-      stakingRatio: '抵押率',
+      stakingRatio: '質押率',
       circulatingSupply: '總流通量',
       backingPerClam: 'ClAM 單位支持額',
       otterKingdom: '歡迎來到海獺王國',
@@ -74,12 +74,12 @@ const Chinese = {
         rfv: '無風險收益率（Risk Free Value，簡稱 RFV），是金庫保證能用來支撐 CLAM 的基金的數量。',
         pol: '協議擁有的流動性（Protocol Owned Liquidity，簡稱 POL）, 是金庫所持有並控制的 LP 數量。越多的 POL 對協定本身與其使用者來說越好。',
         holder: '持有人就是 Otters (sCLAM 持有者) 的總數量',
-        staked: 'CLAM Staked, 是 sCLAM 對 CLAM 的比率 (staked vs unstaked)',
+        staked: 'CLAM 質押率, 是 sCLAM 對 CLAM 的比率 (staked / unstaked)',
         apy: '百分比收益率（Annual Percentage Yield，簡稱 APY），是利率的標準化表示，基於一年的複利期。注意，APY 提供的是指數的概況，沒辦法非常精確地預測未來的結果。',
         runway:
           '生命週期（Runway）是 sCLAM 的發行能維持在一定比率的天數。越低的年度百分比收益率（APY） ，越長的生命週期（Runway）。',
         currentIndex:
-          '當前指數從開始抵押的時候開始追蹤 sCLAM 累積的數量。基本上就是一個人在一天當中可以擁有多少 sCLAM，如果他們抵押或是持有單一顆 CLAM',
+          '當前指數從開始質押的時候開始追蹤 sCLAM 累積的數量。基本上就是一個人在一天當中可以擁有多少 sCLAM，如果他們質押或是持有單一顆 CLAM',
       },
     },
     // src\views\Bond
@@ -101,25 +101,24 @@ const Chinese = {
       purchase: {
         noValue: '請輸入數值！',
         invalidValue: '請輸入合法的數值！',
-        resetVestingAutostake: '你已經擁有此債券，「結合」將會重設你的持有期限（vesting term）。你還是想要執行嗎？',
+        resetVestingAutostake: '你已經擁有此債券，「購買債券」將會重設你的持有期限（vesting term）。你還是想要執行嗎？',
         resetVesting:
-          '你已經擁有此債券。「結合」將會重設你的持有期限並且喪失獎勵資格。我們建議你可以先認領獎勵或是使用一個全新的錢包。你還是想要執行嗎？',
+          '你已經擁有此債券。「購買債券」將會重設你的持有期限並且喪失獎勵資格。我們建議你可以先認領獎勵或是使用一個全新的錢包。你還是想要執行嗎？',
 
         fourFourInfo:
           '備註:  (4, 4) 債券會在一開始抵押所有 CLAM，所以你會得到你在持有期限內所有的 rebase 獎勵。一旦期滿，你就只能認領 sClam。',
-        approvalInfo:
-          '備註:  附註:  「許可（Approve）」 程序只有在第一次結合時需要；往後結合時只需要執行「結合（Bonding）」的程序。',
-        roiFourFourInfo: '* （4, 4）債券的投資報酬包含五天的抵押獎勵。',
+        approvalInfo: '備註:  附註:  「許可」 程序只有在第一次結合時需要；往後結合時只需要執行「購買債券」的程序。',
+        roiFourFourInfo: '* （4, 4）債券的投資報酬包含五天的質押獎勵。',
 
         youWillGet: '你將會獲得 ',
         maxBuy: '你可以購買的最大值為',
       },
       purchaseDialog: {
-        bondSuccessful: '結合成功',
+        bondSuccessful: '債券購買成功',
       },
       redeem: {
         fullyVestedPopup: '（4, 4）債券期滿後你只能認領。',
-        claimAndAutostake: '認領並自動抵押',
+        claimAndAutostake: '認領並自動質押',
         pendingRewards: '待定的獎勵',
         claimableRewards: '可認領的獎勵',
         timeUntilFullyVested: '期滿之前的時間',
@@ -156,29 +155,28 @@ const Chinese = {
     },
     // src\views\Stake
     stake: {
-      clamStaking: 'CLAM 抵押',
-      connectWalletDescription: '連結你的錢包來抵押 CLAM 代幣！',
+      clamStaking: 'CLAM 質押',
+      connectWalletDescription: '連結你的錢包來質押 CLAM 代幣！',
       approvalInfo:
-        '附註:  「許可」 程序只有在第一次抵押 / 取消抵押時需要；往後抵押 / 取消抵押時只需要執行「抵押」或是「取消抵押」的程序。',
-      balanceInWarmup: '你的抵押餘額醞釀中',
-      stakedBalance: '你的抵押餘額',
+        '附註:  「許可」 程序只有在第一次質押 / 取消抵押時需要；往後質押 / 取消質押時只需要執行「質押」或是「取消質押」的程序。',
+      balanceInWarmup: '你的質押額醞釀中',
+      stakedBalance: '你的質押額',
       nextRewardAmount: '下一次獎勵數量',
       nextRewardYield: '下一次獎勵成果',
       roiFiveDay: '投資報酬 (5日比率)', //Return on Investment
-      stakeSuccessful: '抵押成功',
-      unstakeSuccessful: '取消抵押成功',
+      stakeSuccessful: '質押成功',
+      unstakeSuccessful: '取消質押成功',
       youReceived: '你已獲得 ',
     },
     // src\views\Stake
     wrap: {
-      wrapsClam: '打包 sCLAM',
-      connectWalletDescription: '連結你的錢包來打包 sCLAM！',
-      approvalInfo:
-        '附註：「許可（Approve）」 程序只有在第一次打包時需要；往後鑄造時只需要執行「打包（Wrap）」的程序。',
+      wrapsClam: '採集 sCLAM',
+      connectWalletDescription: '連結你的錢包來採集 sCLAM！',
+      approvalInfo: '附註：「許可（Approve）」 程序只有在第一次採珍珠時需要；往後鑄造時只需要執行「採珍珠」的程序。',
       description:
-        'PEARL 是 sCLAM 指數校正的包裝。有些人可能會覺得這對跨鏈來說是很有用的。不同於 sCLAM 餘額，你的 PEARL 餘額不會隨著時間增長；而當 PEARL 被解開時，你將獲得基於最新（且不斷增加的）指數換算的 sCLAM，所以總產值是一樣的。',
-      stakedBalance: '你的餘額 (已抵押的)',
-      wrappedBalance: '你的餘額 (已打包的)',
+        'PEARL 是 sCLAM 指數校正的包裝。有些人可能會覺得這對跨鏈來說是很有用的。不同於 sCLAM 餘額，你的珍珠不會隨著時間增長；而當 PEARL 被解開時，你將獲得基於最新（且不斷增加的）指數換算的 sCLAM，所以總產值是一樣的。',
+      stakedBalance: '你的餘額 (已質押的)',
+      wrappedBalance: '你的餘額 (已採集的)',
       currentIndex: '當前指數',
       indexAdjustedBalance: '指數校正餘額',
       youWillGet: '你將獲得',
@@ -200,13 +198,13 @@ const Chinese = {
     },
     // src\components
     components: {
-      wrapped: '已打包',
-      staked: '已抵押',
-      notStaked: '沒有抵押',
+      wrapped: '已採集',
+      staked: '已質押',
+      notStaked: '沒有質押',
       disconnect: '取消連結',
       buy: '購買',
       buyOnQuickswap: '到 Quickswap 購買',
-      buyPearl: '購買 PEARL',
+      buyPearl: '購買珍珠',
       addTokenToWallet: '把 Token 加入錢包',
       toNextHarvest: '到下一次收成',
       harvesting: '收成中',
@@ -227,9 +225,9 @@ const Chinese = {
       claimYourNFT: '認領你的 NFT',
     },
     pearlChests: {
-      title: 'PEARL Chests',
+      title: '珍珠寶盒',
       description:
-        'PEARL Chests 像是個人的保險庫，你可以將你的 PEARL 鎖在裡頭。一旦你的 PEARL 被放進一個 Chest 裡，它們將被鎖在裡頭一段時間，生產出更多的 CLAM。',
+        '珍珠寶盒像是個人的保險庫，你可以將你的珍珠鎖在裡頭。一旦你的珍珠被放進一個寶盒裡，它們將被鎖在裡頭一段時間，生產出更多的 CLAM。',
       readMore: '閱讀更多',
       locked: '鎖定',
       unlocked: '解鎖',
@@ -242,17 +240,17 @@ const Chinese = {
       lockupPeriod: '鎖定期間',
       dueDate: '到期日',
       apy: '年度百分比收益（APY）',
-      addPearl: '新增PEARL',
-      claimRewardAndRelock: '認領並重新鎖定 ({{amount}} PEARL)',
+      addPearl: '新增珍珠',
+      claimRewardAndRelock: '認領並重新鎖定 ({{amount}} 顆珍珠)',
       claimReward: '認領獎勵',
       redeemAll: '贖回全部',
       claimAllAndRelock: '認領全部並重新鎖定',
       lockUpModal: {
-        title: 'PEARL Chest 鎖定',
+        title: '鎖定珍珠寶盒',
       },
       lockUp: {
         tabLabel: '鎖定',
-        title: '比較所有 PEARL Chests',
+        title: '比較所有珍珠寶盒',
         days: '天',
         boost: '提升',
         rewardBoost: '獎勵提升',
@@ -261,12 +259,12 @@ const Chinese = {
         noExtraBonus: '沒有額外的票據獎勵',
         bonusTitle: '+{{percentage}}% Off',
         bonusDescription: '任何 (4,4) 債券',
-        nftRequirement: '至少需要： \n{{amount}} PEARL',
+        nftRequirement: '至少需要： \n{{amount}} 顆珍珠',
         select: '選擇',
       },
       redeem: {
         tabLabel: '贖回',
-        connect: '連結錢包，查看你的 PEARL Chests！',
+        connect: '連結錢包，查看你的珍珠寶盒！',
       },
     },
   },
