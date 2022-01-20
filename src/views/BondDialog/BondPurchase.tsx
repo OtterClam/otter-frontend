@@ -265,7 +265,7 @@ function BondPurchase({
       </Grid>
 
       <p className="purchase-note">{hasAllowance() && bond.autostake && t('bonds.purchase.fourFourInfo')}</p>
-      {bond.key === 'mai_clam44' && (
+      {bond.supportNFT && (
         <BondNFTDiscount
           disabled={!canSelect}
           selection={selection}

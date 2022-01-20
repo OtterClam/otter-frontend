@@ -185,7 +185,7 @@ export function BondCard({ bondKey, setRedeemedBond, setNftRedeemed, setRedeemed
           {fullyVested && (
             <>
               {(() => {
-                if (bondKey === 'mai_clam44') {
+                if (bond.supportNFT) {
                   return (
                     <CustomButton
                       type="outline"

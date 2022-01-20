@@ -177,7 +177,7 @@ function BondDialog({
               </Grid>
             )}
 
-            {bond.key === 'mai_clam44' ? null : bond.deprecated ? (
+            {bond.supportNFT ? null : bond.deprecated ? (
               <Tabs
                 centered
                 value={currentTab}

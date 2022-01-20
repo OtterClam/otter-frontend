@@ -185,7 +185,7 @@ query {
           setSuccessDialogOpen={setSuccessDialogOpen}
         />
       )}
-      {selectedBond && bondKey === 'mai_clam44' && (
+      {selectedBond && getBond(bondKey!, chainID).supportNFT && (
         <>
           <BondNTFDiscountDialog
             open={nftDialogOpen}
@@ -196,7 +196,7 @@ query {
           />
         </>
       )}
-      {selectedBond && bondKey === 'mai_clam44' && nftSelection && (
+      {selectedBond && getBond(bondKey!, chainID).supportNFT && nftSelection && (
         <BondSuccessDialog
           bond={selectedBond}
           selection={nftSelection}

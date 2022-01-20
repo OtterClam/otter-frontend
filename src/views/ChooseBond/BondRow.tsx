@@ -72,7 +72,7 @@ function BondRow({ bondKey, setRedeemedBond, setSelection, setNftRedeemed, setRe
   const redeemable = fullyVested ? 'redeem' : 'bond';
   const history = useHistory();
   const redirect = (e: any) => {
-    if (bond.key === 'mai_clam44') {
+    if (bond.supportNFT) {
       return history.push(`/bonds/${bondKey}?action=bond`);
     }
     history.push(`/bonds/${bondKey}?action=${redeemable}`);
@@ -176,7 +176,7 @@ function BondRow({ bondKey, setRedeemedBond, setSelection, setNftRedeemed, setRe
         {fullyVested ? (
           <>
             {(() => {
-              if (bondKey === 'mai_clam44')
+              if (bond.supportNFT)
                 return (
                   <CustomButton
                     bgcolor="otter.otterBlue"
