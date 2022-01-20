@@ -17,7 +17,8 @@ import {
   getTransformedMarketPrice,
   getTransformedMaxPayout,
 } from '../utils';
-import { listLockededNFT, LockedNFT } from './nft-action';
+import { listLockedNFT, LockedNFT } from './nft-action';
+import { IReduxState } from '../slices/state.interface';
 
 interface IChangeApproval {
   bondKey: BondKey;
@@ -89,7 +90,7 @@ interface CalcBondDetailsPayload {
   tokenId: number;
 }
 
-const DEPRECATED_BOND_STATIC_VALUES = {
+const DEPRECATED_BOND_STATIC_VALUES: Omit<BondDetails, 'bond'> = {
   bondDiscount: 1,
   debtRatio: 1,
   bondQuote: 1,
@@ -97,7 +98,8 @@ const DEPRECATED_BOND_STATIC_VALUES = {
   vestingTerm: 1,
   maxPayout: 1,
   bondPrice: 1,
-  marketPrice: '0.0',
+  originalBondPrice: 0,
+  marketPrice: 0,
   maxUserCanBuy: '0.0',
   nftApproved: true,
   lockedNFTs: [],
@@ -107,7 +109,7 @@ export const calcBondDetails = createAsyncThunk(
   'bonding/calcBondDetails',
   async (
     { wallet, bondKey, value, provider, networkID, userBalance, nftAddress, tokenId }: CalcBondDetailsPayload,
-    { dispatch },
+    { dispatch, getState },
   ): Promise<BondDetails> => {
     const amountInWei = !value
       ? ethers.utils.parseEther('0.0001') // Use a realistic SLP ownership
@@ -129,13 +131,13 @@ export const calcBondDetails = createAsyncThunk(
       };
     }
 
-    const discountArgs = bondKey === 'mai_clam44' ? [nftAddress, tokenId] : [];
     // Calculate bond discount
+    const originalPriceArgs = bond.supportNFT ? [zeroAddress, 0] : [];
+    const originalBondPriceInUSD = await bondContract.bondPriceInUSD(...originalPriceArgs);
+    const discountArgs = bond.supportNFT ? [nftAddress, tokenId] : [];
     const bondPriceInUSD = await bondContract.bondPriceInUSD(...discountArgs);
-
-    const maiPrice = await getTokenPrice('MAI');
-    const originalMarketPrice = ((await getMarketPrice(networkID, provider)) as BigNumber).mul(maiPrice);
-    const bondDiscount = getBondDiscount({ originalMarketPrice, bondPriceInUSD });
+    const marketPrice = (getState() as IReduxState).app.marketPrice;
+    const bondDiscount = getBondDiscount(marketPrice, bondPriceInUSD);
 
     // Calculate bond quote
     const bondCalcContract = new ethers.Contract(addresses.CLAM_BONDING_CALC_ADDRESS, BondingCalcContract, provider);
@@ -175,8 +177,8 @@ export const calcBondDetails = createAsyncThunk(
     });
 
     // Get transformed prices
-    const bondPrice = getTransformedBondPrice({ bondPriceInUSD });
-    const marketPrice = getTransformedMarketPrice({ originalMarketPrice });
+    const originalBondPrice = getTransformedBondPrice(originalBondPriceInUSD);
+    const bondPrice = getTransformedBondPrice(bondPriceInUSD);
 
     // Get vesting term
     const terms = await bondContract.terms();
@@ -187,7 +189,7 @@ export const calcBondDetails = createAsyncThunk(
     if (wallet) {
       const { lockedNFTs: lockedNFTsResult } = unwrapResult(
         await dispatch(
-          listLockededNFT({
+          listLockedNFT({
             bondKey,
             wallet,
             networkID,
@@ -216,6 +218,7 @@ export const calcBondDetails = createAsyncThunk(
       purchased,
       vestingTerm,
       maxPayout,
+      originalBondPrice,
       bondPrice,
       marketPrice,
       maxUserCanBuy,

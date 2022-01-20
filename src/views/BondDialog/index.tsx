@@ -17,6 +17,7 @@ import { NFTDiscountOption } from './types';
 import { formatCurrency, trim } from '../../helpers';
 import { useWeb3Context } from '../../hooks';
 import { checkBondAction } from '../ChooseBond/utils';
+import { BondDetails } from 'src/store/slices/bond-slice';
 
 function a11yProps(index: number) {
   return {
@@ -61,7 +62,8 @@ function BondDialog({
   const { provider, address } = useWeb3Context();
 
   const isBondLoading = useAppSelector(state => state.bonding.loading);
-  const { marketPrice, bondPrice } = useAppSelector(state => state.bonding[bond.key]);
+  const marketPrice = useAppSelector(state => state.app.marketPrice);
+  const { bondPrice, originalBondPrice } = useAppSelector(state => state.bonding[bond.key]) as BondDetails;
   const priceDiff = (Number(marketPrice) ?? 0) - (bondPrice ?? 0);
 
   const [recipientAddress, setRecipientAddress] = useState(address);
@@ -129,20 +131,34 @@ function BondDialog({
                   <Box className="bond-price-data-title" component="p" color="text.disabled">
                     {t('bonds.bondPrice')}
                   </Box>
-                  <Box className="bond-price-data-value market-price" component="span" color="secondary.light">
-                    {formatCurrency(+marketPrice, 2)}
-                  </Box>
-                  <Box className="bond-price-data-value" component="span" color="text.secondary">
-                    {isBondLoading ? (
+                  {isBondLoading ? (
+                    <Box className="bond-price-data-value" component="span" color="text.secondary">
                       <Skeleton />
-                    ) : bond.deprecated ? (
-                      '-'
-                    ) : bond.type === 'lp' ? (
-                      `$${trim(bondPrice, 2)}`
-                    ) : (
-                      `${trim(bondPrice, 2)} ${bond.reserveUnit}`
-                    )}
-                  </Box>
+                    </Box>
+                  ) : bond.deprecated ? (
+                    <Box className="bond-price-data-value" component="span" color="text.secondary">
+                      -
+                    </Box>
+                  ) : (
+                    <>
+                      {bondPrice === originalBondPrice ? (
+                        <Box className="bond-price-data-value" component="span" color="text.secondary">
+                          {bond.type === 'lp' ? `$${trim(bondPrice, 2)}` : `${trim(bondPrice, 2)} ${bond.reserveUnit}`}
+                        </Box>
+                      ) : (
+                        <>
+                          <Box className="bond-price-data-value market-price" component="span" color="secondary.light">
+                            {formatCurrency(originalBondPrice, 2)}
+                          </Box>
+                          <Box className="bond-price-data-value" component="span" color="text.secondary">
+                            {bond.type === 'lp'
+                              ? `$${trim(bondPrice, 2)}`
+                              : `${trim(bondPrice, 2)} ${bond.reserveUnit}`}
+                          </Box>
+                        </>
+                      )}
+                    </>
+                  )}
                   {priceDiff > 0 && (
                     <Box component="div">
                       <StatusChip status={Status.Success} label={`$${trim(priceDiff, 2)} ${t('bonds.bondDiscount')}`} />

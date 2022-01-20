@@ -8,7 +8,7 @@ import { setAll } from '../../helpers';
 import { fetchPendingTxns, clearPendingTxn } from './pending-txns-slice';
 import { formatEther } from '@ethersproject/units';
 import axios from 'axios';
-import { IReduxState } from './state.interface';
+import { ThunkOptions } from '../types';
 
 export interface ITerm {
   note: INote;
@@ -91,10 +91,6 @@ interface IExtendLockDetails {
   provider: JsonRpcProvider;
   tokenId: string;
   address: string;
-}
-
-interface ThunkOptions {
-  state: IReduxState;
 }
 
 export const loadTermsDetails = createAsyncThunk(

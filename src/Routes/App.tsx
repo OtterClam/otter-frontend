@@ -97,9 +97,7 @@ function App() {
 
     if (whichDetails === 'account' && address && connected) {
       loadAccount(loadProvider);
-      // loadTerms(loadProvider);
       if (isAppLoaded) return;
-
       loadApp(loadProvider);
     }
 
@@ -113,6 +111,13 @@ function App() {
   const loadApp = useCallback(
     loadProvider => {
       dispatch(loadAppDetails({ networkID: chainID, provider: loadProvider }));
+    },
+    [connected],
+  );
+
+  const loadAccount = useCallback(
+    loadProvider => {
+      dispatch(loadAccountDetails({ networkID: chainID, address, provider: loadProvider }));
       dispatch(
         batchGetBondDetails({
           wallet: address,
@@ -127,14 +132,7 @@ function App() {
       dispatch(batchListBondNFTDiscounts({ provider, networkID: chainID }));
       dispatch(listMyNFT({ provider, wallet: walletAddress, networkID: chainID }));
     },
-    [connected],
-  );
-
-  const loadAccount = useCallback(
-    loadProvider => {
-      dispatch(loadAccountDetails({ networkID: chainID, address, provider: loadProvider }));
-    },
-    [connected],
+    [connected, address],
   );
 
   useEffect(() => {

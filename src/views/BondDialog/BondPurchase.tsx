@@ -21,7 +21,7 @@ import ActionButton from '../../components/Button/ActionButton';
 import { prettifySeconds, shorten, trim } from '../../helpers';
 import { useWeb3Context } from '../../hooks';
 import { bondAsset, calcBondDetails, changeApproval } from '../../store/actions/bond-action';
-import { approveNFT, listLockededNFT, listMyNFT } from '../../store/actions/nft-action';
+import { approveNFT, listLockedNFT, listMyNFT } from '../../store/actions/nft-action';
 import { IPendingTxn } from '../../store/slices/pending-txns-slice';
 import { IReduxState } from '../../store/slices/state.interface';
 import BondNFTDiscount from './BondNFTDiscount';
@@ -138,7 +138,7 @@ function BondPurchase({
     if (bondTx.payload) {
       dispatch(listMyNFT({ wallet: address, networkID: chainID, provider }));
       dispatch(
-        listLockededNFT({
+        listLockedNFT({
           bondKey,
           wallet: address,
           networkID: chainID,

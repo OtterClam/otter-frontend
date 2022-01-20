@@ -8,7 +8,7 @@ import CustomButton from 'src/components/Button/CustomButton';
 import { LabelChip, Status, StatusChip } from 'src/components/Chip';
 import { Bond, BondKey, getBond } from 'src/constants';
 import { redeemBond } from 'src/store/actions/bond-action';
-import { BondNFTDiscount, listLockededNFT, listMyNFT, LockedNFT } from 'src/store/actions/nft-action';
+import { BondNFTDiscount, listLockedNFT, listMyNFT, LockedNFT } from 'src/store/actions/nft-action';
 import { useAppDispatch, useAppSelector } from 'src/store/hook';
 import { localeString, prettyShortVestingPeriod, priceUnits, trim } from '../../helpers';
 import { useWeb3Context } from '../../hooks';
@@ -102,7 +102,7 @@ function BondRow({ bondKey, setRedeemedBond, setSelection, setNftRedeemed, setRe
     if (redeemed.payload) {
       dispatch(listMyNFT({ wallet: address, networkID: chainID, provider }));
       dispatch(
-        listLockededNFT({
+        listLockedNFT({
           bondKey,
           wallet: address,
           networkID: chainID,

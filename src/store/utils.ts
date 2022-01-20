@@ -1,14 +1,10 @@
-import { formatUnits } from '@ethersproject/units';
-import { BigNumber } from 'ethers';
+import { formatEther, formatUnits } from '@ethersproject/units';
+import { BigNumber, ethers } from 'ethers';
 import { BondType } from '../constants';
 
-type GetBoundDiscountPayload = {
-  originalMarketPrice: BigNumber;
-  bondPriceInUSD: number;
-};
-export const getBondDiscount = ({ originalMarketPrice, bondPriceInUSD }: GetBoundDiscountPayload) => {
-  return (originalMarketPrice.toNumber() * 1e9 - bondPriceInUSD) / bondPriceInUSD;
-};
+export function getBondDiscount(marketPrice: number, bondPriceInUSD: number) {
+  return (marketPrice - bondPriceInUSD) / bondPriceInUSD;
+}
 
 type GetDebtRatioPayload = {
   bondType: BondType;
@@ -65,12 +61,9 @@ export const getTransformedMaxPayout = ({ originalMaxPayout }: GetTransformedMax
   return originalMaxPayout / 1e9;
 };
 
-type GetTransformedBondPrice = {
-  bondPriceInUSD: number;
-};
-export const getTransformedBondPrice = ({ bondPriceInUSD }: GetTransformedBondPrice) => {
-  return bondPriceInUSD / 1e18;
-};
+export function getTransformedBondPrice(bondPriceInUSD: BigNumber) {
+  return Number(formatEther(bondPriceInUSD));
+}
 
 type GetTransformedMarketPricePayload = {
   originalMarketPrice: BigNumber;

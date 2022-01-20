@@ -208,7 +208,7 @@ export interface ListLockedNFTDetail {
   bondKey: BondKey;
 }
 
-export const listLockededNFT = createAsyncThunk(
+export const listLockedNFT = createAsyncThunk(
   'bond/nft/locked/list',
   async ({ provider, networkID, wallet, bondKey }: ListLockedNFTPayload): Promise<ListLockedNFTDetail> => {
     if (!wallet || bondKey != 'mai_clam44') return { bondKey, lockedNFTs: [] };

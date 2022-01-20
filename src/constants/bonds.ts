@@ -49,6 +49,7 @@ export interface Bond {
   deprecated: boolean;
   autostake: boolean;
   stable: boolean;
+  supportNFT: boolean;
   oracle?: string;
 }
 
@@ -96,6 +97,7 @@ export function listBonds(chainId: number): BondMap {
       autostake: true,
       stable: false,
       oracle: '0xAB594600376Ec9fD91F8e885dADF0CE036862dE0',
+      supportNFT: false,
     },
     matic_clam: {
       key: 'matic_clam',
@@ -109,6 +111,7 @@ export function listBonds(chainId: number): BondMap {
       autostake: true,
       stable: false,
       oracle: '0xAB594600376Ec9fD91F8e885dADF0CE036862dE0',
+      supportNFT: false,
     },
     frax: {
       key: 'frax',
@@ -121,6 +124,7 @@ export function listBonds(chainId: number): BondMap {
       deprecated: true,
       autostake: true,
       stable: true,
+      supportNFT: false,
     },
     frax2: {
       key: 'frax2',
@@ -133,6 +137,7 @@ export function listBonds(chainId: number): BondMap {
       deprecated: false,
       autostake: true,
       stable: true,
+      supportNFT: false,
     },
     frax_clam: {
       key: 'frax_clam',
@@ -146,6 +151,7 @@ export function listBonds(chainId: number): BondMap {
       deprecated: false,
       autostake: true,
       stable: true,
+      supportNFT: false,
     },
     mai: {
       key: 'mai',
@@ -158,6 +164,7 @@ export function listBonds(chainId: number): BondMap {
       deprecated: true,
       autostake: false,
       stable: true,
+      supportNFT: false,
     },
     mai44: {
       key: 'mai44',
@@ -170,6 +177,7 @@ export function listBonds(chainId: number): BondMap {
       deprecated: false,
       autostake: true,
       stable: true,
+      supportNFT: false,
     },
     mai_clam: {
       key: 'mai_clam',
@@ -182,6 +190,7 @@ export function listBonds(chainId: number): BondMap {
       deprecated: true,
       autostake: false,
       stable: true,
+      supportNFT: false,
     },
     mai_clam44: {
       key: 'mai_clam44',
@@ -194,6 +203,7 @@ export function listBonds(chainId: number): BondMap {
       deprecated: false,
       autostake: true,
       stable: true,
+      supportNFT: true,
     },
     'mai-v1': {
       key: 'mai-v1',
@@ -206,6 +216,7 @@ export function listBonds(chainId: number): BondMap {
       deprecated: true,
       autostake: false,
       stable: true,
+      supportNFT: false,
     },
     'mai_clam-v1': {
       key: 'mai_clam-v1',
@@ -218,6 +229,7 @@ export function listBonds(chainId: number): BondMap {
       deprecated: true,
       autostake: false,
       stable: true,
+      supportNFT: false,
     },
     'mai_clam_v2-v1': {
       key: 'mai_clam_v2-v1',
@@ -230,6 +242,7 @@ export function listBonds(chainId: number): BondMap {
       deprecated: true,
       autostake: false,
       stable: true,
+      supportNFT: false,
     },
   };
 }

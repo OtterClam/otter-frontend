@@ -7,8 +7,8 @@ export const contractForBond = (
   networkID: number,
   provider: ethers.Signer | ethers.providers.Provider,
 ): ethers.Contract => {
-  const { address, autostake, key, stable } = getBond(bond, networkID);
-  if (key === 'mai_clam44') {
+  const { address, autostake, stable, supportNFT } = getBond(bond, networkID);
+  if (supportNFT) {
     return new ethers.Contract(address, OtterPAWBondStakeDepository, provider);
   }
   if (stable) {
