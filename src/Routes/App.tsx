@@ -109,15 +109,8 @@ function App() {
   }
 
   const loadApp = useCallback(
-    loadProvider => {
-      dispatch(loadAppDetails({ networkID: chainID, provider: loadProvider }));
-    },
-    [connected],
-  );
-
-  const loadAccount = useCallback(
-    loadProvider => {
-      dispatch(loadAccountDetails({ networkID: chainID, address, provider: loadProvider }));
+    async loadProvider => {
+      await dispatch(loadAppDetails({ networkID: chainID, provider: loadProvider }));
       dispatch(
         batchGetBondDetails({
           wallet: address,
@@ -129,8 +122,15 @@ function App() {
           tokenId: 0,
         }),
       );
-      dispatch(batchListBondNFTDiscounts({ provider, networkID: chainID }));
-      dispatch(listMyNFT({ provider, wallet: walletAddress, networkID: chainID }));
+      dispatch(batchListBondNFTDiscounts({ provider: loadProvider, networkID: chainID }));
+    },
+    [connected],
+  );
+
+  const loadAccount = useCallback(
+    loadProvider => {
+      dispatch(loadAccountDetails({ networkID: chainID, address, provider: loadProvider }));
+      dispatch(listMyNFT({ provider: loadProvider, wallet: walletAddress, networkID: chainID }));
     },
     [connected, address],
   );

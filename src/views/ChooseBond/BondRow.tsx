@@ -37,7 +37,6 @@ function BondRow({ bondKey, setRedeemedBond, setSelection, setNftRedeemed, setRe
   // Use BondPrice as indicator of loading.
   const isBondLoading = useAppSelector(state => !state.bonding[bondKey]?.bondPrice ?? true);
   const bond = getBond(bondKey, chainID);
-  const bonding = useAppSelector(state => state.bonding[bondKey]);
 
   const lockedNFTs = useAppSelector(state => state.bonding[bondKey]?.lockedNFTs);
   const nftDiscounts = useAppSelector<BondNFTDiscount[]>(state => state.nft.bondNftDiscounts.data[bond.key]);

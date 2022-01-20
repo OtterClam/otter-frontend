@@ -30,7 +30,7 @@ export function BondCard({ bondKey, setRedeemedBond, setNftRedeemed, setRedeemed
   const dispatch = useAppDispatch();
 
   const { bondPrice, bondDiscount, purchased, marketPrice, lockedNFTs } = useAppSelector(
-    state => state.bonding[bondKey],
+    state => state.bonding[bondKey] || {},
   );
   const nftDiscounts = useAppSelector<BondNFTDiscount[]>(state => state.nft.bondNftDiscounts.data[bond.key]);
   const isBondLoading = useAppSelector(state => !state.bonding[bondKey]?.bondPrice ?? true);
@@ -157,7 +157,7 @@ export function BondCard({ bondKey, setRedeemedBond, setNftRedeemed, setRedeemed
         <Grid item>{t('bonds.myBond')}</Grid>
         <Grid item className="bond-card-value">
           {myBalance ? `${trim(myBalance, 2)} ${bond.autostake ? 'sCLAM' : 'CLAM'}` : '-'}
-          {lockedNFTs && lockedNFTs.length && <BondNFTDisplay NFTs={lockedNFTs} />}
+          {lockedNFTs?.length > 0 && <BondNFTDisplay NFTs={lockedNFTs} />}
         </Grid>
       </Grid>
 

@@ -3,7 +3,7 @@ import { createAsyncThunk, unwrapResult } from '@reduxjs/toolkit';
 import { BigNumber, constants, ethers } from 'ethers';
 import { AggregatorV3InterfaceABI, BondingCalcContract, ERC721, StakedClamContract } from '../../abi';
 import { BondKey, BondKeys, getAddresses, getBond, zeroAddress } from '../../constants';
-import { contractForBond, contractForReserve, getMarketPrice, getTokenPrice } from '../../helpers';
+import { contractForBond, contractForReserve } from '../../helpers';
 import { calculateUserBondDetails, fetchAccountSuccess, getBalances } from '../slices/account-slice';
 import { BondDetails } from '../slices/bond-slice';
 import { clearPendingTxn, fetchPendingTxns } from '../slices/pending-txns-slice';
@@ -137,7 +137,6 @@ export const calcBondDetails = createAsyncThunk(
     const discountArgs = bond.supportNFT ? [nftAddress, tokenId] : [];
     const bondPriceInUSD = await bondContract.bondPriceInUSD(...discountArgs);
     const marketPrice = (getState() as IReduxState).app.marketPrice;
-    const bondDiscount = getBondDiscount(marketPrice, bondPriceInUSD);
 
     // Calculate bond quote
     const bondCalcContract = new ethers.Contract(addresses.CLAM_BONDING_CALC_ADDRESS, BondingCalcContract, provider);
@@ -179,6 +178,7 @@ export const calcBondDetails = createAsyncThunk(
     // Get transformed prices
     const originalBondPrice = getTransformedBondPrice(originalBondPriceInUSD);
     const bondPrice = getTransformedBondPrice(bondPriceInUSD);
+    const bondDiscount = getBondDiscount(marketPrice, bondPrice);
 
     // Get vesting term
     const terms = await bondContract.terms();
@@ -264,10 +264,10 @@ export const bondAsset = createAsyncThunk(
     const signer = provider.getSigner();
     const bondContract = contractForBond(bondKey, networkID, signer);
 
-    const discountArgs = bondKey === 'mai_clam44' ? [nftAddress, tokenId] : [];
+    const bond = getBond(bondKey, networkID);
+    const discountArgs = bond.supportNFT ? [nftAddress, tokenId] : [];
     const calculatePremium = await bondContract.bondPrice(...discountArgs);
     const maxPremium = Math.round(calculatePremium * (1 + acceptedSlippage));
-    const bond = getBond(bondKey, networkID);
 
     let bondTx;
     try {
@@ -314,7 +314,7 @@ export const redeemBond = createAsyncThunk(
 
     let redeemTx;
     try {
-      const redeemArgs = [address, ...(bondKey === 'mai_clam44' ? [] : [autostake])];
+      const redeemArgs = [address, ...(bond.supportNFT ? [] : [autostake])];
       redeemTx = await bondContract.redeem(...redeemArgs);
       const pendingTxnType = 'redeem_bond_' + bond.key + (autostake === true ? '_autostake' : '');
       dispatch(fetchPendingTxns({ txnHash: redeemTx.hash, text: 'Redeeming ' + bond.name, type: pendingTxnType }));

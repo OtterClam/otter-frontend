@@ -83,18 +83,12 @@ export const batchListBondNFTDiscounts = createAsyncThunk(
   async ({ networkID, provider }: BatchListBondNFTDiscountPayload, { dispatch }) => {
     const bonds = listBonds(networkID);
     await Promise.all(
-      BondKeys.filter(k => k === 'mai_clam44').map(bondKey => {
+      BondKeys.filter(k => bonds[k].supportNFT).map(bondKey => {
         dispatch(listBondNFTDiscounts({ bondKey, provider, bondAddress: bonds[bondKey].address }));
       }),
     );
   },
 );
-
-type Token = {
-  id: string;
-  discount: number;
-  endEpoch: number; // this is otter time unit, 1 epoch means 1 hour after the first day of Otter Era lol;
-};
 
 interface ListMyNFTPayload {
   provider: JsonRpcProvider;
@@ -212,7 +206,6 @@ export const listLockedNFT = createAsyncThunk(
   'bond/nft/locked/list',
   async ({ provider, networkID, wallet, bondKey }: ListLockedNFTPayload): Promise<ListLockedNFTDetail> => {
     if (!wallet || bondKey != 'mai_clam44') return { bondKey, lockedNFTs: [] };
-    const addresses = getAddresses(networkID);
     const bond = contractForBond(bondKey, networkID, provider);
     const nftAddresses = pawAddresses(networkID);
     const info = await bond.bondInfo(wallet);
@@ -227,7 +220,7 @@ export const listLockedNFT = createAsyncThunk(
           return {
             id: discount.tokenID.toNumber() as number,
             address: discount.nft as string,
-            type: nftAddresses.includes(discount.nft) ? 'nft' : ('note' as NFTType),
+            type: (nftAddresses.includes(discount.nft) ? 'nft' : 'note') as NFTType,
             key: symbol as NFT,
             name: name as string,
           };
