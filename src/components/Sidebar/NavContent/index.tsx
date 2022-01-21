@@ -23,6 +23,27 @@ import ToggleLight from './toggle-light.png';
 import Davatar from '@davatar/react';
 import { useAppSelector } from 'src/store/hook';
 
+import IconDefaultBond from './icons/components/bond/IconDefaultBond';
+import IconActiveBond from './icons/components/bond/IconActiveBond';
+
+import IconDefaultCalculator from './icons/components/calculator/IconDefaultCalculator';
+import IconActiveCalculator from './icons/components/calculator/IconActiveCalculator';
+
+import IconDefaultPearlChest from './icons/components/pearl-chest/IconDefaultPearlChest';
+import IconActivePearlChest from './icons/components/pearl-chest/IconActivePearlChest';
+
+import IconDefaultWrap from './icons/components/wrap/IconDefaultWrap';
+import IconActiveWrap from './icons/components/wrap/IconActiveWrap';
+
+import IconDefaultStake from './icons/components/stake/IconDefaultStake';
+import IconActiveStake from './icons/components/stake/IconActiveStake';
+
+import IconDefaultDashboard from './icons/components/dashboard/IconDefaultDashboard';
+import IconActiveDashboard from './icons/components/dashboard/IconActiveDashboard';
+
+import IconDefaultNFT from './icons/components/NFT/IconDefaultNFT';
+import IconDefaultBuyClam from './icons/components/buy-clam/IconDefaultBuyClam';
+
 const useStyles = makeStyles(theme => ({
   navbar: {
     '& .active': {
@@ -83,7 +104,9 @@ function NavContent() {
   const address = useAddress();
   const { ensName } = useENS(address);
   const location = useLocation();
-  const currenTheme = useContext(AppThemeContext).name;
+  const currentTheme = useContext(AppThemeContext);
+  const currentThemeName = currentTheme.name;
+  const currentMainColor = currentTheme.theme.palette.primary.main;
   const networkID = useSelector<IReduxState, number>(state => {
     return (state.app && state.app.networkID) || DEFAULT_NETWORK;
   });
@@ -132,7 +155,11 @@ function NavContent() {
                 className="button-dapp-menu"
               >
                 <div className="dapp-menu-item">
-                  {checkPage(location, 'dashboard') ? <ActiveMenuIcon /> : <InactiveMenuIcon />}
+                  {checkPage(location, 'dashboard') ? (
+                    <IconActiveDashboard />
+                  ) : (
+                    <IconDefaultDashboard color={currentMainColor} />
+                  )}
                   <p>{t('common.dashboard')}</p>
                 </div>
               </Link>
@@ -148,7 +175,7 @@ function NavContent() {
                 className="button-dapp-menu"
               >
                 <div className="dapp-menu-item">
-                  {checkPage(location, 'stake') ? <ActiveMenuIcon /> : <InactiveMenuIcon />}
+                  {checkPage(location, 'stake') ? <IconActiveStake /> : <IconDefaultStake color={currentMainColor} />}
                   <p>{t('common.stake')}</p>
                 </div>
               </Link>
@@ -164,7 +191,7 @@ function NavContent() {
                 className="button-dapp-menu"
               >
                 <div className="dapp-menu-item">
-                  {checkPage(location, 'wrap') ? <ActiveMenuIcon /> : <InactiveMenuIcon />}
+                  {checkPage(location, 'wrap') ? <IconActiveWrap /> : <IconDefaultWrap color={currentMainColor} />}
                   <p>{t('common.wrap')}</p>
                 </div>
               </Link>
@@ -180,7 +207,11 @@ function NavContent() {
                 className="button-dapp-menu"
               >
                 <div className="dapp-menu-item">
-                  {checkPage(location, 'pearl-chests') ? <ActiveMenuIcon /> : <InactiveMenuIcon />}
+                  {checkPage(location, 'pearl-chests') ? (
+                    <IconActivePearlChest />
+                  ) : (
+                    <IconDefaultPearlChest color={currentMainColor} />
+                  )}
                   <p>{t('common.pearlChests')}</p>
                   <div className="dapp-menu-item__new">NEW</div>
                 </div>
@@ -197,7 +228,7 @@ function NavContent() {
                 className="button-dapp-menu"
               >
                 <div className="dapp-menu-item">
-                  {checkPage(location, 'bonds') ? <ActiveMenuIcon /> : <InactiveMenuIcon />}
+                  {checkPage(location, 'bonds') ? <IconActiveBond /> : <IconDefaultBond color={currentMainColor} />}
                   <p>{t('common.bond')}</p>
                 </div>
               </Link>
@@ -231,7 +262,7 @@ function NavContent() {
                 className="button-dapp-menu"
               >
                 <div className="dapp-menu-item">
-                  <InactiveMenuIcon />
+                  <IconDefaultNFT color={currentMainColor} />
                   <p>NFT</p>
                 </div>
               </Link>
@@ -243,7 +274,7 @@ function NavContent() {
                 className="button-dapp-menu"
               >
                 <div className="dapp-menu-item">
-                  <InactiveMenuIcon />
+                  <IconDefaultBuyClam />
                   <p>{t('common.buyThing')}CLAM</p>
                 </div>
               </Link>
@@ -258,7 +289,11 @@ function NavContent() {
                 className="button-dapp-menu"
               >
                 <div className="dapp-menu-item">
-                  {checkPage(location, 'calculator') ? <ActiveMenuIcon /> : <InactiveMenuIcon />}
+                  {checkPage(location, 'calculator') ? (
+                    <IconActiveCalculator />
+                  ) : (
+                    <IconDefaultCalculator color={currentMainColor} />
+                  )}
                   <p>{t('common.calculator')}</p>
                 </div>
               </Link>
@@ -267,7 +302,7 @@ function NavContent() {
         </div>
         <Box className="dapp-menu-bottom" display="flex" justifyContent="flex-end" flexDirection="column">
           <Grid container justifyContent="center" alignItems="center" spacing={0}>
-            {currenTheme === 'dark' && (
+            {currentThemeName === 'dark' && (
               <Grid item>
                 <Box
                   className="light-dark-toggle"
@@ -286,7 +321,7 @@ function NavContent() {
                 </Box>
               </Grid>
             )}
-            {currenTheme === 'light' && (
+            {currentThemeName === 'light' && (
               <Grid item>
                 <Box
                   className="light-dark-toggle"
