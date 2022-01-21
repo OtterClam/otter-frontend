@@ -164,6 +164,7 @@ const English = {
     // src\views\Stake
     stake: {
       clamStaking: 'CLAM Staking',
+      chestAPY: 'Max + ',
       connectWalletDescription: 'Connect your wallet to stake CLAM tokens!',
       approvalInfo:
         'Note: The "Approve" transaction is only needed when staking/unstaking for the first time; subsequent staking/unstaking only requires you to perform the "Stake" or "Unstake" transaction.',

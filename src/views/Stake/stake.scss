@@ -267,6 +267,22 @@
   // color: $clam-pink;
 }
 
+.single-stake-chest-value {
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+  font-size: 14px;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  gap: 5px;
+
+  img {
+    width: 24px;
+    height: 20px;
+  }
+}
+
 .stack-table-title {
   font-style: normal;
   font-weight: 600;

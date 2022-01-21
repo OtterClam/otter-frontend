@@ -1,5 +1,6 @@
 import {
   Box,
+  Divider,
   FormControl,
   Grid,
   InputAdornment,
@@ -10,24 +11,26 @@ import {
   Tab,
   Tabs,
   TabsActions,
-  Divider,
+  Typography,
   Zoom,
 } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
+import _ from 'lodash';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import InfoTooltip from 'src/components/InfoTooltip/InfoTooltip.jsx';
 import ActionButton from '../../components/Button/ActionButton';
 import RebaseTimer from '../../components/RebaseTimer/RebaseTimer';
 import TabPanel from '../../components/TabPanel';
 import { trim } from '../../helpers';
-import { useWeb3Context, useBonds } from '../../hooks';
+import { useBonds, useWeb3Context } from '../../hooks';
 import { IPendingTxn } from '../../store/slices/pending-txns-slice';
-import InfoTooltip from 'src/components/InfoTooltip/InfoTooltip.jsx';
 import { changeApproval, changeStake, claimWarmup } from '../../store/slices/stake-thunk';
 import { IReduxState } from '../../store/slices/state.interface';
 import './stake.scss';
 import StakeDialog from './StakeDialog';
+import IconPearlChest from 'src/assets/icons/icon_pearl_chest_3.png';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -52,6 +55,10 @@ const useStyles = makeStyles(theme => ({
     },
   },
 }));
+
+const percentFormatter = new Intl.NumberFormat('en-US', {
+  style: 'percent',
+});
 
 function a11yProps(index: number) {
   return {
@@ -88,6 +95,7 @@ function Stake() {
   const stakingAPY = useSelector<IReduxState, number>(state => state.app.stakingAPY);
   const stakingTVL = useSelector<IReduxState, number>(state => state.app.stakingTVL);
   const pendingTransactions = useSelector<IReduxState, IPendingTxn[]>(state => state.pendingTransactions);
+  const chestAPY = useSelector<IReduxState, number>(state => _.max(state.lake.terms.map(p => p.apy)) || 0);
 
   const pearlBalance = useSelector<IReduxState, string>(state => state.account.balances?.pearl);
 
@@ -194,13 +202,17 @@ function Stake() {
                     <div className="stake-apy">
                       <p className="single-stake-subtitle">{t('common.apy')}</p>
                       <Box component="p" color="text.secondary" className="single-stake-subtitle-value">
-                        {stakingAPY ? (
-                          new Intl.NumberFormat('en-US', {
-                            style: 'percent',
-                          }).format(stakingAPY)
-                        ) : (
-                          <Skeleton width="150px" />
-                        )}
+                        {stakingAPY ? percentFormatter.format(stakingAPY) : <Skeleton width="150px" />}
+                      </Box>
+                      <Box
+                        component="p"
+                        color="text.secondary"
+                        className="single-stake-chest-value"
+                        bgcolor="mode.lightGray200"
+                      >
+                        <img src={IconPearlChest} />
+                        <Typography color="textPrimary">{t('stake.chestAPY')}</Typography>
+                        {chestAPY ? percentFormatter.format(chestAPY) : <Skeleton width="150px" />}
                       </Box>
                     </div>
                   </Grid>

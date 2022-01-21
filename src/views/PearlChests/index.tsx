@@ -24,9 +24,6 @@ export default function PearlChests() {
   const { tabValue, tabsActions, handleTabValueChangeEvent } = useTabs();
   const { address, connect, connected, chainID, provider, readOnlyProvider } = useWeb3Context();
   useEffect(() => {
-    dispatch(loadTermsDetails({ chainID, provider: readOnlyProvider }));
-  }, [readOnlyProvider]);
-  useEffect(() => {
     if (connected) {
       dispatch(loadPearlAllowance({ address, chainID, provider }));
     }
