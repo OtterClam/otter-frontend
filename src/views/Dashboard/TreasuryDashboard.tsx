@@ -114,7 +114,7 @@ function TreasuryDashboard() {
       // @ts-ignore
       let apy = r.data.protocolMetrics
         // @ts-ignore
-        .filter(p => p.timestamp * 1000 > new Date('2022-1-17 0:00Z'))
+        .filter(p => p.timestamp * 1000 > Date.UTC(2022, 0, 17))
         // @ts-ignore
         .map(entry => ({
           apy: entry.currentAPY,
