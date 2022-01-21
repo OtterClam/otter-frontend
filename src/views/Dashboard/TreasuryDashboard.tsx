@@ -10,7 +10,6 @@ import { IReduxState } from 'src/store/slices/state.interface';
 import Chart from '../../components/Chart/Chart.jsx';
 import { formatCurrency, getTokenImage, trim } from '../../helpers';
 import apollo from '../../lib/apolloClient';
-import OtterKing from './otterking.png';
 import './treasury-dashboard.scss';
 import { bulletpoints, itemType, treasuryDataQuery } from './treasuryData.js';
 
@@ -23,7 +22,7 @@ function TreasuryDashboard() {
     coin: ['MAI', 'FRAX', 'MATIC'],
     rfv: ['MAI', 'FRAX'],
     holder: ['CLAMies'],
-    apy: [t('common.apy')],
+    apy: [t('common.180Chest'), t('common.90Chest'), t('common.28Chest'), t('common.14Chest'), t('common.staking')],
     runway: [
       t('dashboard.tooltipItems.current'),
       `100K ${t('common.apy')}`,
@@ -46,9 +45,9 @@ function TreasuryDashboard() {
   };
   const [data, setData] = useState<any>(null);
   const [apy, setApy] = useState<any>(null);
+  const [apyScale, setApyScale] = useState<number>(0);
   const [runway, setRunway] = useState(null);
   const [staked, setStaked] = useState(null);
-  const [apyScale, setApyScale] = useState<number>(0);
   const [backingPerClam, setBackingPerClam] = useState<number | null>(null);
   const theme = useTheme();
   const smallerScreen = useMediaQuery('(max-width: 650px)');
@@ -56,7 +55,6 @@ function TreasuryDashboard() {
 
   const circSupply = useSelector<IReduxState, number>(state => state.app.circSupply);
   const totalSupply = useSelector<IReduxState, number>(state => state.app.totalSupply);
-  const stakingRatio = useSelector<IReduxState, number>(state => state.app.stakingRatio);
   const marketCap = useSelector<IReduxState, number>(state => state.app.marketCap);
   const marketPrice = useSelector<IReduxState, number>(state => state.app.marketPrice);
   const pearlPrice = useSelector<IReduxState, number>(state => state.app.pearlPrice);
@@ -114,18 +112,23 @@ function TreasuryDashboard() {
       let runway = metrics.filter(pm => pm.runway100k > 5);
       setRunway(runway);
       // @ts-ignore
-      let apy = r.data.protocolMetrics.map(entry => ({
-        apy: entry.currentAPY,
-        timestamp: entry.timestamp,
-      }));
-      //First data point seems to be bugged?
-      //Reports an APY of 3191769842703686000000, which messes with graph scale
-      var sl_apy = apy.slice(0, -1);
-      setApy(sl_apy);
+      let apy = r.data.protocolMetrics
+        // @ts-ignore
+        .filter(p => p.timestamp * 1000 > new Date('2022-1-17 0:00Z'))
+        // @ts-ignore
+        .map(entry => ({
+          apy: entry.currentAPY,
+          diamond: entry.diamondHandAPY,
+          stone: entry.stoneHandAPY,
+          furry: entry.furryHandAPY,
+          safe: entry.safeHandAPY,
+          timestamp: entry.timestamp,
+        }));
+      setApy(apy);
       const apyMax = Math.max.apply(
         Math,
-        (sl_apy as any).map(function (o: any) {
-          return o.apy;
+        (apy as any).map((o: any) => {
+          return o.diamond;
         }),
       );
       setApyScale(apyMax);
@@ -319,22 +322,20 @@ function TreasuryDashboard() {
                 {
                   // @ts-ignore
                   <Chart
-                    type="line"
+                    type="multi"
                     scale="auto"
                     data={apy}
-                    dataKey={['apy']}
-                    color={theme.palette.text.primary}
-                    stroke={[theme.palette.text.primary]}
+                    dataKey={['diamond', 'stone', 'furry', 'safe', 'apy']}
+                    stroke={bulletpoints.apy.map(p => p.background)}
                     headerText={t('dashboard.apyOverTime')}
                     dataFormat="percent"
                     // @ts-ignore
-                    headerSubText={`${apy && trim(apy[0].apy, 2)}%`}
+                    headerSubText={`Max ${apy && trim(apy[0].diamond, 2)}%`}
                     bulletpointColors={bulletpoints.apy}
                     itemNames={tooltipItems.apy}
                     itemType={itemType.percentage}
                     infoTooltipMessage={tooltipInfoMessages.apy}
                     domain={[0, apyScale]}
-
                     // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
                   />
                 }

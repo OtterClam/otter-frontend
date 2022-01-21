@@ -26,6 +26,10 @@ query {
     runway10k
     runway50k
     runway100k
+    diamondHandAPY
+    stoneHandAPY
+    furryHandAPY
+    safeHandAPY
     runwayCurrent
     treasuryClamMaiPOL
   }
@@ -98,6 +102,26 @@ export const bulletpoints = {
       right: 20,
       top: -12,
       background: '#1D2654',
+    },
+    {
+      right: 20,
+      top: -12,
+      background: '#000000',
+    },
+    {
+      right: 20,
+      top: -12,
+      background: '#2EC608',
+    },
+    {
+      right: 20,
+      top: -12,
+      background: '#49A1F2',
+    },
+    {
+      right: 20,
+      top: -12,
+      background: '#c9184a',
     },
   ],
   runway: [

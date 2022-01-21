@@ -247,7 +247,10 @@ const renderLineChart = (
     <Tooltip
       content={<CustomTooltip bulletpointColors={bulletpointColors} itemNames={itemNames} itemType={itemType} />}
     />
-    <Line type="monotone" dataKey={dataKey[0]} stroke={stroke ? stroke : 'none'} color={color} dot={false} />;
+    {dataKey.map((key, i) => (
+      <Line type="monotone" key={i} dataKey={key} stroke={stroke ? stroke : 'none'} color={color} dot={false} />
+    ))}
+
     {renderExpandedChartStroke(isExpanded, expandedGraphStrokeColor)}
   </LineChart>
 );
@@ -283,7 +286,9 @@ const renderMultiLineChart = (
       tick={yAxisTickProps}
       tickLine={false}
       width={33}
-      tickFormatter={number => (number !== 0 ? `${trim(parseFloat(number), 0)}` : '')}
+      tickFormatter={number =>
+        number !== 0 ? (dataFormat !== 'percent' ? `${number}` : `${trim(parseFloat(number) / 1000, 0)}k`) : ''
+      }
       domain={[0, 'auto']}
       connectNulls={true}
       allowDataOverflow={false}
@@ -291,10 +296,9 @@ const renderMultiLineChart = (
     <Tooltip
       content={<CustomTooltip bulletpointColors={bulletpointColors} itemNames={itemNames} itemType={itemType} />}
     />
-    <Line dataKey={dataKey[0]} stroke={stroke[0]} dot={false} />;
-    <Line dataKey={dataKey[1]} stroke={stroke[1]} dot={false} />;
-    <Line dataKey={dataKey[2]} stroke={stroke[2]} dot={false} />;
-    <Line dataKey={dataKey[3]} stroke={stroke[3]} dot={false} />;
+    {dataKey.map((key, i) => (
+      <Line dataKey={key} stroke={stroke[i]} dot={false} />
+    ))}
     {renderExpandedChartStroke(isExpanded, expandedGraphStrokeColor)}
   </LineChart>
 );

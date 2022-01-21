@@ -7,7 +7,7 @@ const English = {
       wrap: 'Wrap',
       stake: 'Stake',
       unstake: 'Unstake',
-      staking: 'staking',
+      staking: 'Staking',
       migrate: 'Migrate',
       pearlChests: 'Pearl Chests',
       roi: 'ROI', //Return on Investment
@@ -36,6 +36,10 @@ const English = {
       dashboard: 'Dashboard',
       calculator: 'Calculator',
       helpTranslate: 'Help us Translate',
+      '180Chest': '180-Day Chest',
+      '90Chest': '90-Day Chest',
+      '28Chest': '28-Day Chest',
+      '14Chest': '14-Day Chest',
     },
     time: {
       days: 'Days',
