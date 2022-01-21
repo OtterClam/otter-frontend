@@ -14,7 +14,6 @@ import {
   getMaxUserCanBuy,
   getPurchasedBonds,
   getTransformedBondPrice,
-  getTransformedMarketPrice,
   getTransformedMaxPayout,
 } from '../utils';
 import { listLockedNFT, LockedNFT } from './nft-action';
@@ -116,19 +115,19 @@ export const calcBondDetails = createAsyncThunk(
       : ethers.utils.parseEther(value);
 
     const bond = getBond(bondKey, networkID);
+    if (bond.deprecated) {
+      return {
+        bond: bondKey,
+        ...DEPRECATED_BOND_STATIC_VALUES,
+      };
+    }
+
     const bondContract = contractForBond(bondKey, networkID, provider);
     const addresses = getAddresses(networkID);
     const nftContract = new ethers.Contract(nftAddress, ERC721, provider);
     let nftApproved = false;
     if (nftAddress != zeroAddress && (await nftContract.getApproved(tokenId)) == bond.address) {
       nftApproved = true;
-    }
-
-    if (bond.deprecated) {
-      return {
-        bond: bondKey,
-        ...DEPRECATED_BOND_STATIC_VALUES,
-      };
     }
 
     // Calculate bond discount
@@ -170,9 +169,9 @@ export const calcBondDetails = createAsyncThunk(
       bondType: bond.type,
       isBondStable: bond.stable,
       balanceOfTreasury,
-      ...(valuation && { valuation }),
-      ...(markdown && { markdown }),
-      ...(latestRoundData && { latestRoundDataAnswer: latestRoundData?.answer }),
+      valuation,
+      markdown,
+      latestRoundDataAnswer: latestRoundData?.answer,
     });
 
     // Get transformed prices
