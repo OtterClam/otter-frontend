@@ -1,0 +1,25 @@
+.otto-type__container {
+  padding: 94px 245px;
+}
+
+.otto-type__cards {
+  display: -ms-grid;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-column-gap: 30px;
+  grid-row-gap: 30px;
+}
+
+.otto-card__container {
+  padding: 40px;
+}
+
+.otto-card__image {
+  width: 100%;
+  max-width: 270px;
+}
+
+.otto-card__count-box {
+  padding: 20px 10px;
+}
+/*# sourceMappingURL=style.css.map */

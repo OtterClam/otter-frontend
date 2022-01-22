@@ -5,6 +5,7 @@ import OttoHeader from 'src/components/Otto/OttoHeader';
 import OttoBanner from 'src/components/Otto/OttoBanner';
 import OttoWhitelistSection from 'src/components/Otto/OttoWhitelistSection';
 import OttoGetSection from 'src/components/Otto/OttoGetSection';
+import OttoTypeSection from 'src/components/Otto/OttoTypeSection';
 
 const useStyles = makeStyles(theme => ({
   view: {
@@ -23,6 +24,7 @@ const OttoView = () => {
       <OttoBanner themeName={themeName} />
       <OttoWhitelistSection />
       <OttoGetSection />
+      <OttoTypeSection />
     </div>
   );
 };
