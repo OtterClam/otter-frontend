@@ -1,0 +1,68 @@
+.otto-header {
+  position: fixed;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 10px 0;
+  transition: background-color 0.2s, box-shadow 0.2s;
+
+  &__container {
+    width: 100%;
+    padding: 0 245px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+  }
+
+  &__section {
+    flex: 1;
+    &.left {
+      flex: 1;
+      align-items: center;
+    }
+    &.right {
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    width: 370px;
+    text-decoration: none;
+
+    &__image {
+      height: 40px;
+      width: auto;
+    }
+    &__text {
+      // NOTE: overwrite mui typography style
+      font-size: 20px !important;
+      margin-left: 16px !important;
+      font-weight: 700 !important;
+    }
+  }
+
+  &__link {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 40px !important;
+    white-space: nowrap;
+  }
+
+  #lang-picker {
+    margin-left: 20px;
+
+    .custom-button {
+      border: none;
+    }
+  }
+
+  @media screen and (max-width: 1124px) {
+    display: none;
+  }
+}

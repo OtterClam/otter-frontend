@@ -1,4 +1,10 @@
+import OttoHeader from 'src/components/Otto/OttoHeader';
+
 const OttoView = () => {
-  return <>otto</>;
+  return (
+    <>
+      <OttoHeader />
+    </>
+  );
 };
 export default OttoView;
