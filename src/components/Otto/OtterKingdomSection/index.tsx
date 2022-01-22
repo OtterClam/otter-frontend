@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
 const OtterKingdomSection = () => {
   const classes = useStyles();
   return (
-    <div className="otto-kingdom__container">
+    <div className={`otto-kingdom__container ${classes.container}`}>
       <Typography className={classes.h4} variant="h4">
         Strengthen Otter Kingdom
       </Typography>

@@ -1,0 +1,20 @@
+.otto-countdown__container {
+  padding: 94px 245px 40px 245px;
+  overflow: hidden;
+  position: relative;
+}
+
+.otto-countdown__deco {
+  position: absolute;
+}
+
+.otto-countdown__deco.left {
+  top: 0;
+  left: 0;
+}
+
+.otto-countdown__deco.right {
+  bottom: 0;
+  right: 0;
+}
+/*# sourceMappingURL=style.css.map */
