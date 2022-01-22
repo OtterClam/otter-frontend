@@ -1,0 +1,12 @@
+.otto-usage__container {
+  padding: 94px 245px;
+}
+
+.otto-usage__cards {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (1fr)[3];
+      grid-template-columns: repeat(3, 1fr);
+  grid-column-gap: 30px;
+}
+/*# sourceMappingURL=style.css.map */
