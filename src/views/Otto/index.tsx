@@ -6,6 +6,7 @@ import OttoBanner from 'src/components/Otto/OttoBanner';
 import OttoWhitelistSection from 'src/components/Otto/OttoWhitelistSection';
 import OttoGetSection from 'src/components/Otto/OttoGetSection';
 import OttoTypeSection from 'src/components/Otto/OttoTypeSection';
+import OtterKingdomSection from 'src/components/Otto/OtterKingdomSection';
 
 const useStyles = makeStyles(theme => ({
   view: {
@@ -25,6 +26,7 @@ const OttoView = () => {
       <OttoWhitelistSection />
       <OttoGetSection />
       <OttoTypeSection />
+      <OtterKingdomSection />
     </div>
   );
 };
