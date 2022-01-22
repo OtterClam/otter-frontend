@@ -4,6 +4,7 @@ import { AppThemeContext } from 'src/helpers/app-theme-context';
 import OttoHeader from 'src/components/Otto/OttoHeader';
 import OttoBanner from 'src/components/Otto/OttoBanner';
 import OttoWhitelistSection from 'src/components/Otto/OttoWhitelistSection';
+import OttoGetSection from 'src/components/Otto/OttoGetSection';
 
 const useStyles = makeStyles(theme => ({
   view: {
@@ -21,6 +22,7 @@ const OttoView = () => {
       <OttoHeader themeName={themeName} />
       <OttoBanner themeName={themeName} />
       <OttoWhitelistSection />
+      <OttoGetSection />
     </div>
   );
 };

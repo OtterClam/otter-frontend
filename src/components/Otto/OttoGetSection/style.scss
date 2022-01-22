@@ -1,0 +1,32 @@
+.otto-get {
+    &__container {
+        padding: 94px 245px;
+        text-align: center;
+    }
+    &__boxes {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+}
+
+.otto-step-box {
+    &__numberLabel {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin: auto;
+    }
+    &__image {
+        width: 210px;
+        height: 145px;
+        background-color: gray;
+        margin: 30px auto 25px auto;
+    }
+    &__button {
+        margin-top: 20px;
+    }
+}
