@@ -1,6 +1,4 @@
-import { useContext } from 'react';
 import { Link, makeStyles } from '@material-ui/core';
-import { AppThemeContext } from 'src/helpers/app-theme-context';
 import { LandingPageLink } from 'src/constants';
 import Logo from './Logo';
 import NewChip from 'src/components/common/NewChip';
@@ -14,16 +12,18 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function OttoHeader() {
-  const theme = useContext(AppThemeContext);
-  const themeName = theme.name;
+interface Props {
+  themeName: string;
+}
+export default function OttoHeader({ themeName }: Props) {
   const classes = useStyles();
+  const highlightColor = themeName === 'light' ? 'error' : 'inherit';
   return (
     <header className={`otto-header ${classes.header}`}>
       <div className="otto-header__container">
         <div className="otto-header__section left">
           <a href={LandingPageLink} className="otto-header__logo">
-            <Logo highlightColor={themeName === 'light' ? 'error' : 'inherit'} />
+            <Logo highlightColor={highlightColor} />
           </a>
         </div>
         {/* TODO|OTTO: replace navbar links */}
