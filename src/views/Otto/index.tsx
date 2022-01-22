@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core';
 import { AppThemeContext } from 'src/helpers/app-theme-context';
 import OttoHeader from 'src/components/Otto/OttoHeader';
 import OttoBanner from 'src/components/Otto/OttoBanner';
+import OttoWhitelistSection from 'src/components/Otto/OttoWhitelistSection';
 
 const useStyles = makeStyles(theme => ({
   view: {
@@ -19,6 +20,7 @@ const OttoView = () => {
     <div className={classes.view}>
       <OttoHeader themeName={themeName} />
       <OttoBanner themeName={themeName} />
+      <OttoWhitelistSection />
     </div>
   );
 };

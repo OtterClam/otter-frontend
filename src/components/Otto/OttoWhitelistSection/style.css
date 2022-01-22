@@ -1,0 +1,24 @@
+.otto-whitelist__container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  background-color: black;
+  overflow: hidden;
+}
+
+.otto-whitelist__content {
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  text-align: center;
+  position: relative;
+  padding: 80px 80px;
+}
+
+.otto-whitelist__image {
+  max-height: 550px;
+}
+/*# sourceMappingURL=style.css.map */
