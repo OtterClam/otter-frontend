@@ -1,0 +1,30 @@
+.custom-button {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 44px;
+  border-radius: 22px;
+  padding: 0 30px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  text-decoration: none;
+}
+
+@media screen and (max-width: 598px) {
+  .custom-button {
+    padding: 10px 20px;
+  }
+}
+
+.icon-button {
+  padding: 10px;
+  border-radius: 10px;
+}
+/*# sourceMappingURL=style.css.map */

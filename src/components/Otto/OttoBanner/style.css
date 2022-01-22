@@ -1,0 +1,73 @@
+.otto-banner__container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding-top: 200px;
+  padding-bottom: 128px;
+}
+
+.otto-banner__section {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+
+.otto-banner__section.left {
+  padding-left: 245px;
+}
+
+.otto-banner__title {
+  font-size: 60px !important;
+  font-weight: 800 !important;
+  line-height: 90px !important;
+}
+
+.otto-banner__description {
+  padding-top: 24px;
+}
+
+.otto-banner__buttons {
+  padding: 20px 0;
+}
+
+.otto-banner__arrow {
+  cursor: pointer;
+}
+
+.otto-banner__arrow svg {
+  -webkit-animation: fade_down 1s ease-in-out infinite;
+          animation: fade_down 1s ease-in-out infinite;
+}
+
+@-webkit-keyframes fade_down {
+  0% {
+    -webkit-transform: translate(0, -10px);
+            transform: translate(0, -10px);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: translate(0, 10px);
+            transform: translate(0, 10px);
+    opacity: 0;
+  }
+}
+
+@keyframes fade_down {
+  0% {
+    -webkit-transform: translate(0, -10px);
+            transform: translate(0, -10px);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: translate(0, 10px);
+            transform: translate(0, 10px);
+    opacity: 0;
+  }
+}
+/*# sourceMappingURL=style.css.map */
