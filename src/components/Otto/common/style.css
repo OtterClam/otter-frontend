@@ -21,6 +21,12 @@
   text-decoration: none;
 }
 
+@media screen and (max-width: 1300px) {
+  .container {
+    padding: 100px 20px;
+  }
+}
+
 @media screen and (max-width: 598px) {
   .container {
     padding: 40px 20px;
