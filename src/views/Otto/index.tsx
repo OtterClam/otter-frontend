@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { makeStyles } from '@material-ui/core';
-import { AppThemeContext } from 'src/helpers/app-theme-context';
+import { OttoThemeContext } from 'src/hooks/theme';
 import OttoHeader from 'src/components/Otto/OttoHeader';
 import OttoBanner from 'src/components/Otto/OttoBanner';
 import OttoWhitelistSection from 'src/components/Otto/OttoWhitelistSection';
@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
 
 const OttoView = () => {
   const classes = useStyles();
-  const theme = useContext(AppThemeContext);
+  const theme = useContext(OttoThemeContext);
   const themeName = theme.name;
   return (
     <div className={classes.view}>

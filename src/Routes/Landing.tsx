@@ -1,4 +1,5 @@
 import { ThemeProvider } from '@material-ui/core';
+import { OttoThemeContextProvider } from 'src/hooks/theme';
 import { useThemeChangedByTime } from 'src/hooks/theme';
 import { Route, Switch } from 'react-router-dom';
 import { dark as darkTheme } from 'src/themes/app';
@@ -16,9 +17,11 @@ function App() {
         </ThemeProvider>
       </Route>
       <Route exact path="/otto">
-        <ThemeProvider theme={theme}>
-          <Otto />
-        </ThemeProvider>
+        <OttoThemeContextProvider value={theme}>
+          <ThemeProvider theme={theme.theme}>
+            <Otto />
+          </ThemeProvider>
+        </OttoThemeContextProvider>
       </Route>
       <Route component={Landing} />
     </Switch>
