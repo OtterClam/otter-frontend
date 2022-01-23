@@ -31,6 +31,9 @@ const useStyles = makeStyles(theme => ({
     fontWeight: 400,
     lineHeight: '24px',
   },
+  slowmist: {
+    height: '16px',
+  },
 }));
 
 const OttoFooter = () => {
@@ -52,7 +55,11 @@ const OttoFooter = () => {
               © 2022 OtterClam All Rights Reserved
             </Typography>
             <Typography variant="body1" className={`${classes.body2} audit`}>
-              Audited by <img src={theme.name === 'light' ? SlowmistLightModeImage : SlowmistDarkModeImage} />
+              Audited by{' '}
+              <img
+                className={classes.slowmist}
+                src={theme.name === 'light' ? SlowmistLightModeImage : SlowmistDarkModeImage}
+              />
             </Typography>
           </div>
         </div>
