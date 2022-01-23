@@ -154,7 +154,7 @@ function TreasuryDashboard() {
             <Box display="flex" flexWrap="wrap" justifyContent="space-between" alignItems="center">
               {displayData.map(({ title, value, info, image }, i) => (
                 <Box key={i} bgcolor="mode.white" className="metric-container">
-                  <Box className="metic">
+                  <Box className="metric">
                     <Typography variant="h6" color="secondary">
                       {title}
                       {info && <InfoTooltip message={info} />}

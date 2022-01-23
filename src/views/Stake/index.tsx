@@ -212,7 +212,8 @@ function Stake() {
                       >
                         <img src={IconPearlChest} />
                         <Typography color="textPrimary">{t('stake.chestAPY')}</Typography>
-                        {chestAPY ? percentFormatter.format(chestAPY) : <Skeleton width="150px" />}
+                        {chestAPY ? percentFormatter.format(chestAPY) : <Skeleton width="60px" />}
+                        <InfoTooltip message={t('stake.chestAPYInfo')} />
                       </Box>
                     </div>
                   </Grid>

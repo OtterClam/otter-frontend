@@ -466,7 +466,7 @@ function Chart({
           alignItems="center"
           style={{ width: '100%', overflow: 'hidden' }}
         >
-          <Box display="flex" width="90%" alignItems="center">
+          <Box display="flex" width="90%" alignItems="center" style={{ gap: '5px' }}>
             <Typography
               variant="h6"
               color="secondary"

@@ -363,6 +363,9 @@
     .data-row-name {
       font-weight: 700;
       font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
       &-warmup {
         font-weight: 700;
         // color: $clam-pink;
@@ -371,6 +374,9 @@
     .data-row-name-small {
       font-weight: 600;
       font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
       &-warmup {
         font-weight: 700;
         // color: $clam-pink;

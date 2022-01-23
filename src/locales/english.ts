@@ -165,6 +165,7 @@ const English = {
     stake: {
       clamStaking: 'CLAM Staking',
       chestAPY: 'Max + ',
+      chestAPYInfo: 'Additional APY for locking 180-day in pearl chest.',
       connectWalletDescription: 'Connect your wallet to stake CLAM tokens!',
       approvalInfo:
         'Note: The "Approve" transaction is only needed when staking/unstaking for the first time; subsequent staking/unstaking only requires you to perform the "Stake" or "Unstake" transaction.',
