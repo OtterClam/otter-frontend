@@ -11,3 +11,15 @@
         height: 100%;
     }
 }
+
+@media screen and (max-width: 960px) {
+    .otto-pond {
+        &__section {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-column-gap: 0px;
+            grid-row-gap: 40px;
+            text-align: center;
+        }
+    }
+}
