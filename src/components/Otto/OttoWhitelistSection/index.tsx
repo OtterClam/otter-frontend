@@ -42,7 +42,7 @@ const OttoWhitelistSection = () => {
   return (
     <div className="otto-whitelist__container">
       {!isTablet && <img className="otto-whitelist__image" src={WhiteListLeftBg} />}
-      {isTablet && <img src={WhiteListTopBg} />}
+      {isTablet && <img className="otto-whitelist__tablet-image" src={WhiteListTopBg} />}
       <div className={`otto-whitelist__content ${classes.content}`}>
         <Typography className={classes.body2} variant="body2">
           Initial Released Image Amount:

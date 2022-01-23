@@ -33,6 +33,10 @@
   width: 30%;
 }
 
+.otto-whitelist__tablet-image {
+  width: 100%;
+}
+
 .otto-whitelist .custom-button {
   width: -webkit-fit-content;
   width: -moz-fit-content;
