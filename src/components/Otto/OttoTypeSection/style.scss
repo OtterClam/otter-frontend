@@ -13,10 +13,28 @@
     }
     &__image {
         width: 100%;
-        max-width: 270px;
+        margin-bottom: 15px;
     }
     &__count-box {
         padding: 20px 10px;
+    }
+    &__h5 {
+        font-size: 20px;
+        font-weight: 700;
+        text-align: center;
+        line-height: 30px;
+        margin: 0;
+        margin-bottom: 15px;
+    }
+    &__body2 {
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 22px;
+    }
+    &__countBox {
+        border-radius: 10px;
+        padding: 10px 20px;
+        margin-top: 15px;
     }
 }
 
@@ -35,4 +53,19 @@
             grid-template-columns: auto;
         }
     }
+    .otto-card {
+        &__container {
+            padding: 20px;
+        }
+        &__body2 {
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 18px;
+        }
+        &__h5 {
+            font-size: 18px;
+            line-height: 28px;
+        }
+    }
+    
 }

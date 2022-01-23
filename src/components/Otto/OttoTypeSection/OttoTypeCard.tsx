@@ -11,27 +11,11 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.mode.white,
     borderRadius: '10px',
   },
-  image: {
-    width: '100%',
-    marginBottom: '15px',
-  },
   h5: {
-    fontSize: '20px',
-    fontWeight: 700,
-    textAlign: 'center',
-    lineHeight: '30px',
     color: theme.palette.mode.otterDark,
-    marginBottom: '15px',
-  },
-  body2: {
-    textAlign: 'left',
-    lineHeight: '22px',
   },
   countBox: {
     backgroundColor: theme.palette.mode.lightGray400,
-    borderRadius: '10px',
-    padding: '10px 20px',
-    marginTop: '15px',
   },
 }));
 
@@ -64,17 +48,11 @@ const OttoTypeCard = ({ metadata }: Props) => {
   const classes = useStyles();
   return (
     <div className={`otto-card__container ${classes.card}`}>
-      <Typography variant="h5" className={classes.h5}>
-        {metadata.name}:
-      </Typography>
-      <OttoImage className={classes.image} type={metadata.type} />
-      <Typography variant="body2" className={classes.body2}>
-        {metadata.description}
-      </Typography>
-      <div className={classes.countBox}>
-        <Typography variant="body2" className={classes.body2}>
-          Population
-        </Typography>
+      <h5 className={`otto-card__h5 ${classes.h5}`}>{metadata.name}:</h5>
+      <OttoImage className="otto-card__image" type={metadata.type} />
+      <p className="otto-card__body2">{metadata.description}</p>
+      <div className={`otto-card__countBox ${classes.countBox}`}>
+        <p className="otto-card__body2">Population</p>
         {metadata.total === null ? 'Coming Soon' : `0 / ${metadata.total}`}
       </div>
     </div>
