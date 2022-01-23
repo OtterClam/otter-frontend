@@ -2,8 +2,7 @@
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  padding-top: 200px;
-  padding-bottom: 128px;
+  padding-top: 145px;
 }
 
 .otto-banner__section {
@@ -14,6 +13,15 @@
 
 .otto-banner__section.left {
   padding-left: 245px;
+}
+
+.otto-banner__section.right {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
 }
 
 .otto-banner__title {
@@ -30,11 +38,25 @@
   padding: 20px 0;
 }
 
-@media screen and (max-width: 598px) {
+.otto-banner__image {
+  width: 100%;
+}
+
+@media screen and (max-width: 960px) {
   .otto-banner__container {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: reverse;
+        -ms-flex-direction: column-reverse;
+            flex-direction: column-reverse;
     padding-top: 60px;
     padding-bottom: 40px;
   }
+  .otto-banner__section.left {
+    padding-left: 100px;
+  }
+}
+
+@media screen and (max-width: 598px) {
   .otto-banner__section.left {
     padding-left: 30px;
   }

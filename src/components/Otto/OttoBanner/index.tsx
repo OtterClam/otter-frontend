@@ -1,17 +1,26 @@
-import { Typography } from '@material-ui/core';
+import { Typography, makeStyles } from '@material-ui/core';
 import { ReactComponent as TelegramIcon } from 'src/components/SocialIcons/images/telegram.svg';
 import { ReactComponent as DiscordIcon } from 'src/components/SocialIcons/images/discord.svg';
+import OttoHeroImage from 'src/assets/images/ottos/otto_hero.png';
+import OttoHeroBackground from 'src/assets/images/backgrounds/background-banner.png';
 
 import RoundedButton from 'src/components/Otto/common/RoundedButton';
 import './style.scss';
+
+const useStyles = makeStyles(() => ({
+  container: {
+    background: `url(${OttoHeroBackground}) center/cover no-repeat`,
+  },
+}));
 
 interface Props {
   themeName: string;
 }
 const OttoBanner = ({ themeName }: Props) => {
+  const classes = useStyles();
   const highlightColor = themeName === 'light' ? 'error' : 'inherit';
   return (
-    <div className="otto-banner__container">
+    <div className={`otto-banner__container ${classes.container}`}>
       <div className="otto-banner__section left">
         <Typography variant="h2" className="otto-banner__title">
           Get Your{' '}
@@ -35,7 +44,9 @@ const OttoBanner = ({ themeName }: Props) => {
           />
         </div>
       </div>
-      <div className="otto-banner__section right">{/* TODO|OTTO: add banner image */}</div>
+      <div className="otto-banner__section right">
+        <img className="otto-banner__image" src={OttoHeroImage} />
+      </div>
     </div>
   );
 };

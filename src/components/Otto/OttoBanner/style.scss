@@ -1,14 +1,17 @@
 .otto-banner {
   &__container {
     display: flex;
-    padding-top: 200px;
-    padding-bottom: 128px;
+    padding-top: 145px;
   }
   &__section {
     flex: 1;
 
     &.left {
       padding-left: 245px;
+    }
+    &.right {
+      display: flex;
+      align-items: flex-end;
     }
   }
   &__title {
@@ -22,19 +25,32 @@
   &__buttons {
     padding: 20px 0;
   }
+  &__image {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 960px) {
+  .otto-banner {
+    &__container {
+      flex-direction: column-reverse;
+      padding-top: 60px;
+      padding-bottom: 40px;
+    }
+    &__section {
+      &.left {
+        padding-left: 100px;
+      }
+    }
+  }
 }
 
 @media screen and (max-width: 598px) {
   .otto-banner {
-    &__container {
-        padding-top: 60px;
-        padding-bottom: 40px;
-      }
     &__section {
       &.left {
         padding-left: 30px;
       }
     }
-
   }
 }
