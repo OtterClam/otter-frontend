@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
     fontSize: '48px',
     fontWeight: 800,
     textAlign: 'center',
-    color: theme.palette.mode.white,
+    color: theme.palette.otter.white,
     marginBottom: '60px',
   },
 }));
