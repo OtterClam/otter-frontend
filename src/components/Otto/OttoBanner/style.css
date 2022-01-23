@@ -39,6 +39,16 @@
           animation: fade_down 1s ease-in-out infinite;
 }
 
+@media screen and (max-width: 598px) {
+  .otto-banner__container {
+    padding-top: 60px;
+    padding-bottom: 40px;
+  }
+  .otto-banner__section.left {
+    padding-left: 30px;
+  }
+}
+
 @-webkit-keyframes fade_down {
   0% {
     -webkit-transform: translate(0, -10px);

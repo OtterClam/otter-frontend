@@ -1,7 +1,4 @@
 .otto-type {
-    &__container {
-        padding: 94px 245px;
-    }
     &__cards {
         display: grid;
         grid-template-columns: repeat(3, 1fr);

@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
 const OttoTypeSection = () => {
   const classes = useStyles();
   return (
-    <div className={`otto-type__container ${classes.container}`}>
+    <div className={`otto-type__container container ${classes.container}`}>
       <Typography className={classes.h4} variant="h4">
         Type of Otto
       </Typography>

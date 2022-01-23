@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
 const OtterUsageSection = () => {
   const classes = useStyles();
   return (
-    <div className={`otto-usage__container ${classes.container}`}>
+    <div className={`otto-usage__container container ${classes.container}`}>
       <Typography className={classes.h4} variant="h4">
         What can you do with Ottos?
       </Typography>

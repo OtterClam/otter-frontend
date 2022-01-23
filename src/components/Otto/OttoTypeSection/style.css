@@ -1,11 +1,8 @@
-.otto-type__container {
-  padding: 94px 245px;
-}
-
 .otto-type__cards {
   display: -ms-grid;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  -ms-grid-columns: (1fr)[3];
+      grid-template-columns: repeat(3, 1fr);
   grid-column-gap: 30px;
   grid-row-gap: 30px;
 }

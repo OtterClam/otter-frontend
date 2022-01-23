@@ -1,7 +1,3 @@
-.otto-usage__container {
-  padding: 94px 245px;
-}
-
 .otto-usage__cards {
   display: -ms-grid;
   display: grid;

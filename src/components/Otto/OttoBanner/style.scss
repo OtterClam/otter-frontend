@@ -1,45 +1,60 @@
 .otto-banner {
-    &__container {
-        display: flex;
-        padding-top: 200px;
-        padding-bottom: 128px;
-    }
-    &__section {
-        flex: 1;
+  &__container {
+    display: flex;
+    padding-top: 200px;
+    padding-bottom: 128px;
+  }
+  &__section {
+    flex: 1;
 
-        &.left {
-            padding-left: 245px;
-        }
+    &.left {
+      padding-left: 245px;
     }
-    &__title {
-        font-size: 60px !important;
-        font-weight: 800 !important;
-        line-height: 90px !important;
+  }
+  &__title {
+    font-size: 60px !important;
+    font-weight: 800 !important;
+    line-height: 90px !important;
+  }
+  &__description {
+    padding-top: 24px;
+  }
+  &__buttons {
+    padding: 20px 0;
+  }
+  &__arrow {
+    cursor: pointer;
+    svg {
+      animation: fade_down 1s ease-in-out infinite;
     }
-    &__description {
-        padding-top: 24px;
+  }
+}
+
+@media screen and (max-width: 598px) {
+  .otto-banner {
+    &__container {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+    &__section {
+      &.left {
+        padding-left: 30px;
+      }
     }
-    &__buttons {
-        padding: 20px 0;
-    }
-    &__arrow {
-        cursor: pointer;
-        svg {
-            animation: fade_down 1s ease-in-out infinite;
-        }
-    }
+
+  }
 }
 
 @keyframes fade_down {
-    0% {
-      transform: translate(0, -10px);
-      opacity: 0;
-    }
-    50% {
-      opacity: 1;
-    }
-    100% {
-      transform: translate(0, 10px);
-      opacity: 0;
-    }
+  0% {
+    transform: translate(0, -10px);
+    opacity: 0;
   }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(0, 10px);
+    opacity: 0;
+  }
+}

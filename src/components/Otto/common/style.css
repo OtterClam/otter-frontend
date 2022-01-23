@@ -1,3 +1,7 @@
+.container {
+  padding: 94px 245px;
+}
+
 .custom-button {
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
@@ -18,6 +22,9 @@
 }
 
 @media screen and (max-width: 598px) {
+  .container {
+    padding: 40px 20px;
+  }
   .custom-button {
     padding: 10px 20px;
   }

@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
 const OttoGetSection = () => {
   const classes = useStyles();
   return (
-    <div className={`otto-get__container ${classes.container}`}>
+    <div className={`otto-get__container container ${classes.container}`}>
       <Typography className={classes.h4} variant="h4">
         How to get Ottos?
       </Typography>
