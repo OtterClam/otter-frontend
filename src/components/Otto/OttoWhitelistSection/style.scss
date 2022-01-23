@@ -5,6 +5,10 @@
         background-color: black;
     }
     &__content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
         flex-grow: 1;
         text-align: center;
         position: relative;
@@ -12,6 +16,9 @@
     }
     &__image {
         width: 30%;
+    }
+    .custom-button {
+        width: fit-content;
     }
 }
 
