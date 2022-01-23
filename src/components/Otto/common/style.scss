@@ -45,11 +45,13 @@
       margin-bottom: 10px;
     }
     &__body1 {
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 700;
-      line-height: 30px;
+      line-height: 28px;
     }
     &__slogan {
+      font-size: 20px;
+      line-height: 30px;
         margin-bottom: 40px;
         text-align: center;
       }
@@ -80,15 +82,14 @@
         line-height: 36px;
       }
       &__body1 {
-        font-size: 18px;
-        line-height: 28px;
+        font-size: 16px;
+        line-height: 24px;
       }
       &__slogan {
+        font-size: 18px;
+        line-height: 28px;
         margin-bottom: 20px;
       }
-    }
-    .slogan {
-      margin-bottom: 20px;
     }
   }
 }

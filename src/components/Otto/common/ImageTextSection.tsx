@@ -33,7 +33,7 @@ const ImageTextSection = ({ color, bgcolor, title, slogan, children }: PropsWith
   return (
     <Box className={`image-text__container container`} color={color} bgcolor={bgcolor}>
       <h4 className="image-text__content__h4">{title}</h4>
-      <p className="image-text__content__slogan image-text__content__body1">{slogan}</p>
+      <p className="image-text__content__slogan">{slogan}</p>
       <div className="image-text__section">{children}</div>
     </Box>
   );
