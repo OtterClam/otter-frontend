@@ -14,10 +14,10 @@ export const useThemeChangedByTime = (): ThemeValue => {
 
   useEffect(() => {
     const currentHour = new Date().getHours();
-    const isEvening = currentHour >= EVENING_HOUR;
+    const isNight = currentHour >= EVENING_HOUR;
     // TODO|OTTO: add dark mode layout
-    // const isEvening = currentHour >= EVENING_HOUR || currentHour <= MORNING_HOUR;
-    // if (isEvening) return setTheme({ name: 'dark', theme: darkTheme });
+    // const isNight = currentHour >= EVENING_HOUR || currentHour <= MORNING_HOUR;
+    // if (isNight) return setTheme({ name: 'dark', theme: darkTheme });
     setTheme({ name: 'light', theme: lightTheme });
   }, []);
 
