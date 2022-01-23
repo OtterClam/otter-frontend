@@ -9,6 +9,7 @@ import OttoTypeSection from 'src/components/Otto/OttoTypeSection';
 import OtterKingdomSection from 'src/components/Otto/OtterKingdomSection';
 import OttoUsageSection from 'src/components/Otto/OtterUsageSection';
 import OttoCountdownSection from 'src/components/Otto/OttoCountdownSection';
+import OttoFooter from 'src/components/common/Footer';
 
 const useStyles = makeStyles(theme => ({
   view: {
@@ -31,6 +32,7 @@ const OttoView = () => {
       <OtterKingdomSection />
       <OttoUsageSection />
       <OttoCountdownSection />
+      <OttoFooter />
     </div>
   );
 };
