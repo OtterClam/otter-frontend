@@ -13,6 +13,7 @@
 
 .otto-banner__section.left {
   padding-left: 245px;
+  padding-bottom: 40px;
 }
 
 .otto-banner__section.right {
@@ -35,7 +36,7 @@
 }
 
 .otto-banner__buttons {
-  padding: 20px 0;
+  padding-top: 20px;
 }
 
 .otto-banner__image {
@@ -50,15 +51,22 @@
             flex-direction: column-reverse;
     padding-top: 60px;
     padding-bottom: 40px;
+    text-align: center;
+  }
+  .otto-banner__title {
+    font-size: 48px !important;
+    line-height: 72px !important;
   }
   .otto-banner__section.left {
     padding-left: 100px;
+    padding-right: 100px;
   }
 }
 
 @media screen and (max-width: 598px) {
   .otto-banner__section.left {
     padding-left: 30px;
+    padding-right: 30px;
   }
 }
 /*# sourceMappingURL=style.css.map */

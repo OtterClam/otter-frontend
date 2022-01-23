@@ -8,6 +8,7 @@
 
     &.left {
       padding-left: 245px;
+      padding-bottom: 40px;
     }
     &.right {
       display: flex;
@@ -23,7 +24,7 @@
     padding-top: 24px;
   }
   &__buttons {
-    padding: 20px 0;
+    padding-top: 20px;
   }
   &__image {
     width: 100%;
@@ -36,10 +37,16 @@
       flex-direction: column-reverse;
       padding-top: 60px;
       padding-bottom: 40px;
+      text-align: center;
+    }
+    &__title {
+      font-size: 48px !important;
+      line-height: 72px !important;
     }
     &__section {
       &.left {
         padding-left: 100px;
+        padding-right: 100px;
       }
     }
   }
@@ -50,6 +57,7 @@
     &__section {
       &.left {
         padding-left: 30px;
+        padding-right: 30px;
       }
     }
   }
