@@ -19,8 +19,8 @@ function TreasuryDashboard() {
   const { t } = useTranslation();
   const tooltipItems = {
     tvl: [t('dashboard.tooltipItems.tvl')],
-    coin: ['MAI', 'FRAX', 'MATIC'],
-    rfv: ['MAI', 'FRAX'],
+    coin: ['MAI', 'FRAX', 'MATIC', 'MAI/USDC', 'MAI/USDC(Deposited to QiDAO) ', 'Qi'],
+    rfv: ['MAI', 'FRAX', 'MAI/USDC', 'MAI/USDC(Deposited to QiDAO) '],
     holder: ['CLAMies'],
     apy: [t('common.180Chest'), t('common.90Chest'), t('common.28Chest'), t('common.14Chest'), t('common.staking')],
     runway: [
@@ -92,31 +92,26 @@ function TreasuryDashboard() {
 
   useEffect(() => {
     apollo(treasuryDataQuery).then(r => {
-      // @ts-ignore
-      let metrics = r?.data.protocolMetrics.map(entry =>
-        // @ts-ignore
-        Object.entries(entry).reduce((obj, [key, value]) => ((obj[key] = parseFloat(value)), obj), {}),
-      );
-      // @ts-ignore
-      metrics = metrics.filter(pm => pm.treasuryMarketValue > 0);
+      const metrics = r?.data.protocolMetrics
+        .map((entry: any) =>
+          // @ts-ignore
+          Object.entries(entry).reduce((obj, [key, value]) => ((obj[key] = parseFloat(value)), obj), {}),
+        )
+        .filter((pm: any) => pm.treasuryMarketValue > 0);
       setData(metrics);
-      // @ts-ignore
-      let staked = r.data.protocolMetrics.map(entry => ({
-        staked: (parseFloat(entry.sClamCirculatingSupply) / parseFloat(entry.clamCirculatingSupply)) * 100,
-        timestamp: entry.timestamp,
-      }));
-      // @ts-ignore
-      staked = staked.filter(pm => pm.staked < 100);
+      const staked = r?.data.protocolMetrics
+        .map((entry: any) => ({
+          staked: (parseFloat(entry.sClamCirculatingSupply) / parseFloat(entry.clamCirculatingSupply)) * 100,
+          timestamp: entry.timestamp,
+        }))
+        .filter((pm: any) => pm.staked < 100);
       setStaked(staked);
       // @ts-ignore
       let runway = metrics.filter(pm => pm.runway100k > 5);
       setRunway(runway);
-      // @ts-ignore
-      let apy = r.data.protocolMetrics
-        // @ts-ignore
-        .filter(p => p.timestamp * 1000 > Date.UTC(2022, 0, 17))
-        // @ts-ignore
-        .map(entry => ({
+      const apy = r?.data.protocolMetrics
+        .filter((p: any) => p.timestamp * 1000 > Date.UTC(2022, 0, 17))
+        .map((entry: any) => ({
           apy: entry.currentAPY,
           diamond: entry.diamondHandAPY,
           stone: entry.stoneHandAPY,
@@ -201,13 +196,21 @@ function TreasuryDashboard() {
                   <Chart
                     type="stack"
                     data={data}
-                    dataKey={['treasuryMaiMarketValue', 'treasuryFraxMarketValue', 'treasuryWmaticMarketValue']}
+                    dataKey={[
+                      'treasuryMaiMarketValue',
+                      'treasuryFraxMarketValue',
+                      'treasuryWmaticMarketValue',
+                      'treasuryMaiUsdcRiskFreeValue',
+                      'treasuryMaiUsdcQiInvestmentRiskFreeValue',
+                      'treasuryQiMarketValue',
+                    ]}
                     stopColor={[
                       ['#EE4B4E', 'rgba(219, 55, 55, 0.5)'],
                       ['#8F5AE8', 'rgba(143, 90, 232, 0.5)'],
                       ['#2891F9', 'rgba(40, 145, 249, 0.5)'],
-                      // ['#DC30EB', '#EA98F1'],
-                      // ['#8BFF4D', '#4C8C2A'],
+                      ['#F97328', 'rgba(249, 115, 40, 0.5)'],
+                      ['#5CBD6B', 'rgba(92, 189, 107, 0.5)'],
+                      ['#F4D258', 'rgba(244, 210, 88, 0.5)'],
                     ]}
                     headerText={t('dashboard.marketValue')}
                     // @ts-ignore
@@ -230,13 +233,17 @@ function TreasuryDashboard() {
                     data={data}
                     // @ts-ignore
                     format="currency"
-                    dataKey={['treasuryMaiRiskFreeValue', 'treasuryFraxRiskFreeValue']}
+                    dataKey={[
+                      'treasuryMaiRiskFreeValue',
+                      'treasuryFraxRiskFreeValue',
+                      'treasuryMaiUsdcRiskFreeValue',
+                      'treasuryMaiUsdcQiInvestmentRiskFreeValue',
+                    ]}
                     stopColor={[
-                      ['#EE4B4E', 'rgba(219, 55, 55, 0.5)'], //MAI
-                      ['#8F5AE8', 'rgba(143, 90, 232, 0.5)'], //FRAX
-                      // ['#DC30EB', '#EA98F1']
-                      // ['#000', '#fff'],
-                      // ['#000', '#fff'],
+                      ['#EE4B4E', 'rgba(219, 55, 55, 0.5)'], // MAI
+                      ['#8F5AE8', 'rgba(143, 90, 232, 0.5)'], // FRAX
+                      ['#DC30EB', '#EA98F1'], // MAI-USDC
+                      ['#5CBD6B', 'rgba(92, 189, 107, 0.5)'], // MAI-USDC Deposited
                     ]}
                     headerText={t('dashboard.riskFree')}
                     // @ts-ignore
