@@ -1,4 +1,4 @@
-.otto-kingdom__section {
+.otto-pond__section {
   display: -ms-grid;
   display: grid;
   -ms-grid-columns: (1fr)[2];
@@ -6,13 +6,13 @@
   grid-column-gap: 44px;
 }
 
-.otto-kingdom__image {
+.otto-pond__image {
   width: 100%;
   padding-bottom: 100%;
   background-color: white;
 }
 
-.otto-kingdom__content {
+.otto-pond__content {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;

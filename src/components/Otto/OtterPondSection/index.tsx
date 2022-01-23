@@ -27,16 +27,16 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const OtterKingdomSection = () => {
+const OtterPondSection = () => {
   const classes = useStyles();
   return (
-    <div className={`otto-kingdom__container container ${classes.container}`}>
+    <div className={`otto-pond__container container ${classes.container}`}>
       <Typography className={classes.h4} variant="h4">
         Strengthen Otter Kingdom
       </Typography>
-      <div className="otto-kingdom__section">
-        <div className="otto-kingdom__image" />
-        <div className="otto-kingdom__content">
+      <div className="otto-pond__section">
+        <div className="otto-pond__image" />
+        <div className="otto-pond__content">
           <Typography variant="h5" className={classes.h5}>
             Breed Your Ottos
             <br />
@@ -51,4 +51,4 @@ const OtterKingdomSection = () => {
     </div>
   );
 };
-export default OtterKingdomSection;
+export default OtterPondSection;
