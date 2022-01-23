@@ -9,20 +9,10 @@ import './style.scss';
 
 const useStyles = makeStyles(theme => ({
   container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
     backgroundColor: theme.palette.mode.darkBlue,
   },
   h4: {
     color: theme.palette.mode.white,
-    fontSize: '48px',
-    fontWeight: 800,
-    textAlign: 'center',
-    marginBottom: '10px',
-  },
-  deco: {
-    width: '30%',
   },
 }));
 
@@ -30,10 +20,8 @@ const OttoCountdownSection = () => {
   const classes = useStyles();
   return (
     <div className={`otto-countdown__container ${classes.container}`}>
-      <img className={`otto-countdown__deco left ${classes.deco}`} src={OttoDecoLeftImage} />
-      <Typography className={classes.h4} variant="h4">
-        Strengthen Otter Kingdom
-      </Typography>
+      <img className="otto-countdown__deco left" src={OttoDecoLeftImage} />
+      <h4 className={`otto-countdown__title ${classes.h4}`}>Mint your Ottos Now!</h4>
       <Countdown
         title="Mint Countdown"
         color="mode.white"
@@ -43,7 +31,7 @@ const OttoCountdownSection = () => {
       />
       {/* TODO|OTTO: add time up callback */}
       <OttoBuyClamHint />
-      <img className={`otto-countdown__deco right ${classes.deco}`} src={OttoDecoRightImage} />
+      <img className="otto-countdown__deco right" src={OttoDecoRightImage} />
     </div>
   );
 };
