@@ -40,7 +40,7 @@ const OttoFooter = () => {
   const theme = useContext(AppThemeContext);
   const classes = useStyles();
   return (
-    <div className="footer__container">
+    <div className={`footer__container ${classes.container}`}>
       <div className="footer__partnership">
         <Typography variant="h5" className={classes.h5}>
           IN PARTNERSHIP WITH
