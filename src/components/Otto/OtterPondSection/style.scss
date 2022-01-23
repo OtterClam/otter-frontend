@@ -4,11 +4,6 @@
         grid-template-columns: repeat(2, 1fr);
         grid-column-gap: 44px;
     }
-    &__image {
-        width: 100%;
-        padding-bottom: 100%;
-        background-color: white;
-    }
     &__content {
         display: flex;
         flex-direction: column;

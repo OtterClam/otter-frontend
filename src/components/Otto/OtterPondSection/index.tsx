@@ -1,4 +1,5 @@
 import { Typography, makeStyles } from '@material-ui/core';
+import OttoPondImage from 'src/assets/images/ottos/otto_pond.png';
 import './style.scss';
 
 const useStyles = makeStyles(theme => ({
@@ -25,6 +26,11 @@ const useStyles = makeStyles(theme => ({
   highlight: {
     color: theme.palette.otter.clamPink,
   },
+  image: {
+    width: '100%',
+    paddingBottom: '100%',
+    background: `url(${OttoPondImage}) center/cover no-repeat`,
+  },
 }));
 
 const OtterPondSection = () => {
@@ -35,7 +41,7 @@ const OtterPondSection = () => {
         Strengthen Otter Kingdom
       </Typography>
       <div className="otto-pond__section">
-        <div className="otto-pond__image" />
+        <div className={classes.image} />
         <div className="otto-pond__content">
           <Typography variant="h5" className={classes.h5}>
             Breed Your Ottos
