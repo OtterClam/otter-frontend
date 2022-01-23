@@ -13,7 +13,6 @@ const useStyles = makeStyles(theme => ({
   },
   image: {
     width: '100%',
-    maxWidth: '270px',
     marginBottom: '15px',
   },
   h5: {
