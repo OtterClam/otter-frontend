@@ -30,15 +30,6 @@
   padding: 20px 0;
 }
 
-.otto-banner__arrow {
-  cursor: pointer;
-}
-
-.otto-banner__arrow svg {
-  -webkit-animation: fade_down 1s ease-in-out infinite;
-          animation: fade_down 1s ease-in-out infinite;
-}
-
 @media screen and (max-width: 598px) {
   .otto-banner__container {
     padding-top: 60px;
@@ -46,38 +37,6 @@
   }
   .otto-banner__section.left {
     padding-left: 30px;
-  }
-}
-
-@-webkit-keyframes fade_down {
-  0% {
-    -webkit-transform: translate(0, -10px);
-            transform: translate(0, -10px);
-    opacity: 0;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    -webkit-transform: translate(0, 10px);
-            transform: translate(0, 10px);
-    opacity: 0;
-  }
-}
-
-@keyframes fade_down {
-  0% {
-    -webkit-transform: translate(0, -10px);
-            transform: translate(0, -10px);
-    opacity: 0;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    -webkit-transform: translate(0, 10px);
-            transform: translate(0, 10px);
-    opacity: 0;
   }
 }
 /*# sourceMappingURL=style.css.map */

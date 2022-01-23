@@ -1,7 +1,6 @@
-import { Typography, SvgIcon } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import { ReactComponent as TelegramIcon } from 'src/components/SocialIcons/images/telegram.svg';
 import { ReactComponent as DiscordIcon } from 'src/components/SocialIcons/images/discord.svg';
-import { ReactComponent as ArrowIcon } from 'src/assets/icons/icon_arrow.svg';
 
 import RoundedButton from 'src/components/Otto/common/RoundedButton';
 import './style.scss';
@@ -34,9 +33,6 @@ const OttoBanner = ({ themeName }: Props) => {
             text="Discord"
             marginLeft="20px"
           />
-        </div>
-        <div className="otto-banner__arrow">
-          <SvgIcon component={ArrowIcon} viewBox="0 0 32 32" />
         </div>
       </div>
       <div className="otto-banner__section right">{/* TODO|OTTO: add banner image */}</div>
