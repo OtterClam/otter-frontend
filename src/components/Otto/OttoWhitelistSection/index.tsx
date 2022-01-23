@@ -1,7 +1,8 @@
-import { Typography, makeStyles } from '@material-ui/core';
+import { Typography, makeStyles, useMediaQuery } from '@material-ui/core';
 import RoundedButton from 'src/components/Otto/common/RoundedButton';
-import WhiteListRightBg from 'src/assets/images/otto_bg_whitelist_right.png';
-import WhiteListLeftBg from 'src/assets/images/otto_bg_whitelist_left.png';
+import WhiteListRightBg from 'src/assets/images/backgrounds/background-otto_whitelist_right.png';
+import WhiteListLeftBg from 'src/assets/images/backgrounds/background-otto_whitelist_left.png';
+import WhiteListTopBg from 'src/assets/images/backgrounds/background-otto_whitelist_top.png';
 
 import './style.scss';
 
@@ -34,11 +35,14 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+const customTabletMediaQuery = '(max-width: 1300px)';
 const OttoWhitelistSection = () => {
   const classes = useStyles();
+  const isTablet = useMediaQuery(customTabletMediaQuery);
   return (
-    <div className="otto-whitelist__container container">
-      <img className="otto-whitelist__image" src={WhiteListLeftBg} />
+    <div className="otto-whitelist__container">
+      {!isTablet && <img className="otto-whitelist__image" src={WhiteListLeftBg} />}
+      {isTablet && <img src={WhiteListTopBg} />}
       <div className={`otto-whitelist__content ${classes.content}`}>
         <Typography className={classes.body2} variant="body2">
           Initial Released Image Amount:
@@ -54,7 +58,7 @@ const OttoWhitelistSection = () => {
         </Typography>
         <RoundedButton type="solid" text="Check Whitelist on Discord" />
       </div>
-      <img className="otto-whitelist__image" src={WhiteListRightBg} />
+      {!isTablet && <img className="otto-whitelist__image" src={WhiteListRightBg} />}
     </div>
   );
 };
