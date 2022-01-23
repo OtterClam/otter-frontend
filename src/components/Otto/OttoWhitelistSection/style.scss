@@ -3,16 +3,25 @@
         display: flex;
         justify-content: space-between;
         background-color: black;
-        overflow: hidden;
     }
     &__content {
         flex-grow: 1;
         text-align: center;
         position: relative;
-        padding: 80px 80px;
+        padding: 80px;
     }
     &__image {
         width: 30%;
     }
 }
-    
+
+@media screen and (max-width: 1300px) {
+    .otto-whitelist{
+        &__container {
+            flex-direction: column;
+        }
+        &__content {
+            padding: 10px 40px 20px 40px;
+        }
+    }
+}
