@@ -7,9 +7,12 @@ import OttoHeroBackground from 'src/assets/images/backgrounds/background-banner.
 import RoundedButton from 'src/components/Otto/common/RoundedButton';
 import './style.scss';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
   container: {
     background: `url(${OttoHeroBackground}) center/cover no-repeat`,
+  },
+  hightlight: {
+    color: theme.palette.otter.clamPink,
   },
 }));
 
@@ -18,16 +21,11 @@ interface Props {
 }
 const OttoBanner = ({ themeName }: Props) => {
   const classes = useStyles();
-  const highlightColor = themeName === 'light' ? 'error' : 'inherit';
   return (
     <div className={`otto-banner__container ${classes.container}`}>
       <div className="otto-banner__section left">
         <Typography variant="h2" className="otto-banner__title">
-          Get Your{' '}
-          <Typography variant="inherit" color={highlightColor}>
-            Ottos
-          </Typography>{' '}
-          in <br /> Otto Kingdom
+          Get Your <span className={classes.hightlight}>Ottos</span> in <br /> Otto Kingdom
         </Typography>
         <Typography variant="h5" className="otto-banner__description">
           Ottos are unique and randomly generated 2D NFT Social Avatars for your online experiences. Some appear normal.
