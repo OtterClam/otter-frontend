@@ -6,7 +6,9 @@ import OttoBanner from 'src/components/Otto/OttoBanner';
 import OttoWhitelistSection from 'src/components/Otto/OttoWhitelistSection';
 import OttoGetSection from 'src/components/Otto/OttoGetSection';
 import OttoTypeSection from 'src/components/Otto/OttoTypeSection';
-import OtterPondSection from 'src/components/Otto/OtterPondSection';
+import OttoERCSection from 'src/components/Otto/OttoERCSection';
+import OttoFactorySection from 'src/components/Otto/OttoFactorySection';
+import OtterPondSection from 'src/components/Otto/OttoPondSection';
 import OttoUsageSection from 'src/components/Otto/OtterUsageSection';
 import OttoCountdownSection from 'src/components/Otto/OttoCountdownSection';
 import OttoFooter from 'src/components/common/Footer';
@@ -29,6 +31,8 @@ const OttoView = () => {
       <OttoWhitelistSection />
       <OttoGetSection />
       <OttoTypeSection />
+      <OttoERCSection />
+      <OttoFactorySection />
       <OtterPondSection />
       <OttoUsageSection />
       <OttoCountdownSection />
