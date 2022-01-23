@@ -25,9 +25,9 @@ function Root() {
   let ThemeProvider = DefaultThemeProvider;
 
   if (isApp()) {
-    Content = App;
-    defaultTheme = undefined;
-    ThemeProvider = AppThemeProvider;
+    // Content = App;
+    // defaultTheme = undefined;
+    // ThemeProvider = AppThemeProvider;
   } else if (isIDO()) {
     Content = IDO;
   }
