@@ -5,7 +5,7 @@ import { DescriptionMetadata } from './type';
 const useStyles = makeStyles(theme => ({
   label: {
     color: theme.palette.mode.white,
-    backgroundColor: theme.palette.otter.otterBlue,
+    backgroundColor: theme.palette.otter.clamPink,
     fontSize: '24px',
   },
   content: {

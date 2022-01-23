@@ -2,10 +2,13 @@
     &__container {
         text-align: center;
     }
+    &__title {
+        margin-bottom: 60px !important;
+    }
     &__boxes {
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-column-gap: 20px;
     }
 }
 
@@ -27,5 +30,22 @@
     }
     &__button {
         margin-top: 20px;
+    }
+}
+
+
+@media screen and (max-width: 960px) {
+    .otto-get {
+        &__container {
+            text-align: center;
+        }
+        &__title {
+            margin-bottom: 20px !important;
+        }
+        &__boxes {
+            grid-template-columns: auto;
+            grid-column-gap: 0px;
+            grid-row-gap: 40px;
+        }
     }
 }

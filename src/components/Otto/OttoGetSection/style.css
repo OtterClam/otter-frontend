@@ -2,14 +2,16 @@
   text-align: center;
 }
 
+.otto-get__title {
+  margin-bottom: 60px !important;
+}
+
 .otto-get__boxes {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  width: 100%;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
+  grid-column-gap: 20px;
 }
 
 .otto-step-box__numberLabel {
@@ -37,5 +39,20 @@
 
 .otto-step-box__button {
   margin-top: 20px;
+}
+
+@media screen and (max-width: 960px) {
+  .otto-get__container {
+    text-align: center;
+  }
+  .otto-get__title {
+    margin-bottom: 20px !important;
+  }
+  .otto-get__boxes {
+    -ms-grid-columns: auto;
+        grid-template-columns: auto;
+    grid-column-gap: 0px;
+    grid-row-gap: 40px;
+  }
 }
 /*# sourceMappingURL=style.css.map */
