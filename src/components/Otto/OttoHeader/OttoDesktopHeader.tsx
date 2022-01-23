@@ -1,5 +1,6 @@
 import { Link, makeStyles } from '@material-ui/core';
 import { LandingPageLink } from 'src/constants';
+import { LinkMetadata } from './type';
 import NewChip from 'src/components/common/NewChip';
 import LanguagePicker from 'src/components/LanguagePicker';
 import Logo from './Logo';
@@ -13,7 +14,11 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function OttoDesktopHeader() {
+interface Props {
+  linkMetadata: LinkMetadata[];
+}
+
+export default function OttoDesktopHeader({ linkMetadata }: Props) {
   const classes = useStyles();
   return (
     <header className={`otto-header-desktop ${classes.header}`}>
@@ -25,21 +30,11 @@ export default function OttoDesktopHeader() {
         </div>
         {/* TODO|OTTO: replace navbar links */}
         <div className="otto-header-desktop__section right">
-          <Link className="otto-header-desktop__link" href="/FAKE/bank">
-            Bank
-          </Link>
-          <Link className="otto-header-desktop__link" href="/FAKE/otto">
-            Otto <NewChip marginLeft="10px" />
-          </Link>
-          <Link className="otto-header-desktop__link" href="/FAKE/market">
-            Market
-          </Link>
-          <Link className="otto-header-desktop__link" href="/FAKE/treasury">
-            Treasury
-          </Link>
-          <Link className="otto-header-desktop__link" href="/FAKE">
-            Getting Started
-          </Link>
+          {linkMetadata.map(metadata => (
+            <Link className="otto-header-desktop__link" href={metadata.href}>
+              {metadata.text} {metadata.new && <NewChip marginLeft="10px" />}
+            </Link>
+          ))}
           <div id="lang-picker">
             <LanguagePicker border={false} />
           </div>

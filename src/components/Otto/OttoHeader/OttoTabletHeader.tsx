@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import { Link, makeStyles } from '@material-ui/core';
 import { LandingPageLink } from 'src/constants';
+import { LinkMetadata } from './type';
 import NewChip from 'src/components/common/NewChip';
 import LanguagePicker from 'src/components/LanguagePicker';
 import Logo from './Logo';
@@ -28,37 +29,11 @@ const MenuButton = ({ menuOpen, setMenuOpen }: MenuButtonProps) => {
   );
 };
 
-const NavMenu = () => {
-  return (
-    <div className="otto-header-tablet__menu">
-      <div>
-        <a href={LandingPageLink} className="otto-header-tablet__menu-link otto-header-logo">
-          <Logo />
-        </a>
-      </div>
-      <Link className="otto-header-tablet__menu-link" href="/FAKE/bank">
-        Bank
-      </Link>
-      <Link className="otto-header-tablet__menu-link" href="/FAKE/otto">
-        Otto <NewChip marginLeft="4px" />
-      </Link>
-      <Link className="otto-header-tablet__menu-link" href="/FAKE/market">
-        Market
-      </Link>
-      <Link className="otto-header-tablet__menu-link" href="/FAKE/treasury">
-        Treasury
-      </Link>
-      <Link className="otto-header-tablet__menu-link" href="/FAKE">
-        Getting Started
-      </Link>
-      <div id="lang-picker">
-        <LanguagePicker border={false} />
-      </div>
-    </div>
-  );
-};
+interface Props {
+  linkMetadata: LinkMetadata[];
+}
 
-const OttoTabletHeader = () => {
+const OttoTabletHeader = ({ linkMetadata }: Props) => {
   const classes = useStyles();
   const [menuOpen, setMenuOpen] = useState(false);
   return (
@@ -74,7 +49,24 @@ const OttoTabletHeader = () => {
         {/* TODO|OTTO: replace navbar links */}
         <div className="otto-header-tablet__patch" />
       </div>
-      {menuOpen && <NavMenu />}
+      {menuOpen && (
+        <div className="otto-header-tablet__menu">
+          <div>
+            <a href={LandingPageLink} className="otto-header-tablet__menu-link otto-header-logo">
+              <Logo />
+            </a>
+          </div>
+          {linkMetadata.map(metadata => (
+            <Link key={metadata.text} className="otto-header-tablet__menu-link" href={metadata.href}>
+              {metadata.text}
+              {metadata.new && <NewChip marginLeft="4px" />}
+            </Link>
+          ))}
+          <div id="lang-picker">
+            <LanguagePicker border={false} />
+          </div>
+        </div>
+      )}
     </header>
   );
 };

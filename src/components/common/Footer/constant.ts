@@ -1,7 +1,4 @@
-// TODO|OTTO: replace story and reward links
 export const RESOURCES_LINKS = [
-  { text: "OtterClam's Story", href: '/' },
-  { text: 'Reward System', href: '/' },
   { text: 'The Big Picture', href: 'https://otterclam.medium.com/otterclams-soft-rebranding-881c481e57fb' },
   { text: 'Dune Analytics', href: 'https://dune.xyz/abtheo/OtterClam-Finance' },
   {
