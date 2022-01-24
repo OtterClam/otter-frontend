@@ -351,6 +351,13 @@ const English = {
         content:
           'ERC-721 tokens are non-fungible, meaning that each part of your Otto has unique features and will be valued accordingly. This feature of ERC-721 tokens is what differentiates them from ERC-20 tokens, which are equal in terms of value, and therefore identical and interchangeable.',
       },
+      factory: {
+        title: 'Otto Factory',
+        slogan: 'Incubate and create a unique look for your Ottos',
+        subtitle: 'Incubate your own Ottos and customize their features!',
+        content:
+          'Mix and match from our selection of accessories to customize your Otto and flaunt your impeccable style. Incubate and orchestrate to show the world your flair. We have the friendliest fashionistas in the NFT space!',
+      },
     },
   },
 };

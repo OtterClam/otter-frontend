@@ -1,23 +1,20 @@
+import { useTranslation } from 'react-i18next';
 import ImageTextSection from 'src/components/Otto/common/ImageTextSection';
 import ERC71Image from 'src/assets/images/ottos/otto_ERC72.png';
-
-// TODO|OTTO: replace factory image and placeholders
 
 const { ImageSection, TextSection } = ImageTextSection;
 
 const OttoFactorySection = () => {
+  const { t } = useTranslation();
   return (
     <ImageTextSection
       color="mode.otterDark"
       bgcolor="mode.white"
-      title="Otter Factory"
-      slogan="Forging and create a new look for your Ottos"
+      title={t('otto.factory.title')}
+      slogan={t('otto.factory.slogan')}
     >
       <ImageSection imgSrc={ERC71Image} />
-      <TextSection
-        subtitle="Incubate your own Ottos and customize their lookings!"
-        content="Placeholder Placeholder Placeholder Placeholder Placeholder Placeholder"
-      />
+      <TextSection subtitle={t('otto.factory.subtitle')} content={t('otto.factory.content')} />
     </ImageTextSection>
   );
 };
