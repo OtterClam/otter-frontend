@@ -1,8 +1,9 @@
-import { Typography, makeStyles } from '@material-ui/core';
+import { useTranslation } from 'react-i18next';
+import { makeStyles } from '@material-ui/core';
 import { OttoType, OttoTypeMetadata } from './type';
-import OttoMaleImage from 'src/assets/images/ottos/otto_male.png';
-import OttoFemaleImage from 'src/assets/images/ottos/otto_female.png';
-import OttoNonGenderImage from 'src/assets/images/ottos/otto_non_gender.png';
+import OttoOttoImage from 'src/assets/images/ottos/otto_otto.png';
+import OttoLottieImage from 'src/assets/images/ottos/otto_lottie.png';
+import OttoCleoImage from 'src/assets/images/ottos/otto_cleo.png';
 import OttoPupImage from 'src/assets/images/ottos/otto_pup.png';
 import OttoVXImage from 'src/assets/images/ottos/otto_vx.png';
 
@@ -26,12 +27,12 @@ interface ImageProps {
 const OttoImage = ({ className, type }: ImageProps) => {
   const imgSrc = (() => {
     switch (type) {
-      case 'otto_female':
-        return OttoFemaleImage;
-      case 'otto_male':
-        return OttoMaleImage;
-      case 'otto_non_gender':
-        return OttoNonGenderImage;
+      case 'otto_lottie':
+        return OttoLottieImage;
+      case 'otto_otto':
+        return OttoOttoImage;
+      case 'otto_cleo':
+        return OttoCleoImage;
       case 'otto_pup':
         return OttoPupImage;
       case 'otto_vx':
@@ -46,14 +47,15 @@ interface Props {
 }
 const OttoTypeCard = ({ metadata }: Props) => {
   const classes = useStyles();
+  const { t } = useTranslation();
   return (
     <div className={`otto-card__container ${classes.card}`}>
       <h5 className={`otto-card__h5 ${classes.h5}`}>{metadata.name}:</h5>
       <OttoImage className="otto-card__image" type={metadata.type} />
       <p className="otto-card__body2">{metadata.description}</p>
       <div className={`otto-card__countBox ${classes.countBox}`}>
-        <p className="otto-card__body2">Population</p>
-        {metadata.total === null ? 'Coming Soon' : `0 / ${metadata.total}`}
+        <p className="otto-card__body2">{t('otto.type.population')}</p>
+        {metadata.total === null ? t('otto.type.comingSoon') : `0 / ${metadata.total}`}
       </div>
     </div>
   );

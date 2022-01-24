@@ -1,4 +1,4 @@
-export type OttoType = 'otto_male' | 'otto_female' | 'otto_non_gender' | 'otto_pup' | 'otto_vx';
+export type OttoType = 'otto_otto' | 'otto_lottie' | 'otto_cleo' | 'otto_pup' | 'otto_vx';
 
 export interface OttoTypeMetadata {
   type: OttoType;

@@ -324,6 +324,26 @@ const English = {
         calendar2: 'Only 5000 available, act fast!',
         calendarButton: 'Add to Calendar',
       },
+      type: {
+        title: 'Types of Otto',
+        ottoName: 'Otto',
+        ottoDescription:
+          "There are only 2,950 of these otterly handsome fellows. They don't just jazz up your online profiles, they are part of the genesis release, capable of breeding otter pups to increase the kingdom's otter population.",
+        lottieName: 'Lottie',
+        lottieDescription:
+          '1,950 female Ottos make these NFTs a bit more enticing than the males, but no less adorable. Also part of the genesis collection, these fashionable Lotties will melt your heart with one lovable look. They also aspire to be fertile mothers of many pups. You can breed them with male Ottos or non-gender ones as well!',
+        cleoName: 'Cleo',
+        cleoDescription:
+          "The rarest otters in the kingdom, you won't see these laying around any old pond or stream. Non-gender Ottos can be used to breed with either male or female Ottos in the genesis collection. Consider yourself lucky if you've acquired one of these extraordinary creatures!",
+        pupName: 'Otto Pup',
+        pupDescription:
+          'These cutie pies have the most pinchable cheeks in the kingdom! The kingdom only gets pups from owners who breed, so expect to see these soon once the genesis Ottos get to know each other a little bit better.',
+        vxName: 'Otto VX',
+        vxDescription:
+          'Not content with taking over the 2d NFT space, relentless innovation leads the Otter Kingdom into the metaverse. These voxel-based avatars are built for the metaverse  experience (SandBox anyone?). Stay tuned for more details.',
+        population: 'Population',
+        comingSoon: 'Coming Soon',
+      },
     },
   },
 };
