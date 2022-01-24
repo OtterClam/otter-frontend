@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Typography, makeStyles, useMediaQuery } from '@material-ui/core';
 import RoundedButton from 'src/components/Otto/common/RoundedButton';
 import WhiteListRightBg from 'src/assets/images/backgrounds/background-otto_whitelist_right.png';
@@ -39,24 +40,27 @@ const customTabletMediaQuery = '(max-width: 1300px)';
 const OttoWhitelistSection = () => {
   const classes = useStyles();
   const isTablet = useMediaQuery(customTabletMediaQuery);
+  const { t } = useTranslation();
   return (
     <div className="otto-whitelist__container">
       {!isTablet && <img className="otto-whitelist__image" src={WhiteListLeftBg} />}
       {isTablet && <img className="otto-whitelist__tablet-image" src={WhiteListTopBg} />}
       <div className={`otto-whitelist__content ${classes.content}`}>
         <Typography className={classes.body2} variant="body2">
-          Initial Released Image Amount:
+          {t('otto.whitelist.amount')}
         </Typography>
         <Typography className={classes.h2} variant="h2">
-          3,000{' '}
+          5,000{' '}
         </Typography>
         <Typography className={classes.h5} variant="h5">
-          Only for Whitelist!
+          {t('otto.whitelist.whitelist')}
         </Typography>
         <Typography className={classes.body1} variant="body1">
-          Lockup your PEARL in <span className={classes.highlight}>180-day Chest</span> to get qualified in Whitelist
+          {t('otto.whitelist.joinDescription1')}
+          <br />
+          {t('otto.whitelist.joinDescription2')}
         </Typography>
-        <RoundedButton type="solid" text="Check Whitelist on Discord" />
+        <RoundedButton type="solid" text={t('otto.whitelist.joinButton')} />
       </div>
       {!isTablet && <img className="otto-whitelist__image" src={WhiteListRightBg} />}
     </div>
