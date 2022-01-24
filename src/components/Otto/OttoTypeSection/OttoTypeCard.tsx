@@ -4,7 +4,7 @@ import { OttoType, OttoTypeMetadata } from './type';
 import OttoOttoImage from 'src/assets/images/ottos/otto_otto.png';
 import OttoLottieImage from 'src/assets/images/ottos/otto_lottie.png';
 import OttoCleoImage from 'src/assets/images/ottos/otto_cleo.png';
-import OttoPupImage from 'src/assets/images/ottos/otto_pup.png';
+import OttoPupImage from 'src/assets/images/ottos/otto_pup.jpg';
 import OttoVXImage from 'src/assets/images/ottos/otto_vx.png';
 
 const useStyles = makeStyles(theme => ({

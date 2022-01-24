@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core';
 import { OttoUsageMetadata, UsageType } from './type';
 
 import BeneficialEcosystemImage from 'src/assets/images/usage/image-beneficial_ecosystem.png';
-import CommercialRightImage from 'src/assets/images/usage/image-commercial_right.png';
+import CommercialRightImage from 'src/assets/images/usage/image-commercial_right.jpg';
 import PlayableAvatarImage from 'src/assets/images/usage/image-playable_avatar.png';
 
 const useStyles = makeStyles(theme => ({
