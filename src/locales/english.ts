@@ -317,7 +317,7 @@ const English = {
         buyClamHighlight: 'CLAM',
         buyClam2: 'Ottos can ONLY be minted by CLAM.',
         buyClamButton: 'Buy CLAM',
-        calendar1: 'Mint Ottos with CLAM starting. \n',
+        calendar1: 'Mint Ottos with CLAM.\n',
         calendarHighlight: 'Jan 29',
         calendar2: 'Only 5000 available, act fast!',
         calendarButton: 'Add to Calendar',
