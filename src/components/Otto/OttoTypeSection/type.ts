@@ -4,5 +4,5 @@ export interface OttoTypeMetadata {
   type: OttoType;
   name: string;
   description: string;
-  total: number | null;
+  total: string | null;
 }

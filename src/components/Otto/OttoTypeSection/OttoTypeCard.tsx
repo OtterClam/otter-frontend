@@ -50,7 +50,7 @@ const OttoTypeCard = ({ metadata }: Props) => {
   const { t } = useTranslation();
   return (
     <div className={`otto-card__container ${classes.card}`}>
-      <h5 className={`otto-card__h5 ${classes.h5}`}>{metadata.name}:</h5>
+      <h5 className={`otto-card__h5 ${classes.h5}`}>{metadata.name}</h5>
       <OttoImage className="otto-card__image" type={metadata.type} />
       <p className="otto-card__body2">{metadata.description}</p>
       <div className={`otto-card__countBox ${classes.countBox}`}>
