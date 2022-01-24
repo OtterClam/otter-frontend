@@ -23,7 +23,6 @@ const OttoGetSection = () => {
   const OTTO_STEP_METADATA: DescriptionMetadata[] = useMemo(
     () => [
       {
-        imgSrc: '',
         description: [
           { type: 'normal', text: t('otto.get.discord1') },
           { type: 'highlight', text: t('otto.get.discordHighlight') },
@@ -32,16 +31,14 @@ const OttoGetSection = () => {
         buttonText: t('otto.get.discordButton'),
       },
       {
-        imgSrc: '',
         description: [
           { type: 'normal', text: t('otto.get.buyClam1') },
           { type: 'highlight', text: t('otto.get.buyClamHighlight') },
           { type: 'normal', text: t('otto.get.buyClam2') },
         ],
-        buttonText: t('otto.get.butClamButton'),
+        buttonText: t('otto.get.buyClamButton'),
       },
       {
-        imgSrc: '',
         description: [
           { type: 'normal', text: t('otto.get.calendar1') },
           { type: 'highlight', text: t('otto.get.calendarHighlight') },

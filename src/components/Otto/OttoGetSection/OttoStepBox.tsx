@@ -1,6 +1,9 @@
 import { makeStyles } from '@material-ui/core';
 import RoundedButton from 'src/components/Otto/common/RoundedButton';
 import { DescriptionMetadata } from './type';
+import ImageStep1 from 'src/assets/images/steps/step1.png';
+import ImageStep2 from 'src/assets/images/steps/step2.png';
+import ImageStep3 from 'src/assets/images/steps/step3.png';
 
 const useStyles = makeStyles(theme => ({
   label: {
@@ -20,6 +23,19 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+const StepImage = ({ number }: { number: number }) => {
+  switch (number) {
+    case 1:
+      return <img className="otto-step-box__image" src={ImageStep1} />;
+    case 2:
+      return <img className="otto-step-box__image" src={ImageStep2} />;
+    case 3:
+      return <img className="otto-step-box__image" src={ImageStep3} />;
+    default:
+      return <></>;
+  }
+};
+
 interface Props {
   metadata: DescriptionMetadata;
   number: number;
@@ -29,7 +45,7 @@ const OttoStepBox = ({ metadata, number }: Props) => {
   return (
     <div className="otto-step-box__container">
       <div className={`otto-step-box__numberLabel ${classes.label}`}>{number}</div>
-      <div className="otto-step-box__image" />
+      <StepImage number={number} />
       {metadata.description.map((description, index) => {
         if (description.type === 'highlight')
           return (

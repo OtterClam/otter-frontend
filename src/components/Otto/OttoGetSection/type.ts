@@ -4,7 +4,6 @@ type Description = {
 };
 
 export interface DescriptionMetadata {
-  imgSrc: string;
   description: Description[];
   buttonText: string;
 }
