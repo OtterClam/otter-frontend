@@ -2,7 +2,7 @@ import ImageTextSection from 'src/components/Otto/common/ImageTextSection';
 import ERC71Image from 'src/assets/images/ottos/otto_ERC72.png';
 const { ImageSection, TextSection } = ImageTextSection;
 
-const OttoERCSection = () => {
+const OttoComponentSection = () => {
   // TODO|OTTO: replace placeholder
   return (
     <ImageTextSection
@@ -19,4 +19,4 @@ const OttoERCSection = () => {
     </ImageTextSection>
   );
 };
-export default OttoERCSection;
+export default OttoComponentSection;
