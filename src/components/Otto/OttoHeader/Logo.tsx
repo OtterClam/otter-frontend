@@ -1,28 +1,6 @@
-import { Typography, makeStyles } from '@material-ui/core';
-import LogoImage from 'src/assets/images/logo.png';
-
-const useStyles = makeStyles(theme => ({
-  name: {
-    color: theme.palette.mode.otterDark,
-  },
-  highlight: {
-    color: theme.palette.otter.clamPink,
-  },
-}));
+import LogoImage from 'src/assets/images/logos/logo.svg';
 
 const Logo = () => {
-  const classes = useStyles();
-  return (
-    <>
-      <img className="otto-header-logo__image" src={LogoImage} />
-      <Typography variant="h1" className={`${classes.name} otto-header-logo__text`}>
-        Otter
-        <Typography variant="inherit" className={classes.highlight}>
-          C
-        </Typography>
-        lam
-      </Typography>
-    </>
-  );
+  return <img className="otto-header-logo__image" src={LogoImage} />;
 };
 export default Logo;
