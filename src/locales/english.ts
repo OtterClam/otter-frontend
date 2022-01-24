@@ -378,6 +378,13 @@ const English = {
         beneficialTitle: 'Kingdom-wide Benefits',
         beneficialContent: 'Owners can use Ottos anywhere in the kingdom to reap benefits.',
       },
+      countdown: {
+        mintTitle: 'Mint your Ottos Now!',
+        mintSubtitle: 'Mint Countdown',
+        hintDescription:
+          'Ottos can only be minted using CLAM, so make sure you have the required amount prior to minting.',
+        buyNow: 'BUY NOW',
+      },
     },
   },
 };
