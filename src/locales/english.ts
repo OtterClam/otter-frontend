@@ -327,7 +327,7 @@ const English = {
         calendar1: 'Mint Ottos with CLAM.\n',
         calendarHighlight: 'Jan 29',
         calendar2: 'Only 5000 available, act fast!',
-        calendarButton: 'Add to Calendar',
+        calendarButton: 'Coming Soon',
       },
       type: {
         title: 'Types of Otto',
