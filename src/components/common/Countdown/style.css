@@ -1,0 +1,103 @@
+.countdown {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.countdown__title {
+  margin-bottom: 20px !important;
+  font-size: 18px !important;
+  line-height: 27px !important;
+  font-weight: bold !important;
+}
+
+.countdown__content {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 100%;
+          flex: 1 100%;
+  max-width: 730px;
+  padding: 20px;
+  border-radius: 20px;
+  margin: 0 20px;
+}
+
+.countdown__numbers {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.countdown__number-group {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  width: 78px;
+}
+
+.countdown__number-group:not(:last-child) {
+  margin-right: 20px;
+}
+
+.countdown__number-label {
+  width: 100%;
+  margin-top: 10px !important;
+  font-size: 12px !important;
+  line-height: 21px !important;
+  font-weight: normal !important;
+}
+
+.countdown__number {
+  width: 36px;
+  height: 48px;
+  border-radius: 8px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.countdown__number:first-child {
+  margin-right: 6px;
+}
+
+.countdown__number span {
+  font-size: 24px !important;
+}
+
+@media screen and (max-width: 512px) {
+  .countdown__number-group {
+    width: 54px;
+  }
+  .countdown__number-label {
+    font-size: 12px !important;
+    line-height: 18px !important;
+  }
+  .countdown__number {
+    width: 24px;
+    height: 36px;
+  }
+  .countdown__number span {
+    font-size: 20px !important;
+  }
+  .countdown__title {
+    font-size: 16px !important;
+    line-height: 24px !important;
+  }
+}
+/*# sourceMappingURL=style.css.map */

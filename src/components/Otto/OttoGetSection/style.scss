@@ -1,0 +1,52 @@
+.otto-get {
+    &__container {
+        text-align: center;
+    }
+    &__title {
+        margin-bottom: 60px !important;
+    }
+    &__boxes {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-column-gap: 20px;
+    }
+}
+
+.otto-step-box {
+    &__numberLabel {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin: auto;
+    }
+    &__image {
+        width: 100%;
+        margin: 30px auto 25px auto;
+    }
+    &__content {
+        white-space: pre-line;
+    }
+    &__button {
+        margin-top: 20px;
+    }
+}
+
+
+@media screen and (max-width: 960px) {
+    .otto-get {
+        &__container {
+            text-align: center;
+        }
+        &__title {
+            margin-bottom: 20px !important;
+        }
+        &__boxes {
+            grid-template-columns: auto;
+            grid-column-gap: 0px;
+            grid-row-gap: 40px;
+        }
+    }
+}

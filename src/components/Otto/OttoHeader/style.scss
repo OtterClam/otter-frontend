@@ -1,0 +1,131 @@
+.otto-header-desktop {
+  position: fixed;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 10px 0;
+  transition: background-color 0.2s, box-shadow 0.2s;
+
+  &__container {
+    width: 100%;
+    padding: 0 245px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+  }
+
+  &__section {
+    flex: 1;
+    &.left {
+      flex: 1;
+      align-items: center;
+    }
+    &.right {
+      flex-grow: 1;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+  }
+
+  &__link {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 40px !important;
+    white-space: nowrap;
+  }
+
+  #lang-picker {
+    margin-left: 20px;
+
+    .custom-button {
+      border: none;
+    }
+  }
+}
+
+.otto-header-logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+
+  &__image {
+    height: 40px;
+    width: auto;
+  }
+  &__text {
+    // NOTE: overwrite mui typography style
+    font-size: 20px !important;
+    margin-left: 16px !important;
+    font-weight: 700 !important;
+  }
+}
+
+.otto-header-tablet {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  &__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+  }
+  &__patch {
+    width: 24px;
+  }
+  &__menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: white;
+  }
+  &__menu-link {
+    margin-bottom: 40px !important;
+  }
+}
+
+.menu-button {
+  position: fixed;
+  top: 20px;
+  width: 24px;
+  height: 18px;
+  cursor: pointer;
+  z-index: 1;
+
+  &__top-line-style, &__middle-line-style, &__bottom-line-style {
+    width: 18px;
+    height: 2px;
+    margin: 3px;
+    background-color: black;
+    transition: 0.3s;
+  }
+
+  &__top-line-style {
+    &.open {
+      transform: rotate(45deg) translateY(6.5px);
+    }
+  }
+
+  &__middle-line-style {
+    &.open {
+      opacity: 0;
+    }
+  }
+
+  &__bottom-line-style {
+    &.open {
+      transform: rotate(-45deg) translateY(-8px);
+    }
+  }
+}

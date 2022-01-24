@@ -1,0 +1,74 @@
+.otto-type {
+    &__cards {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-column-gap: 30px;
+        grid-row-gap: 30px;
+    }
+}
+
+.otto-card {
+    &__container {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 40px;
+    }
+    &__image {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+    &__count-box {
+        padding: 20px 10px;
+    }
+    &__h5 {
+        font-size: 20px;
+        font-weight: 700;
+        text-align: center;
+        line-height: 30px;
+        margin: 0;
+        margin-bottom: 15px;
+    }
+    &__body2 {
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 22px;
+    }
+    &__countBox {
+        border-radius: 10px;
+        padding: 10px 20px;
+        margin-top: 15px;
+    }
+}
+
+@media screen and (max-width: 1300px) {
+    .otto-type {
+        &__cards {
+            grid-template-columns: 1fr 1fr;
+            grid-row-gap: 20px;
+        }
+    }
+}
+
+@media screen and (max-width: 598px) {
+    .otto-type {
+        &__cards {
+            grid-template-columns: auto;
+        }
+    }
+    .otto-card {
+        &__container {
+            padding: 20px;
+        }
+        &__body2 {
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 18px;
+        }
+        &__h5 {
+            font-size: 18px;
+            line-height: 28px;
+        }
+    }
+    
+}
