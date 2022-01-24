@@ -312,7 +312,7 @@ const English = {
         amount: 'Genesis Otto Amount',
         whitelist: 'Only for Whitelist',
         joinDescription1: 'Join Discord to get',
-        joinDescription2: 'latest updated of whitelist',
+        joinDescription2: 'latest updates on whitelist',
         joinButton: 'Join Discord',
       },
       get: {
