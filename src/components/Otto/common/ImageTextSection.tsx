@@ -6,7 +6,7 @@ interface ImageProps {
   imgSrc: string;
 }
 const ImageSection = ({ imgSrc }: ImageProps) => {
-  return <div className="image-text__image" style={{ background: `url(${imgSrc}) center/cover no-repeat` }} />;
+  return <img className="image-text__image" src={imgSrc} />;
 };
 
 interface TextProps {

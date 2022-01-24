@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import ImageTextSection from 'src/components/Otto/common/ImageTextSection';
-import ERC71Image from 'src/assets/images/ottos/otto_ERC72.png';
+import OttoFactoryImage from 'src/assets/images/ottos/otto_factory.png';
 
 const { ImageSection, TextSection } = ImageTextSection;
 
@@ -13,7 +13,7 @@ const OttoFactorySection = () => {
       title={t('otto.factory.title')}
       slogan={t('otto.factory.slogan')}
     >
-      <ImageSection imgSrc={ERC71Image} />
+      <ImageSection imgSrc={OttoFactoryImage} />
       <TextSection subtitle={t('otto.factory.subtitle')} content={t('otto.factory.content')} />
     </ImageTextSection>
   );

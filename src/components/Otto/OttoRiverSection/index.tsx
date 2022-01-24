@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { makeStyles } from '@material-ui/core';
 import ImageTextSection from '../common/ImageTextSection';
-import OttoPondImage from 'src/assets/images/ottos/otto_pond.png';
+import OttoRiverImage from 'src/assets/images/ottos/otto_river.png';
 
 const { ImageSection, TextSection } = ImageTextSection;
 
@@ -21,7 +21,7 @@ const OtterPondSection = () => {
       title={t('otto.river.title')}
       slogan={t('otto.river.slogan')}
     >
-      <ImageSection imgSrc={OttoPondImage} />
+      <ImageSection imgSrc={OttoRiverImage} />
       <TextSection
         subtitle={
           <>
