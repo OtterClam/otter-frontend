@@ -32,7 +32,7 @@ export default function DashboardHero() {
     },
     {
       image: Ad4,
-      link: 'https://www.youtube.com/watch?v=qZGGj5clzHU',
+      link: 'https://www.youtube.com/watch?v=laPZp3WUt6I',
     },
   ];
   return (
