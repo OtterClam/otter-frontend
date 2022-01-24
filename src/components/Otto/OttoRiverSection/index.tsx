@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { makeStyles } from '@material-ui/core';
 import ImageTextSection from '../common/ImageTextSection';
 import OttoPondImage from 'src/assets/images/ottos/otto_pond.png';
@@ -12,23 +13,25 @@ const useStyles = makeStyles(theme => ({
 
 const OtterPondSection = () => {
   const classes = useStyles();
+  const { t } = useTranslation();
   return (
     <ImageTextSection
       color="mode.otterDark"
       bgcolor="mode.lightGray200"
-      title="Otter Pond"
-      slogan="Inheriting good genes to strengthen the Otter Kingdom"
+      title={t('otto.river.title')}
+      slogan={t('otto.river.slogan')}
     >
       <ImageSection imgSrc={OttoPondImage} />
       <TextSection
         subtitle={
           <>
-            Breed Your Ottos
+            {t('otto.river.subtitle1')}
             <br />
-            to Get <span className={classes.highlight}>SSR</span> Otto Pups!
+            {t('otto.river.subtitle2')} <span className={classes.highlight}>{t('otto.river.subtitleHighlight')}</span>{' '}
+            {t('otto.river.subtitle3')}
           </>
         }
-        content="The rarer the components your Otto comprise, the higher chance of super rare otter pups you will get by breeding the male and female Ottos!"
+        content={t('otto.river.content')}
       />
     </ImageTextSection>
   );

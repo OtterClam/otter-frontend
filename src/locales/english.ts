@@ -358,6 +358,16 @@ const English = {
         content:
           'Mix and match from our selection of accessories to customize your Otto and flaunt your impeccable style. Incubate and orchestrate to show the world your flair. We have the friendliest fashionistas in the NFT space!',
       },
+      river: {
+        title: 'Otto River',
+        slogan: 'Pass down your Ottos’ good genes to strengthen the Otter Kingdom',
+        subtitle1: 'Breed Your Ottos',
+        subtitle2: 'to Get',
+        subtitleHighlight: 'SSR',
+        subtitle3: 'Otto Pups!',
+        content:
+          'The rarer your male and female Ottos’ components, the higher the likelihood they’ll breed a super rare otter pup!',
+      },
     },
   },
 };
