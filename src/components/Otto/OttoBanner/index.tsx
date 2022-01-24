@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { makeStyles } from '@material-ui/core';
 import { ReactComponent as TelegramIcon } from 'src/components/SocialIcons/images/telegram.svg';
 import { ReactComponent as DiscordIcon } from 'src/components/SocialIcons/images/discord.svg';
+import { ReactComponent as TwitterIcon } from 'src/components/SocialIcons/images/twitter.svg';
 import OttoHeroImage from 'src/assets/images/ottos/otto_hero.png';
 import OttoHeroBackground from 'src/assets/images/backgrounds/background-banner.png';
 
@@ -42,6 +43,14 @@ const OttoBanner = () => {
             icon={DiscordIcon}
             iconSvgProps={{ viewBox: '0 0 32 32' }}
             text="Discord"
+            marginLeft="20px"
+          />
+          <RoundedButton
+            href="https://twitter.com/otterclam"
+            type="outline"
+            icon={TwitterIcon}
+            iconSvgProps={{ viewBox: '0 0 32 32' }}
+            text="Twitter"
             marginLeft="20px"
           />
         </div>
