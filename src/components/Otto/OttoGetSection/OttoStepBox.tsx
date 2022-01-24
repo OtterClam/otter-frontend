@@ -61,7 +61,7 @@ const OttoStepBox = ({ metadata, number }: Props) => {
         );
       })}
       <div className="otto-step-box__button">
-        <RoundedButton text={metadata.buttonText} />
+        <RoundedButton href={metadata.button.href} text={metadata.button.text} />
       </div>
     </div>
   );

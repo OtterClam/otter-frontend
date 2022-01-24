@@ -292,9 +292,7 @@ const English = {
       header: {
         bank: 'Bank',
         otto: 'Otto',
-        market: 'Market',
-        treasury: 'Treasury',
-        gettingStarted: 'Getting Started',
+        airdrop: 'Airdrop',
       },
       banner: {
         meet: 'Meet',

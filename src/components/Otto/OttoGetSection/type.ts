@@ -3,7 +3,11 @@ type Description = {
   text: string;
 };
 
+type Button = {
+  text: string;
+  href: string;
+};
 export interface DescriptionMetadata {
   description: Description[];
-  buttonText: string;
+  button: Button;
 }

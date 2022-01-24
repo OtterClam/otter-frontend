@@ -60,7 +60,7 @@ const OttoWhitelistSection = () => {
           <br />
           {t('otto.whitelist.joinDescription2')}
         </Typography>
-        <RoundedButton type="solid" text={t('otto.whitelist.joinButton')} />
+        <RoundedButton href="https://discord.gg/otterclam" type="solid" text={t('otto.whitelist.joinButton')} />
       </div>
       {!isTablet && <img className="otto-whitelist__image" src={WhiteListRightBg} />}
     </div>

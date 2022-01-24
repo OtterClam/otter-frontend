@@ -8,7 +8,7 @@ export const RESOURCES_LINKS = [
 ];
 
 export const INVOLVED_LINKS = [
-  { text: 'Join the DAO', href: 'https://discord.com/invite/B3jK922P' },
+  { text: 'Join the DAO', href: 'https://discord.gg/X7t5ydaWbH' },
   { text: 'Contact Us', href: 'https://discord.com/invite/RvjsSCph' },
   { text: 'Media Kit', href: 'https://docs.otterclam.finance/references/media-and-branding-guide' },
 ];

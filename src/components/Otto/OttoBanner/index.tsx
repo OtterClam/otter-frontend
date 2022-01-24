@@ -29,8 +29,15 @@ const OttoBanner = () => {
         <h3 className="otto-banner__slogan">{t('otto.banner.slogan')}</h3>
         <h4 className="otto-banner__description">{t('otto.banner.description')}</h4>
         <div className="otto-banner__buttons">
-          <RoundedButton type="outline" icon={TelegramIcon} iconSvgProps={{ viewBox: '0 0 32 32' }} text="Telegram" />
           <RoundedButton
+            href="https://t.me/otterclam_official"
+            type="outline"
+            icon={TelegramIcon}
+            iconSvgProps={{ viewBox: '0 0 32 32' }}
+            text="Telegram"
+          />
+          <RoundedButton
+            href="https://discord.gg/otterclam"
             type="outline"
             icon={DiscordIcon}
             iconSvgProps={{ viewBox: '0 0 32 32' }}

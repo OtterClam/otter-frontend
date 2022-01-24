@@ -46,7 +46,6 @@ const OttoTabletHeader = ({ linkMetadata }: Props) => {
             <Logo />
           </a>
         </div>
-        {/* TODO|OTTO: replace navbar links */}
         <div className="otto-header-tablet__patch" />
       </div>
       {menuOpen && (
@@ -57,7 +56,7 @@ const OttoTabletHeader = ({ linkMetadata }: Props) => {
             </a>
           </div>
           {linkMetadata.map(metadata => (
-            <Link key={metadata.text} className="otto-header-tablet__menu-link" href={metadata.href}>
+            <Link key={metadata.text} className="otto-header-tablet__menu-link" href={metadata.href} target="__blank">
               {metadata.text}
               {metadata.new && <NewChip marginLeft="4px" />}
             </Link>

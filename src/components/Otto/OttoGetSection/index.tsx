@@ -28,7 +28,7 @@ const OttoGetSection = () => {
           { type: 'highlight', text: t('otto.get.discordHighlight') },
           { type: 'normal', text: t('otto.get.discord2') },
         ],
-        buttonText: t('otto.get.discordButton'),
+        button: { text: t('otto.get.discordButton'), href: 'https://discord.gg/otterclam' },
       },
       {
         description: [
@@ -36,7 +36,10 @@ const OttoGetSection = () => {
           { type: 'highlight', text: t('otto.get.buyClamHighlight') },
           { type: 'normal', text: t('otto.get.buyClam2') },
         ],
-        buttonText: t('otto.get.buyClamButton'),
+        button: {
+          text: t('otto.get.buyClamButton'),
+          href: 'https://quickswap.exchange/#/swap?outputCurrency=0xC250e9987A032ACAC293d838726C511E6E1C029d',
+        },
       },
       {
         description: [
@@ -44,7 +47,8 @@ const OttoGetSection = () => {
           { type: 'highlight', text: t('otto.get.calendarHighlight') },
           { type: 'normal', text: t('otto.get.calendar2') },
         ],
-        buttonText: t('otto.get.calendarButton'),
+        // FIXME|OTTO: replace with google calendar api
+        button: { text: t('otto.get.calendarButton'), href: 'https://calendar.google.com/calendar/u/0/r?tab=rc' },
       },
     ],
     [],

@@ -14,15 +14,9 @@ export default function OttoHeader() {
   const { t } = useTranslation();
   const MENU_LINKS: LinkMetadata[] = useMemo(
     () => [
-      { text: t('otto.header.bank'), href: '/FAKE/bank', new: false },
-      { text: t('otto.header.otto'), href: '/FAKE/otto', new: true },
-      { text: t('otto.header.market'), href: '/FAKE/market', new: false },
-      { text: t('otto.header.treasury'), href: '/FAKE/treasury', new: false },
-      {
-        text: t('otto.header.gettingStarted'),
-        href: '/FAKE',
-        new: false,
-      },
+      { text: t('otto.header.bank'), href: 'https://app.otterclam.finance/#/dashboard', new: false },
+      { text: t('otto.header.otto'), href: '/#/otto', new: true },
+      { text: t('otto.header.airdrop'), href: 'https://www.otterclam.finance/#/nft', new: false },
     ],
     [],
   );

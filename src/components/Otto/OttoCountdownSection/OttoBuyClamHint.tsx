@@ -24,8 +24,11 @@ const OttoBuyClamHint = () => {
     <div className={`otto-buy-clam-hint__container ${classes.container}`}>
       <div>{getCLAMTokenImage(60)}</div>
       <div className={`otto-buy-clam-hint__content ${classes.content}`}>{t('otto.countdown.hintDescription')}</div>
-      {/* TODO|OTTO: replace with buy clam link */}
-      <Link className={`otto-buy-clam-hint__highlight ${classes.highlight}`} href="/FAKE/buy-clam">
+      <Link
+        className={`otto-buy-clam-hint__highlight ${classes.highlight}`}
+        target="__blank"
+        href="https://quickswap.exchange/#/swap?outputCurrency=0xC250e9987A032ACAC293d838726C511E6E1C029d"
+      >
         {t('otto.countdown.buyNow')}
       </Link>
     </div>

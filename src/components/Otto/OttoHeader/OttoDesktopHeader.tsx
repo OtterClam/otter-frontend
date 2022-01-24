@@ -28,10 +28,9 @@ export default function OttoDesktopHeader({ linkMetadata }: Props) {
             <Logo />
           </a>
         </div>
-        {/* TODO|OTTO: replace navbar links */}
         <div className="otto-header-desktop__section right">
           {linkMetadata.map(metadata => (
-            <Link className="otto-header-desktop__link" href={metadata.href}>
+            <Link className="otto-header-desktop__link" href={metadata.href} target="__blank">
               {metadata.text} {metadata.new && <NewChip marginLeft="10px" />}
             </Link>
           ))}
