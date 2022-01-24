@@ -33,6 +33,7 @@ const English = {
       yourBalance: 'Your Balance',
       balance: 'Balance',
       currentApy: 'Current APY',
+      chestAPY: 'Pearl Chest MAX APY',
       dashboard: 'Dashboard',
       calculator: 'Calculator',
       helpTranslate: 'Help us Translate',
