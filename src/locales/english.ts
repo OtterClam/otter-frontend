@@ -368,6 +368,16 @@ const English = {
         content:
           'The rarer your male and female Ottos’ components, the higher the likelihood they’ll breed a super rare otter pup!',
       },
+      usage: {
+        title: 'What can you do with Ottos?',
+        playableTitle: 'Playable avatars in The Sandbox',
+        playableContent: 'Get an Otto VX and explore the Sandbox metaverse.',
+        commercialTitle: 'Full Commercial Rights on all OtterClam assets',
+        commercialContent:
+          'You own all commercial rights to the images of all your Ottos as well as the 3D model of your Otter VX.',
+        beneficialTitle: 'Kingdom-wide Benefits',
+        beneficialContent: 'Owners can use Ottos anywhere in the kingdom to reap benefits.',
+      },
     },
   },
 };

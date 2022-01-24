@@ -1,6 +1,8 @@
+import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Typography, makeStyles } from '@material-ui/core';
 import OttoUsageCard from './OttoUsageCard';
-import { OTTO_USAGE_METADATA } from './constant';
+import { OttoUsageMetadata } from './type';
 import './style.scss';
 
 const useStyles = makeStyles(theme => ({
@@ -18,10 +20,32 @@ const useStyles = makeStyles(theme => ({
 
 const OtterUsageSection = () => {
   const classes = useStyles();
+  const { t } = useTranslation();
+  const OTTO_USAGE_METADATA: OttoUsageMetadata[] = useMemo(
+    () => [
+      {
+        type: 'playable_avatar',
+        title: t('otto.usage.playableTitle'),
+        content: t('otto.usage.playableContent'),
+      },
+      {
+        type: 'commercial_right',
+        title: t('otto.usage.commercialTitle'),
+        content: t('otto.usage.commercialContent'),
+      },
+      {
+        type: 'beneficial_ecosystem',
+        title: t('otto.usage.beneficialTitle'),
+        content: t('otto.usage.beneficialContent'),
+      },
+    ],
+    [],
+  );
+
   return (
     <div className={`otto-usage__container container ${classes.container}`}>
       <Typography className={classes.h4} variant="h4">
-        What can you do with Ottos?
+        {t('otto.usage.title')}
       </Typography>
       <div className="otto-usage__cards">
         {OTTO_USAGE_METADATA.map(metadata => (
