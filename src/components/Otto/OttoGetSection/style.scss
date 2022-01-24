@@ -26,6 +26,9 @@
         width: 100%;
         margin: 30px auto 25px auto;
     }
+    &__content {
+        white-space: pre-line;
+    }
     &__button {
         margin-top: 20px;
     }

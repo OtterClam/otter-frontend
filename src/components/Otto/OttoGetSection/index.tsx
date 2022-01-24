@@ -44,7 +44,6 @@ const OttoGetSection = () => {
       {
         description: [
           { type: 'normal', text: t('otto.get.calendar1') },
-          { type: 'highlight', text: t('otto.get.calendarHighlight') },
           { type: 'normal', text: t('otto.get.calendar2') },
         ],
         // FIXME|OTTO: replace with google calendar api
