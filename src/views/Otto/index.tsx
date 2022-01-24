@@ -27,7 +27,7 @@ const OttoView = () => {
   return (
     <div className={classes.view}>
       <OttoHeader />
-      <OttoBanner themeName={themeName} />
+      <OttoBanner />
       <OttoWhitelistSection />
       <OttoGetSection />
       <OttoTypeSection />

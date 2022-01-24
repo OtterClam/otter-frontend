@@ -19,15 +19,24 @@
     }
   }
   &__title {
-    font-size: 60px !important;
-    font-weight: 800 !important;
-    line-height: 90px !important;
+    font-size: 60px;
+    font-weight: 800;
+    line-height: 90px;
+    margin: 0;
+  }
+  &__slogan {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 36px;
+    margin: 0;
+    margin-bottom: 40px;
   }
   &__description {
-    padding-top: 24px;
-  }
-  &__buttons {
-    padding-top: 20px;
+    font-size: 20px;
+    line-height: 30px;
+    font-weight: 700;
+    margin: 0;
+    margin-bottom: 20px;
   }
   &__image {
     width: 100%;
@@ -43,8 +52,17 @@
       text-align: center;
     }
     &__title {
-      font-size: 48px !important;
-      line-height: 72px !important;
+      font-size: 48px;
+      line-height: 72px;
+    }
+    &__slogan {
+      font-size: 20px;
+      line-height: 30px;
+      margin-bottom: 20px;
+    }
+    &__description {
+      font-size: 18px;
+      line-height: 28px;
     }
     &__section {
       &.left {
