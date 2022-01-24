@@ -289,6 +289,13 @@ const English = {
       },
     },
     otto: {
+      header: {
+        bank: 'Bank',
+        otto: 'Otto',
+        market: 'Market',
+        treasury: 'Treasury',
+        gettingStarted: 'Getting Started',
+      },
       banner: {
         meet: 'Meet',
         otto: 'Otto',
