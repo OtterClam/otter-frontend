@@ -1,21 +1,19 @@
+import { useTranslation } from 'react-i18next';
 import ImageTextSection from 'src/components/Otto/common/ImageTextSection';
 import ERC71Image from 'src/assets/images/ottos/otto_ERC72.png';
 const { ImageSection, TextSection } = ImageTextSection;
 
 const OttoComponentSection = () => {
-  // TODO|OTTO: replace placeholder
+  const { t } = useTranslation();
   return (
     <ImageTextSection
       color="mode.otterDark"
-      bgcolor="mode.lightGray100"
-      title="OttoERC-721 Tech"
-      slogan="Every single DNA and accessory on your Otto has its value"
+      bgcolor="mode.lightGray200"
+      title={t('otto.component.title')}
+      slogan={t('otto.component.slogan')}
     >
       <ImageSection imgSrc={ERC71Image} />
-      <TextSection
-        subtitle="placeholder placeholder"
-        content="ERC-721 tokens are non-fungible, meaning that every part in your Otto has its unique value and is to be treated individually. Unlike ERC-20, every single ERC-20 token is equal in value and is identical and inter replaceable."
-      />
+      <TextSection subtitle={t('otto.component.subtitle')} content={t('otto.component.content')} />
     </ImageTextSection>
   );
 };

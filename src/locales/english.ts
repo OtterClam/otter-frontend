@@ -344,6 +344,13 @@ const English = {
         population: 'Population',
         comingSoon: 'Coming Soon',
       },
+      component: {
+        title: 'Components of Otto',
+        slogan: 'Every feature and accessory of your Otto has value',
+        subtitle: 'The tech behind the Otto appeal',
+        content:
+          'ERC-721 tokens are non-fungible, meaning that each part of your Otto has unique features and will be valued accordingly. This feature of ERC-721 tokens is what differentiates them from ERC-20 tokens, which are equal in terms of value, and therefore identical and interchangeable.',
+      },
     },
   },
 };
