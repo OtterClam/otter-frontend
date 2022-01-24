@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.mode.otterDark,
   },
   countBox: {
-    backgroundColor: theme.palette.mode.lightGray400,
+    backgroundColor: theme.palette.mode.lightGray300,
   },
 }));
 
