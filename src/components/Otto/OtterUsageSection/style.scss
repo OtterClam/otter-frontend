@@ -8,6 +8,9 @@
 
 .otto-usage-card {
   &__container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     padding: 40px;
     border-radius: 10px;
   }

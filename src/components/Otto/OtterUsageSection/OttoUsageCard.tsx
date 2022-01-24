@@ -39,8 +39,10 @@ const OttoUsageCard = ({ metadata }: Props) => {
   const classes = useStyles();
   return (
     <div className={`otto-usage-card__container ${classes.card}`}>
-      <h5 className={`${classes.title} otto-usage-card__title`}>{metadata.title}</h5>
-      <p className="otto-usage-card__content">{metadata.content}</p>
+      <div>
+        <h5 className={`${classes.title} otto-usage-card__title`}>{metadata.title}</h5>
+        <p className="otto-usage-card__content">{metadata.content}</p>
+      </div>
       <UsageImage className="otto-usage-card__image" type={metadata.type} />
     </div>
   );
