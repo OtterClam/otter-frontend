@@ -288,6 +288,15 @@ const English = {
         viewOnOpenSea: 'View on OpenSea',
       },
     },
+    otto: {
+      banner: {
+        meet: 'Meet',
+        otto: 'Otto',
+        slogan: "The Otter Kingdom's newest NFT innovation",
+        description:
+          'Ottos are unique and randomly generated 2D NFT Social Avatars created to enhance your online experience. Some appear normal. Some look crazy. Some are just damn cool!',
+      },
+    },
   },
 };
 export default English;

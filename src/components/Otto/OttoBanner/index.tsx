@@ -1,4 +1,5 @@
-import { Typography, makeStyles } from '@material-ui/core';
+import { useTranslation } from 'react-i18next';
+import { makeStyles } from '@material-ui/core';
 import { ReactComponent as TelegramIcon } from 'src/components/SocialIcons/images/telegram.svg';
 import { ReactComponent as DiscordIcon } from 'src/components/SocialIcons/images/discord.svg';
 import OttoHeroImage from 'src/assets/images/ottos/otto_hero.png';
@@ -16,21 +17,17 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-interface Props {
-  themeName: string;
-}
-const OttoBanner = ({ themeName }: Props) => {
+const OttoBanner = () => {
   const classes = useStyles();
+  const { t } = useTranslation();
   return (
     <div className={`otto-banner__container ${classes.container}`}>
       <div className="otto-banner__section left">
-        <Typography variant="h2" className="otto-banner__title">
-          Get Your <span className={classes.hightlight}>Ottos</span> in <br /> Otto Kingdom
-        </Typography>
-        <Typography variant="h5" className="otto-banner__description">
-          Ottos are unique and randomly generated 2D NFT Social Avatars for your online experiences. Some appear normal.
-          Some look crazy. Some are just damn cool!
-        </Typography>
+        <h2 className="otto-banner__title">
+          {t('otto.banner.meet')} <span className={classes.hightlight}>{t('otto.banner.otto')}</span>!
+        </h2>
+        <h3 className="otto-banner__slogan">{t('otto.banner.slogan')}</h3>
+        <h4 className="otto-banner__description">{t('otto.banner.description')}</h4>
         <div className="otto-banner__buttons">
           <RoundedButton type="outline" icon={TelegramIcon} iconSvgProps={{ viewBox: '0 0 32 32' }} text="Telegram" />
           <RoundedButton
