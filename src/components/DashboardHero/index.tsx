@@ -5,11 +5,16 @@ import Ad3 from './ad-03.jpg';
 import Ad4 from './ad-04.jpg';
 import Ad5 from './ad-05.gif';
 import Ad6 from './ad-06.gif';
+import AMA from './AMA.gif';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import './styles.scss';
 
 export default function DashboardHero() {
   const ads = [
+    {
+      image: AMA,
+      link: 'https://discord.gg/otterclam',
+    },
     {
       image: Ad5,
       link: 'https://www.otterclam.finance/#/otto',
