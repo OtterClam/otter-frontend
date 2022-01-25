@@ -36,7 +36,15 @@ export default function DashboardHero() {
     },
   ];
   return (
-    <Carousel className="dashboard-hero" showThumbs={false} showArrows={false} showStatus={false} autoPlay infiniteLoop>
+    <Carousel
+      className="dashboard-hero"
+      interval={6000}
+      showThumbs={false}
+      showArrows={false}
+      showStatus={false}
+      autoPlay
+      infiniteLoop
+    >
       {ads.map(({ image, link }, i) => (
         <a key={i} href={link} target="_blank" style={{ display: 'block' }}>
           <img src={image} />
