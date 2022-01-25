@@ -255,7 +255,7 @@ function NavContent() {
                 </div>
               </div>
               <Link
-                href={'https://www.otterclam.finance/#/nft'}
+                href={'https://www.otterclam.finance/#/otto'}
                 target="_blank"
                 rel="noreferrer"
                 className="button-dapp-menu"
