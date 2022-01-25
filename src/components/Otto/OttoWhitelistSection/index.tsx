@@ -20,6 +20,10 @@ const useStyles = makeStyles(theme => ({
     fontSize: '100px',
     fontWeight: 800,
   },
+  h3: {
+    fontSize: '64px',
+    fontWeight: 800,
+  },
   h5: {
     fontSize: '36px',
     fontWeight: 800,
@@ -49,11 +53,8 @@ const OttoWhitelistSection = () => {
         <Typography className={classes.body2} variant="body2">
           {t('otto.whitelist.amount')}
         </Typography>
-        <Typography className={classes.h2} variant="h2">
-          5,000{' '}
-        </Typography>
-        <Typography className={classes.h5} variant="h5">
-          {t('otto.whitelist.whitelist')}
+        <Typography className={classes.h3} variant="h3">
+          5,000 Ottos
         </Typography>
         <Typography className={classes.body1} variant="body1">
           {t('otto.whitelist.joinDescription1')}

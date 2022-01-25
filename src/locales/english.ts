@@ -309,10 +309,9 @@ const English = {
           'Ottos are unique and randomly generated 2D NFT Social Avatars created to enhance your online experience. Some appear normal. Some look crazy. Some are just damn cool!',
       },
       whitelist: {
-        amount: 'Genesis Otto Amount',
-        whitelist: 'Only for Whitelist',
+        amount: 'Genesis Release',
         joinDescription1: 'Join Discord to get',
-        joinDescription2: 'latest updates on whitelist',
+        joinDescription2: 'latest whitelist updates and requirements',
         joinButton: 'Join Discord',
       },
       get: {
