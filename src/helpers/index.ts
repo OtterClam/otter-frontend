@@ -14,6 +14,7 @@ export * from './set-all';
 export * from './price-units';
 export * from './token-price';
 export * from './locale-string';
+export * from './scroll-to-top';
 
 export function formatCurrency(c: number, precision = 0) {
   return new Intl.NumberFormat('en-US', {
