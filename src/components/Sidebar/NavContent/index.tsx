@@ -212,7 +212,6 @@ function NavContent() {
                     <IconDefaultPearlChest color={currentMainColor} />
                   )}
                   <p>{t('common.pearlChests')}</p>
-                  <div className="dapp-menu-item__new">NEW</div>
                 </div>
               </Link>
 
@@ -263,6 +262,7 @@ function NavContent() {
                 <div className="dapp-menu-item">
                   <IconDefaultNFT color={currentMainColor} />
                   <p>Otto</p>
+                  <div className="dapp-menu-item__new">NEW</div>
                 </div>
               </Link>
 
