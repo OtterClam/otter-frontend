@@ -262,7 +262,7 @@ function NavContent() {
               >
                 <div className="dapp-menu-item">
                   <IconDefaultNFT color={currentMainColor} />
-                  <p>NFT</p>
+                  <p>Otto</p>
                 </div>
               </Link>
 
