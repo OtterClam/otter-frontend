@@ -5,7 +5,7 @@ import AuditedMark from 'src/components/AuditedMark';
 import SocialIcons from 'src/components/SocialIcons';
 import Header from '../../components/LandingHeader';
 import WhiteList from '../WhiteList';
-import Footer from './components/Footer';
+import Footer from 'src/components/common/Footer';
 import SecondSection from './components/SecondSection';
 import Stat from './components/Stat';
 import CloseIcon from './images/icon_24x24_close.svg';

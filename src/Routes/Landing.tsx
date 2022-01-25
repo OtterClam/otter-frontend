@@ -23,7 +23,9 @@ function App() {
           </ThemeProvider>
         </OttoThemeContextProvider>
       </Route>
-      <Route component={Landing} />
+      <ThemeProvider theme={theme.theme}>
+        <Route component={Landing} />
+      </ThemeProvider>
     </Switch>
   );
 }

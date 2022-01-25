@@ -1,8 +1,12 @@
 .main {
   padding: 80px 0;
-  background-image: url(../../images/wave.svg);
-  background-position: bottom;
-  background-repeat: repeat-x;
+  /* NOTE: remove wave temporarily, cuz it doesn't fit the new footer
+   * need to fix this after designer makes a new landing page.
+   **/
+
+  // background-image: url(../../images/wave.svg);
+  // background-position: bottom;
+  // background-repeat: repeat-x;
 }
 
 .title {
