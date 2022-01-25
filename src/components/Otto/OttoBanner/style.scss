@@ -6,6 +6,12 @@
 
   &__buttons {
     display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+
+    @media screen and (max-width: 598px) {
+      justify-content: center;
+    }
   }
 
   &__section {

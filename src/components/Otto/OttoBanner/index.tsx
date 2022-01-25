@@ -43,7 +43,6 @@ const OttoBanner = () => {
             icon={DiscordIcon}
             iconSvgProps={{ viewBox: '0 0 32 32' }}
             text="Discord"
-            marginLeft="20px"
           />
           <RoundedButton
             href="https://twitter.com/otterclam"
@@ -51,7 +50,6 @@ const OttoBanner = () => {
             icon={TwitterIcon}
             iconSvgProps={{ viewBox: '0 0 32 32' }}
             text="Twitter"
-            marginLeft="20px"
           />
         </div>
       </div>
