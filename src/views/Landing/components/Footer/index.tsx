@@ -54,7 +54,7 @@ export default function Footer({ backgroundColor }: Props) {
         <img src={PolygonLogo} alt="logo" />
       </div>
       <div className={styles.last}>
-        <p className={styles.rightsReserved}>© 2021 OtterClam All Rights Reserved</p>
+        <p className={styles.rightsReserved}>© 2022 OtterClam All Rights Reserved</p>
         <AuditedMark />
       </div>
     </footer>

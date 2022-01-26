@@ -342,7 +342,7 @@ function NavContent() {
           </Grid>
           <div className="dapp-menu-bottom">
             <SocialIcons color="gray" size={24} />
-            <p className="dapp-menu-bottom__rights">© 2021 OtterClam All Rights Reserved</p>
+            <p className="dapp-menu-bottom__rights">© 2022 OtterClam All Rights Reserved</p>
             <div className="dapp-menu-bottom__audit">
               <AuditedMark />
             </div>
