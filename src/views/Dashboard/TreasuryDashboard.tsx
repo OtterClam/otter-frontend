@@ -337,7 +337,7 @@ function TreasuryDashboard() {
                     headerText={t('dashboard.apyOverTime')}
                     dataFormat="percent"
                     // @ts-ignore
-                    headerSubText={`Max ${apy && trim(apy[0].diamond, 2)}%`}
+                    headerSubText={`Max ${apy && numberFormatter.format(apy[0].diamond)}%`}
                     bulletpointColors={bulletpoints.apy}
                     itemNames={tooltipItems.apy}
                     itemType={itemType.percentage}
