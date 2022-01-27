@@ -163,41 +163,15 @@ const renderStackedAreaChart = (
       formatter={value => trim(parseFloat(value), 2)}
       content={<CustomTooltip bulletpointColors={bulletpointColors} itemNames={itemNames} itemType={itemType} />}
     />
-    <Area
-      dataKey={dataKey[0]}
-      stroke={stroke ? stroke[0] : 'none'}
-      fill={`url(#color-${dataKey[0]})`}
-      fillOpacity={1}
-      stackId="1"
-    />
-    <Area
-      dataKey={dataKey[1]}
-      stroke={stroke ? stroke[1] : 'none'}
-      fill={`url(#color-${dataKey[1]})`}
-      fillOpacity={1}
-      stackId="1"
-    />
-    <Area
-      dataKey={dataKey[2]}
-      stroke={stroke ? stroke[2] : 'none'}
-      fill={`url(#color-${dataKey[2]})`}
-      fillOpacity={1}
-      stackId="1"
-    />
-    <Area
-      dataKey={dataKey[3]}
-      stroke={stroke ? stroke[3] : 'none'}
-      fill={`url(#color-${dataKey[3]})`}
-      fillOpacity={1}
-      stackId="1"
-    />
-    <Area
-      dataKey={dataKey[4]}
-      stroke={stroke ? stroke[4] : 'none'}
-      fill={`url(#color-${dataKey[4]})`}
-      fillOpacity={1}
-      stackId="1"
-    />
+    {dataKey.map((key, i) => (
+      <Area
+        dataKey={key}
+        stroke={stroke ? stroke[i] : 'none'}
+        fill={`url(#color-${key})`}
+        fillOpacity={1}
+        stackId="1"
+      />
+    ))}
     {renderExpandedChartStroke(isExpanded, expandedGraphStrokeColor)}
   </AreaChart>
 );
