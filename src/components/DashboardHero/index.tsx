@@ -21,7 +21,7 @@ export default function DashboardHero() {
     },
     {
       image: Ad6,
-      link: 'https://www.otterclam.finance/#/otto',
+      link: 'https://gleam.io/EoFKK/otterclam-weekly-quests-1-10000-rewards-pearl-chest-lottery-otto-nft-whitelist-raffle',
     },
     {
       image: Ad1,
