@@ -20,17 +20,9 @@ const DefaultThemeProvider = ({ children }: PropsWithChildren<{}>) => {
 };
 
 function Root() {
-  let Content = Landing;
+  let Content = App;
   let defaultTheme: Theme | undefined = lightTheme;
-  let ThemeProvider = DefaultThemeProvider;
-
-  if (isApp()) {
-    Content = App;
-    defaultTheme = undefined;
-    ThemeProvider = AppThemeProvider;
-  } else if (isIDO()) {
-    Content = IDO;
-  }
+  let ThemeProvider = AppThemeProvider;
 
   return (
     <HashRouter>

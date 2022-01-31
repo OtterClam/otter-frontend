@@ -12,7 +12,7 @@ import { AppThemeContext } from 'src/helpers/app-theme-context';
 import useENS from 'src/hooks/useENS';
 import { IReduxState } from 'src/store/slices/state.interface';
 import { shorten, trim } from '../../../helpers';
-import { useAddress, useBonds } from '../../../hooks';
+import { useAddress, useBonds, useUser } from '../../../hooks';
 import '../sidebar.scss';
 import ActiveMenuIcon from './ActiveMenuIcon';
 import AppLogo from './AppLogo';
@@ -101,7 +101,8 @@ function NavContent() {
   const styles = useStyles();
   const { active: activeBonds = [] } = useGroupedBonds();
   const address = useAddress();
-  const { ensName } = useENS(address);
+  const user = useUser();
+  const { ensName } = useENS(address, user);
   const location = useLocation();
   const currentTheme = useContext(AppThemeContext);
   const currentThemeName = currentTheme.name;
