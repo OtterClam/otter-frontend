@@ -3,9 +3,10 @@
 This is the front-end forked repo for OtterClam Finance done for Gitcoin hackathon for Unstoppable domain integration.
 
 # [Hackathon Submission PR for the Public Repo](https://github.com/OtterClam/otter-frontend/pull/62)
+https://github.com/OtterClam/otter-frontend/pull/62
 
 # [OtterClam Frontend Public link](https://app.otterclam.finance/)
-
+https://app.otterclam.finance/
 
 ## 🔧 Setting up Local Development
 
