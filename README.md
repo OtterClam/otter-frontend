@@ -17,7 +17,7 @@ Required:
 - [Git](https://git-scm.com/downloads)
 
 ```bash
-git clone https://github.com/OtterClam/otter-frontend.git
+git clone https://github.com/sidduHERE/otter-frontend.git
 cd otter-frontend
 yarn install
 npm run start
