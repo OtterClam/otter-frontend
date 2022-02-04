@@ -44,6 +44,7 @@ export interface ILockNote {
 
 export interface IOtterLakeSliceState {
   loading: boolean;
+  loadingNotes: boolean;
   terms: ITerm[];
   lockNotes: ILockNote[];
   selectedTerm?: ITerm;
@@ -52,6 +53,7 @@ export interface IOtterLakeSliceState {
 
 const initialState: IOtterLakeSliceState = {
   loading: true,
+  loadingNotes: true,
   terms: [],
   lockNotes: [],
   selectedTerm: undefined,
@@ -505,10 +507,15 @@ const otterLakeSlice = createSlice({
       .addCase(updateAllowance, (state, action) => {
         state.allowance = action.payload;
       })
+      .addCase(loadLockedNotes.pending, (state, action) => {
+        state.loadingNotes = true;
+      })
       .addCase(loadLockedNotes.fulfilled, (state, action) => {
         setAll(state, action.payload);
+        state.loadingNotes = false;
       })
       .addCase(loadLockedNotes.rejected, (state, { error }) => {
+        state.loadingNotes = false;
         console.log(error);
       });
   },

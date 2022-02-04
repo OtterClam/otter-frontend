@@ -1,10 +1,12 @@
 import { Divider, Paper, Typography } from '@material-ui/core';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { addHours } from 'date-fns';
 import differenceInDays from 'date-fns/differenceInDays';
 import formatDate from 'date-fns/format';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector as useReduxSelector } from 'react-redux';
+import NewPageIcon from 'src/assets/icons/icon_new_page.svg';
 import { formatCurrency, getTokenImage } from 'src/helpers';
 import getNoteImage from 'src/helpers/get-note-image';
 import { useWeb3Context } from 'src/hooks';
@@ -25,7 +27,6 @@ import CustomButton from '../Button/CustomButton';
 import { LabelChip } from '../Chip';
 import PearlChestLockupSuccessModal from '../PearlChestLockupSuccessModal';
 import './styles.scss';
-import NewPageIcon from 'src/assets/icons/icon_new_page.svg';
 
 const numberFormatter = Intl.NumberFormat('en', { maximumFractionDigits: 4 });
 const percentageFormatter = Intl.NumberFormat('en', { style: 'percent', minimumFractionDigits: 2 });
@@ -52,6 +53,7 @@ export default function PearlChestsRedeem() {
   const dispatch = useDispatch();
   const { chainID, connected, address, provider } = useWeb3Context();
   const currentEpoch = useSelector(state => state.app.currentEpoch);
+  const loadingNotes = useSelector(state => state.lake.loadingNotes);
   const lockNotes = useSelector(state => state.lake.lockNotes);
   const terms = useSelector(state => state.lake.terms);
   const pearlPrice = useSelector(state => state.app.pearlPrice);
@@ -86,6 +88,10 @@ export default function PearlChestsRedeem() {
       dispatch(loadLockedNotes({ address, chainID, provider }));
     }
   }, [connected, address, terms]);
+
+  if (loadingNotes) {
+    return <CircularProgress size={48} />;
+  }
 
   return (
     <Paper className="ohm-card">
