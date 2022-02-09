@@ -6,6 +6,7 @@ import { light as lightTheme } from '../themes';
 import { Theme, ThemeProvider as MuiThemeProvider } from '@material-ui/core';
 import { AppThemeProvider } from 'src/helpers/app-theme-context';
 import { PropsWithChildren } from 'react';
+import { SnackbarProvider } from 'notistack';
 
 const isApp = (): boolean => {
   return window.location.host.includes('app');
@@ -35,7 +36,9 @@ function Root() {
   return (
     <HashRouter>
       <ThemeProvider>
-        <Content />
+        <SnackbarProvider maxSnack={3}>
+          <Content />
+        </SnackbarProvider>
       </ThemeProvider>
     </HashRouter>
   );
