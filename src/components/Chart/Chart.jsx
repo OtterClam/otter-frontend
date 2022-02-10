@@ -163,41 +163,15 @@ const renderStackedAreaChart = (
       formatter={value => trim(parseFloat(value), 2)}
       content={<CustomTooltip bulletpointColors={bulletpointColors} itemNames={itemNames} itemType={itemType} />}
     />
-    <Area
-      dataKey={dataKey[0]}
-      stroke={stroke ? stroke[0] : 'none'}
-      fill={`url(#color-${dataKey[0]})`}
-      fillOpacity={1}
-      stackId="1"
-    />
-    <Area
-      dataKey={dataKey[1]}
-      stroke={stroke ? stroke[1] : 'none'}
-      fill={`url(#color-${dataKey[1]})`}
-      fillOpacity={1}
-      stackId="1"
-    />
-    <Area
-      dataKey={dataKey[2]}
-      stroke={stroke ? stroke[2] : 'none'}
-      fill={`url(#color-${dataKey[2]})`}
-      fillOpacity={1}
-      stackId="1"
-    />
-    <Area
-      dataKey={dataKey[3]}
-      stroke={stroke ? stroke[3] : 'none'}
-      fill={`url(#color-${dataKey[3]})`}
-      fillOpacity={1}
-      stackId="1"
-    />
-    <Area
-      dataKey={dataKey[4]}
-      stroke={stroke ? stroke[4] : 'none'}
-      fill={`url(#color-${dataKey[4]})`}
-      fillOpacity={1}
-      stackId="1"
-    />
+    {dataKey.map((key, i) => (
+      <Area
+        dataKey={key}
+        stroke={stroke ? stroke[i] : 'none'}
+        fill={`url(#color-${key})`}
+        fillOpacity={1}
+        stackId="1"
+      />
+    ))}
     {renderExpandedChartStroke(isExpanded, expandedGraphStrokeColor)}
   </AreaChart>
 );
@@ -247,7 +221,10 @@ const renderLineChart = (
     <Tooltip
       content={<CustomTooltip bulletpointColors={bulletpointColors} itemNames={itemNames} itemType={itemType} />}
     />
-    <Line type="monotone" dataKey={dataKey[0]} stroke={stroke ? stroke : 'none'} color={color} dot={false} />;
+    {dataKey.map((key, i) => (
+      <Line type="monotone" key={i} dataKey={key} stroke={stroke ? stroke : 'none'} color={color} dot={false} />
+    ))}
+
     {renderExpandedChartStroke(isExpanded, expandedGraphStrokeColor)}
   </LineChart>
 );
@@ -283,7 +260,9 @@ const renderMultiLineChart = (
       tick={yAxisTickProps}
       tickLine={false}
       width={33}
-      tickFormatter={number => (number !== 0 ? `${trim(parseFloat(number), 0)}` : '')}
+      tickFormatter={number =>
+        number !== 0 ? (dataFormat !== 'percent' ? `${number}` : `${trim(parseFloat(number) / 1000, 0)}k`) : ''
+      }
       domain={[0, 'auto']}
       connectNulls={true}
       allowDataOverflow={false}
@@ -291,10 +270,9 @@ const renderMultiLineChart = (
     <Tooltip
       content={<CustomTooltip bulletpointColors={bulletpointColors} itemNames={itemNames} itemType={itemType} />}
     />
-    <Line dataKey={dataKey[0]} stroke={stroke[0]} dot={false} />;
-    <Line dataKey={dataKey[1]} stroke={stroke[1]} dot={false} />;
-    <Line dataKey={dataKey[2]} stroke={stroke[2]} dot={false} />;
-    <Line dataKey={dataKey[3]} stroke={stroke[3]} dot={false} />;
+    {dataKey.map((key, i) => (
+      <Line dataKey={key} stroke={stroke[i]} dot={false} />
+    ))}
     {renderExpandedChartStroke(isExpanded, expandedGraphStrokeColor)}
   </LineChart>
 );
@@ -462,7 +440,7 @@ function Chart({
           alignItems="center"
           style={{ width: '100%', overflow: 'hidden' }}
         >
-          <Box display="flex" width="90%" alignItems="center">
+          <Box display="flex" width="90%" alignItems="center" style={{ gap: '5px' }}>
             <Typography
               variant="h6"
               color="secondary"

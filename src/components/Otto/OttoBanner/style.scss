@@ -1,0 +1,96 @@
+.otto-banner {
+  &__container {
+    display: flex;
+    padding-top: 145px;
+  }
+
+  &__buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+
+    @media screen and (max-width: 598px) {
+      justify-content: center;
+    }
+  }
+
+  &__section {
+    flex: 1;
+
+    &.left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-left: 245px;
+      padding-bottom: 40px;
+    }
+    &.right {
+      display: flex;
+      align-items: flex-end;
+    }
+  }
+  &__title {
+    font-size: 60px;
+    font-weight: 800;
+    line-height: 90px;
+    margin: 0;
+  }
+  &__slogan {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 36px;
+    margin: 0;
+    margin-bottom: 40px;
+  }
+  &__description {
+    font-size: 20px;
+    line-height: 30px;
+    font-weight: 700;
+    margin: 0;
+    margin-bottom: 20px;
+  }
+  &__image {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 960px) {
+  .otto-banner {
+    &__container {
+      flex-direction: column-reverse;
+      padding-top: 60px;
+      padding-bottom: 40px;
+      text-align: center;
+    }
+    &__title {
+      font-size: 48px;
+      line-height: 72px;
+    }
+    &__slogan {
+      font-size: 20px;
+      line-height: 30px;
+      margin-bottom: 20px;
+    }
+    &__description {
+      font-size: 18px;
+      line-height: 28px;
+    }
+    &__section {
+      &.left {
+        padding-left: 100px;
+        padding-right: 100px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 598px) {
+  .otto-banner {
+    &__section {
+      &.left {
+        padding-left: 30px;
+        padding-right: 30px;
+      }
+    }
+  }
+}

@@ -10,7 +10,6 @@ import { IReduxState } from 'src/store/slices/state.interface';
 import Chart from '../../components/Chart/Chart.jsx';
 import { formatCurrency, getTokenImage, trim } from '../../helpers';
 import apollo from '../../lib/apolloClient';
-import OtterKing from './otterking.png';
 import './treasury-dashboard.scss';
 import { bulletpoints, itemType, treasuryDataQuery } from './treasuryData.js';
 
@@ -20,10 +19,10 @@ function TreasuryDashboard() {
   const { t } = useTranslation();
   const tooltipItems = {
     tvl: [t('dashboard.tooltipItems.tvl')],
-    coin: ['MAI', 'FRAX', 'MATIC'],
-    rfv: ['MAI', 'FRAX'],
+    coin: ['MAI', 'FRAX', 'MATIC', 'MAI/USDC', 'MAI/USDC(Deposited to QiDAO) ', 'Qi'],
+    rfv: ['MAI', 'FRAX', 'MAI/USDC', 'MAI/USDC(Deposited to QiDAO) '],
     holder: ['CLAMies'],
-    apy: [t('common.apy')],
+    apy: [t('common.180Chest'), t('common.90Chest'), t('common.28Chest'), t('common.14Chest'), t('common.staking')],
     runway: [
       t('dashboard.tooltipItems.current'),
       `100K ${t('common.apy')}`,
@@ -46,9 +45,9 @@ function TreasuryDashboard() {
   };
   const [data, setData] = useState<any>(null);
   const [apy, setApy] = useState<any>(null);
+  const [apyScale, setApyScale] = useState<number>(0);
   const [runway, setRunway] = useState(null);
   const [staked, setStaked] = useState(null);
-  const [apyScale, setApyScale] = useState<number>(0);
   const [backingPerClam, setBackingPerClam] = useState<number | null>(null);
   const theme = useTheme();
   const smallerScreen = useMediaQuery('(max-width: 650px)');
@@ -56,7 +55,6 @@ function TreasuryDashboard() {
 
   const circSupply = useSelector<IReduxState, number>(state => state.app.circSupply);
   const totalSupply = useSelector<IReduxState, number>(state => state.app.totalSupply);
-  const stakingRatio = useSelector<IReduxState, number>(state => state.app.stakingRatio);
   const marketCap = useSelector<IReduxState, number>(state => state.app.marketCap);
   const marketPrice = useSelector<IReduxState, number>(state => state.app.marketPrice);
   const pearlPrice = useSelector<IReduxState, number>(state => state.app.pearlPrice);
@@ -94,38 +92,38 @@ function TreasuryDashboard() {
 
   useEffect(() => {
     apollo(treasuryDataQuery).then(r => {
-      // @ts-ignore
-      let metrics = r?.data.protocolMetrics.map(entry =>
-        // @ts-ignore
-        Object.entries(entry).reduce((obj, [key, value]) => ((obj[key] = parseFloat(value)), obj), {}),
-      );
-      // @ts-ignore
-      metrics = metrics.filter(pm => pm.treasuryMarketValue > 0);
+      const metrics = r?.data.protocolMetrics
+        .map((entry: any) =>
+          // @ts-ignore
+          Object.entries(entry).reduce((obj, [key, value]) => ((obj[key] = parseFloat(value)), obj), {}),
+        )
+        .filter((pm: any) => pm.treasuryMarketValue > 0);
       setData(metrics);
-      // @ts-ignore
-      let staked = r.data.protocolMetrics.map(entry => ({
-        staked: (parseFloat(entry.sClamCirculatingSupply) / parseFloat(entry.clamCirculatingSupply)) * 100,
-        timestamp: entry.timestamp,
-      }));
-      // @ts-ignore
-      staked = staked.filter(pm => pm.staked < 100);
+      const staked = r?.data.protocolMetrics
+        .map((entry: any) => ({
+          staked: (parseFloat(entry.sClamCirculatingSupply) / parseFloat(entry.clamCirculatingSupply)) * 100,
+          timestamp: entry.timestamp,
+        }))
+        .filter((pm: any) => pm.staked < 100);
       setStaked(staked);
       // @ts-ignore
       let runway = metrics.filter(pm => pm.runway100k > 5);
       setRunway(runway);
-      // @ts-ignore
-      let apy = r.data.protocolMetrics.map(entry => ({
-        apy: entry.currentAPY,
-        timestamp: entry.timestamp,
-      }));
-      //First data point seems to be bugged?
-      //Reports an APY of 3191769842703686000000, which messes with graph scale
-      var sl_apy = apy.slice(0, -1);
-      setApy(sl_apy);
+      const apy = r?.data.protocolMetrics
+        .filter((p: any) => p.timestamp * 1000 > Date.UTC(2022, 0, 17))
+        .map((entry: any) => ({
+          apy: entry.currentAPY,
+          diamond: entry.diamondHandAPY,
+          stone: entry.stoneHandAPY,
+          furry: entry.furryHandAPY,
+          safe: entry.safeHandAPY,
+          timestamp: entry.timestamp,
+        }));
+      setApy(apy);
       const apyMax = Math.max.apply(
         Math,
-        (sl_apy as any).map(function (o: any) {
-          return o.apy;
+        (apy as any).map((o: any) => {
+          return o.diamond;
         }),
       );
       setApyScale(apyMax);
@@ -151,7 +149,7 @@ function TreasuryDashboard() {
             <Box display="flex" flexWrap="wrap" justifyContent="space-between" alignItems="center">
               {displayData.map(({ title, value, info, image }, i) => (
                 <Box key={i} bgcolor="mode.white" className="metric-container">
-                  <Box className="metic">
+                  <Box className="metric">
                     <Typography variant="h6" color="secondary">
                       {title}
                       {info && <InfoTooltip message={info} />}
@@ -198,13 +196,21 @@ function TreasuryDashboard() {
                   <Chart
                     type="stack"
                     data={data}
-                    dataKey={['treasuryMaiMarketValue', 'treasuryFraxMarketValue', 'treasuryWmaticMarketValue']}
+                    dataKey={[
+                      'treasuryMaiMarketValue',
+                      'treasuryFraxMarketValue',
+                      'treasuryWmaticMarketValue',
+                      'treasuryMaiUsdcRiskFreeValue',
+                      'treasuryMaiUsdcQiInvestmentRiskFreeValue',
+                      'treasuryQiMarketValue',
+                    ]}
                     stopColor={[
                       ['#EE4B4E', 'rgba(219, 55, 55, 0.5)'],
                       ['#8F5AE8', 'rgba(143, 90, 232, 0.5)'],
                       ['#2891F9', 'rgba(40, 145, 249, 0.5)'],
-                      // ['#DC30EB', '#EA98F1'],
-                      // ['#8BFF4D', '#4C8C2A'],
+                      ['#F97328', 'rgba(249, 115, 40, 0.5)'],
+                      ['#5CBD6B', 'rgba(92, 189, 107, 0.5)'],
+                      ['#F4D258', 'rgba(244, 210, 88, 0.5)'],
                     ]}
                     headerText={t('dashboard.marketValue')}
                     // @ts-ignore
@@ -227,13 +233,17 @@ function TreasuryDashboard() {
                     data={data}
                     // @ts-ignore
                     format="currency"
-                    dataKey={['treasuryMaiRiskFreeValue', 'treasuryFraxRiskFreeValue']}
+                    dataKey={[
+                      'treasuryMaiRiskFreeValue',
+                      'treasuryFraxRiskFreeValue',
+                      'treasuryMaiUsdcRiskFreeValue',
+                      'treasuryMaiUsdcQiInvestmentRiskFreeValue',
+                    ]}
                     stopColor={[
-                      ['#EE4B4E', 'rgba(219, 55, 55, 0.5)'], //MAI
-                      ['#8F5AE8', 'rgba(143, 90, 232, 0.5)'], //FRAX
-                      // ['#DC30EB', '#EA98F1']
-                      // ['#000', '#fff'],
-                      // ['#000', '#fff'],
+                      ['#EE4B4E', 'rgba(219, 55, 55, 0.5)'], // MAI
+                      ['#8F5AE8', 'rgba(143, 90, 232, 0.5)'], // FRAX
+                      ['#DC30EB', '#EA98F1'], // MAI-USDC
+                      ['#5CBD6B', 'rgba(92, 189, 107, 0.5)'], // MAI-USDC Deposited
                     ]}
                     headerText={t('dashboard.riskFree')}
                     // @ts-ignore
@@ -319,22 +329,20 @@ function TreasuryDashboard() {
                 {
                   // @ts-ignore
                   <Chart
-                    type="line"
+                    type="multi"
                     scale="auto"
                     data={apy}
-                    dataKey={['apy']}
-                    color={theme.palette.text.primary}
-                    stroke={[theme.palette.text.primary]}
+                    dataKey={['diamond', 'stone', 'furry', 'safe', 'apy']}
+                    stroke={bulletpoints.apy.map(p => p.background)}
                     headerText={t('dashboard.apyOverTime')}
                     dataFormat="percent"
                     // @ts-ignore
-                    headerSubText={`${apy && trim(apy[0].apy, 2)}%`}
+                    headerSubText={`Max ${apy && numberFormatter.format(apy[0].diamond)}%`}
                     bulletpointColors={bulletpoints.apy}
                     itemNames={tooltipItems.apy}
                     itemType={itemType.percentage}
                     infoTooltipMessage={tooltipInfoMessages.apy}
                     domain={[0, apyScale]}
-
                     // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
                   />
                 }

@@ -32,18 +32,13 @@ export default function LandingHeader() {
       <a href="https://www.otterclam.finance" className="landing-header-logo">
         <img src={HeaderLogo} alt="logo" />
       </a>
-      <Link href="/#/pearl-chests" className="nft-link">
-        PEARL Chests
-        <span className="landing-header__new">NEW!</span>
+      <Link href="/#/otto" className="nft-link">
+        Otto
+        <span className="landing-header__new">NEW</span>
       </Link>
-      <Link href="/#/nft" className="nft-link">
-        NFT
+      <Link href="https://app.otterclam.finance/#/pearl-chests" className="nft-link">
+        Pearl Chests
       </Link>
-      <Link href={TwitterLink}>Twitter</Link>
-      <Link href={DiscordLink}>Discord</Link>
-      <Link href={TelegramLink}>Telegram</Link>
-      <Link href={GithubLink}>Github</Link>
-      <Link href={MediumLink}>Medium</Link>
       <LanguagePicker border={false} />
       {/* <Link href={DocsLink}>Docs</Link> */}
     </header>

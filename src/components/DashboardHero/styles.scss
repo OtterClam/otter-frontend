@@ -1,0 +1,8 @@
+.dashboard-hero {
+  border-radius: 8px;
+  overflow: hidden;
+
+  @media screen and (max-width: 600px) {
+    border-radius: 0;
+  }
+}

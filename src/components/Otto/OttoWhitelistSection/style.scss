@@ -1,0 +1,37 @@
+.otto-whitelist {
+  &__container {
+    display: flex;
+    justify-content: space-between;
+  }
+  &__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    text-align: center;
+    position: relative;
+    padding: 80px;
+    gap: 8px;
+  }
+  &__image {
+    width: 30%;
+  }
+  &__tablet-image {
+    width: 100%;
+  }
+  .custom-button {
+    width: fit-content;
+  }
+}
+
+@media screen and (max-width: 1300px) {
+  .otto-whitelist {
+    &__container {
+      flex-direction: column;
+    }
+    &__content {
+      padding: 10px 40px 40px 40px;
+    }
+  }
+}

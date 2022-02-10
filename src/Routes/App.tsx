@@ -79,13 +79,12 @@ function App() {
     let loadProvider = readOnlyProvider;
 
     if (whichDetails === 'app') {
-      loadApp(loadProvider);
-      // loadTerms(loadProvider);
+      await loadApp(loadProvider);
+      loadChests(loadProvider);
     }
 
     if (whichDetails === 'account' && address && connected) {
       loadAccount(loadProvider);
-      // loadTerms(loadProvider);
       if (isAppLoaded) return;
 
       loadApp(loadProvider);
@@ -99,13 +98,20 @@ function App() {
   }
 
   const loadApp = useCallback(
-    loadProvider => {
-      dispatch(loadAppDetails({ networkID: chainID, provider: loadProvider }));
+    async loadProvider => {
+      await dispatch(loadAppDetails({ networkID: chainID, provider: loadProvider }));
       BondKeys.map(bondKey => {
         dispatch(
           calcBondDetails({ bondKey, value: null, provider: loadProvider, networkID: chainID, userBalance: '0' }),
         );
       });
+    },
+    [connected],
+  );
+
+  const loadChests = useCallback(
+    provider => {
+      dispatch(loadTermsDetails({ chainID, provider }));
     },
     [connected],
   );

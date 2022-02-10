@@ -1,7 +1,6 @@
 import apollo from '../../lib/apolloClient';
 import { useTranslation } from 'react-i18next';
 
-// TODO: add paramaterization
 export const treasuryDataQuery = `
 query {
   protocolMetrics(first: 100, orderBy: timestamp, orderDirection: desc) {
@@ -22,10 +21,17 @@ query {
     treasuryFraxMarketValue
     treasuryFraxRiskFreeValue
     treasuryWmaticMarketValue
+    treasuryMaiUsdcRiskFreeValue
+    treasuryMaiUsdcQiInvestmentRiskFreeValue
+    treasuryQiMarketValue
     currentAPY
     runway10k
     runway50k
     runway100k
+    diamondHandAPY
+    stoneHandAPY
+    furryHandAPY
+    safeHandAPY
     runwayCurrent
     treasuryClamMaiPOL
   }
@@ -61,12 +67,17 @@ export const bulletpoints = {
     {
       right: 29,
       top: -12,
-      background: 'linear-gradient(180deg, #4C8C2A -10%, #8BFF4D 100%)',
+      background: 'linear-gradient(180deg, #F97328 19.01%, rgba(249, 115, 40, 0.5) 100%)',
     },
     {
       right: 29,
       top: -12,
-      background: 'linear-gradient(180deg, #c9184a -10%, #ff758f 100%)',
+      background: 'linear-gradient(180deg, #5CBD6B 19.01%, rgba(92, 189, 107, 0.5) 100%)',
+    },
+    {
+      right: 29,
+      top: -12,
+      background: 'linear-gradient(180deg, #F4D258 19.01%, rgba(244, 210, 88, 0.5) 100%)',
     },
   ],
   rfv: [
@@ -85,6 +96,11 @@ export const bulletpoints = {
       top: -12,
       background: 'linear-gradient(180deg, #c9184a -10%, #ff758f 100%)',
     },
+    {
+      right: 29,
+      top: -12,
+      background: 'linear-gradient(180deg, #5CBD6B 19.01%, rgba(92, 189, 107, 0.5) 100%)',
+    },
   ],
   holder: [
     {
@@ -98,6 +114,26 @@ export const bulletpoints = {
       right: 20,
       top: -12,
       background: '#1D2654',
+    },
+    {
+      right: 20,
+      top: -12,
+      background: '#000000',
+    },
+    {
+      right: 20,
+      top: -12,
+      background: '#2EC608',
+    },
+    {
+      right: 20,
+      top: -12,
+      background: '#49A1F2',
+    },
+    {
+      right: 20,
+      top: -12,
+      background: '#c9184a',
     },
   ],
   runway: [

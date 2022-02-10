@@ -50,6 +50,9 @@
       }
       h6 {
         font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 5px;
       }
 
       div.metric-container {
@@ -70,6 +73,12 @@
         flex-direction: column;
         justify-content: center;
         align-items: flex-start;
+
+        h6 {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+        }
       }
     }
   }

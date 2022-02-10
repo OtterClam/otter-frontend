@@ -11,6 +11,7 @@ import { mobileMediaQuery } from 'src/themes/mediaQuery';
 //Add new translations to the dropdown here!
 const lngs: any = {
   en: { nativeName: 'English' },
+  zh: { nativeName: '中文' },
   de: { nativeName: 'Deutsch' },
   fr: { nativeName: 'Français' },
   it: { nativeName: 'Italiano' },

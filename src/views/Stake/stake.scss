@@ -267,6 +267,22 @@
   // color: $clam-pink;
 }
 
+.single-stake-chest-value {
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+  font-size: 14px;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  gap: 5px;
+
+  img {
+    width: 24px;
+    height: 20px;
+  }
+}
+
 .stack-table-title {
   font-style: normal;
   font-weight: 600;
@@ -346,14 +362,32 @@
   .data-row {
     .data-row-name {
       font-weight: 700;
-      font-size: 14px;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
       &-warmup {
         font-weight: 700;
         // color: $clam-pink;
       }
     }
-
+    .data-row-name-small {
+      font-weight: 600;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      &-warmup {
+        font-weight: 700;
+        // color: $clam-pink;
+      }
+      margin-left: 20px;
+    }
     .data-row-value {
+      font-size: 16px;
+      line-height: 17px;
+    }
+    .data-row-value-small {
       font-size: 14px;
       line-height: 17px;
     }
