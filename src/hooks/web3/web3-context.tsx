@@ -3,6 +3,8 @@ import Web3Modal from 'web3modal';
 import { StaticJsonRpcProvider, JsonRpcProvider, Web3Provider } from '@ethersproject/providers';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { DEFAULT_NETWORK, Networks, RPCURL } from '../../constants';
+import { useSnackbar } from 'notistack';
+import { useDispatch, useSelector } from 'react-redux';
 
 type onChainProvider = {
   connect: () => Promise<Web3Provider>;
@@ -72,6 +74,12 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
     return true;
   };
 
+  // const dispatch = useDispatch();
+  // const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  // const onMigrate = async () => {
+  //   await dispatch(enqueueSnackbar('woo'));
+  // };
+
   const _initListeners = useCallback(
     (rawProvider: JsonRpcProvider) => {
       if (!rawProvider.on) {
@@ -100,7 +108,8 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
       Number(otherChainID) !== Networks.OTTER_FORK &&
       Number(otherChainID) !== Networks.HARDHAT
     ) {
-      alert('Please switch your wallet to Polygon network to use OtterClam!');
+      // alert('Please switch your wallet to Polygon network to use OtterClam!');
+      // enqueueSnackbar('Woo');
     }
 
     if (chainID !== otherChainID) {
