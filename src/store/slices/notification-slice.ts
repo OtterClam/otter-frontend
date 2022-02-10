@@ -17,7 +17,7 @@ export interface Notification {
   };
 }
 
-export const enqueueSnackbar = createAsyncThunk(
+export const enqueueSnackbarThunk = createAsyncThunk(
   'notifications/enqueueSnackbar',
   async (notification: Notification, { dispatch }) => {
     const key = notification.options && notification.options.key;
@@ -32,7 +32,7 @@ export const enqueueSnackbar = createAsyncThunk(
   },
 );
 
-export const closeSnackbar = createAsyncThunk('notifications/closeSnackbar', async (key: number, { dispatch }) => {
+export const closeSnackbarThunk = createAsyncThunk('notifications/closeSnackbar', async (key: number, { dispatch }) => {
   return {
     type: CLOSE_SNACKBAR,
     dismissAll: !key, // dismiss all if no key has been defined
@@ -40,90 +40,101 @@ export const closeSnackbar = createAsyncThunk('notifications/closeSnackbar', asy
   };
 });
 
-export const removeSnackbar = createAsyncThunk('notifications/removeSnackbar', async (key: number, { dispatch }) => {
-  return {
-    type: REMOVE_SNACKBAR,
-    key,
-  };
-});
+export const removeSnackbarThunk = createAsyncThunk(
+  'notifications/removeSnackbar',
+  async (key: number, { dispatch }) => {
+    return {
+      type: REMOVE_SNACKBAR,
+      key,
+    };
+  },
+);
 
-const initialState: Array<Notification> = [];
-
-export default (state = defaultState, action) => {
-  switch (action.type) {
-    case ENQUEUE_SNACKBAR:
-      return {
-        ...state,
-        notifications: [
-          ...state.notifications,
-          {
-            key: action.key,
-            ...action.notification,
-          },
-        ],
-      };
-
-    case CLOSE_SNACKBAR:
-      return {
-        ...state,
-        notifications: state.notifications.map(notification =>
-          action.dismissAll || notification.key === action.key
-            ? { ...notification, dismissed: true }
-            : { ...notification },
-        ),
-      };
-
-    case REMOVE_SNACKBAR:
-      return {
-        ...state,
-        notifications: state.notifications.filter(notification => notification.key !== action.key),
-      };
-
-    default:
-      return state;
-  }
+const initialState: NotificationsSliceState = {
+  notifications: [],
 };
+// export default (state = defaultState, action) => {
+//   switch (action.type) {
+//     case ENQUEUE_SNACKBAR:
+//       return {
+//         ...state,
+//         notifications: [
+//           ...state.notifications,
+//           {
+//             key: action.key,
+//             ...action.notification,
+//           },
+//         ],
+//       };
+
+// case CLOSE_SNACKBAR:
+//   return {
+//     ...state,
+//     notifications: state.notifications.map(notification =>
+//       action.dismissAll || notification.key === action.key
+//         ? { ...notification, dismissed: true }
+//         : { ...notification },
+//     ),
+//   };
+
+//     case REMOVE_SNACKBAR:
+//       return {
+//         ...state,
+//         notifications: state.notifications.filter(notification => notification.key !== action.key),
+//       };
+
+//     default:
+//       return state;
+//   }
+// };
 
 const notificationsSlice = createSlice({
   name: 'notifications',
   initialState,
   reducers: {
-    selectTerm(state, action) {
-      state.selectedTerm = action.payload;
+    enqueueSnackbar(state, action) {
+      state.notifications = action.payload;
     },
-    updateAllowance(state, action) {
-      state.allowance = action.payload;
+    closeSnackbar(state, action) {
+      state.notifications = state.notifications.map(notification =>
+        action.payload.dismissAll || notification.options.key === action.payload.key
+          ? { ...notification, dismissed: true }
+          : { ...notification },
+      );
+    },
+    removeSnackbar(state, action) {
+      state.notifications.filter(notification => notification.options.key !== action.payload.key);
     },
   },
-  extraReducers: builder => {
-    builder
-      .addCase(loadTermsDetails.pending, (state, action) => {
-        state.loading = true;
-      })
-      .addCase(loadTermsDetails.fulfilled, (state, action) => {
-        setAll(state, action.payload);
-        state.loading = false;
-      })
-      .addCase(loadTermsDetails.rejected, (state, { error }) => {
-        state.loading = false;
-        console.log(error);
-      })
-      .addCase(updateAllowance, (state, action) => {
-        state.allowance = action.payload;
-      })
-      .addCase(loadLockedNotes.fulfilled, (state, action) => {
-        setAll(state, action.payload);
-      })
-      .addCase(loadLockedNotes.rejected, (state, { error }) => {
-        console.log(error);
-      });
-  },
+  // extraReducers: builder => {
+  //   builder
+  //     .addCase(loadTermsDetails.pending, (state, action) => {
+  //       state.loading = true;
+  //     })
+  //     .addCase(loadTermsDetails.fulfilled, (state, action) => {
+  //       setAll(state, action.payload);
+  //       state.loading = false;
+  //     })
+  //     .addCase(loadTermsDetails.rejected, (state, { error }) => {
+  //       state.loading = false;
+  //       console.log(error);
+  //     })
+  //     .addCase(updateAllowance, (state, action) => {
+  //       state.allowance = action.payload;
+  //     })
+  //     .addCase(loadLockedNotes.fulfilled, (state, action) => {
+  //       setAll(state, action.payload);
+  //     })
+  //     .addCase(loadLockedNotes.rejected, (state, { error }) => {
+  //       console.log(error);
+  //     });
+  // },
 });
 
-const baseInfo = (state: { app: IOtterLakeSliceState }) => state.app;
+const baseInfo = (state: { app: NotificationsSliceState }) => state.app;
 
-export default otterLakeSlice.reducer;
+export default notificationsSlice.reducer;
 
-export const { selectTerm } = otterLakeSlice.actions;
+export const { enqueueSnackbar, closeSnackbar, removeSnackbar } = notificationsSlice.actions;
 
 export const getOtterLakeState = createSelector(baseInfo, otterLake => otterLake);
