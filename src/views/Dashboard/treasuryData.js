@@ -87,7 +87,7 @@ export const bulletpoints = {
       // dQuick
       right: 29,
       top: -12,
-      background: 'linear-gradient(180deg, #F4D258 19.01%, rgba(244, 210, 88, 0.5) 100%)',
+      background: 'linear-gradient(180deg, #5C80B6 19.01%, rgba(92, 128, 182, 0.5) 100%)',
     },
   ],
   rfv: [

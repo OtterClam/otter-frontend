@@ -212,7 +212,7 @@ function TreasuryDashboard() {
                       ['#F97328', 'rgba(249, 115, 40, 0.5)'],
                       ['#5CBD6B', 'rgba(92, 189, 107, 0.5)'],
                       ['#F4D258', 'rgba(244, 210, 88, 0.5)'],
-                      ['#F4D258', 'rgba(244, 210, 88, 0.5)'],
+                      ['#5C80B6', 'rgba(92, 128, 182, 0.5)'],
                     ]}
                     headerText={t('dashboard.marketValue')}
                     // @ts-ignore
