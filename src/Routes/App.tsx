@@ -153,7 +153,7 @@ function App() {
   }, [connected]);
 
   useEffect(() => {
-    if (checkNetworkStatus == CheckNetworkStatus.WRONG_CHAIN) {
+    if (checkNetworkStatus === CheckNetworkStatus.WRONG_CHAIN) {
       enqueueSnackbar('Wrong chain boots');
     }
   }, [checkNetworkStatus]);

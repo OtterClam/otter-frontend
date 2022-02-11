@@ -92,12 +92,8 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
       rawProvider.on('accountsChanged', () => setTimeout(() => window.location.reload(), 1));
 
       rawProvider.on('chainChanged', (chain: number) => {
-        var checkNetworkStatus = _checkNetwork(chain);
-        setCheckNetworkStatus(checkNetworkStatus);
-        //Only refresh when network switches from Invalid -> Valid
-        if (checkNetworkStatus !== CheckNetworkStatus.OK && IsValidChain(chain)) {
-          setTimeout(() => window.location.reload(), 1);
-        }
+        setCheckNetworkStatus(_checkNetwork(chain));
+        setTimeout(() => window.location.reload(), 1);
       });
 
       rawProvider.on('network', (_newNetwork, oldNetwork) => {
@@ -191,9 +187,9 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
 };
 export const IsValidChain = (chainID: number): boolean => {
   return (
-    Number(chainID) == Networks.POLYGON_MAINNET &&
-    Number(chainID) == Networks.POLYGON_MUMBAI &&
-    Number(chainID) == Networks.OTTER_FORK &&
-    Number(chainID) == Networks.HARDHAT
+    Number(chainID) === Networks.POLYGON_MAINNET ||
+    Number(chainID) === Networks.POLYGON_MUMBAI ||
+    Number(chainID) === Networks.OTTER_FORK ||
+    Number(chainID) === Networks.HARDHAT
   );
 };
