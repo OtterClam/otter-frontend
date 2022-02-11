@@ -19,8 +19,8 @@ function TreasuryDashboard() {
   const { t } = useTranslation();
   const tooltipItems = {
     tvl: [t('dashboard.tooltipItems.tvl')],
-    coin: ['MAI', 'FRAX', 'MATIC', 'MAI/USDC', 'MAI/USDC(Deposited to QiDAO) ', 'Qi'],
-    rfv: ['MAI', 'FRAX', 'MAI/USDC', 'MAI/USDC(Deposited to QiDAO) '],
+    coin: ['MAI', 'FRAX', 'MATIC', 'MAI/USDC', 'MAI/USDC(QiDAO)', 'Qi', 'dQUICK'],
+    rfv: ['MAI', 'FRAX', 'MAI/USDC', 'MAI/USDC(QiDAO)'],
     holder: ['CLAMies'],
     apy: [t('common.180Chest'), t('common.90Chest'), t('common.28Chest'), t('common.14Chest'), t('common.staking')],
     runway: [
@@ -203,6 +203,7 @@ function TreasuryDashboard() {
                       'treasuryMaiUsdcRiskFreeValue',
                       'treasuryMaiUsdcQiInvestmentRiskFreeValue',
                       'treasuryQiMarketValue',
+                      'treasuryDquickMarketValue',
                     ]}
                     stopColor={[
                       ['#EE4B4E', 'rgba(219, 55, 55, 0.5)'],
@@ -210,6 +211,7 @@ function TreasuryDashboard() {
                       ['#2891F9', 'rgba(40, 145, 249, 0.5)'],
                       ['#F97328', 'rgba(249, 115, 40, 0.5)'],
                       ['#5CBD6B', 'rgba(92, 189, 107, 0.5)'],
+                      ['#F4D258', 'rgba(244, 210, 88, 0.5)'],
                       ['#F4D258', 'rgba(244, 210, 88, 0.5)'],
                     ]}
                     headerText={t('dashboard.marketValue')}
