@@ -97,9 +97,10 @@ function useTabs() {
   const query = new URLSearchParams(location.search);
   const [tabValue, setTabValue] = useState(query.get('tab') ?? ChestTab.LockUp);
   const tabsActions = useRef<TabsActions>(null);
-  const { checkNetworkStatus } = useWeb3Context();
+  const { checkNetworkStatus, switchToPolygonMainnet } = useWeb3Context();
 
-  const handleTabValueChangeEvent = useCallback((e: ChangeEvent<{}>, newValue: ChestTab) => {
+  const handleTabValueChangeEvent = useCallback(async (e: ChangeEvent<{}>, newValue: ChestTab) => {
+    await switchToPolygonMainnet();
     setTabValue(newValue);
   }, []);
 

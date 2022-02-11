@@ -18,6 +18,7 @@ type onChainProvider = {
   web3?: any;
   checkNetworkStatus: CheckNetworkStatus;
   hasCachedProvider: () => boolean;
+  switchToPolygonMainnet: () => Promise<boolean>;
 };
 
 export type Web3ContextData = {
@@ -82,6 +83,45 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
     if (!web3Modal.cachedProvider) return false;
     return true;
   };
+
+  const switchToPolygonMainnet = useCallback(async (): Promise<boolean> => {
+    try {
+      await window.ethereum.request({
+        // await web3Modal.({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: '0x89' }],
+      });
+    } catch (e: any) {
+      //wallet currently does not have Polygon network,
+      //ask to add it for them
+      //https://docs.polygon.technology/docs/develop/metamask/config-polygon-on-metamask/
+      if (e.code === 4902) {
+        try {
+          await window.ethereum.request({
+            method: 'wallet_addEthereumChain',
+            params: [
+              {
+                chainId: '0x89',
+                chainName: 'Polygon Mainnet',
+                nativeCurrency: {
+                  name: 'MATIC',
+                  symbol: 'MATIC',
+                  decimals: 18,
+                },
+                blockExplorerUrls: ['https://polygonscan.com/'],
+                rpcUrls: ['https://polygon-rpc.com/'],
+              },
+            ],
+          });
+        } catch (addError) {
+          console.error(addError);
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }, []);
 
   const _initListeners = useCallback(
     (rawProvider: JsonRpcProvider) => {
@@ -168,6 +208,7 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
       web3Modal,
       readOnlyProvider,
       checkNetworkStatus,
+      switchToPolygonMainnet,
     }),
     [
       connect,
@@ -180,6 +221,7 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
       web3Modal,
       readOnlyProvider,
       checkNetworkStatus,
+      switchToPolygonMainnet,
     ],
   );
   //@ts-ignore
