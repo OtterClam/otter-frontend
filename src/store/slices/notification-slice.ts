@@ -53,40 +53,6 @@ export const removeSnackbarThunk = createAsyncThunk(
 const initialState: NotificationsSliceState = {
   notifications: [],
 };
-// export default (state = defaultState, action) => {
-//   switch (action.type) {
-//     case ENQUEUE_SNACKBAR:
-//       return {
-//         ...state,
-//         notifications: [
-//           ...state.notifications,
-//           {
-//             key: action.key,
-//             ...action.notification,
-//           },
-//         ],
-//       };
-
-// case CLOSE_SNACKBAR:
-//   return {
-//     ...state,
-//     notifications: state.notifications.map(notification =>
-//       action.dismissAll || notification.key === action.key
-//         ? { ...notification, dismissed: true }
-//         : { ...notification },
-//     ),
-//   };
-
-//     case REMOVE_SNACKBAR:
-//       return {
-//         ...state,
-//         notifications: state.notifications.filter(notification => notification.key !== action.key),
-//       };
-
-//     default:
-//       return state;
-//   }
-// };
 
 const notificationsSlice = createSlice({
   name: 'notifications',
@@ -106,29 +72,6 @@ const notificationsSlice = createSlice({
       state.notifications.filter(notification => notification.options.key !== action.payload.key);
     },
   },
-  // extraReducers: builder => {
-  //   builder
-  //     .addCase(loadTermsDetails.pending, (state, action) => {
-  //       state.loading = true;
-  //     })
-  //     .addCase(loadTermsDetails.fulfilled, (state, action) => {
-  //       setAll(state, action.payload);
-  //       state.loading = false;
-  //     })
-  //     .addCase(loadTermsDetails.rejected, (state, { error }) => {
-  //       state.loading = false;
-  //       console.log(error);
-  //     })
-  //     .addCase(updateAllowance, (state, action) => {
-  //       state.allowance = action.payload;
-  //     })
-  //     .addCase(loadLockedNotes.fulfilled, (state, action) => {
-  //       setAll(state, action.payload);
-  //     })
-  //     .addCase(loadLockedNotes.rejected, (state, { error }) => {
-  //       console.log(error);
-  //     });
-  // },
 });
 
 const baseInfo = (state: { app: NotificationsSliceState }) => state.app;

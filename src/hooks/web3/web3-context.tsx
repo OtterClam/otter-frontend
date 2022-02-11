@@ -16,12 +16,19 @@ type onChainProvider = {
   web3Modal: Web3Modal;
   chainID: number;
   web3?: any;
+  checkNetworkStatus: CheckNetworkStatus;
   hasCachedProvider: () => boolean;
 };
 
 export type Web3ContextData = {
   onChainProvider: onChainProvider;
 } | null;
+
+export enum CheckNetworkStatus {
+  SUCCESS = 'SUCCESS',
+  WRONG_CHAIN = 'WRONG_CHAIN',
+  FAILURE = 'FAILURE',
+}
 
 const Web3Context = React.createContext<Web3ContextData>(null);
 
@@ -52,6 +59,7 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
   const [uri, setUri] = useState(rpcUrl);
   const [provider, setProvider] = useState<JsonRpcProvider>(new StaticJsonRpcProvider(uri));
   const readOnlyProvider = useMemo(() => new StaticJsonRpcProvider((RPCURL as any)[chainID]), [chainID]);
+  const [checkNetworkStatus, setCheckNetworkStatus] = useState<CheckNetworkStatus>(CheckNetworkStatus.SUCCESS);
 
   const [web3Modal] = useState<Web3Modal>(
     new Web3Modal({
@@ -74,12 +82,6 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
     return true;
   };
 
-  // const dispatch = useDispatch();
-  // const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  // const onMigrate = async () => {
-  //   await dispatch(enqueueSnackbar('woo'));
-  // };
-
   const _initListeners = useCallback(
     (rawProvider: JsonRpcProvider) => {
       if (!rawProvider.on) {
@@ -89,7 +91,7 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
       rawProvider.on('accountsChanged', () => setTimeout(() => window.location.reload(), 1));
 
       rawProvider.on('chainChanged', (chain: number) => {
-        _checkNetwork(chain);
+        setCheckNetworkStatus(_checkNetwork(chain));
         setTimeout(() => window.location.reload(), 1);
       });
 
@@ -101,15 +103,15 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
     [provider],
   );
 
-  const _checkNetwork = (otherChainID: number): Boolean => {
+  const _checkNetwork = (otherChainID: number): CheckNetworkStatus => {
+    var status = CheckNetworkStatus.SUCCESS;
     if (
       Number(otherChainID) !== Networks.POLYGON_MAINNET &&
       Number(otherChainID) !== Networks.POLYGON_MUMBAI &&
       Number(otherChainID) !== Networks.OTTER_FORK &&
       Number(otherChainID) !== Networks.HARDHAT
     ) {
-      // alert('Please switch your wallet to Polygon network to use OtterClam!');
-      // enqueueSnackbar('Woo');
+      status = CheckNetworkStatus.WRONG_CHAIN;
     }
 
     if (chainID !== otherChainID) {
@@ -118,11 +120,11 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
       if (rpcUrl) {
         setChainID(otherChainID);
         setUri(rpcUrl);
-        return true;
+        return status ? status : CheckNetworkStatus.SUCCESS;
       }
-      return false;
+      return status ? status : CheckNetworkStatus.FAILURE;
     }
-    return true;
+    return status ? status : CheckNetworkStatus.SUCCESS;
   };
 
   const connect = useCallback(async () => {
@@ -136,7 +138,7 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
     const connectedAddress = await connectedProvider.getSigner().getAddress();
 
     const validNetwork = _checkNetwork(chainId);
-    if (!validNetwork) {
+    if (validNetwork !== CheckNetworkStatus.SUCCESS) {
       console.error('Wrong network, please switch to Polygon Mainnet');
       return;
     }

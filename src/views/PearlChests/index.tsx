@@ -1,7 +1,6 @@
 import { Paper, Tab, Tabs, TabsActions, Typography, Zoom } from '@material-ui/core';
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import CustomButton from 'src/components/Button/CustomButton';
 import PearlChestsLockup from 'src/components/PearlChestsLockup';
@@ -12,6 +11,8 @@ import { useWeb3Context } from 'src/hooks';
 import { loadPearlAllowance, loadTermsDetails } from 'src/store/slices/otter-lake-slice';
 import chestOpenImage from './images/chest-open.png';
 import './styles.scss';
+import { useDispatch, useSelector } from 'react-redux';
+import { useSnackbar } from 'notistack';
 
 enum ChestTab {
   LockUp = 'lockup',
@@ -97,8 +98,10 @@ function useTabs() {
   const query = new URLSearchParams(location.search);
   const [tabValue, setTabValue] = useState(query.get('tab') ?? ChestTab.LockUp);
   const tabsActions = useRef<TabsActions>(null);
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const handleTabValueChangeEvent = useCallback((e: ChangeEvent<{}>, newValue: ChestTab) => {
+    enqueueSnackbar('woo');
     setTabValue(newValue);
   }, []);
 
