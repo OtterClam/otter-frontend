@@ -12,7 +12,6 @@ import { loadPearlAllowance, loadTermsDetails } from 'src/store/slices/otter-lak
 import chestOpenImage from './images/chest-open.png';
 import './styles.scss';
 import { useDispatch, useSelector } from 'react-redux';
-import { useSnackbar } from 'notistack';
 
 enum ChestTab {
   LockUp = 'lockup',
@@ -98,10 +97,9 @@ function useTabs() {
   const query = new URLSearchParams(location.search);
   const [tabValue, setTabValue] = useState(query.get('tab') ?? ChestTab.LockUp);
   const tabsActions = useRef<TabsActions>(null);
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const { checkNetworkStatus } = useWeb3Context();
 
   const handleTabValueChangeEvent = useCallback((e: ChangeEvent<{}>, newValue: ChestTab) => {
-    enqueueSnackbar('woo');
     setTabValue(newValue);
   }, []);
 

@@ -25,7 +25,8 @@ export type Web3ContextData = {
 } | null;
 
 export enum CheckNetworkStatus {
-  SUCCESS = 'SUCCESS',
+  OK = 'OK',
+  UPDATED = 'UPDATED',
   WRONG_CHAIN = 'WRONG_CHAIN',
   FAILURE = 'FAILURE',
 }
@@ -59,7 +60,7 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
   const [uri, setUri] = useState(rpcUrl);
   const [provider, setProvider] = useState<JsonRpcProvider>(new StaticJsonRpcProvider(uri));
   const readOnlyProvider = useMemo(() => new StaticJsonRpcProvider((RPCURL as any)[chainID]), [chainID]);
-  const [checkNetworkStatus, setCheckNetworkStatus] = useState<CheckNetworkStatus>(CheckNetworkStatus.SUCCESS);
+  const [checkNetworkStatus, setCheckNetworkStatus] = useState<CheckNetworkStatus>(CheckNetworkStatus.OK);
 
   const [web3Modal] = useState<Web3Modal>(
     new Web3Modal({
@@ -91,8 +92,12 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
       rawProvider.on('accountsChanged', () => setTimeout(() => window.location.reload(), 1));
 
       rawProvider.on('chainChanged', (chain: number) => {
-        setCheckNetworkStatus(_checkNetwork(chain));
-        setTimeout(() => window.location.reload(), 1);
+        var checkNetworkStatus = _checkNetwork(chain);
+        setCheckNetworkStatus(checkNetworkStatus);
+        //Only refresh when network switches from Invalid -> Valid
+        if (checkNetworkStatus !== CheckNetworkStatus.OK && IsValidChain(chain)) {
+          setTimeout(() => window.location.reload(), 1);
+        }
       });
 
       rawProvider.on('network', (_newNetwork, oldNetwork) => {
@@ -104,13 +109,8 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
   );
 
   const _checkNetwork = (otherChainID: number): CheckNetworkStatus => {
-    var status = CheckNetworkStatus.SUCCESS;
-    if (
-      Number(otherChainID) !== Networks.POLYGON_MAINNET &&
-      Number(otherChainID) !== Networks.POLYGON_MUMBAI &&
-      Number(otherChainID) !== Networks.OTTER_FORK &&
-      Number(otherChainID) !== Networks.HARDHAT
-    ) {
+    var status = CheckNetworkStatus.OK;
+    if (!IsValidChain(otherChainID)) {
       status = CheckNetworkStatus.WRONG_CHAIN;
     }
 
@@ -120,11 +120,11 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
       if (rpcUrl) {
         setChainID(otherChainID);
         setUri(rpcUrl);
-        return status ? status : CheckNetworkStatus.SUCCESS;
+        return status ? status : CheckNetworkStatus.OK;
       }
       return status ? status : CheckNetworkStatus.FAILURE;
     }
-    return status ? status : CheckNetworkStatus.SUCCESS;
+    return status;
   };
 
   const connect = useCallback(async () => {
@@ -138,7 +138,7 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
     const connectedAddress = await connectedProvider.getSigner().getAddress();
 
     const validNetwork = _checkNetwork(chainId);
-    if (validNetwork !== CheckNetworkStatus.SUCCESS) {
+    if (validNetwork !== CheckNetworkStatus.OK) {
       console.error('Wrong network, please switch to Polygon Mainnet');
       return;
     }
@@ -171,9 +171,29 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
       chainID,
       web3Modal,
       readOnlyProvider,
+      checkNetworkStatus,
     }),
-    [connect, disconnect, hasCachedProvider, provider, connected, address, chainID, web3Modal, readOnlyProvider],
+    [
+      connect,
+      disconnect,
+      hasCachedProvider,
+      provider,
+      connected,
+      address,
+      chainID,
+      web3Modal,
+      readOnlyProvider,
+      checkNetworkStatus,
+    ],
   );
   //@ts-ignore
   return <Web3Context.Provider value={{ onChainProvider }}>{children}</Web3Context.Provider>;
+};
+export const IsValidChain = (chainID: number): boolean => {
+  return (
+    Number(chainID) == Networks.POLYGON_MAINNET &&
+    Number(chainID) == Networks.POLYGON_MUMBAI &&
+    Number(chainID) == Networks.OTTER_FORK &&
+    Number(chainID) == Networks.HARDHAT
+  );
 };
