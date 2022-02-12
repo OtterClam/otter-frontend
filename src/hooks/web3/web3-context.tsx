@@ -27,7 +27,6 @@ export type Web3ContextData = {
 
 export enum CheckNetworkStatus {
   OK = 'OK',
-  UPDATED = 'UPDATED',
   WRONG_CHAIN = 'WRONG_CHAIN',
   FAILURE = 'FAILURE',
 }
@@ -94,11 +93,11 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
     } catch (e: any) {
       //wallet currently does not have Polygon network,
       //ask to add it for them
-      //https://docs.polygon.technology/docs/develop/metamask/config-polygon-on-metamask/
       if (e.code === 4902) {
         try {
           await window.ethereum.request({
             method: 'wallet_addEthereumChain',
+            //https://docs.polygon.technology/docs/develop/metamask/config-polygon-on-metamask/
             params: [
               {
                 chainId: '0x89',
@@ -118,6 +117,15 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
           return false;
         }
       }
+      //TODO: Better error handling!
+      // User rejected the request.
+      else if (e.code == 4001) {
+        return false;
+      }
+      //failed to switch network, unknown error
+      else {
+        return false;
+      }
     }
 
     return true;
@@ -132,7 +140,7 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
       rawProvider.on('accountsChanged', () => setTimeout(() => window.location.reload(), 1));
 
       rawProvider.on('chainChanged', (chain: number) => {
-        setCheckNetworkStatus(_checkNetwork(chain));
+        _checkNetwork(chain);
         setTimeout(() => window.location.reload(), 1);
       });
 
@@ -141,14 +149,11 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
         window.location.reload();
       });
     },
-    [provider],
+    [provider, checkNetworkStatus],
   );
 
   const _checkNetwork = (otherChainID: number): CheckNetworkStatus => {
     var status = CheckNetworkStatus.OK;
-    if (!IsValidChain(otherChainID)) {
-      status = CheckNetworkStatus.WRONG_CHAIN;
-    }
 
     if (chainID !== otherChainID) {
       console.warn('You are switching networks: ', otherChainID);
@@ -156,10 +161,17 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
       if (rpcUrl) {
         setChainID(otherChainID);
         setUri(rpcUrl);
-        return status ? status : CheckNetworkStatus.OK;
+        status = CheckNetworkStatus.OK;
+      } else {
+        status = CheckNetworkStatus.FAILURE;
       }
-      return status ? status : CheckNetworkStatus.FAILURE;
     }
+
+    if (!IsValidChain(otherChainID)) {
+      status = CheckNetworkStatus.WRONG_CHAIN;
+    }
+
+    setCheckNetworkStatus(status);
     return status;
   };
 
