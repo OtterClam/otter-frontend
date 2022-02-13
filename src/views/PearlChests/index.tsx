@@ -12,6 +12,7 @@ import { loadPearlAllowance, loadTermsDetails } from 'src/store/slices/otter-lak
 import chestOpenImage from './images/chest-open.png';
 import './styles.scss';
 import { useDispatch, useSelector } from 'react-redux';
+import { CheckNetworkStatus } from 'src/hooks/web3/web3-context';
 
 enum ChestTab {
   LockUp = 'lockup',
@@ -22,7 +23,16 @@ export default function PearlChests() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { tabValue, tabsActions, handleTabValueChangeEvent } = useTabs();
-  const { address, connect, connected, chainID, provider, readOnlyProvider } = useWeb3Context();
+  const {
+    address,
+    connect,
+    connected,
+    chainID,
+    provider,
+    readOnlyProvider,
+    checkNetworkStatus,
+    switchToPolygonMainnet,
+  } = useWeb3Context();
   useEffect(() => {
     if (connected) {
       dispatch(loadPearlAllowance({ address, chainID, provider }));
@@ -76,7 +86,15 @@ export default function PearlChests() {
 
           {tabValue === ChestTab.Redeem && !address && (
             <div className="pearl-chests__connect">
-              <CustomButton className="pearl-chests__connect-btn" text={t('common.connectWallet')} onClick={connect} />
+              <CustomButton
+                className="pearl-chests__connect-btn"
+                text={
+                  checkNetworkStatus === CheckNetworkStatus.WRONG_CHAIN
+                    ? t('common.switchChain')
+                    : t('common.connectWallet')
+                }
+                onClick={checkNetworkStatus === CheckNetworkStatus.WRONG_CHAIN ? switchToPolygonMainnet : connect}
+              />
               <Typography variant="caption" component="p" className="pearl-chests__connect-msg">
                 {t('pearlChests.redeem.connect')}
               </Typography>

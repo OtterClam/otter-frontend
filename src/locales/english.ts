@@ -23,6 +23,7 @@ const English = {
       clamPrice: 'CLAM Price',
       pearlPrice: 'PEARL Price',
       connectWallet: 'Connect Wallet',
+      switchChain: 'Switch Chain',
       price: 'Price',
       buy: 'Buy',
       buyThing: 'Buy ', //e.g. "Buy CLAM", "Buy sCLAM"
