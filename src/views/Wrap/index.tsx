@@ -27,6 +27,7 @@ import { AppThemeContext } from 'src/helpers/app-theme-context';
 import { useAppSelector, useAppDispatch, useWeb3Context } from 'src/hooks';
 import { IPendingTxn } from 'src/store/slices/pending-txns-slice';
 import { approveWrapping, changeWrap } from 'src/store/slices/wrap-thunk';
+import { CheckNetworkStatus } from 'src/hooks/web3/web3-context';
 import './wrap.scss';
 import WrapDialog from './WrapDialog';
 
@@ -59,7 +60,7 @@ function Wrap() {
   const { t } = useTranslation();
   const styles = useStyles();
   const dispatch = useAppDispatch();
-  const { provider, address, connect, chainID } = useWeb3Context();
+  const { provider, address, connect, chainID, checkNetworkStatus, switchToPolygonMainnet } = useWeb3Context();
   const tabsActions = useRef<TabsActions>(null);
   const currenTheme = useContext(AppThemeContext).name;
   const isSmallScreen = useMediaQuery('(max-width: 600px)');
@@ -180,8 +181,16 @@ function Wrap() {
               {!address ? (
                 <div className="wrap-wallet-notification">
                   <div className="wallet-menu" id="wallet-menu">
-                    <Box bgcolor="otter.otterBlue" className="app-otter-button" onClick={() => connect()}>
-                      <p>{t('common.connectWallet')}</p>
+                    <Box
+                      bgcolor="otter.otterBlue"
+                      className="app-otter-button"
+                      onClick={checkNetworkStatus === CheckNetworkStatus.WRONG_CHAIN ? switchToPolygonMainnet : connect}
+                    >
+                      <p>
+                        {checkNetworkStatus === CheckNetworkStatus.WRONG_CHAIN
+                          ? t('common.switchChain')
+                          : t('common.connectWallet')}
+                      </p>
                     </Box>
                   </div>
                   <p className="desc-text">{t('wrap.connectWalletDescription')}</p>

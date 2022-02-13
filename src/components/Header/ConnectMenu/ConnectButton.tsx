@@ -30,7 +30,7 @@ const ConnectButton = ({ status }: ConnectButtonProps) => {
   if (status === ConnectButtonStatus.WrongChain) {
     // TODO: to be translate - components.connect
     if (isMobile) return <CustomButton text="Switch Chain" onClick={switchToPolygonMainnet} />;
-    return <CustomButton text={'Switch Chain'} onClick={switchToPolygonMainnet} />;
+    return <CustomButton text={t('common.switchChain')} onClick={switchToPolygonMainnet} />;
   }
   if (status === ConnectButtonStatus.NotConnected) {
     // TODO: to be translate - components.connect

@@ -17,6 +17,7 @@ import PearlChest1 from './pearl-chest1.png';
 import PearlChest2 from './pearl-chest2.png';
 import PearlChest3 from './pearl-chest3.png';
 import PearlChest4 from './pearl-chest4.png';
+import { CheckNetworkStatus } from 'src/hooks/web3/web3-context';
 
 const extraBonus: { [k: number]: number } = {
   28: 0.5,
@@ -78,7 +79,7 @@ function LockupOption({
   const pendingTransactions = useSelector<IReduxState, IPendingTxn[]>(state => {
     return state.pendingTransactions;
   });
-  const { address, connect } = useWeb3Context();
+  const { address, connect, checkNetworkStatus, switchToPolygonMainnet } = useWeb3Context();
 
   return (
     <Paper className="lockup-option">
@@ -172,9 +173,21 @@ function LockupOption({
         className="lockup-option__select-btn"
         pendingTransactions={pendingTransactions}
         type="select_lockup_option"
-        start={t(address ? 'pearlChests.lockUp.select' : 'common.connectWallet')}
+        start={t(
+          checkNetworkStatus === CheckNetworkStatus.WRONG_CHAIN
+            ? 'common.switchChain'
+            : address
+            ? 'pearlChests.lockUp.select'
+            : 'common.connectWallet',
+        )}
         progress="Processing..."
-        processTx={() => (address ? onSelect(term) : connect())}
+        processTx={() => {
+          checkNetworkStatus === CheckNetworkStatus.WRONG_CHAIN
+            ? switchToPolygonMainnet()
+            : address
+            ? onSelect(term)
+            : connect();
+        }}
       />
     </Paper>
   );
