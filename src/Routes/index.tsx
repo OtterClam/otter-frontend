@@ -9,7 +9,7 @@ import { PropsWithChildren } from 'react';
 import { SnackbarKey, SnackbarProvider, useSnackbar } from 'notistack';
 import { SnackbarUtilsConfigurator } from '../store/snackbarUtils';
 import { Close as IconClose } from '@material-ui/icons';
-import SnackbarCloseButton from './twst';
+// import SnackbarCloseButton from './twst';
 
 const isApp = (): boolean => {
   return window.location.host.includes('app');
@@ -22,6 +22,16 @@ const isIDO = (): boolean => {
 const DefaultThemeProvider = ({ children }: PropsWithChildren<{}>) => {
   return <MuiThemeProvider theme={lightTheme}>{children}</MuiThemeProvider>;
 };
+
+function SnackbarCloseButton({ snackbarKey }: { snackbarKey: SnackbarKey }) {
+  const { closeSnackbar } = useSnackbar();
+
+  return (
+    <IconButton onClick={() => closeSnackbar(snackbarKey)}>
+      <IconClose />
+    </IconButton>
+  );
+}
 
 function Root() {
   let Content = Landing;
