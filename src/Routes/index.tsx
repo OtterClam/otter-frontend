@@ -9,7 +9,6 @@ import { PropsWithChildren } from 'react';
 import { SnackbarKey, SnackbarProvider, useSnackbar } from 'notistack';
 import { SnackbarUtilsConfigurator } from '../store/snackbarUtils';
 import { Close as IconClose } from '@material-ui/icons';
-// import SnackbarCloseButton from './twst';
 
 const isApp = (): boolean => {
   return window.location.host.includes('app');

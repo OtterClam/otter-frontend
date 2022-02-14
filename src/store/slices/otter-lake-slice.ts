@@ -9,6 +9,7 @@ import { fetchPendingTxns, clearPendingTxn } from './pending-txns-slice';
 import { formatEther } from '@ethersproject/units';
 import axios from 'axios';
 import { IReduxState } from './state.interface';
+import SnackbarUtils from '../../store/snackbarUtils';
 
 export interface ITerm {
   note: INote;
@@ -274,7 +275,7 @@ export const approveSpending = createAsyncThunk(
       await tx.wait();
       await dispatch(updateAllowance(constants.MaxInt256.toString()));
     } catch (error: any) {
-      alert((error as Error).message);
+      SnackbarUtils.error((error as Error).message);
     } finally {
       if (tx) {
         dispatch(clearPendingTxn(tx.hash));
@@ -302,7 +303,7 @@ export const claimReward = createAsyncThunk<void, IClaimRewardDetails, ThunkOpti
       await tx.wait();
       dispatch(loadLockedNotes({ address, chainID, provider }));
     } catch (err) {
-      alert((err as Error).message);
+      SnackbarUtils.error((err as Error).message);
     } finally {
       if (tx) {
         dispatch(clearPendingTxn(tx.hash));
@@ -330,7 +331,7 @@ export const redeem = createAsyncThunk<void, IRedeemDetails, ThunkOptions>(
       await tx.wait();
       dispatch(loadLockedNotes({ address, chainID, provider }));
     } catch (err) {
-      alert((err as Error).message);
+      SnackbarUtils.error((err as Error).message);
     } finally {
       if (tx) {
         dispatch(clearPendingTxn(tx.hash));
@@ -375,7 +376,7 @@ export const lock = createAsyncThunk<LockActionResult | undefined, ILockNoteDeta
       lockedEvent = result.events.find((event: any) => event.event === 'Locked');
       dispatch(loadLockedNotes({ address, chainID, provider }));
     } catch (err) {
-      alert((err as Error).message);
+      SnackbarUtils.error((err as Error).message);
       return;
     } finally {
       if (tx) {
@@ -417,7 +418,7 @@ export const extendLock = createAsyncThunk<LockActionResult | undefined, IExtend
       lockedEvent = result.events.find((event: any) => event.event === 'Locked');
       dispatch(loadLockedNotes({ address, chainID, provider }));
     } catch (err) {
-      alert((err as Error).message);
+      SnackbarUtils.error((err as Error).message);
     } finally {
       if (tx) {
         dispatch(clearPendingTxn(tx.hash));
@@ -463,7 +464,7 @@ export const claimAndLock = createAsyncThunk<LockActionResult | undefined, IClai
       lockedEvent = result.events.find((event: any) => event.event === 'Locked');
       dispatch(loadLockedNotes({ address, chainID, provider }));
     } catch (err) {
-      alert((err as Error).message);
+      SnackbarUtils.error((err as Error).message);
     } finally {
       if (tx) {
         dispatch(clearPendingTxn(tx.hash));

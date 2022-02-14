@@ -45,7 +45,7 @@ export const changeApproval = createAsyncThunk(
   'bonding/changeApproval',
   async ({ bondKey, provider, networkID, address }: IChangeApproval, { dispatch }) => {
     if (!provider) {
-      SnackbarUtils.warning('errors.connectWallet');
+      SnackbarUtils.warning('errors.connectWallet', true);
       return;
     }
 
@@ -71,7 +71,7 @@ export const changeApproval = createAsyncThunk(
 
       allowance = +(await approvedPromise);
     } catch (error: any) {
-      alert(error.message);
+      SnackbarUtils.error(error.message);
     } finally {
       if (approveTx) {
         dispatch(clearPendingTxn(approveTx.hash));
@@ -180,7 +180,7 @@ export const calcBondDetails = createAsyncThunk(
 
     // Display error if user tries to exceed maximum.
     if (!!value && bondQuote > maxPayout / 1e9) {
-      alert(
+      SnackbarUtils.error(
         "You're trying to bond more than the maximum payout available! The maximum bond payout is " +
           (maxPayout / 1e9).toFixed(2).toString() +
           ' CLAM.',
@@ -249,8 +249,8 @@ export const bondAsset = createAsyncThunk(
       dispatch(calculateUserBondDetails({ address, bondKey, networkID, provider }));
       return;
     } catch (error: any) {
-      if (error.code === -32603 && error.message.indexOf('ds-math-sub-underflow') >= 0) {
-        SnackbarUtils.error('errors.bondBalance');
+      if (error.code === -32603) {
+        SnackbarUtils.error('errors.bondBalance', true);
       } else SnackbarUtils.error(error.message);
       return;
     } finally {
@@ -274,7 +274,7 @@ export const redeemBond = createAsyncThunk(
   'bonding/redeemBond',
   async ({ address, bondKey, networkID, provider, autostake }: IRedeemBond, { dispatch }) => {
     if (!provider) {
-      SnackbarUtils.warning('errors.connectWallet');
+      SnackbarUtils.warning('errors.connectWallet', true);
       return;
     }
 

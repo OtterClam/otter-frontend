@@ -5,6 +5,7 @@ import { PearlTokenContract, StakedClamContract } from 'src/abi';
 import { getAddresses } from 'src/constants';
 import { fetchAccountSuccess, wrap, unwrap } from './account-slice';
 import { clearPendingTxn, fetchPendingTxns, getWrappingTypeText } from './pending-txns-slice';
+import SnackbarUtils from '../../store/snackbarUtils';
 
 interface ApproveWrappingProps {
   provider: JsonRpcProvider;
@@ -16,7 +17,7 @@ export const approveWrapping = createAsyncThunk(
   'wrap/approve',
   async ({ provider, address, networkID }: ApproveWrappingProps, { dispatch }) => {
     if (!provider) {
-      alert('Please connect your wallet!');
+      SnackbarUtils.warning('errors.connectWallet', true);
       return;
     }
     const addresses = getAddresses(networkID);
@@ -44,7 +45,7 @@ export const approveWrapping = createAsyncThunk(
       dispatch(fetchPendingTxns({ txnHash: approveTx.hash, text, type: pendingTxnType }));
       allowance = +(await approvedPromise);
     } catch (error: any) {
-      alert(error.message);
+      SnackbarUtils.error(error.message);
       return;
     } finally {
       if (approveTx) {
@@ -74,7 +75,7 @@ export const changeWrap = createAsyncThunk(
   'wrap/changeWrap',
   async ({ action, value, provider, address, networkID }: ChangeWrapProps, { dispatch }) => {
     if (!provider) {
-      alert('Please connect your wallet!');
+      SnackbarUtils.warning('errors.connectWallet', true);
       return;
     }
     const addresses = getAddresses(networkID);
@@ -115,10 +116,10 @@ export const changeWrap = createAsyncThunk(
       await wrapTx.wait();
       resolvedAmount = await transferPromise;
     } catch (error: any) {
-      if (error.code === -32603 && error.message.indexOf('ds-math-sub-underflow') >= 0) {
-        alert('You may be trying to wrap more than your balance! Error code: 32603. Message: ds-math-sub-underflow');
+      if (error.code === -32603) {
+        SnackbarUtils.warning('errors.wrapBalance');
       } else {
-        alert(error.message);
+        SnackbarUtils.error(error.message);
       }
       return;
     } finally {

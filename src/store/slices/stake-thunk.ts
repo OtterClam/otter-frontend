@@ -5,7 +5,7 @@ import { clearPendingTxn, fetchPendingTxns, getStakingTypeText } from './pending
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchAccountSuccess, getBalances } from './account-slice';
 import { JsonRpcProvider } from '@ethersproject/providers';
-
+import SnackbarUtils from '../../store/snackbarUtils';
 interface IChangeApproval {
   token: string;
   provider: JsonRpcProvider;
@@ -17,7 +17,7 @@ export const changeApproval = createAsyncThunk(
   'stake/changeApproval',
   async ({ token, provider, address, networkID }: IChangeApproval, { dispatch }) => {
     if (!provider) {
-      alert('Please connect your wallet!');
+      SnackbarUtils.warning('errors.connectWallet', true);
       return;
     }
     const addresses = getAddresses(networkID);
@@ -59,7 +59,7 @@ export const changeApproval = createAsyncThunk(
       dispatch(fetchPendingTxns({ txnHash: approveTx.hash, text, type: pendingTxnType }));
       allowance = +(await approvedPromise);
     } catch (error: any) {
-      alert(error.message);
+      SnackbarUtils.error(error.message);
       return;
     } finally {
       if (approveTx) {
@@ -99,7 +99,7 @@ export const changeStake = createAsyncThunk(
   'stake/changeStake',
   async ({ action, value, provider, address, networkID }: IChangeStake, { dispatch }) => {
     if (!provider) {
-      alert('Please connect your wallet!');
+      SnackbarUtils.warning('errors.connectWallet', true);
       return;
     }
     const addresses = getAddresses(networkID);
@@ -120,10 +120,11 @@ export const changeStake = createAsyncThunk(
       dispatch(fetchPendingTxns({ txnHash: stakeTx.hash, text: getStakingTypeText(action), type: pendingTxnType }));
       await stakeTx.wait();
     } catch (error: any) {
-      if (error.code === -32603 && error.message.indexOf('ds-math-sub-underflow') >= 0) {
-        alert('You may be trying to stake more than your balance! Error code: 32603. Message: ds-math-sub-underflow');
+      if (error.code === -32603) {
+        //&& error.message.indexOf('ds-math-sub-underflow') >= 0
+        SnackbarUtils.warning('errors.stakeBalance', true);
       } else {
-        alert(error.message);
+        SnackbarUtils.error(error.message);
       }
       return;
     } finally {
@@ -148,7 +149,7 @@ export const claimWarmup = createAsyncThunk(
   'stake/claimWarmup',
   async ({ provider, address, networkID }: ClaimWarmupPayload, { dispatch }) => {
     if (!provider) {
-      alert('Please connect your wallet!');
+      SnackbarUtils.warning('errors.connectWallet', true);
       return;
     }
     const addresses = getAddresses(networkID);
@@ -164,7 +165,7 @@ export const claimWarmup = createAsyncThunk(
       if (error.code === -32603 && error.message.indexOf('ds-math-sub-underflow') >= 0) {
         alert('You may be trying to stake more than your balance! Error code: 32603. Message: ds-math-sub-underflow');
       } else {
-        alert(error.message);
+        SnackbarUtils.error(error.message);
       }
       return;
     } finally {

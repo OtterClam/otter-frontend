@@ -30,6 +30,7 @@ import { approveWrapping, changeWrap } from 'src/store/slices/wrap-thunk';
 import { CheckNetworkStatus } from 'src/hooks/web3/web3-context';
 import './wrap.scss';
 import WrapDialog from './WrapDialog';
+import SnackbarUtils from '../../store/snackbarUtils';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -115,7 +116,7 @@ function Wrap() {
 
   const onChangeWrap = async (action: string) => {
     if (isNaN(Number(quantity)) || Number(quantity) === 0 || quantity === '0') {
-      alert('Please enter a value!');
+      SnackbarUtils.warning('errors.enterValue', true);
     } else {
       setAction(action);
       let wrapTx: any = await dispatch(

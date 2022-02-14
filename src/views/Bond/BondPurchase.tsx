@@ -12,6 +12,7 @@ import { ethers } from 'ethers';
 import { useTranslation } from 'react-i18next';
 import BondPurchaseDialog from './BondPurchaseDialog';
 import ActionButton from '../../components/Button/ActionButton';
+import SnackbarUtils from '../../store/snackbarUtils';
 
 const useStyles = makeStyles(theme => ({
   input: {
@@ -102,10 +103,10 @@ function BondPurchase({ bondKey, slippage }: IBondPurchaseProps) {
 
   async function onBond() {
     if (quantity === '') {
-      alert(t('bonds.purchase.noValue'));
+      SnackbarUtils.warning('bonds.purchase.noValue', true);
       //@ts-ignore
     } else if (isNaN(quantity)) {
-      alert(t('bonds.purchase.invalidValue'));
+      SnackbarUtils.warning('bonds.purchase.invalidValue', true);
     } else if (interestDue > 0 || pendingPayout > 0) {
       const shouldProceed = window.confirm(
         bond.autostake ? t('bonds.purchase.resetVestingAutostake') : t('bonds.purchase.resetVesting'),

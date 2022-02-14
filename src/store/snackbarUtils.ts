@@ -12,16 +12,16 @@ export const SnackbarUtilsConfigurator: React.FC = () => {
 
 //Enable translation so snackbars can be queued within Hooks / Slices
 export default {
-  success(msg: string, translate: boolean = true) {
+  success(msg: string, translate: boolean = false) {
     this.toast(translate ? i18next.t(msg) : msg, 'success');
   },
-  warning(msg: string, translate: boolean = true) {
+  warning(msg: string, translate: boolean = false) {
     this.toast(translate ? i18next.t(msg) : msg, 'warning');
   },
-  info(msg: string, translate: boolean = true) {
+  info(msg: string, translate: boolean = false) {
     this.toast(translate ? i18next.t(msg) : msg, 'info');
   },
-  error(msg: string, translate: boolean = true) {
+  error(msg: string, translate: boolean = false) {
     this.toast(translate ? i18next.t(msg) : msg, 'error');
   },
   toast(msg: string, variant: VariantType = 'default') {

@@ -45,8 +45,10 @@ const English = {
     },
     errors: {
       connectWallet: 'Please connect your wallet!',
-      bondBalance:
-        'You may be trying to bond more than your balance! Error code: 32603. Message: ds-math-sub-underflow',
+      bondBalance: 'Attempting to bond more than your balance!',
+      wrapBalance: 'Attempting to wrap more than your balance!',
+      stakeBalance: 'Attempting to wrap more than your balance!',
+      enterValue: 'Please enter a value!',
     },
     time: {
       days: 'Days',

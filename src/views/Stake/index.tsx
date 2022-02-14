@@ -125,8 +125,7 @@ function Stake() {
     // eslint-disable-next-line no-restricted-globals
     //@ts-ignore
     if (isNaN(quantity) || quantity === 0 || quantity === '') {
-      // enqueueSnackbar('Please enter a value!');
-      SnackbarUtils.warning('Please enter a value!');
+      SnackbarUtils.warning('errors.enterValue', true);
     } else {
       setAction(action);
       let stakeTx: any = await dispatch(

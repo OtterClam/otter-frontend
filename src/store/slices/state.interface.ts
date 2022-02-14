@@ -6,7 +6,7 @@ import { IWhitelist } from './whitelist-slice';
 import { IDOState } from './ido-slice';
 import { MigrationState } from './migrate-slice';
 import { IOtterLakeSliceState } from './otter-lake-slice';
-import { NotificationsSliceState } from './notification-slice';
+// import { NotificationsSliceState } from './notification-slice';
 
 export interface IReduxState {
   pendingTransactions: IPendingTxn[];
@@ -17,5 +17,5 @@ export interface IReduxState {
   ido: IDOState;
   migrate: MigrationState;
   lake: IOtterLakeSliceState;
-  notifications: NotificationsSliceState;
+  // notifications: NotificationsSliceState;
 }
