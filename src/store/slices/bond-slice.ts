@@ -45,7 +45,7 @@ export const changeApproval = createAsyncThunk(
   'bonding/changeApproval',
   async ({ bondKey, provider, networkID, address }: IChangeApproval, { dispatch }) => {
     if (!provider) {
-      alert('Please connect your wallet!');
+      SnackbarUtils.warning('errors.connectWallet');
       return;
     }
 

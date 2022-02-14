@@ -1,6 +1,7 @@
 import { useSnackbar, VariantType, WithSnackbarProps } from 'notistack';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import i18next from '../i18n';
 
 //github.com/iamhosseindhv/notistack/issues/30#issuecomment-542863653
 let useSnackbarRef: WithSnackbarProps;
@@ -10,35 +11,18 @@ export const SnackbarUtilsConfigurator: React.FC = () => {
 };
 
 //Enable translation so snackbars can be queued within Hooks / Slices
-const { t } = useTranslation();
 export default {
   success(msg: string, translate: boolean = true) {
-    if (translate) {
-      this.toast(t(msg), 'success');
-    } else {
-      this.toast(msg, 'success');
-    }
+    this.toast(translate ? i18next.t(msg) : msg, 'success');
   },
   warning(msg: string, translate: boolean = true) {
-    if (translate) {
-      this.toast(t(msg), 'warning');
-    } else {
-      this.toast(msg, 'warning');
-    }
+    this.toast(translate ? i18next.t(msg) : msg, 'warning');
   },
   info(msg: string, translate: boolean = true) {
-    if (translate) {
-      this.toast(t(msg), 'info');
-    } else {
-      this.toast(msg, 'info');
-    }
+    this.toast(translate ? i18next.t(msg) : msg, 'info');
   },
   error(msg: string, translate: boolean = true) {
-    if (translate) {
-      this.toast(t(msg), 'error');
-    } else {
-      this.toast(msg, 'error');
-    }
+    this.toast(translate ? i18next.t(msg) : msg, 'error');
   },
   toast(msg: string, variant: VariantType = 'default') {
     useSnackbarRef.enqueueSnackbar(msg, { variant });

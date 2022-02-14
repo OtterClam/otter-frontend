@@ -3,11 +3,13 @@ import Landing from './Landing';
 import IDO from './IDO';
 import { HashRouter } from 'react-router-dom';
 import { light as lightTheme } from '../themes';
-import { Theme, ThemeProvider as MuiThemeProvider } from '@material-ui/core';
+import { IconButton, Theme, ThemeProvider as MuiThemeProvider } from '@material-ui/core';
 import { AppThemeProvider } from 'src/helpers/app-theme-context';
 import { PropsWithChildren } from 'react';
-import { SnackbarProvider } from 'notistack';
+import { SnackbarKey, SnackbarProvider, useSnackbar } from 'notistack';
 import { SnackbarUtilsConfigurator } from '../store/snackbarUtils';
+import { Close as IconClose } from '@material-ui/icons';
+import SnackbarCloseButton from './twst';
 
 const isApp = (): boolean => {
   return window.location.host.includes('app');
@@ -37,7 +39,11 @@ function Root() {
   return (
     <HashRouter>
       <ThemeProvider>
-        <SnackbarProvider maxSnack={3} anchorOrigin={{ horizontal: 'center', vertical: 'top' }}>
+        <SnackbarProvider
+          maxSnack={3}
+          anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
+          action={snackbarKey => <SnackbarCloseButton snackbarKey={snackbarKey} />}
+        >
           <SnackbarUtilsConfigurator />
           <Content />
         </SnackbarProvider>
