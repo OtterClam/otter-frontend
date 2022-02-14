@@ -8,8 +8,7 @@ import { createSlice, createSelector, createAsyncThunk } from '@reduxjs/toolkit'
 import { JsonRpcProvider } from '@ethersproject/providers';
 import { fetchAccountSuccess } from './account-slice';
 import { formatUnits } from '@ethersproject/units';
-import { useSnackbar } from 'notistack';
-
+import SnackbarUtils from '../../store/snackbarUtils';
 interface IState {
   [key: string]: any;
 }
@@ -251,8 +250,8 @@ export const bondAsset = createAsyncThunk(
       return;
     } catch (error: any) {
       if (error.code === -32603 && error.message.indexOf('ds-math-sub-underflow') >= 0) {
-        alert('You may be trying to bond more than your balance! Error code: 32603. Message: ds-math-sub-underflow');
-      } else alert(error.message);
+        SnackbarUtils.error('errors.bondBalance');
+      } else SnackbarUtils.error(error.message);
       return;
     } finally {
       if (bondTx) {
@@ -274,10 +273,8 @@ interface IRedeemBond {
 export const redeemBond = createAsyncThunk(
   'bonding/redeemBond',
   async ({ address, bondKey, networkID, provider, autostake }: IRedeemBond, { dispatch }) => {
-    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     if (!provider) {
-      alert('Please connect your wallet!');
-      enqueueSnackbar('Please connect your wallet!');
+      SnackbarUtils.warning('errors.connectWallet');
       return;
     }
 
@@ -295,8 +292,7 @@ export const redeemBond = createAsyncThunk(
       dispatch(getBalances({ address, networkID, provider }));
       return;
     } catch (error: any) {
-      alert(error.message);
-      enqueueSnackbar(error.message);
+      SnackbarUtils.error(error.message);
     } finally {
       if (redeemTx) {
         dispatch(clearPendingTxn(redeemTx.hash));

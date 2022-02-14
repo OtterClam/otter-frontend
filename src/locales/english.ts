@@ -43,6 +43,11 @@ const English = {
       '28Chest': '28-Day Chest',
       '14Chest': '14-Day Chest',
     },
+    errors: {
+      connectWallet: 'Please connect your wallet!',
+      bondBalance:
+        'You may be trying to bond more than your balance! Error code: 32603. Message: ds-math-sub-underflow',
+    },
     time: {
       days: 'Days',
       day: 'Day',

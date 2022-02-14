@@ -31,7 +31,6 @@ import { IReduxState } from '../../store/slices/state.interface';
 import './stake.scss';
 import StakeDialog from './StakeDialog';
 import IconPearlChest from 'src/assets/icons/icon_pearl_chest_3.png';
-import { useSnackbar } from 'notistack';
 import { CheckNetworkStatus } from 'src/hooks/web3/web3-context';
 import SnackbarUtils from '../../store/snackbarUtils';
 
