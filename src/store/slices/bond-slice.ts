@@ -294,7 +294,9 @@ export const redeemBond = createAsyncThunk(
       dispatch(getBalances({ address, networkID, provider }));
       return;
     } catch (error: any) {
-      SnackbarUtils.error(error.message);
+      if (error.code === -32603) {
+        SnackbarUtils.warning('bonds.redeem.fullyVestedPopup', true);
+      } else SnackbarUtils.error(error.message);
     } finally {
       if (redeemTx) {
         dispatch(clearPendingTxn(redeemTx.hash));

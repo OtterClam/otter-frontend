@@ -48,6 +48,7 @@ const English = {
       bondBalance: 'Attempting to bond more than your balance!',
       wrapBalance: 'Attempting to wrap more than your balance!',
       stakeBalance: 'Attempting to stake or unstake more than your balance!',
+      lockBalance: 'Attempting to lock more than your balance!',
       enterValue: 'Please enter a value!',
     },
     time: {

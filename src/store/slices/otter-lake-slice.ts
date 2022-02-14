@@ -375,8 +375,14 @@ export const lock = createAsyncThunk<LockActionResult | undefined, ILockNoteDeta
       const result = await tx.wait();
       lockedEvent = result.events.find((event: any) => event.event === 'Locked');
       dispatch(loadLockedNotes({ address, chainID, provider }));
-    } catch (err) {
-      SnackbarUtils.error((err as Error).message);
+    } catch (error: any) {
+      if (error.code === -32603) {
+        SnackbarUtils.warning('errors.lockBalance', true);
+      } else if (error.code === 'INVALID_ARGUMENT') {
+        SnackbarUtils.warning('bonds.purchase.invalidValue', true);
+      } else {
+        SnackbarUtils.error(error.message);
+      }
       return;
     } finally {
       if (tx) {
@@ -463,8 +469,14 @@ export const claimAndLock = createAsyncThunk<LockActionResult | undefined, IClai
       const result = await tx.wait();
       lockedEvent = result.events.find((event: any) => event.event === 'Locked');
       dispatch(loadLockedNotes({ address, chainID, provider }));
-    } catch (err) {
-      SnackbarUtils.error((err as Error).message);
+    } catch (error: any) {
+      if (error.code === -32603) {
+        SnackbarUtils.warning('errors.wrapBalance', true);
+      } else if (error.code === 'INVALID_ARGUMENT') {
+        SnackbarUtils.warning('bonds.purchase.invalidValue', true);
+      } else {
+        SnackbarUtils.error(error.message);
+      }
     } finally {
       if (tx) {
         dispatch(clearPendingTxn(tx.hash));
