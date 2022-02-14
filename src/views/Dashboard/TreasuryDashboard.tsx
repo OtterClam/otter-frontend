@@ -238,13 +238,13 @@ function TreasuryDashboard() {
                     dataKey={[
                       'treasuryMaiRiskFreeValue',
                       'treasuryFraxRiskFreeValue',
-                      'treasuryMaiUsdcRiskFreeValue',
+                      // 'treasuryMaiUsdcRiskFreeValue',
                       'treasuryMaiUsdcQiInvestmentRiskFreeValue',
                     ]}
                     stopColor={[
                       ['#EE4B4E', 'rgba(219, 55, 55, 0.5)'], // MAI
                       ['#8F5AE8', 'rgba(143, 90, 232, 0.5)'], // FRAX
-                      ['#DC30EB', '#EA98F1'], // MAI-USDC
+                      // ['#DC30EB', '#EA98F1'], // MAI-USDC
                       ['#5CBD6B', 'rgba(92, 189, 107, 0.5)'], // MAI-USDC Deposited
                     ]}
                     headerText={t('dashboard.riskFree')}
