@@ -115,7 +115,6 @@ function useTabs() {
   const query = new URLSearchParams(location.search);
   const [tabValue, setTabValue] = useState(query.get('tab') ?? ChestTab.LockUp);
   const tabsActions = useRef<TabsActions>(null);
-  const { checkNetworkStatus } = useWeb3Context();
 
   const handleTabValueChangeEvent = useCallback(async (e: ChangeEvent<{}>, newValue: ChestTab) => {
     setTabValue(newValue);

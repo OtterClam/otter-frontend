@@ -31,7 +31,9 @@ import { IReduxState } from '../../store/slices/state.interface';
 import './stake.scss';
 import StakeDialog from './StakeDialog';
 import IconPearlChest from 'src/assets/icons/icon_pearl_chest_3.png';
+import { useSnackbar } from 'notistack';
 import { CheckNetworkStatus } from 'src/hooks/web3/web3-context';
+import SnackbarUtils from '../../store/snackbarUtils';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -124,8 +126,8 @@ function Stake() {
     // eslint-disable-next-line no-restricted-globals
     //@ts-ignore
     if (isNaN(quantity) || quantity === 0 || quantity === '') {
-      // eslint-disable-next-line no-alert
-      alert('Please enter a value!');
+      // enqueueSnackbar('Please enter a value!');
+      SnackbarUtils.warning('Please enter a value!');
     } else {
       setAction(action);
       let stakeTx: any = await dispatch(

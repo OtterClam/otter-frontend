@@ -158,6 +158,9 @@ function App() {
     }
   }, [checkNetworkStatus]);
 
+  //relay errors from Web3ContextProvider
+  //errorKey, errorMsg
+
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };

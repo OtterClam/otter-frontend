@@ -7,6 +7,7 @@ import { Theme, ThemeProvider as MuiThemeProvider } from '@material-ui/core';
 import { AppThemeProvider } from 'src/helpers/app-theme-context';
 import { PropsWithChildren } from 'react';
 import { SnackbarProvider } from 'notistack';
+import { SnackbarUtilsConfigurator } from '../store/snackbarUtils';
 
 const isApp = (): boolean => {
   return window.location.host.includes('app');
@@ -36,7 +37,8 @@ function Root() {
   return (
     <HashRouter>
       <ThemeProvider>
-        <SnackbarProvider maxSnack={3}>
+        <SnackbarProvider maxSnack={3} anchorOrigin={{ horizontal: 'center', vertical: 'top' }}>
+          <SnackbarUtilsConfigurator />
           <Content />
         </SnackbarProvider>
       </ThemeProvider>

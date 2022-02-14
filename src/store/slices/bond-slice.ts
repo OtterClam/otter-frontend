@@ -8,6 +8,7 @@ import { createSlice, createSelector, createAsyncThunk } from '@reduxjs/toolkit'
 import { JsonRpcProvider } from '@ethersproject/providers';
 import { fetchAccountSuccess } from './account-slice';
 import { formatUnits } from '@ethersproject/units';
+import { useSnackbar } from 'notistack';
 
 interface IState {
   [key: string]: any;
@@ -273,8 +274,10 @@ interface IRedeemBond {
 export const redeemBond = createAsyncThunk(
   'bonding/redeemBond',
   async ({ address, bondKey, networkID, provider, autostake }: IRedeemBond, { dispatch }) => {
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     if (!provider) {
       alert('Please connect your wallet!');
+      enqueueSnackbar('Please connect your wallet!');
       return;
     }
 
@@ -293,6 +296,7 @@ export const redeemBond = createAsyncThunk(
       return;
     } catch (error: any) {
       alert(error.message);
+      enqueueSnackbar(error.message);
     } finally {
       if (redeemTx) {
         dispatch(clearPendingTxn(redeemTx.hash));
