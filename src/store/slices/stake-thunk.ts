@@ -162,7 +162,7 @@ export const claimWarmup = createAsyncThunk(
       dispatch(fetchPendingTxns({ txnHash: tx.hash, text: 'CLAIMING', type: 'claimWarmup' }));
       await tx.wait();
     } catch (error: any) {
-      if (error.code === -32603 && error.message.indexOf('ds-math-sub-underflow') >= 0) {
+      if (error.code === -32603) {
         alert('You may be trying to stake more than your balance! Error code: 32603. Message: ds-math-sub-underflow');
       } else {
         SnackbarUtils.error(error.message);

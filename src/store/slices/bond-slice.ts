@@ -250,7 +250,9 @@ export const bondAsset = createAsyncThunk(
       return;
     } catch (error: any) {
       if (error.code === -32603) {
-        SnackbarUtils.error('errors.bondBalance', true);
+        SnackbarUtils.warning('errors.bondBalance', true);
+      } else if (error.code === 'INVALID_ARGUMENT') {
+        SnackbarUtils.warning('bonds.purchase.invalidValue', true);
       } else SnackbarUtils.error(error.message);
       return;
     } finally {

@@ -50,6 +50,7 @@ function Root() {
       <ThemeProvider>
         <SnackbarProvider
           maxSnack={3}
+          autoHideDuration={5000}
           anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
           action={snackbarKey => <SnackbarCloseButton snackbarKey={snackbarKey} />}
         >
