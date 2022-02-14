@@ -47,7 +47,7 @@ const English = {
       connectWallet: 'Please connect your wallet!',
       bondBalance: 'Attempting to bond more than your balance!',
       wrapBalance: 'Attempting to wrap more than your balance!',
-      stakeBalance: 'Attempting to wrap more than your balance!',
+      stakeBalance: 'Attempting to stake or unstake more than your balance!',
       enterValue: 'Please enter a value!',
     },
     time: {

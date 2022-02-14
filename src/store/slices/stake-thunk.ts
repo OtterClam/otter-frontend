@@ -123,6 +123,8 @@ export const changeStake = createAsyncThunk(
       if (error.code === -32603) {
         //&& error.message.indexOf('ds-math-sub-underflow') >= 0
         SnackbarUtils.warning('errors.stakeBalance', true);
+      } else if (error.code === 'INVALID_ARGUMENT') {
+        SnackbarUtils.warning('bonds.purchase.invalidValue', true);
       } else {
         SnackbarUtils.error(error.message);
       }

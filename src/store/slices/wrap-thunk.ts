@@ -117,7 +117,9 @@ export const changeWrap = createAsyncThunk(
       resolvedAmount = await transferPromise;
     } catch (error: any) {
       if (error.code === -32603) {
-        SnackbarUtils.warning('errors.wrapBalance');
+        SnackbarUtils.warning('errors.wrapBalance', true);
+      } else if (error.code === 'INVALID_ARGUMENT') {
+        SnackbarUtils.warning('bonds.purchase.invalidValue', true);
       } else {
         SnackbarUtils.error(error.message);
       }
