@@ -1,5 +1,4 @@
 import apollo from '../../lib/apolloClient';
-import { useTranslation } from 'react-i18next';
 
 export const treasuryDataQuery = `
 query {
@@ -25,6 +24,8 @@ query {
     treasuryMaiUsdcQiInvestmentRiskFreeValue
     treasuryQiMarketValue
     treasuryDquickMarketValue
+    treasuryQiWmaticMarketValue
+    treasuryQiWmaticQiInvestmentMarketValue
     currentAPY
     runway10k
     runway50k
@@ -85,6 +86,12 @@ export const bulletpoints = {
     },
     {
       // dQuick
+      right: 29,
+      top: -12,
+      background: 'linear-gradient(180deg, #5C80B6 19.01%, rgba(92, 128, 182, 0.5) 100%)',
+    },
+    {
+      // Qi/Wmatic
       right: 29,
       top: -12,
       background: 'linear-gradient(180deg, #5C80B6 19.01%, rgba(92, 128, 182, 0.5) 100%)',
