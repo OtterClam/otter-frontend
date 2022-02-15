@@ -1,12 +1,14 @@
-import { Hidden, useMediaQuery } from '@material-ui/core';
+import { Hidden, ThemeProvider, useMediaQuery } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
+import { dark as darkTheme } from 'src/themes/app';
+import { NFT } from 'src/views';
+import Calculator from 'src/views/Calculator';
 import Dashboard from 'src/views/Dashboard/TreasuryDashboard';
 import Migrate from 'src/views/Migrate';
 import PearlChests from 'src/views/PearlChests';
-import Calculator from 'src/views/Calculator';
 import TopBar from '../components/Header';
 import Loading from '../components/Loader';
 import Sidebar from '../components/Sidebar';
@@ -15,8 +17,8 @@ import { BondKeys } from '../constants';
 import { useAddress, useWeb3Context } from '../hooks';
 import { calculateUserBondDetails, loadAccountDetails } from '../store/slices/account-slice';
 import { loadAppDetails } from '../store/slices/app-slice';
-import { loadTermsDetails } from '../store/slices/otter-lake-slice';
 import { calcBondDetails } from '../store/slices/bond-slice';
+import { loadTermsDetails } from '../store/slices/otter-lake-slice';
 import { IReduxState } from '../store/slices/state.interface';
 import { Bond, ChooseBond, Stake, Wrap } from '../views';
 import NotFound from '../views/404/NotFound';
@@ -176,7 +178,12 @@ function App() {
   if (isAppLoading) return <Loading />;
 
   return (
-    <>
+    <Switch>
+      <Route exact path="/nft">
+        <ThemeProvider theme={darkTheme}>
+          <NFT />
+        </ThemeProvider>
+      </Route>
       <div className={`app ${isSmallerScreen && 'tablet'} ${isSmallScreen && 'mobile'}`}>
         <TopBar drawe={!isSmallerScreen} handleDrawerToggle={handleDrawerToggle} />
         <nav className={classes.drawer}>
@@ -233,7 +240,7 @@ function App() {
           </Switch>
         </div>
       </div>
-    </>
+    </Switch>
   );
 }
 

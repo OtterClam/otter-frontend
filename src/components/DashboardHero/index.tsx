@@ -1,23 +1,27 @@
 import { Carousel } from 'react-responsive-carousel';
 import Ad1 from './ad-01.jpg';
-import Ad2 from './ad-02.jpg';
 import Ad3 from './ad-03.jpg';
 import Ad4 from './ad-04.jpg';
 import Ad5 from './ad-05.gif';
 import Ad6 from './ad-06.gif';
 import AMA from './ama.jpg';
+import Ad0211 from './ad-0211.jpg';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import './styles.scss';
 
 export default function DashboardHero() {
   const ads = [
     {
-      image: AMA,
-      link: 'https://youtu.be/C3aOBaCUaXk',
+      image: Ad0211,
+      link: 'https://www.otterclam.finance',
     },
     {
       image: Ad5,
       link: 'https://www.otterclam.finance/#/otto',
+    },
+    {
+      image: AMA,
+      link: 'https://youtu.be/C3aOBaCUaXk',
     },
     {
       image: Ad6,
@@ -25,10 +29,6 @@ export default function DashboardHero() {
     },
     {
       image: Ad1,
-      link: '',
-    },
-    {
-      image: Ad2,
       link: '/#/pearl-chests',
     },
     {
