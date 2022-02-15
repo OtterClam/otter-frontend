@@ -6,16 +6,18 @@ import { Box } from '@material-ui/core';
 import ClamMenu from '../ClamMenu';
 import ConnectButton, { ConnectButtonStatus } from './ConnectButton';
 import LanguagePicker from '../../LanguagePicker';
+import { CheckNetworkStatus } from 'src/hooks/web3/web3-context';
 
 const ConnectMenu = () => {
-  const { connected } = useWeb3Context();
+  const { connected, checkNetworkStatus } = useWeb3Context();
   const pendingTransactions = useSelector(state => {
     return state.pendingTransactions;
   });
 
   const connectStatus = useMemo(() => {
     if (pendingTransactions && pendingTransactions.length > 0) return ConnectButtonStatus.InProgress;
-    if (connected) return ConnectButtonStatus.Connected;
+    if (checkNetworkStatus === CheckNetworkStatus.OK && connected) return ConnectButtonStatus.Connected;
+    if (checkNetworkStatus === CheckNetworkStatus.WRONG_CHAIN) return ConnectButtonStatus.WrongChain;
     return ConnectButtonStatus.NotConnected;
   }, []);
 

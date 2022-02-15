@@ -31,6 +31,8 @@ import { IReduxState } from '../../store/slices/state.interface';
 import './stake.scss';
 import StakeDialog from './StakeDialog';
 import IconPearlChest from 'src/assets/icons/icon_pearl_chest_3.png';
+import { CheckNetworkStatus } from 'src/hooks/web3/web3-context';
+import SnackbarUtils from '../../store/snackbarUtils';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -71,7 +73,7 @@ function Stake() {
   const { t } = useTranslation();
   const styles = useStyles();
   const dispatch = useDispatch();
-  const { provider, address, connect, chainID } = useWeb3Context();
+  const { provider, address, connect, chainID, checkNetworkStatus, switchToPolygonMainnet } = useWeb3Context();
   const tabsActions = useRef<TabsActions>(null);
 
   const [view, setView] = useState(0);
@@ -123,8 +125,7 @@ function Stake() {
     // eslint-disable-next-line no-restricted-globals
     //@ts-ignore
     if (isNaN(quantity) || quantity === 0 || quantity === '') {
-      // eslint-disable-next-line no-alert
-      alert('Please enter a value!');
+      SnackbarUtils.warning('errors.enterValue', true);
     } else {
       setAction(action);
       let stakeTx: any = await dispatch(
@@ -252,8 +253,16 @@ function Stake() {
               {!address ? (
                 <div className="stake-wallet-notification">
                   <div className="wallet-menu" id="wallet-menu">
-                    <Box bgcolor="otter.otterBlue" className="app-otter-button" onClick={connect}>
-                      <p>{t('common.connectWallet')}</p>
+                    <Box
+                      bgcolor="otter.otterBlue"
+                      className="app-otter-button"
+                      onClick={checkNetworkStatus === CheckNetworkStatus.WRONG_CHAIN ? switchToPolygonMainnet : connect}
+                    >
+                      <p>
+                        {checkNetworkStatus === CheckNetworkStatus.WRONG_CHAIN
+                          ? t('common.switchChain')
+                          : t('common.connectWallet')}
+                      </p>
                     </Box>
                   </div>
                   <p className="desc-text">{t('stake.connectWalletDescription')}</p>

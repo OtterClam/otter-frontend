@@ -11,6 +11,7 @@ import { IReduxState } from '../../store/slices/state.interface';
 import { useTranslation, Trans } from 'react-i18next';
 import BondRedeemDialog from './BondRedeemDialog';
 import ActionButton from '../../components/Button/ActionButton';
+import SnackbarUtils from '../../store/snackbarUtils';
 
 interface IBondRedeem {
   bondKey: BondKey;
@@ -87,7 +88,7 @@ function BondRedeem({ bondKey }: IBondRedeem) {
             color="otter.white"
             onClick={() => {
               if (bond.autostake && !fullVested) {
-                window.alert(t('bonds.redeem.fullyVestedPopup'));
+                SnackbarUtils.warning('bonds.redeem.fullyVestedPopup', true);
                 return;
               }
             }}

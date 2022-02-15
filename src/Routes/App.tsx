@@ -23,6 +23,8 @@ import { IReduxState } from '../store/slices/state.interface';
 import { Bond, ChooseBond, Stake, Wrap } from '../views';
 import NotFound from '../views/404/NotFound';
 import './style.scss';
+import { CheckNetworkStatus } from 'src/hooks/web3/web3-context';
+import SnackbarUtils from '../store/snackbarUtils';
 
 const drawerWidth = 280;
 const transitionDuration = 969;
@@ -69,7 +71,8 @@ function App() {
   const isSmallerScreen = useMediaQuery('(max-width: 960px)');
   const isSmallScreen = useMediaQuery('(max-width: 600px)');
 
-  const { connect, provider, readOnlyProvider, hasCachedProvider, chainID, connected } = useWeb3Context();
+  const { connect, provider, readOnlyProvider, hasCachedProvider, chainID, connected, checkNetworkStatus } =
+    useWeb3Context();
   const address = useAddress();
 
   const [walletChecked, setWalletChecked] = useState(false);
@@ -84,7 +87,6 @@ function App() {
       await loadApp(loadProvider);
       loadChests(loadProvider);
     }
-
     if (whichDetails === 'account' && address && connected) {
       loadAccount(loadProvider);
       if (isAppLoaded) return;
@@ -150,6 +152,12 @@ function App() {
       loadDetails('userBonds');
     }
   }, [connected]);
+
+  useEffect(() => {
+    if (checkNetworkStatus === CheckNetworkStatus.WRONG_CHAIN) {
+      SnackbarUtils.error('errors.wrongChain', true);
+    }
+  }, [checkNetworkStatus]);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);

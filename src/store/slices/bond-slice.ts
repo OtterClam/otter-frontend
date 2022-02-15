@@ -8,7 +8,7 @@ import { createSlice, createSelector, createAsyncThunk } from '@reduxjs/toolkit'
 import { JsonRpcProvider } from '@ethersproject/providers';
 import { fetchAccountSuccess } from './account-slice';
 import { formatUnits } from '@ethersproject/units';
-
+import SnackbarUtils from '../../store/snackbarUtils';
 interface IState {
   [key: string]: any;
 }
@@ -45,7 +45,7 @@ export const changeApproval = createAsyncThunk(
   'bonding/changeApproval',
   async ({ bondKey, provider, networkID, address }: IChangeApproval, { dispatch }) => {
     if (!provider) {
-      alert('Please connect your wallet!');
+      SnackbarUtils.warning('errors.connectWallet', true);
       return;
     }
 
@@ -71,7 +71,7 @@ export const changeApproval = createAsyncThunk(
 
       allowance = +(await approvedPromise);
     } catch (error: any) {
-      alert(error.message);
+      SnackbarUtils.error(error.message);
     } finally {
       if (approveTx) {
         dispatch(clearPendingTxn(approveTx.hash));
@@ -180,7 +180,7 @@ export const calcBondDetails = createAsyncThunk(
 
     // Display error if user tries to exceed maximum.
     if (!!value && bondQuote > maxPayout / 1e9) {
-      alert(
+      SnackbarUtils.error(
         "You're trying to bond more than the maximum payout available! The maximum bond payout is " +
           (maxPayout / 1e9).toFixed(2).toString() +
           ' CLAM.',
@@ -249,9 +249,11 @@ export const bondAsset = createAsyncThunk(
       dispatch(calculateUserBondDetails({ address, bondKey, networkID, provider }));
       return;
     } catch (error: any) {
-      if (error.code === -32603 && error.message.indexOf('ds-math-sub-underflow') >= 0) {
-        alert('You may be trying to bond more than your balance! Error code: 32603. Message: ds-math-sub-underflow');
-      } else alert(error.message);
+      if (error.code === -32603) {
+        SnackbarUtils.warning('errors.bondBalance', true);
+      } else if (error.code === 'INVALID_ARGUMENT') {
+        SnackbarUtils.warning('bonds.purchase.invalidValue', true);
+      } else SnackbarUtils.error(error.message);
       return;
     } finally {
       if (bondTx) {
@@ -274,7 +276,7 @@ export const redeemBond = createAsyncThunk(
   'bonding/redeemBond',
   async ({ address, bondKey, networkID, provider, autostake }: IRedeemBond, { dispatch }) => {
     if (!provider) {
-      alert('Please connect your wallet!');
+      SnackbarUtils.warning('errors.connectWallet', true);
       return;
     }
 
@@ -292,7 +294,9 @@ export const redeemBond = createAsyncThunk(
       dispatch(getBalances({ address, networkID, provider }));
       return;
     } catch (error: any) {
-      alert(error.message);
+      if (error.code === -32603) {
+        SnackbarUtils.warning('bonds.redeem.fullyVestedPopup', true);
+      } else SnackbarUtils.error(error.message);
     } finally {
       if (redeemTx) {
         dispatch(clearPendingTxn(redeemTx.hash));

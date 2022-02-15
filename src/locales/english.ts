@@ -23,6 +23,7 @@ const English = {
       clamPrice: 'CLAM Price',
       pearlPrice: 'PEARL Price',
       connectWallet: 'Connect Wallet',
+      switchChain: 'Switch Chain',
       price: 'Price',
       buy: 'Buy',
       buyThing: 'Buy ', //e.g. "Buy CLAM", "Buy sCLAM"
@@ -41,6 +42,16 @@ const English = {
       '90Chest': '90-Day Chest',
       '28Chest': '28-Day Chest',
       '14Chest': '14-Day Chest',
+    },
+    errors: {
+      connectWallet: 'Please connect your wallet.',
+      bondBalance: 'Attempting to bond more than your balance!',
+      wrapBalance: 'Attempting to wrap more than your balance!',
+      stakeBalance: 'Attempting to stake or unstake more than your balance!',
+      lockBalance: 'Attempting to lock more than your balance!',
+      enterValue: 'Please enter a value.',
+      wrongChain: 'Please switch to the Polygon Network.',
+      userReject: 'Request rejected by user.',
     },
     time: {
       days: 'Days',
