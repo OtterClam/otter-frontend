@@ -50,53 +50,6 @@ export const bulletpoints = {
       background: 'linear-gradient(180deg, #FFACA1 -10%, #FFACA1 100%)',
     },
   ],
-  coin: [
-    {
-      right: 15,
-      top: -12,
-      background: 'linear-gradient(180deg, #DB3737 -10%, #EA9276 100%)',
-    },
-    {
-      right: 25,
-      top: -12,
-      background: 'linear-gradient(180deg, #8f5ae8 -10%, #98B3E9 100%)',
-    },
-    {
-      right: 29,
-      top: -12,
-      background: 'linear-gradient(180deg, #2891F9 0%, rgba(40, 145, 249, 0.5) 100%)',
-    },
-    {
-      // USDC/MAI
-      right: 29,
-      top: -12,
-      background: 'linear-gradient(180deg, #F97328 19.01%, rgba(249, 115, 40, 0.5) 100%)',
-    },
-    {
-      // USDC/MAI(QiDAO)
-      right: 29,
-      top: -12,
-      background: 'linear-gradient(180deg, #5CBD6B 19.01%, rgba(92, 189, 107, 0.5) 100%)',
-    },
-    {
-      // Qi
-      right: 29,
-      top: -12,
-      background: 'linear-gradient(180deg, #F4D258 19.01%, rgba(244, 210, 88, 0.5) 100%)',
-    },
-    {
-      // dQuick
-      right: 29,
-      top: -12,
-      background: 'linear-gradient(180deg, #5C80B6 19.01%, rgba(92, 128, 182, 0.5) 100%)',
-    },
-    {
-      // Qi/Wmatic
-      right: 29,
-      top: -12,
-      background: 'linear-gradient(180deg, #5C80B6 19.01%, rgba(92, 128, 182, 0.5) 100%)',
-    },
-  ],
   rfv: [
     {
       right: 15,

@@ -1,7 +1,7 @@
 import { Box, Container, Grid, Paper, Typography, useMediaQuery, Zoom } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
 import { Skeleton } from '@material-ui/lab';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import DashboardHero from 'src/components/DashboardHero';
@@ -15,34 +15,69 @@ import { bulletpoints, itemType, treasuryDataQuery } from './treasuryData.js';
 
 const numberFormatter = Intl.NumberFormat('en', { maximumFractionDigits: 0 });
 
+const dataKeys = {
+  marketValues: [
+    'treasuryMaiMarketValue',
+    'treasuryFraxMarketValue',
+    'treasuryWmaticMarketValue',
+    'treasuryMaiUsdcQiInvestmentRiskFreeValue',
+    'treasuryQiMarketValue',
+    'treasuryDquickMarketValue',
+    'treasuryQiWmaticQiInvestmentMarketValue',
+  ],
+};
+const stopColors = {
+  marketValues: [
+    ['#EE4B4E', 'rgba(219, 55, 55, 0.5)'],
+    ['#8F5AE8', 'rgba(143, 90, 232, 0.5)'],
+    ['#2891F9', 'rgba(40, 145, 249, 0.5)'],
+    ['#5CBD6B', 'rgba(92, 189, 107, 0.5)'],
+    ['#F4D258', 'rgba(244, 210, 88, 0.5)'],
+    ['#5C80B6', 'rgba(92, 128, 182, 0.5)'],
+    ['#F4D258', 'rgba(244, 210, 88, 0.5)'],
+  ],
+};
+const tooltipColors = {
+  marketValues: stopColors.marketValues.map(([color1, color2]) => ({
+    background: `linear-gradient(180deg, ${color1} 19%, ${color2} 100%)`,
+  })),
+};
+
 function TreasuryDashboard() {
   const { t } = useTranslation();
-  const tooltipItems = {
-    tvl: [t('dashboard.tooltipItems.tvl')],
-    coin: ['MAI', 'FRAX', 'MATIC', 'MAI/USDC(QiDAO)', 'Qi', 'dQUICK', 'Qi/MATIC'],
-    rfv: ['MAI', 'FRAX', 'MAI/USDC(QiDAO)'],
-    holder: ['CLAMies'],
-    apy: [t('common.180Chest'), t('common.90Chest'), t('common.28Chest'), t('common.14Chest'), t('common.staking')],
-    runway: [
-      t('dashboard.tooltipItems.current'),
-      `100K ${t('common.apy')}`,
-      `50K ${t('common.apy')}`,
-      `10K ${t('common.apy')}`,
-    ],
-    pol: [t('dashboard.tooltipItems.lpTreasury'), t('dashboard.tooltipItems.marketLP')],
-  };
 
-  const tooltipInfoMessages = {
-    tvl: t('dashboard.tooltipInfoMessages.tvl'),
-    mvt: t('dashboard.tooltipInfoMessages.mvt'),
-    rfv: t('dashboard.tooltipInfoMessages.rfv'),
-    pol: t('dashboard.tooltipInfoMessages.pol'),
-    holder: t('dashboard.tooltipInfoMessages.holder'),
-    staked: t('dashboard.tooltipInfoMessages.staked'),
-    apy: t('dashboard.tooltipInfoMessages.apy'),
-    runway: t('dashboard.tooltipInfoMessages.runway'),
-    currentIndex: t('dashboard.tooltipInfoMessages.currentIndex'),
-  };
+  const tooltipItems = useMemo(
+    () => ({
+      tvl: [t('dashboard.tooltipItems.tvl')],
+      marketValues: ['MAI', 'FRAX', 'MATIC', 'MAI/USDC(QiDAO)', 'Qi', 'dQUICK', 'Qi/MATIC'],
+      rfv: ['MAI', 'FRAX', 'MAI/USDC(QiDAO)'],
+      holder: ['CLAMies'],
+      apy: [t('common.180Chest'), t('common.90Chest'), t('common.28Chest'), t('common.14Chest'), t('common.staking')],
+      runway: [
+        t('dashboard.tooltipItems.current'),
+        `100K ${t('common.apy')}`,
+        `50K ${t('common.apy')}`,
+        `10K ${t('common.apy')}`,
+      ],
+      pol: [t('dashboard.tooltipItems.lpTreasury'), t('dashboard.tooltipItems.marketLP')],
+    }),
+    [t],
+  );
+
+  const tooltipInfoMessages = useMemo(
+    () => ({
+      tvl: t('dashboard.tooltipInfoMessages.tvl'),
+      mvt: t('dashboard.tooltipInfoMessages.mvt'),
+      rfv: t('dashboard.tooltipInfoMessages.rfv'),
+      pol: t('dashboard.tooltipInfoMessages.pol'),
+      holder: t('dashboard.tooltipInfoMessages.holder'),
+      staked: t('dashboard.tooltipInfoMessages.staked'),
+      apy: t('dashboard.tooltipInfoMessages.apy'),
+      runway: t('dashboard.tooltipInfoMessages.runway'),
+      currentIndex: t('dashboard.tooltipInfoMessages.currentIndex'),
+    }),
+    [t],
+  );
   const [data, setData] = useState<any>(null);
   const [apy, setApy] = useState<any>(null);
   const [apyScale, setApyScale] = useState<number>(0);
@@ -205,20 +240,12 @@ function TreasuryDashboard() {
                       'treasuryDquickMarketValue',
                       'treasuryQiWmaticQiInvestmentMarketValue',
                     ]}
-                    stopColor={[
-                      ['#EE4B4E', 'rgba(219, 55, 55, 0.5)'],
-                      ['#8F5AE8', 'rgba(143, 90, 232, 0.5)'],
-                      ['#2891F9', 'rgba(40, 145, 249, 0.5)'],
-                      ['#5CBD6B', 'rgba(92, 189, 107, 0.5)'],
-                      ['#F4D258', 'rgba(244, 210, 88, 0.5)'],
-                      ['#5C80B6', 'rgba(92, 128, 182, 0.5)'],
-                      ['#F4D258', 'rgba(244, 210, 88, 0.5)'],
-                    ]}
+                    stopColor={stopColors.marketValues}
                     headerText={t('dashboard.marketValue')}
                     // @ts-ignore
                     headerSubText={`${data && formatCurrency(data[0].treasuryMarketValue)}`}
-                    bulletpointColors={bulletpoints.coin}
-                    itemNames={tooltipItems.coin}
+                    bulletpointColors={tooltipColors.marketValues}
+                    itemNames={tooltipItems.marketValues}
                     itemType={itemType.dollar}
                     infoTooltipMessage={tooltipInfoMessages.mvt}
                     // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
