@@ -44,12 +44,14 @@ const English = {
       '14Chest': '14-Day Chest',
     },
     errors: {
-      connectWallet: 'Please connect your wallet!',
+      connectWallet: 'Please connect your wallet.',
       bondBalance: 'Attempting to bond more than your balance!',
       wrapBalance: 'Attempting to wrap more than your balance!',
       stakeBalance: 'Attempting to stake or unstake more than your balance!',
       lockBalance: 'Attempting to lock more than your balance!',
-      enterValue: 'Please enter a value!',
+      enterValue: 'Please enter a value.',
+      wrongChain: 'Please switch to the Polygon Network.',
+      userReject: 'Request rejected by user.',
     },
     time: {
       days: 'Days',

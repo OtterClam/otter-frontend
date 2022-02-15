@@ -3,8 +3,7 @@ import Web3Modal from 'web3modal';
 import { StaticJsonRpcProvider, JsonRpcProvider, Web3Provider } from '@ethersproject/providers';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { DEFAULT_NETWORK, Networks, RPCURL } from '../../constants';
-import { useSnackbar } from 'notistack';
-import { useDispatch, useSelector } from 'react-redux';
+import SnackbarUtils from '../../store/snackbarUtils';
 
 type onChainProvider = {
   connect: () => Promise<Web3Provider>;
@@ -113,19 +112,24 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
             ],
           });
         } catch (addError) {
+          if (e.code == 4001) {
+            SnackbarUtils.error('error.userReject', true);
+          } else {
+            SnackbarUtils.error(e.message);
+          }
           console.error(addError);
           return false;
         }
       }
-      //TODO: Better error handling!
       // User rejected the request.
       else if (e.code == 4001) {
-        return false;
+        SnackbarUtils.error('error.userReject', true);
       }
       //failed to switch network, unknown error
       else {
-        return false;
+        SnackbarUtils.error(e.message);
       }
+      return false;
     }
 
     return true;

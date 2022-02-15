@@ -24,7 +24,7 @@ import { Bond, ChooseBond, Stake, Wrap } from '../views';
 import NotFound from '../views/404/NotFound';
 import './style.scss';
 import { CheckNetworkStatus } from 'src/hooks/web3/web3-context';
-import { useSnackbar } from 'notistack';
+import SnackbarUtils from '../store/snackbarUtils';
 
 const drawerWidth = 280;
 const transitionDuration = 969;
@@ -79,7 +79,6 @@ function App() {
 
   const isAppLoading = useSelector<IReduxState, boolean>(state => state.app.loading);
   const isAppLoaded = useSelector<IReduxState>(state => typeof state.app.marketPrice != 'undefined');
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   async function loadDetails(whichDetails: string) {
     let loadProvider = readOnlyProvider;
@@ -156,12 +155,9 @@ function App() {
 
   useEffect(() => {
     if (checkNetworkStatus === CheckNetworkStatus.WRONG_CHAIN) {
-      enqueueSnackbar('Wrong chain boots');
+      SnackbarUtils.error('errors.wrongChain', true);
     }
   }, [checkNetworkStatus]);
-
-  //relay errors from Web3ContextProvider
-  //errorKey, errorMsg
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
