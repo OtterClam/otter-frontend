@@ -1,35 +1,8 @@
 import { getAddresses } from '.';
 
-export type BondKey =
-  | 'frax'
-  | 'frax2'
-  | 'frax_clam'
-  | 'mai'
-  | 'mai44'
-  | 'matic'
-  | 'matic_clam'
-  | 'mai_clam44'
-  | 'mai_clam'
-  | 'mai-v1'
-  | 'mai_clam_v2-v1'
-  | 'mai_clam-v1';
+export type BondKey = 'frax2' | 'frax_clam' | 'mai44' | 'matic' | 'matic_clam' | 'mai_clam44';
 
-export const BondKeys: BondKey[] = [
-  'frax',
-  'frax2',
-  'frax_clam',
-  'mai',
-  'matic',
-  'matic_clam',
-  'mai44',
-  'mai_clam',
-  'mai_clam44',
-  'mai-v1',
-  'mai_clam-v1',
-  'mai_clam_v2-v1',
-];
-
-export const ReserveKeys: BondKey[] = ['mai', 'frax2'];
+export const BondKeys: BondKey[] = ['frax2', 'frax_clam', 'matic', 'matic_clam', 'mai44', 'mai_clam44'];
 
 export enum BondAction {
   Bond = 'bond',
@@ -55,7 +28,7 @@ type BondMap = {
 };
 
 export function listBonds(chainId: number): BondMap {
-  const { BONDS, RESERVES, MAI_ADDRESS, CLAM_ADDRESS } = getAddresses(chainId);
+  const { RESERVES, MAI_ADDRESS, CLAM_ADDRESS } = getAddresses(chainId);
   return {
     matic: {
       key: 'matic',
@@ -65,7 +38,7 @@ export function listBonds(chainId: number): BondMap {
       reserveUnit: 'WMATIC',
       type: 'token',
       dexUrl: `https://quickswap.exchange/#/swap?outputCurrency=0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270`,
-      deprecated: false,
+      deprecated: true,
       autostake: true,
       stable: false,
       oracle: '0xAB594600376Ec9fD91F8e885dADF0CE036862dE0',
@@ -78,22 +51,10 @@ export function listBonds(chainId: number): BondMap {
       reserveUnit: '',
       type: 'lp',
       dexUrl: `https://quickswap.exchange/#/add/0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270/${CLAM_ADDRESS}`,
-      deprecated: false,
+      deprecated: true,
       autostake: true,
       stable: false,
       oracle: '0xAB594600376Ec9fD91F8e885dADF0CE036862dE0',
-    },
-    frax: {
-      key: 'frax',
-      name: 'FRAX legacy',
-      address: '0x5Fa0FBDb07Fe9647B43426dcc79da984f0327E4a',
-      reserve: '0x45c32fa6df82ead1e2ef74d17b76547eddfaff89',
-      reserveUnit: 'FRAX',
-      type: 'token',
-      dexUrl: 'https://app.sushi.com/swap?outputCurrency=0x45c32fA6DF82ead1e2EF74d17b76547EDdFaFF89',
-      deprecated: true,
-      autostake: true,
-      stable: true,
     },
     frax2: {
       key: 'frax2',
@@ -103,7 +64,7 @@ export function listBonds(chainId: number): BondMap {
       reserveUnit: 'FRAX',
       type: 'token',
       dexUrl: 'https://app.sushi.com/swap?outputCurrency=0x45c32fA6DF82ead1e2EF74d17b76547EDdFaFF89',
-      deprecated: false,
+      deprecated: true,
       autostake: true,
       stable: true,
     },
@@ -116,20 +77,8 @@ export function listBonds(chainId: number): BondMap {
       type: 'lp',
       dexUrl:
         'https://app.sushi.com/add/0x45c32fA6DF82ead1e2EF74d17b76547EDdFaFF89/0xC250e9987A032ACAC293d838726C511E6E1C029d',
-      deprecated: false,
-      autostake: true,
-      stable: true,
-    },
-    mai: {
-      key: 'mai',
-      name: 'MAI v2',
-      address: BONDS.MAI,
-      reserve: RESERVES.MAI,
-      reserveUnit: 'MAI',
-      type: 'token',
-      dexUrl: `https://quickswap.exchange/#/swap?outputCurrency=${MAI_ADDRESS}`,
       deprecated: true,
-      autostake: false,
+      autostake: true,
       stable: true,
     },
     mai44: {
@@ -140,20 +89,8 @@ export function listBonds(chainId: number): BondMap {
       reserveUnit: 'MAI',
       type: 'token',
       dexUrl: `https://quickswap.exchange/#/swap?outputCurrency=${MAI_ADDRESS}`,
-      deprecated: false,
-      autostake: true,
-      stable: true,
-    },
-    mai_clam: {
-      key: 'mai_clam',
-      name: 'MAI-CLAM LP',
-      address: BONDS.MAI_CLAM,
-      reserve: RESERVES.MAI_CLAM,
-      reserveUnit: 'LP',
-      type: 'lp',
-      dexUrl: `https://quickswap.exchange/#/add/${MAI_ADDRESS}/${CLAM_ADDRESS}`,
       deprecated: true,
-      autostake: false,
+      autostake: true,
       stable: true,
     },
     mai_clam44: {
@@ -164,44 +101,8 @@ export function listBonds(chainId: number): BondMap {
       reserveUnit: 'LP',
       type: 'lp',
       dexUrl: `https://quickswap.exchange/#/add/${MAI_ADDRESS}/${CLAM_ADDRESS}`,
-      deprecated: false,
+      deprecated: true,
       autostake: true,
-      stable: true,
-    },
-    'mai-v1': {
-      key: 'mai-v1',
-      name: 'MAI v1',
-      address: BONDS.OLD_MAI,
-      reserve: RESERVES.MAI,
-      reserveUnit: 'MAI',
-      type: 'token',
-      dexUrl: '',
-      deprecated: true,
-      autostake: false,
-      stable: true,
-    },
-    'mai_clam-v1': {
-      key: 'mai_clam-v1',
-      name: 'MAI-CLAM v1-legacy',
-      address: BONDS.OLD_MAI_CLAM,
-      reserve: RESERVES.OLD_MAI_CLAM,
-      reserveUnit: 'LP',
-      type: 'lp',
-      dexUrl: `https://quickswap.exchange/#/add/${MAI_ADDRESS}/${CLAM_ADDRESS}`,
-      deprecated: true,
-      autostake: false,
-      stable: true,
-    },
-    'mai_clam_v2-v1': {
-      key: 'mai_clam_v2-v1',
-      name: 'MAI-CLAM v1',
-      address: BONDS.OLD_MAI_CLAM_V2,
-      reserve: RESERVES.OLD_MAI_CLAM,
-      reserveUnit: 'LP',
-      type: 'lp',
-      dexUrl: `https://quickswap.exchange/#/add/${MAI_ADDRESS}/${CLAM_ADDRESS}`,
-      deprecated: true,
-      autostake: false,
       stable: true,
     },
   };

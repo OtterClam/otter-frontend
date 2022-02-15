@@ -51,7 +51,7 @@ export const loadMigrationDetails = createAsyncThunk(
     const oldStakingContract = new ethers.Contract(addresses.OLD_STAKING_ADDRESS, StakingContract, provider);
     const stakingContract = new ethers.Contract(addresses.STAKING_ADDRESS, StakingContract, provider);
     const migrator = new ethers.Contract(addresses.MIGRATOR, ClamTokenMigrator, provider);
-    const mai = contractForReserve('mai', networkID, provider);
+    const mai = contractForReserve('mai44', networkID, provider);
 
     const [oldClamBalance, oldSClamBalance, oldWarmup, oldSClamAllowance, clamMigratorAllowance, epoch] =
       await Promise.all([
