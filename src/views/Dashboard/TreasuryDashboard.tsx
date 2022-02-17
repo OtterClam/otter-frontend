@@ -79,9 +79,6 @@ function TreasuryDashboard() {
     [t],
   );
   const [data, setData] = useState<any>(null);
-  const [apy, setApy] = useState<any>(null);
-  const [apyScale, setApyScale] = useState<number>(0);
-  const [runway, setRunway] = useState(null);
   const [staked, setStaked] = useState(null);
   const [backingPerClam, setBackingPerClam] = useState<number | null>(null);
   const theme = useTheme();
@@ -142,26 +139,6 @@ function TreasuryDashboard() {
         .filter((pm: any) => pm.staked < 100);
       setStaked(staked);
       // @ts-ignore
-      let runway = metrics.filter(pm => pm.runway100k > 5);
-      setRunway(runway);
-      const apy = r?.data.protocolMetrics
-        .filter((p: any) => p.timestamp * 1000 > Date.UTC(2022, 0, 17))
-        .map((entry: any) => ({
-          apy: entry.currentAPY,
-          diamond: entry.diamondHandAPY,
-          stone: entry.stoneHandAPY,
-          furry: entry.furryHandAPY,
-          safe: entry.safeHandAPY,
-          timestamp: entry.timestamp,
-        }));
-      setApy(apy);
-      const apyMax = Math.max.apply(
-        Math,
-        (apy as any).map((o: any) => {
-          return o.diamond;
-        }),
-      );
-      setApyScale(apyMax);
       const latestMetrics = (r as any).data.protocolMetrics[0];
       setBackingPerClam(latestMetrics.treasuryMarketValue / latestMetrics.clamCirculatingSupply);
     });
@@ -255,39 +232,6 @@ function TreasuryDashboard() {
             </Grid>
 
             <Grid item lg={6} md={6} sm={12} xs={12}>
-              <Paper className="ohm-card ohm-chart-card">
-                {
-                  <Chart
-                    type="stack"
-                    data={data}
-                    // @ts-ignore
-                    format="currency"
-                    dataKey={[
-                      'treasuryMaiRiskFreeValue',
-                      'treasuryFraxRiskFreeValue',
-                      // 'treasuryMaiUsdcRiskFreeValue',
-                      'treasuryMaiUsdcQiInvestmentRiskFreeValue',
-                    ]}
-                    stopColor={[
-                      ['#EE4B4E', 'rgba(219, 55, 55, 0.5)'], // MAI
-                      ['#8F5AE8', 'rgba(143, 90, 232, 0.5)'], // FRAX
-                      // ['#DC30EB', '#EA98F1'], // MAI-USDC
-                      ['#5CBD6B', 'rgba(92, 189, 107, 0.5)'], // MAI-USDC Deposited
-                    ]}
-                    headerText={t('dashboard.riskFree')}
-                    // @ts-ignore
-                    headerSubText={`${data && formatCurrency(data[0].treasuryRiskFreeValue)}`}
-                    bulletpointColors={bulletpoints.rfv}
-                    itemNames={tooltipItems.rfv}
-                    itemType={itemType.dollar}
-                    infoTooltipMessage={tooltipInfoMessages.rfv}
-                    // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
-                  />
-                }
-              </Paper>
-            </Grid>
-
-            <Grid item lg={6} md={6} sm={12} xs={12}>
               <Paper className="ohm-card">
                 {
                   // @ts-ignore
@@ -311,26 +255,6 @@ function TreasuryDashboard() {
                 }
               </Paper>
             </Grid>
-            {/*
-            <Grid item lg={6} md={12} sm={12} xs={12}>
-              <Paper className="ohm-card">
-                <Chart
-                  type="bar"
-                  data={data}
-                  dataKey={['holders']}
-                  headerText="Holders"
-                  stroke={[theme.palette.text.secondary]}
-                  headerSubText={`${data && data[0].holders}`}
-                  bulletpointColors={bulletpoints.holder}
-                  itemNames={tooltipItems.holder}
-                  itemType={''}
-                  infoTooltipMessage={tooltipInfoMessages.holder}
-                  expandedGraphStrokeColor={theme.palette.graphStrokeColor}
-                />
-              </Paper>
-            </Grid>
-            */}
-
             <Grid item lg={6} md={6} sm={12} xs={12}>
               <Paper className="ohm-card">
                 {
@@ -347,57 +271,6 @@ function TreasuryDashboard() {
                     isStaked={true}
                     bulletpointColors={bulletpoints.staked}
                     infoTooltipMessage={tooltipInfoMessages.staked}
-                    // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
-                  />
-                }
-              </Paper>
-            </Grid>
-
-            <Grid item lg={6} md={6} sm={12} xs={12}>
-              <Paper className="ohm-card">
-                {
-                  // @ts-ignore
-                  <Chart
-                    type="multi"
-                    scale="auto"
-                    data={apy}
-                    dataKey={['diamond', 'stone', 'furry', 'safe', 'apy']}
-                    stroke={bulletpoints.apy.map(p => p.background)}
-                    headerText={t('dashboard.apyOverTime')}
-                    dataFormat="percent"
-                    // @ts-ignore
-                    headerSubText={`Max ${apy && numberFormatter.format(apy[0].diamond)}%`}
-                    bulletpointColors={bulletpoints.apy}
-                    itemNames={tooltipItems.apy}
-                    itemType={itemType.percentage}
-                    infoTooltipMessage={tooltipInfoMessages.apy}
-                    domain={[0, apyScale]}
-                    // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
-                  />
-                }
-              </Paper>
-            </Grid>
-
-            <Grid item lg={6} md={6} sm={12} xs={12}>
-              <Paper className="ohm-card">
-                {
-                  // @ts-ignore
-                  <Chart
-                    type="multi"
-                    data={runway}
-                    dataKey={['runwayCurrent', 'runway100k', 'runway50k', 'runway10k']}
-                    color={theme.palette.text.primary}
-                    stroke={[theme.palette.text.primary, '#2EC608', '#49A1F2', '#ff758f']}
-                    headerText={t('dashboard.runway')}
-                    // @ts-ignore
-                    headerSubText={`${data && trim(data[0].runwayCurrent, 1)} ${t('time.days')}`}
-                    dataFormat="days"
-                    bulletpointColors={
-                      theme.palette.text.primary == '#1D2654' ? bulletpoints.runway : bulletpoints.runway_darktheme
-                    }
-                    itemNames={tooltipItems.runway}
-                    itemType={''}
-                    infoTooltipMessage={tooltipInfoMessages.runway}
                     // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
                   />
                 }

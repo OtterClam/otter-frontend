@@ -11,14 +11,11 @@ query {
     clamPrice
     marketCap
     totalValueLocked
-    treasuryRiskFreeValue
     treasuryMarketValue
     nextEpochRebase
     nextDistributedClam
-    treasuryMaiRiskFreeValue
     treasuryMaiMarketValue
     treasuryFraxMarketValue
-    treasuryFraxRiskFreeValue
     treasuryWmaticMarketValue
     treasuryMaiUsdcRiskFreeValue
     treasuryMaiUsdcQiInvestmentRiskFreeValue
@@ -26,15 +23,6 @@ query {
     treasuryDquickMarketValue
     treasuryQiWmaticMarketValue
     treasuryQiWmaticQiInvestmentMarketValue
-    currentAPY
-    runway10k
-    runway50k
-    runway100k
-    diamondHandAPY
-    stoneHandAPY
-    furryHandAPY
-    safeHandAPY
-    runwayCurrent
     treasuryClamMaiPOL
   }
 }
