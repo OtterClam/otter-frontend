@@ -24,9 +24,11 @@ const renderDate = (index, payload, item) => {
 const renderItem = (type, item) => {
   const { t, i18n } = useTranslation();
   return type === '$' ? (
-    <Typography variant="body2">{`${type}${Math.round(item).toLocaleString(i18n)}`}</Typography>
+    <Typography variant="body2" className={item.name}>{`${type}${Math.round(item.value).toLocaleString(
+      i18n,
+    )}`}</Typography>
   ) : (
-    <Typography variant="body2">{`${Math.round(item).toLocaleString(i18n)}${type}`}</Typography>
+    <Typography variant="body2">{`${Math.round(item.value).toLocaleString(i18n)}${type}`}</Typography>
   );
 };
 
@@ -69,20 +71,22 @@ const renderTooltipItems = (payload, bulletpointColors, itemNames, itemType, isS
       <Box>{renderDate(0, payload, payload[0])}</Box>
     </Box>
   ) : (
-    payload.map((item, index) => (
-      <Box key={index}>
-        <Box className="item" display="flex">
-          <Box display="flex" justifyContent="space-between">
-            <Typography variant="body2">
-              <span className="tooltip-bulletpoint" style={bulletpointColors[index]}></span>
-              {`${itemNames[index]}`}
-            </Typography>
+    payload.map((item, index) => {
+      return (
+        <Box key={index}>
+          <Box className="item" display="flex">
+            <Box display="flex" justifyContent="space-between">
+              <Typography variant="body2" className={item.name}>
+                <span className={`tooltip-bulletpoint ${item.name}`} style={bulletpointColors[index]}></span>
+                {`${itemNames[index]}`}
+              </Typography>
+            </Box>
+            {renderItem(itemType, item)}
           </Box>
-          {renderItem(itemType, item.value)}
+          <Box>{renderDate(index, payload, item)}</Box>
         </Box>
-        <Box>{renderDate(index, payload, item)}</Box>
-      </Box>
-    ))
+      );
+    })
   );
 };
 

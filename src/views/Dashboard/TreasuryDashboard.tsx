@@ -17,6 +17,7 @@ const numberFormatter = Intl.NumberFormat('en', { maximumFractionDigits: 0 });
 
 const dataKeys = {
   marketValues: [
+    'treasuryMarketValue',
     'treasuryMaiMarketValue',
     'treasuryFraxMarketValue',
     'treasuryWmaticMarketValue',
@@ -28,6 +29,7 @@ const dataKeys = {
 };
 const stopColors = {
   marketValues: [
+    ['#FFFFFF', 'rgba(219, 55, 55, 0.5)'],
     ['#EE4B4E', 'rgba(219, 55, 55, 0.5)'],
     ['#8F5AE8', 'rgba(143, 90, 232, 0.5)'],
     ['#2891F9', 'rgba(40, 145, 249, 0.5)'],
@@ -49,7 +51,7 @@ function TreasuryDashboard() {
   const tooltipItems = useMemo(
     () => ({
       tvl: [t('dashboard.tooltipItems.tvl')],
-      marketValues: ['MAI', 'FRAX', 'MATIC', 'MAI/USDC(QiDAO)', 'Qi', 'dQUICK', 'Qi/MATIC'],
+      marketValues: ['Total', 'MAI', 'FRAX', 'MATIC', 'MAI/USDC(QiDAO)', 'Qi', 'dQUICK', 'Qi/MATIC'],
       rfv: ['MAI', 'FRAX', 'MAI/USDC(QiDAO)'],
       holder: ['CLAMies'],
       apy: [t('common.180Chest'), t('common.90Chest'), t('common.28Chest'), t('common.14Chest'), t('common.staking')],
@@ -209,6 +211,7 @@ function TreasuryDashboard() {
                     type="stack"
                     data={data}
                     dataKey={[
+                      'treasuryMarketValue',
                       'treasuryMaiMarketValue',
                       'treasuryFraxMarketValue',
                       'treasuryWmaticMarketValue',

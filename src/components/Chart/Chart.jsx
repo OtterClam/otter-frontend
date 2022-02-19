@@ -163,15 +163,21 @@ const renderStackedAreaChart = (
       formatter={value => trim(parseFloat(value), 2)}
       content={<CustomTooltip bulletpointColors={bulletpointColors} itemNames={itemNames} itemType={itemType} />}
     />
-    {dataKey.map((key, i) => (
-      <Area
-        dataKey={key}
-        stroke={stroke ? stroke[i] : 'none'}
-        fill={`url(#color-${key})`}
-        fillOpacity={1}
-        stackId="1"
-      />
-    ))}
+    {dataKey.map((key, i) => {
+      //Don't fill area for Total (avoid double-counting)
+      if (key === 'treasuryMarketValue') {
+        return <Area dataKey={key} />;
+      }
+      return (
+        <Area
+          dataKey={key}
+          stroke={stroke ? stroke[i] : 'none'}
+          fill={`url(#color-${key})`}
+          fillOpacity={1}
+          stackId="1"
+        />
+      );
+    })}
     {renderExpandedChartStroke(isExpanded, expandedGraphStrokeColor)}
   </AreaChart>
 );
