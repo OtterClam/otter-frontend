@@ -15,8 +15,15 @@
     margin-right: 5px;
     vertical-align: middle;
   }
+  .tooltip-bulletpoint.treasuryMarketValue {
+    display: none;
+  }
 
   .tooltip-date {
     margin-top: 13px;
   }
+}
+.treasuryMarketValue {
+  font-size: 1em !important;
+  height: 1.5em;
 }
