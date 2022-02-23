@@ -21,7 +21,7 @@ export default function DashboardHero() {
     },
     {
       image: AMA,
-      link: 'https://youtu.be/C3aOBaCUaXk',
+      link: 'https://www.youtube.com/watch?v=sJ3DqFW409E',
     },
     {
       image: Ad6,
