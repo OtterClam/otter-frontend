@@ -171,8 +171,6 @@ function App() {
     if (isSidebarExpanded) handleSidebarClose();
   }, [location]);
 
-  if (isAppLoading) return <Loading />;
-
   return (
     <Switch>
       <Route exact path="/nft">
@@ -234,6 +232,7 @@ function App() {
 
             <Route component={NotFound} />
           </Switch>
+          <Loading show={isAppLoading} />
         </div>
       </div>
     </Switch>
