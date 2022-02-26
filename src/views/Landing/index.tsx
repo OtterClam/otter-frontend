@@ -10,7 +10,6 @@ import SecondSection from './components/SecondSection';
 import Stat from './components/Stat';
 import CloseIcon from './images/icon_24x24_close.svg';
 import Otter01 from './images/otter_01.png';
-import './landing.scss';
 
 function Landing() {
   const { t, i18n } = useTranslation();
