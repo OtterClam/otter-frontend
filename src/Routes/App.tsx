@@ -10,7 +10,7 @@ import Dashboard from 'src/views/Dashboard/TreasuryDashboard';
 import Migrate from 'src/views/Migrate';
 import PearlChests from 'src/views/PearlChests';
 import TopBar from '../components/Header';
-import Loading from '../components/Loader';
+import LoadingScreen from '../components/LoadingScreen';
 import Sidebar from '../components/Sidebar';
 import NavDrawer from '../components/Sidebar/NavDrawer';
 import { BondKeys } from '../constants';
@@ -232,7 +232,7 @@ function App() {
 
             <Route component={NotFound} />
           </Switch>
-          <Loading show={isAppLoading} />
+          <LoadingScreen show={isAppLoading} />
         </div>
       </div>
     </Switch>
