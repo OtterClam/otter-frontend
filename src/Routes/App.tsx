@@ -10,7 +10,7 @@ import Dashboard from 'src/views/Dashboard/TreasuryDashboard';
 import Migrate from 'src/views/Migrate';
 import PearlChests from 'src/views/PearlChests';
 import TopBar from '../components/Header';
-import Loading from '../components/Loader';
+import LoadingScreen from '../components/LoadingScreen';
 import Sidebar from '../components/Sidebar';
 import NavDrawer from '../components/Sidebar/NavDrawer';
 import { BondKeys } from '../constants';
@@ -171,8 +171,6 @@ function App() {
     if (isSidebarExpanded) handleSidebarClose();
   }, [location]);
 
-  if (isAppLoading) return <Loading />;
-
   return (
     <Switch>
       <Route exact path="/nft">
@@ -234,6 +232,7 @@ function App() {
 
             <Route component={NotFound} />
           </Switch>
+          <LoadingScreen show={isAppLoading} />
         </div>
       </div>
     </Switch>
