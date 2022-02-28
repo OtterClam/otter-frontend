@@ -11,7 +11,7 @@ module.exports = {
     },
   },
   extends: ['plugin:prettier/recommended', 'prettier/react', 'prettier/@typescript-eslint'],
-  plugins: ['prettier'],
+  plugins: ['prettier', 'react-hooks'],
   rules: {
     'prettier/prettier': ['error'],
     'import/prefer-default-export': 'off',
@@ -27,5 +27,7 @@ module.exports = {
     'no-nested-ternary': 'off',
     'no-restricted-syntax': 'off',
     'no-plusplus': 'off',
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
   },
 };

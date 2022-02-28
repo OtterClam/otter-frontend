@@ -123,7 +123,7 @@ const renderStackedAreaChart = (
   <AreaChart data={data}>
     <defs>
       {dataKey.map((key, i) => (
-        <linearGradient id={`color-${key}`} x1="0" y1="0" x2="0" y2="1">
+        <linearGradient key={i} id={`color-${key}`} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor={stopColor[i][0]} stopOpacity={1} />
           <stop offset="90%" stopColor={stopColor[i][1]} stopOpacity={1} />
         </linearGradient>
@@ -166,10 +166,11 @@ const renderStackedAreaChart = (
     {dataKey.map((key, i) => {
       //Don't fill area for Total (avoid double-counting)
       if (key === 'treasuryMarketValue') {
-        return <Area dataKey={key} />;
+        return <Area key={i} dataKey={key} />;
       }
       return (
         <Area
+          key={i}
           dataKey={key}
           stroke={stroke ? stroke[i] : 'none'}
           fill={`url(#color-${key})`}

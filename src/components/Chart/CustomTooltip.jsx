@@ -3,8 +3,7 @@ import { trim, localeString } from '../../helpers';
 import './customtooltip.scss';
 import { useTranslation } from 'react-i18next';
 
-const renderDate = (index, payload, item) => {
-  const { t, i18n } = useTranslation();
+const renderDate = (i18n, index, payload, item) => {
   return index === payload.length - 1 ? (
     <div className="tooltip-date">
       {new Date(item.payload.timestamp * 1000)
@@ -21,8 +20,7 @@ const renderDate = (index, payload, item) => {
   );
 };
 
-const renderItem = (type, item) => {
-  const { t, i18n } = useTranslation();
+const renderItem = (i18n, type, item) => {
   return type === '$' ? (
     <Typography variant="body2" className={item.name}>{`${type}${Math.round(item.value).toLocaleString(
       i18n,
@@ -32,8 +30,16 @@ const renderItem = (type, item) => {
   );
 };
 
-const renderTooltipItems = (payload, bulletpointColors, itemNames, itemType, isStaked = false, isPOL = false) => {
-  const { t } = useTranslation();
+const renderTooltipItems = (
+  t,
+  i18n,
+  payload,
+  bulletpointColors,
+  itemNames,
+  itemType,
+  isStaked = false,
+  isPOL = false,
+) => {
   return isStaked ? (
     <Box>
       <Box className="item" display="flex" justifyContent="space-between">
@@ -50,7 +56,7 @@ const renderTooltipItems = (payload, bulletpointColors, itemNames, itemType, isS
         </Typography>
         <Typography>{`${trim(100 - payload[0].value, 2)}%`}</Typography>
       </Box>
-      <Box>{renderDate(0, payload, payload[0])}</Box>
+      <Box>{renderDate(i18n, 0, payload, payload[0])}</Box>
     </Box>
   ) : isPOL ? (
     <Box>
@@ -68,7 +74,7 @@ const renderTooltipItems = (payload, bulletpointColors, itemNames, itemType, isS
         </Typography>
         <Typography>{`${(100 - payload[0].value).toFixed(2)}%`}</Typography>
       </Box>
-      <Box>{renderDate(0, payload, payload[0])}</Box>
+      <Box>{renderDate(i18n, 0, payload, payload[0])}</Box>
     </Box>
   ) : (
     payload.map((item, index) => {
@@ -81,9 +87,9 @@ const renderTooltipItems = (payload, bulletpointColors, itemNames, itemType, isS
                 {`${itemNames[index]}`}
               </Typography>
             </Box>
-            {renderItem(itemType, item)}
+            {renderItem(i18n, itemType, item)}
           </Box>
-          <Box>{renderDate(index, payload, item)}</Box>
+          <Box>{renderDate(i18n, index, payload, item)}</Box>
         </Box>
       );
     })
@@ -91,10 +97,11 @@ const renderTooltipItems = (payload, bulletpointColors, itemNames, itemType, isS
 };
 
 function CustomTooltip({ active, payload, bulletpointColors, itemNames, itemType, isStaked, isPOL }) {
+  const { t, i18n } = useTranslation();
   if (active && payload && payload.length) {
     return (
       <Paper className={`ohm-card tooltip-container`}>
-        {renderTooltipItems(payload, bulletpointColors, itemNames, itemType, isStaked, isPOL)}
+        {renderTooltipItems(t, i18n, payload, bulletpointColors, itemNames, itemType, isStaked, isPOL)}
       </Paper>
     );
   }

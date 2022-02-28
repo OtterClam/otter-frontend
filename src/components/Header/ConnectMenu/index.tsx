@@ -17,7 +17,7 @@ const ConnectMenu = () => {
     if (checkNetworkStatus === CheckNetworkStatus.OK && connected) return ConnectButtonStatus.Connected;
     if (checkNetworkStatus === CheckNetworkStatus.WRONG_CHAIN) return ConnectButtonStatus.WrongChain;
     return ConnectButtonStatus.NotConnected;
-  }, []);
+  }, [pendingTransactions, checkNetworkStatus, connected]);
 
   return (
     <div className="wallet-menu" id="wallet-menu">

@@ -23,6 +23,9 @@ const ConnectButton = ({ status }: ConnectButtonProps) => {
   const isMobile = useMediaQuery(mobileMediaQuery);
   const { t } = useTranslation();
   const { connect, disconnect, switchToPolygonMainnet } = useWeb3Context();
+  const [popperOpen, setPopperOpen] = useState(false);
+  const buttonRef = useRef(null);
+
   if (status === ConnectButtonStatus.Connected) {
     if (isMobile)
       return (
@@ -52,8 +55,6 @@ const ConnectButton = ({ status }: ConnectButtonProps) => {
     );
   }
 
-  const [popperOpen, setPopperOpen] = useState(false);
-  const buttonRef = useRef(null);
   if (status === ConnectButtonStatus.InProgress) {
     return (
       <>

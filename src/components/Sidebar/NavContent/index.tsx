@@ -216,7 +216,7 @@ function NavContent() {
                 </div>
               </Link>
 
-              <Link
+              {/* <Link
                 component={NavLink}
                 id="bond-nav"
                 to="/bonds"
@@ -253,7 +253,7 @@ function NavContent() {
                     ))}
                   </div>
                 </div>
-              </div>
+              </div> */}
               <Link
                 href={'https://www.otterclam.finance/otto'}
                 target="_blank"
