@@ -1,7 +1,7 @@
 import { getAddresses } from '.';
 
 export type BondKey = 'frax2' | 'frax_clam' | 'mai44' | 'matic' | 'matic_clam' | 'mai_clam44';
-
+export const ReserveKeys: BondKey[] = ['mai44', 'frax2'];
 export const BondKeys: BondKey[] = ['frax2', 'frax_clam', 'matic', 'matic_clam', 'mai44', 'mai_clam44'];
 
 export enum BondAction {
@@ -9,17 +9,20 @@ export enum BondAction {
   Redeem = 'redeem',
 }
 
+export type BondType = 'token' | 'lp';
+
 export interface Bond {
   key: BondKey;
   name: string;
   address: string;
   reserve: string;
   reserveUnit: string;
-  type: 'token' | 'lp';
+  type: BondType;
   dexUrl: string;
   deprecated: boolean;
   autostake: boolean;
   stable: boolean;
+  supportNFT: boolean;
   oracle?: string;
 }
 
@@ -27,8 +30,33 @@ type BondMap = {
   [key in BondKey]: Bond;
 };
 
+export interface AccountBond {
+  bond: BondKey;
+  allowance: number;
+  balance: number;
+  rawBalance: string;
+  interestDue: number;
+  bondMaturationTime: number;
+  pendingPayout: number;
+}
+
+export interface Bonding {
+  loading: boolean;
+  bond: BondKey;
+  bondDiscount: number;
+  debtRatio: number;
+  bondQuote: number;
+  purchased: number;
+  vestingTerm: number;
+  maxPayout: number;
+  bondPrice: number;
+  marketPrice: string;
+  maxUserCanBuy: string;
+  nftApproved: boolean;
+}
+
 export function listBonds(chainId: number): BondMap {
-  const { RESERVES, MAI_ADDRESS, CLAM_ADDRESS } = getAddresses(chainId);
+  const { RESERVES, BONDS, MAI_ADDRESS, CLAM_ADDRESS } = getAddresses(chainId);
   return {
     matic: {
       key: 'matic',
@@ -42,6 +70,7 @@ export function listBonds(chainId: number): BondMap {
       autostake: true,
       stable: false,
       oracle: '0xAB594600376Ec9fD91F8e885dADF0CE036862dE0',
+      supportNFT: false,
     },
     matic_clam: {
       key: 'matic_clam',
@@ -55,6 +84,7 @@ export function listBonds(chainId: number): BondMap {
       autostake: true,
       stable: false,
       oracle: '0xAB594600376Ec9fD91F8e885dADF0CE036862dE0',
+      supportNFT: false,
     },
     frax2: {
       key: 'frax2',
@@ -67,6 +97,7 @@ export function listBonds(chainId: number): BondMap {
       deprecated: true,
       autostake: true,
       stable: true,
+      supportNFT: false,
     },
     frax_clam: {
       key: 'frax_clam',
@@ -80,6 +111,7 @@ export function listBonds(chainId: number): BondMap {
       deprecated: true,
       autostake: true,
       stable: true,
+      supportNFT: false,
     },
     mai44: {
       key: 'mai44',
@@ -92,11 +124,12 @@ export function listBonds(chainId: number): BondMap {
       deprecated: true,
       autostake: true,
       stable: true,
+      supportNFT: false,
     },
     mai_clam44: {
       key: 'mai_clam44',
       name: 'MAI-CLAM (4,4)',
-      address: '0xda0d7c3d751d00a1ec1c495eF7Cf3db1a202B0B9',
+      address: BONDS.MAI_CLAM,
       reserve: RESERVES.MAI_CLAM,
       reserveUnit: 'LP',
       type: 'lp',
@@ -104,6 +137,7 @@ export function listBonds(chainId: number): BondMap {
       deprecated: true,
       autostake: true,
       stable: true,
+      supportNFT: false,
     },
   };
 }

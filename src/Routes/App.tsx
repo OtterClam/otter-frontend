@@ -1,8 +1,11 @@
 import { Hidden, ThemeProvider, useMediaQuery } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
+import { CheckNetworkStatus } from 'src/hooks/web3/web3-context';
+import { batchListBondNFTDiscounts, listMyNFT } from 'src/store/actions/nft-action';
+import { useAppSelector } from 'src/store/hook';
 import { dark as darkTheme } from 'src/themes/app';
 import { NFT } from 'src/views';
 import Calculator from 'src/views/Calculator';
@@ -13,18 +16,16 @@ import TopBar from '../components/Header';
 import LoadingScreen from '../components/LoadingScreen';
 import Sidebar from '../components/Sidebar';
 import NavDrawer from '../components/Sidebar/NavDrawer';
-import { BondKeys } from '../constants';
-import { useAddress, useWeb3Context } from '../hooks';
+import { BondKeys, zeroAddress } from '../constants';
+import { useWeb3Context } from '../hooks';
+import { batchGetBondDetails } from '../store/actions/bond-action';
 import { calculateUserBondDetails, loadAccountDetails } from '../store/slices/account-slice';
 import { loadAppDetails } from '../store/slices/app-slice';
-import { calcBondDetails } from '../store/slices/bond-slice';
 import { loadTermsDetails } from '../store/slices/otter-lake-slice';
-import { IReduxState } from '../store/slices/state.interface';
-import { Bond, ChooseBond, Stake, Wrap } from '../views';
+import SnackbarUtils from '../store/snackbarUtils';
+import { ChooseBond, Stake, Wrap } from '../views';
 import NotFound from '../views/404/NotFound';
 import './style.scss';
-import { CheckNetworkStatus } from 'src/hooks/web3/web3-context';
-import SnackbarUtils from '../store/snackbarUtils';
 
 const drawerWidth = 280;
 const transitionDuration = 969;
@@ -39,7 +40,6 @@ const useStyles = makeStyles(theme => ({
   content: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
-    padding: theme.spacing(1),
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
       duration: transitionDuration,
@@ -71,14 +71,14 @@ function App() {
   const isSmallerScreen = useMediaQuery('(max-width: 960px)');
   const isSmallScreen = useMediaQuery('(max-width: 600px)');
 
-  const { connect, provider, readOnlyProvider, hasCachedProvider, chainID, connected, checkNetworkStatus } =
+  const { address, connect, provider, readOnlyProvider, hasCachedProvider, chainID, connected, checkNetworkStatus } =
     useWeb3Context();
-  const address = useAddress();
 
   const [walletChecked, setWalletChecked] = useState(false);
 
-  const isAppLoading = useSelector<IReduxState, boolean>(state => state.app.loading);
-  const isAppLoaded = useSelector<IReduxState>(state => typeof state.app.marketPrice != 'undefined');
+  const isAppLoading = useAppSelector(state => state.app.loading);
+  const isBondLoading = useAppSelector(state => state.bonding.loading);
+  const isAppLoaded = useAppSelector(state => typeof state.app.marketPrice != 'undefined');
 
   async function loadDetails(whichDetails: string) {
     let loadProvider = readOnlyProvider;
@@ -90,7 +90,6 @@ function App() {
     if (whichDetails === 'account' && address && connected) {
       loadAccount(loadProvider);
       if (isAppLoaded) return;
-
       loadApp(loadProvider);
     }
 
@@ -104,11 +103,18 @@ function App() {
   const loadApp = useCallback(
     async loadProvider => {
       await dispatch(loadAppDetails({ networkID: chainID, provider: loadProvider }));
-      BondKeys.map(bondKey => {
-        dispatch(
-          calcBondDetails({ bondKey, value: null, provider: loadProvider, networkID: chainID, userBalance: '0' }),
-        );
-      });
+      dispatch(
+        batchGetBondDetails({
+          wallet: address,
+          value: null,
+          provider: loadProvider,
+          networkID: chainID,
+          userBalance: '0',
+          nftAddress: zeroAddress,
+          tokenId: 0,
+        }),
+      );
+      dispatch(batchListBondNFTDiscounts({ provider: loadProvider, networkID: chainID }));
     },
     [connected],
   );
@@ -123,8 +129,9 @@ function App() {
   const loadAccount = useCallback(
     loadProvider => {
       dispatch(loadAccountDetails({ networkID: chainID, address, provider: loadProvider }));
+      // dispatch(listMyNFT({ provider: loadProvider, wallet: address, networkID: chainID }));
     },
-    [connected],
+    [connected, address],
   );
 
   useEffect(() => {
@@ -212,13 +219,6 @@ function App() {
             </Route>
 
             <Route path="/bonds">
-              {BondKeys.map(bondKey => {
-                return (
-                  <Route exact key={bondKey} path={`/bonds/${bondKey}`}>
-                    <Bond bondKey={bondKey} />
-                  </Route>
-                );
-              })}
               <ChooseBond />
             </Route>
 

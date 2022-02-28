@@ -1,15 +1,16 @@
-import { Box, Slide } from '@material-ui/core';
+import { Box, Grid, Slide } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BondKey, getBond } from 'src/constants';
 import { prettifySeconds, prettyVestingPeriod, trim } from '../../helpers';
 import { useWeb3Context } from '../../hooks';
-import { redeemBond } from '../../store/slices/bond-slice';
-import { IPendingTxn, isPendingTxn, txnButtonText } from '../../store/slices/pending-txns-slice';
+import { redeemBond } from '../../store/actions/bond-action';
+import { IPendingTxn } from '../../store/slices/pending-txns-slice';
 import { IReduxState } from '../../store/slices/state.interface';
 import { useTranslation, Trans } from 'react-i18next';
 import BondRedeemDialog from './BondRedeemDialog';
+import CustomButton from 'src/components/Button/CustomButton';
 import ActionButton from '../../components/Button/ActionButton';
 import SnackbarUtils from '../../store/snackbarUtils';
 
@@ -81,39 +82,48 @@ function BondRedeem({ bondKey }: IBondRedeem) {
   return (
     <Box display="flex" flexDirection="column">
       <Box display="flex" justifyContent="space-around" flexWrap="wrap">
-        {bond.autostake && !fullVested && (
-          <Box
-            className="transaction-button app-otter-button"
-            bgcolor="otter.otterBlue"
-            color="otter.white"
-            onClick={() => {
-              if (bond.autostake && !fullVested) {
-                SnackbarUtils.warning('bonds.redeem.fullyVestedPopup', true);
-                return;
-              }
-            }}
-          >
-            <p>{t('common.claim')}</p>
-          </Box>
-        )}
-        {!(bond.autostake && !fullVested) && (
-          <ActionButton
-            pendingTransactions={pendingTransactions}
-            type={'redeem_bond_' + bondKey}
-            start="Claim"
-            progress="Claiming..."
-            processTx={() => onRedeem(false)}
-          ></ActionButton>
-        )}
-        {!bond.deprecated && !bond.autostake && (
-          <ActionButton
-            pendingTransactions={pendingTransactions}
-            type={'redeem_bond_' + bondKey + '_autostake'}
-            start="Claim and Autostake"
-            progress="Claiming..."
-            processTx={() => onRedeem(true)}
-          ></ActionButton>
-        )}
+        <Grid container spacing={2} justifyContent="center">
+          {bond.autostake && !fullVested && (
+            <Grid item xs={6}>
+              <CustomButton
+                bgcolor="otter.otterBlue"
+                color="otter.white"
+                text={t('common.claim')}
+                padding="19px 30px"
+                height="auto"
+                fontSize="14px"
+                onClick={() => {
+                  if (bond.autostake && !fullVested) {
+                    SnackbarUtils.warning('bonds.redeem.fullyVestedPopup', true);
+                    return;
+                  }
+                }}
+              />
+            </Grid>
+          )}
+          {!(bond.autostake && !fullVested) && (
+            <Grid item xs={6}>
+              <ActionButton
+                pendingTransactions={pendingTransactions}
+                type={'redeem_bond_' + bondKey}
+                start="Claim"
+                progress="Claiming..."
+                processTx={() => onRedeem(false)}
+              />
+            </Grid>
+          )}
+          {!bond.deprecated && (
+            <Grid item xs={6}>
+              <ActionButton
+                pendingTransactions={pendingTransactions}
+                type={'redeem_bond_' + bondKey + '_autostake'}
+                start="Claim and Autostake"
+                progress="Claiming..."
+                processTx={() => onRedeem(true)}
+              />
+            </Grid>
+          )}
+        </Grid>
       </Box>
       <BondRedeemDialog
         open={open}

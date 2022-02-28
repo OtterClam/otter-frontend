@@ -1,15 +1,15 @@
-import groupBy from 'lodash/groupBy';
 import { JsonRpcProvider } from '@ethersproject/providers';
+import { formatEther } from '@ethersproject/units';
 import { createAction, createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
 import { constants, ethers } from 'ethers';
-import { PearlNote, OtterLake, PearlTokenContract } from '../../abi';
+import groupBy from 'lodash/groupBy';
+import { OtterLake, PearlNote, PearlTokenContract } from '../../abi';
 import { getAddresses } from '../../constants';
 import { setAll } from '../../helpers';
-import { fetchPendingTxns, clearPendingTxn } from './pending-txns-slice';
-import { formatEther } from '@ethersproject/units';
-import axios from 'axios';
-import { IReduxState } from './state.interface';
 import SnackbarUtils from '../../store/snackbarUtils';
+import { ThunkOptions } from '../types';
+import { clearPendingTxn, fetchPendingTxns } from './pending-txns-slice';
 
 export interface ITerm {
   note: INote;
@@ -94,10 +94,6 @@ interface IExtendLockDetails {
   provider: JsonRpcProvider;
   tokenId: string;
   address: string;
-}
-
-interface ThunkOptions {
-  state: IReduxState;
 }
 
 export const loadTermsDetails = createAsyncThunk(

@@ -1,0 +1,65 @@
+@import 'styles/_colors.scss';
+@import 'styles/_mixins.scss';
+
+.nft-dialog {
+  z-index: 10 !important;
+
+  .dialog {
+    padding: 20px;
+  }
+
+  .nft-discount-card {
+    width: 100%;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    border: 1px solid $light-gray400;
+    transition: 0.25s all;
+    &.selected {
+      padding: 19px;
+      border: 2px solid $otter-blue;
+    }
+    &:nth-last-child(1) {
+      margin-bottom: 0;
+    }
+    &:hover {
+      padding: 19px;
+      cursor: pointer;
+      border: 2px solid $light-gray400;
+      box-shadow: 0px 4px 20px 0px $light-gray200;
+    }
+
+    .nft-img {
+      width: 160px;
+      height: 104px;
+      @include background-image-setting;
+      @include otter-images;
+    }
+
+    .nft-description {
+      margin-left: 20px;
+
+      .nft-name {
+        font-size: 20px;
+        margin-top: 0;
+        margin-bottom: 10px;
+      }
+    
+      .nft-discount {
+        font-size: 16px;
+        color: $otter-blue;
+        margin-bottom: 10px;
+      }
+
+      .nft-expire-time {
+        font-size: 14px;
+        color: $dark-gray100;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 598px) {
+  
+}

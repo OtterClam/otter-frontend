@@ -18,7 +18,7 @@ import { useDispatch } from 'react-redux';
 import Modal from 'src/components/Modal';
 import { trim } from 'src/helpers';
 import getNoteImage from 'src/helpers/get-note-image';
-import { useSelector } from 'src/store/hook';
+import { useAppSelector } from 'src/store/hook';
 import {
   extendLock as extendLockAction,
   ILockNote,
@@ -74,8 +74,8 @@ export default function AddPearlToNoteModal({
   const dispatch = useDispatch();
   const [amount, setAmount] = useState('0');
   const multiplier = term ? Number((term.multiplier / 100).toFixed(1)) : 1;
-  const account = useSelector(state => state.account);
-  const pendingTransactions = useSelector(state => state.pendingTransactions);
+  const account = useAppSelector(state => state.account);
+  const pendingTransactions = useAppSelector(state => state.pendingTransactions);
   const { provider, address, chainID } = useWeb3Context();
 
   const lockup = useCallback(async () => {

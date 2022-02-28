@@ -3,7 +3,7 @@ import addDays from 'date-fns/addDays';
 import formateDate from 'date-fns/format';
 import { useMemo } from 'react';
 import getNoteImage from 'src/helpers/get-note-image';
-import { useSelector } from 'src/store/hook';
+import { useAppSelector } from 'src/store/hook';
 import Modal from '../Modal';
 import './styles.scss';
 
@@ -23,9 +23,9 @@ export default function PearlChestLockupSuccessModal({
   actionResult,
   onClose,
 }: PearlChestLockupSuccessModalProps) {
-  const terms = useSelector(state => state.lake.terms);
+  const terms = useAppSelector(state => state.lake.terms);
   const allTerms = useMemo(() => terms.flatMap(t => [t, t.fallbackTerm || t]), [terms]);
-  const note = useSelector(state =>
+  const note = useAppSelector(state =>
     state.lake.lockNotes.find(p => p.noteAddress === actionResult?.note && p.tokenId === actionResult?.tokenId),
   );
   const term = allTerms.find(term => term.noteAddress === actionResult?.note);

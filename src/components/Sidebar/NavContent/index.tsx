@@ -21,6 +21,7 @@ import InactiveMenuIcon from './InactiveMenuIcon';
 import ToggleDark from './toggle-dark.png';
 import ToggleLight from './toggle-light.png';
 import Davatar from '@davatar/react';
+import { useAppSelector } from 'src/store/hook';
 
 import IconDefaultBond from './icons/components/bond/IconDefaultBond';
 import IconActiveBond from './icons/components/bond/IconActiveBond';
@@ -67,7 +68,7 @@ function BondROI({ bond }: { bond: ComputedBond }) {
   const bondPrice = useSelector<IReduxState, number>(state => {
     return state.bonding[bond.value] && state.bonding[bond.value].bondPrice;
   });
-  const marketPrice = useSelector<IReduxState, string>(state => state.bonding[bond.value]?.marketPrice);
+  const marketPrice = useAppSelector(state => state.bonding[bond.value]?.marketPrice);
   const priceDiff = (Number(marketPrice) ?? 0) - (bondPrice ?? 0);
   const dotColor = theme.palette.mode.chip.status.success;
   const dot = <span className="bond-pair-roi-dot" style={{ background: dotColor }} />;

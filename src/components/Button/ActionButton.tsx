@@ -1,6 +1,7 @@
 import { Box, BoxProps } from '@material-ui/core';
 import { IPendingTxn, isPendingTxn, txnButtonText } from '../../store/slices/pending-txns-slice';
 
+import './button.scss';
 interface ActionButtonProps extends BoxProps {
   className?: string;
   pendingTransactions: IPendingTxn[];
@@ -30,9 +31,7 @@ function ActionButton(props: ActionButtonProps) {
 
   return (
     <Box
-      className={
-        'wrap-tab-panel-btn stake-tab-panel-btn transaction-button app-otter-button nft-card__button ' + className
-      }
+      className="action-button wrap-tab-panel-btn stake-tab-panel-btn"
       bgcolor="otter.otterBlue"
       onClick={handleClick}
       {...boxProps}

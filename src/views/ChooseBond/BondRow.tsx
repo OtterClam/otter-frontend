@@ -1,15 +1,20 @@
-import { Box, Link, Paper, Slide, TableCell, TableRow, Tooltip, makeStyles } from '@material-ui/core';
+import { Box, Grid, Link, makeStyles, Tooltip } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
-import { useSelector } from 'react-redux';
-import { NavLink, useHistory } from 'react-router-dom';
-import { LabelChip, Status, StatusChip } from 'src/components/Chip';
-import { BondKey, getBond } from 'src/constants';
-import BondLogo from '../../components/BondLogo';
-import { priceUnits, trim, prettifySeconds, prettyShortVestingPeriod, localeString } from '../../helpers';
-import { useWeb3Context } from '../../hooks';
-import { IReduxState } from '../../store/slices/state.interface';
-import './choose-bond.scss';
+import { Dispatch, MouseEvent, SetStateAction, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { NavLink, useHistory } from 'react-router-dom';
+import BondLogo from 'src/components/BondLogo';
+import CustomButton from 'src/components/Button/CustomButton';
+import { LabelChip, Status, StatusChip } from 'src/components/Chip';
+import { Bond, BondKey, getBond } from 'src/constants';
+import { redeemBond } from 'src/store/actions/bond-action';
+import { BondNFTDiscount, listLockedNFT, listMyNFT, LockedNFT } from 'src/store/actions/nft-action';
+import { useAppDispatch, useAppSelector } from 'src/store/hook';
+import { localeString, prettyShortVestingPeriod, priceUnits, trim } from '../../helpers';
+import { useWeb3Context } from '../../hooks';
+import { NFTDiscountOption } from '../BondDialog/types';
+import BondNFTDisplay from './BondNFTDisplay';
+import './choose-bond.scss';
 
 const useStyles = makeStyles(theme => ({
   white: {
@@ -20,182 +25,125 @@ const useStyles = makeStyles(theme => ({
 }));
 interface IBondProps {
   bondKey: BondKey;
+  setRedeemedBond(value: Bond): void;
+  setRedeemedAmount(value: number): void;
+  setNftRedeemed(value: NFTDiscountOption[]): void;
+  setSelection: Dispatch<SetStateAction<NFTDiscountOption | undefined>>;
 }
 
-export function BondDataCard({ bondKey }: IBondProps) {
-  const { chainID } = useWeb3Context();
-  const bond = getBond(bondKey, chainID);
-
-  const isBondLoading = useSelector<IReduxState, boolean>(state => !state.bonding[bondKey]?.bondPrice ?? true);
-  const bondPrice = useSelector<IReduxState, number | undefined>(state => {
-    return state.bonding[bondKey] && state.bonding[bondKey].bondPrice;
-  });
-  const bondDiscount = useSelector<IReduxState, number>(state => {
-    return state.bonding[bondKey] && state.bonding[bondKey].bondDiscount;
-  });
-  const bondPurchased = useSelector<IReduxState, number>(state => {
-    return state.bonding[bondKey] && state.bonding[bondKey].purchased;
-  });
-  const marketPrice = useSelector<IReduxState, string>(state => state.bonding[bondKey]?.marketPrice);
-  const fiveDayRate = useSelector<IReduxState, number>(state => state.app.fiveDayRate);
-  const priceDiff = (Number(marketPrice) ?? 0) - (bondPrice ?? 0);
-  const { t } = useTranslation();
-
-  return (
-    <Slide direction="up" in={true}>
-      <Paper id={`${bond}--bond`} className="bond-data-card ohm-card extra-wide">
-        <div className="bond-pair">
-          <BondLogo bond={bond} />
-          <div className="bond-name">
-            <p className="bond-name-title">{bond.name}</p>
-            {!bond.deprecated && (
-              <div>
-                <Link href={bond.dexUrl} target="_blank">
-                  <Box component="p" color="otter.otterBlue" className="bond-lp-add-liquidity">
-                    {bond.type === 'lp' ? `${t('common.addLiquidity')}` : `${t('common.buyThing')} ${bond.reserveUnit}`}
-                  </Box>
-                </Link>
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="data-row">
-          <p className="bond-name-title">{t('common.price')}</p>
-          <div className="bond-price">
-            <p className="bond-name-title ">
-              {priceUnits(bondKey)}
-              {isBondLoading ? <Skeleton width="50px" /> : bond.deprecated ? '-' : trim(bondPrice, 2)}
-            </p>
-            {priceDiff > 0 && (
-              <StatusChip status={Status.Success} label={`$${trim(priceDiff, 2)} ${t('bonds.bondDiscount')}`} />
-            )}
-          </div>
-        </div>
-
-        <div className="data-row">
-          <p className="bond-name-title">{t('common.roi')}</p>
-          <p className="bond-name-title">
-            {isBondLoading ? <Skeleton width="50px" /> : bond.deprecated ? '-' : `${trim(bondDiscount * 100, 2)}%`}
-            {!bond.deprecated && bond.autostake && (
-              <Tooltip title={`* ${t('bonds.purchase.roiFourFourInfo')} `}>
-                <span>{` + ${trim(fiveDayRate * 100, 2)}%*`}</span>
-              </Tooltip>
-            )}
-          </p>
-        </div>
-
-        <div className="data-row">
-          <p className="bond-name-title">{t('bonds.purchased')}</p>
-          <p className="bond-name-title">
-            {isBondLoading ? (
-              <Skeleton width="80px" />
-            ) : bond.deprecated ? (
-              '-'
-            ) : (
-              new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD',
-                maximumFractionDigits: 0,
-                minimumFractionDigits: 0,
-              }).format(bondPurchased)
-            )}
-          </p>
-        </div>
-        <Link component={NavLink} to={`/bonds/${bondKey}`}>
-          <Box
-            bgcolor="otter.otterBlue"
-            color="otter.white"
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            height="44px"
-            className="bond-table-btn"
-          >
-            <p>
-              {bond.deprecated ? t('common.redeem') : t('common.bond')} {bond.name}
-            </p>
-          </Box>
-        </Link>
-      </Paper>
-    </Slide>
-  );
-}
-
-export function BondTableRow({ bondKey }: IBondProps) {
-  const { chainID } = useWeb3Context();
+function BondRow({ bondKey, setRedeemedBond, setSelection, setNftRedeemed, setRedeemedAmount }: IBondProps) {
+  const { chainID, address, provider } = useWeb3Context();
+  const dispatch = useAppDispatch();
   // Use BondPrice as indicator of loading.
-  const isBondLoading = useSelector<IReduxState, boolean>(state => !state.bonding[bondKey]?.bondPrice ?? true);
+  const isBondLoading = useAppSelector(state => !state.bonding[bondKey]?.bondPrice ?? true);
   const bond = getBond(bondKey, chainID);
 
-  const bondPrice = useSelector<IReduxState, number>(state => {
+  const lockedNFTs = useAppSelector(state => state.bonding[bondKey]?.lockedNFTs);
+  const nftDiscounts = useAppSelector<BondNFTDiscount[]>(state => state.nft.bondNftDiscounts.data[bond.key]);
+
+  const bondPrice = useAppSelector(state => {
     return state.bonding[bondKey] && state.bonding[bondKey].bondPrice;
   });
-  const bondDiscount = useSelector<IReduxState, number>(state => {
+  const bondDiscount = useAppSelector(state => {
     return state.bonding[bondKey] && state.bonding[bondKey].bondDiscount;
   });
-  const bondPurchased = useSelector<IReduxState, number>(state => {
+  const bondPurchased = useAppSelector(state => {
     return state.bonding[bondKey] && state.bonding[bondKey].purchased;
   });
-  const fiveDayRate = useSelector<IReduxState, number>(state => state.app.fiveDayRate);
-  const marketPrice = useSelector<IReduxState, string>(state => state.bonding[bondKey]?.marketPrice);
-  const myBalance = useSelector<IReduxState, number>(state => {
-    //@ts-ignore
-    return state.account[bondKey] && state.account[bondKey].interestDue;
-  });
+  const fiveDayRate = useAppSelector(state => state.app.fiveDayRate);
+  const marketPrice = useAppSelector(state => state.bonding[bondKey]?.marketPrice);
+  const myBalance = useAppSelector(state => state.account[bondKey]?.interestDue);
   const priceDiff = (Number(marketPrice) ?? 0) - (bondPrice ?? 0);
   const { t, i18n } = useTranslation();
-  const currentBlockTime = useSelector<IReduxState, number>(state => state.app.currentBlockTime);
-  const bondMaturationTime = useSelector<IReduxState, number>(state => {
+  const currentBlockTime = useAppSelector(state => state.app.currentBlockTime);
+  const bondMaturationTime = useAppSelector(state => {
     //@ts-ignore
     return state.account[bondKey] && state.account[bondKey].bondMaturationTime;
   });
 
-  const vestingTime = () => {
-    return prettyShortVestingPeriod(t, currentBlockTime, bondMaturationTime);
-  };
-
+  const vestingTime = useMemo(
+    () => prettyShortVestingPeriod(t, currentBlockTime, bondMaturationTime),
+    [currentBlockTime, bondMaturationTime],
+  );
   const fullyVested = currentBlockTime > bondMaturationTime && bondMaturationTime > 0;
 
   const styles = useStyles();
 
   const redeemable = fullyVested ? 'redeem' : 'bond';
   const history = useHistory();
-  const redirect = () => {
+  const redirect = (e: any) => {
+    if (bond.supportNFT) {
+      return history.push(`/bonds/${bondKey}?action=bond`);
+    }
     history.push(`/bonds/${bondKey}?action=${redeemable}`);
   };
-  return (
-    <TableRow onClick={redirect} id={`${bondKey}--bond`} className={`${styles.white}`}>
-      <TableCell align="left" className="extra-wide">
-        <div className="bond-name-cell">
-          <BondLogo bond={bond} />
-          <div className="bond-name">
-            {bond.deprecated && <LabelChip label={`${t('bonds.deprecated')}`} className="bond-name-label" />}
-            <p className="bond-table-actions">{bond.name}</p>
-            {!bond.deprecated && (
-              <Link color="primary" href={bond.dexUrl} target="_blank">
-                <Box component="p" color="otter.otterBlue" className="bond-lp-add-liquidity">
-                  {bond.type === 'lp' ? `${t('common.addLiquidity')}` : `${t('common.buyThing')}${bond.reserveUnit}`}
-                </Box>
-              </Link>
-            )}
-          </div>
-        </div>
-      </TableCell>
 
-      <TableCell align="center">
-        <div className="bond-name-container">
-          <p className="bond-table-actions">
-            <span className="currency-icon">{priceUnits(bondKey)}</span>
-            <span>{isBondLoading ? <Skeleton width="50px" /> : bond.deprecated ? '-' : trim(bondPrice, 2)}</span>
-          </p>
-          {priceDiff > 0 && (
-            <StatusChip status={Status.Success} label={`$${trim(priceDiff, 2)} ${t('bonds.bondDiscount')}`} />
-          )}
-        </div>
-      </TableCell>
-      <TableCell align="right">
-        <p className="bond-table-actions">
+  const handleMaiClamRedeem = async (e: MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+
+    const mapDiscounts = nftDiscounts.reduce<Record<string, BondNFTDiscount>>((acc, cur) => {
+      acc[cur.address] = cur;
+      return acc;
+    }, {});
+    const selections = lockedNFTs.map(
+      (e: LockedNFT): NFTDiscountOption => ({
+        id: e.id,
+        address: e.address,
+        type: mapDiscounts[e.address].name.includes('Note') ? 'note' : 'nft',
+        key: mapDiscounts[e.address].key,
+        name: mapDiscounts[e.address].name,
+        discount: mapDiscounts[e.address].discount,
+        endDate: mapDiscounts[e.address].endDate,
+      }),
+    );
+    console.log(`${bond.key} ${JSON.stringify(selections)}`);
+    const redeemed = await dispatch(redeemBond({ address, bondKey, networkID: chainID, provider, autostake: true }));
+    if (redeemed.payload) {
+      dispatch(listMyNFT({ wallet: address, networkID: chainID, provider }));
+      dispatch(
+        listLockedNFT({
+          bondKey,
+          wallet: address,
+          networkID: chainID,
+          provider: provider,
+        }),
+      );
+      setNftRedeemed(selections);
+      setRedeemedBond(bond);
+      setRedeemedAmount(myBalance);
+      setSelection(undefined);
+    }
+  };
+
+  return (
+    <Grid container id={`${bondKey}--bond`} className={`bond-row ${styles.white}`} onClick={redirect}>
+      <Grid item xs={1} className="bond-row-logo">
+        <BondLogo bond={bond} />
+      </Grid>
+      <Grid item xs={2} className="bond-row-value first-col">
+        <p>{bond.name}</p>
+        {bond.deprecated ? (
+          <LabelChip label={`${t('bonds.deprecated')}`} className="bond-name-label" />
+        ) : (
+          <Link color="primary" href={bond.dexUrl} target="_blank">
+            <Box component="p" color="otter.otterBlue">
+              {bond.type === 'lp' ? `${t('common.addLiquidity')}` : `${t('common.buyThing')}${bond.reserveUnit}`}
+            </Box>
+          </Link>
+        )}
+      </Grid>
+
+      <Grid item xs={2} className="bond-row-value">
+        <p className="bond-price-text">
+          <span className="currency-icon">{priceUnits(bondKey)}</span>
+          <span>{isBondLoading ? <Skeleton width="50px" /> : bond.deprecated ? '-' : trim(bondPrice, 2)}</span>
+        </p>
+        {priceDiff > 0 && (
+          <StatusChip status={Status.Success} label={`$${trim(priceDiff, 2)} ${t('bonds.bondDiscount')}`} />
+        )}
+      </Grid>
+      <Grid item xs={1} className="bond-row-value">
+        <p>
           {isBondLoading ? <Skeleton /> : bond.deprecated ? '-' : `${trim(bondDiscount * 100, 2)}%`}
           {!bond.deprecated && bond.autostake && (
             <Tooltip title={`* ${t('bonds.purchase.roiFourFourInfo')} `}>
@@ -203,9 +151,9 @@ export function BondTableRow({ bondKey }: IBondProps) {
             </Tooltip>
           )}
         </p>
-      </TableCell>
-      <TableCell align="right">
-        <p className="bond-table-actions">
+      </Grid>
+      <Grid item xs={2} className="bond-row-value">
+        <p>
           {isBondLoading ? (
             <Skeleton />
           ) : bond.deprecated ? (
@@ -219,45 +167,50 @@ export function BondTableRow({ bondKey }: IBondProps) {
             }).format(bondPurchased)
           )}
         </p>
-      </TableCell>
-      <TableCell>
-        <p className="bond-table-actions">
-          {myBalance ? `${trim(myBalance, 2)} ${bond.autostake ? 'sCLAM' : 'CLAM'}` : '-'}
-        </p>
-      </TableCell>
-      <TableCell className="extra-wide">
-        <div className="bond-table-actions">
-          {fullyVested && (
-            <Link className="bond-table-action-button" component={NavLink} to={`/bonds/${bondKey}?action=redeem`}>
-              <Box
-                color="otter.otterBlue"
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                height="44px"
-                className="bond-table-btn bond-table-btn__redeem"
-              >
-                <p>{t('common.redeem')}</p>
-              </Box>
-            </Link>
-          )}
-          {vestingTime() && !fullyVested && (
-            <div>
-              <p>
-                {new Date(bondMaturationTime * 1000).toLocaleString(localeString(i18n), {
-                  year: 'numeric',
-                  month: 'numeric',
-                  day: 'numeric',
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}
-              </p>
-              <p>{vestingTime()}</p>
-            </div>
-          )}
-          {!fullyVested && !vestingTime() && <p className="bond-table-actions">-</p>}
-        </div>
-      </TableCell>
-    </TableRow>
+      </Grid>
+      <Grid item xs={2} className="bond-row-value">
+        {myBalance ? `${trim(myBalance, 2)} ${bond.autostake ? 'sCLAM' : 'CLAM'}` : '-'}
+        {lockedNFTs && lockedNFTs.length ? <BondNFTDisplay NFTs={lockedNFTs} /> : ''}
+      </Grid>
+      <Grid item xs={2} className="bond-row-value">
+        {fullyVested ? (
+          <>
+            {(() => {
+              if (bond.supportNFT)
+                return (
+                  <CustomButton
+                    bgcolor="otter.otterBlue"
+                    color="otter.white"
+                    text={`${t('common.redeem')}`}
+                    onClick={handleMaiClamRedeem}
+                  />
+                );
+              return (
+                <Link component={NavLink} to={`/bonds/${bondKey}?action=redeem`}>
+                  {/* FIXME: modify desc from redeem to clain now */}
+                  <CustomButton bgcolor="otter.otterBlue" color="otter.white" text={`${t('common.redeem')}`} />
+                </Link>
+              );
+            })()}
+          </>
+        ) : vestingTime ? (
+          <div>
+            <p>
+              {new Date(bondMaturationTime * 1000).toLocaleString(localeString(i18n), {
+                year: 'numeric',
+                month: 'numeric',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+              })}
+            </p>
+            <p>{vestingTime}</p>
+          </div>
+        ) : (
+          <p className="bond-row-value">-</p>
+        )}
+      </Grid>
+    </Grid>
   );
 }
+export default BondRow;

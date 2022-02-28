@@ -1,11 +1,10 @@
-import { JsonRpcProvider, JsonRpcSigner } from '@ethersproject/providers';
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { JsonRpcProvider } from '@ethersproject/providers';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { BigNumber, ethers } from 'ethers';
-import type { AppDispatch } from '../store';
 import { OtterPAW } from 'src/abi';
 import { getAddresses } from 'src/constants';
 
-interface NFTGiveawayState {
+export interface NFTGiveawayState {
   claimed: boolean;
   tokenID: number;
   whitelisted: boolean;
@@ -40,12 +39,14 @@ export const fetchAll = createAsyncThunk<{ allWhitelisted: boolean[]; allTokenID
   },
 );
 
+export enum OtterNFT {
+  SafeHand,
+  FurryHand,
+  StoneHand,
+  DiamondHand,
+}
 interface ClaimProps extends EthersProps {
-  // 0: safe-hand
-  // 1: furry-hand
-  // 2: stone-hand
-  // 3: diamon-hand
-  nft: number;
+  nft: OtterNFT;
 }
 
 export const claim = createAsyncThunk<void, ClaimProps>(

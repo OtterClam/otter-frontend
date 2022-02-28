@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useSelector } from '../../../store/hook';
+import { useAppSelector } from '../../../store/hook';
 import { useWeb3Context } from '../../../hooks';
 
 import { Box } from '@material-ui/core';
@@ -10,9 +10,7 @@ import { CheckNetworkStatus } from 'src/hooks/web3/web3-context';
 
 const ConnectMenu = () => {
   const { connected, checkNetworkStatus } = useWeb3Context();
-  const pendingTransactions = useSelector(state => {
-    return state.pendingTransactions;
-  });
+  const pendingTransactions = useAppSelector(state => state.pendingTransactions);
 
   const connectStatus = useMemo(() => {
     if (pendingTransactions && pendingTransactions.length > 0) return ConnectButtonStatus.InProgress;

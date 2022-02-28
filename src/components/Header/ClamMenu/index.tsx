@@ -57,9 +57,9 @@ const useStyles = makeStyles(theme => ({
 const BuyButton = ({ text }: { text: string }) => {
   const isMobile = useMediaQuery(mobileMediaQuery);
   if (isMobile) {
-    return <CustomButton type="outline" text={text} />;
+    return <CustomButton type="outline" color="text.primary" text={text} />;
   }
-  return <CustomButton type="outline" icon={ClamIcon} text={`${text} CLAM`} />;
+  return <CustomButton type="outline" color="text.primary" icon={ClamIcon} text={`${text} CLAM`} />;
 };
 
 function ClamMenu() {

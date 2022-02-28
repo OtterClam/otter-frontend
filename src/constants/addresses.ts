@@ -1,4 +1,5 @@
 import { Networks } from './blockchain';
+import { NFT } from 'src/views/BondDialog/BondNFTDiscountDialog/constants';
 
 const POLYGON_MAINNET = {
   sCLAM_ADDRESS: '0xAAc144Dc08cE39Ed92182dd85ded60E5000C9e67',
@@ -21,7 +22,7 @@ const POLYGON_MAINNET = {
   },
   BONDS: {
     MAI: '0x603A74Fd527b85E0A1e205517c1f24aC71f5C263',
-    MAI_CLAM: '0x706587BD39322A6a78ddD5491cDbb783F8FD983E',
+    MAI_CLAM: '0xeF66010868Ff77119171628B7eFa0F6179779375',
     OLD_MAI: '0x28077992bFA9609Ae27458A766470b03D43dEe8A',
     OLD_MAI_CLAM: '0x79B47c03B02019Af78Ee0de9B0b3Ac0786338a0d',
     OLD_MAI_CLAM_V2: '0x64c766f9A4936c3a4b51C55Ea5C4854E19766035',
@@ -74,10 +75,28 @@ const POLYGON_MUMBAI = {
   OTTER_LAKE: '0xAaC7D4A36DAb95955ef3c641c23F1fA46416CF71',
 };
 
+export const zeroAddress = '0x0000000000000000000000000000000000000000';
+
 export const getAddresses = (networkID: number) => {
   if (networkID === Networks.POLYGON_MAINNET || networkID === Networks.OTTER_FORK || networkID === Networks.HARDHAT)
     return POLYGON_MAINNET;
   if (networkID === Networks.POLYGON_MUMBAI) return POLYGON_MUMBAI;
 
   throw new Error("Network don't support");
+};
+
+export const getPAWAddress = (key: NFT, networkID: number) => {
+  const addresses = getAddresses(networkID);
+  switch (key) {
+    case 'DIAMOND':
+      return addresses.NFTS.DIAMOND_HAND;
+    case 'FURRY':
+      return addresses.NFTS.FURRY_HAND;
+    case 'SAFE':
+      return addresses.NFTS.SAFE_HAND;
+    case 'STONE':
+      return addresses.NFTS.STONE_HAND;
+    default:
+      return addresses.OTTER_LAKE; // this is for nft note
+  }
 };

@@ -1,17 +1,21 @@
 @import 'styles/_colors.scss';
 
 #bond-view {
-  position: absolute !important;
   width: 100%;
   height: 100%;
-  z-index: 69;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
   .MuiBackdrop-root {
     background: rgba(100, 100, 100, 0.5) !important;
     backdrop-filter: blur(33px) !important;
     -webkit-backdrop-filter: blur(33px) !important;
     .ohm-card {
       opacity: 1 !important;
-      height: auto;
+      height: fit-content;
+      max-height: calc(100vh - 40px);
+      overflow-y: auto;
     }
   }
   @supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
@@ -22,11 +26,11 @@
       .ohm-card {
         opacity: 1 !important;
         height: auto;
+        overflow-y: auto;
       }
     }
     .ohm-modal {
       max-width: 688px;
-      min-height: 605px;
     }
   }
 
@@ -36,22 +40,29 @@
       background: rgba(0, 0, 0, 0.5) !important;
       .ohm-card {
         height: auto;
+        overflow-y: auto;
       }
     }
     .ohm-modal {
       max-width: 688px;
-      min-height: 605px;
+      overflow-y: auto;
       opacity: 0.9;
     }
   }
 
   .ohm-card {
     max-width: 803px;
+    overflow-y: auto;
   }
   .bond-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    .cancel-bond {
+      cursor: pointer;
+    }
+
     .bond-header-logo {
       justify-content: center;
       align-items: center;
@@ -80,10 +91,17 @@
   }
 
   .bond-price-data {
+    text-align: center;
+
     .bond-price-data-title {
       font-weight: 700;
       font-size: 16px;
       line-height: 24px;
+    }
+
+    .market-price {
+      text-decoration: line-through;
+      margin-right: 8px;
     }
 
     .bond-price-data-value {
@@ -95,10 +113,9 @@
   }
 
   .bond-price-data-row {
-    display: flex;
-    justify-content: space-around;
-    text-align: center;
-    margin: 23px;
+    margin-top: 40px;
+    margin-bottom: 20px;
+
     h4 {
       margin-bottom: 0;
     }
@@ -113,19 +130,17 @@
     margin: 5px;
   }
 }
-
-.transaction-button {
-  min-width: 185px !important;
-  max-width: 408px;
-  margin: 5px !important;
-  @media screen and (max-width: 417px) {
-    max-width: unset;
-    width: 100%;
-  }
+.MuiPaper-root.ohm-card {
+    margin-bottom: 0!important;
 }
-
 .mobile #bond-view {
+  overflow: hidden;
+  justify-content: center;
+  align-items: center;
+
   .ohm-card {
+    overflow-y: auto;
+    max-height: calc(100vh - 40px);
     .card-content {
       justify-content: space-evenly !important;
       .bond-toggle-row {
@@ -159,7 +174,7 @@
   backdrop-filter: blur(100px) !important;
 }
 
-.bond-one-table {
+.bond-tabs {
   .MuiTabs-indicator {
     // background-color: $otter-dark;
     height: 3px;
@@ -180,6 +195,7 @@
 
   .MuiOutlinedInput-input {
     font-size: 16px;
+    padding: 16px;
   }
 
   .MuiOutlinedInput-notchedOutline {
@@ -203,12 +219,18 @@
   }
 }
 
-.help-text {
-  .help-text-desc {
-    font-weight: 300;
-    font-size: 14px;
-    text-align: center;
+@media screen and (max-width: 598px)  {
+  .purchase-box {
+    > .MuiBox-root {
+      padding: 24px 0;
+    }
   }
+}
+.purchase-note {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-weight: 300;
+  font-size: 14px;
 }
 
 .bond-balance-title {

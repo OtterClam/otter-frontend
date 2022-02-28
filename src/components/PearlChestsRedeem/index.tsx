@@ -10,7 +10,7 @@ import NewPageIcon from 'src/assets/icons/icon_new_page.svg';
 import { formatCurrency, getTokenImage } from 'src/helpers';
 import getNoteImage from 'src/helpers/get-note-image';
 import { useWeb3Context } from 'src/hooks';
-import { useSelector } from 'src/store/hook';
+import { useAppSelector } from 'src/store/hook';
 import {
   claimAndLock as claimAndLockAction,
   claimReward as claimRewardAction,
@@ -52,11 +52,11 @@ export default function PearlChestsRedeem() {
   const [selectedLockNote, setSelectedLock] = useState<ILockNote | null>(null);
   const dispatch = useDispatch();
   const { chainID, connected, address, provider } = useWeb3Context();
-  const currentEpoch = useSelector(state => state.app.currentEpoch);
-  const loadingNotes = useSelector(state => state.lake.loadingNotes);
-  const lockNotes = useSelector(state => state.lake.lockNotes);
-  const terms = useSelector(state => state.lake.terms);
-  const pearlPrice = useSelector(state => state.app.pearlPrice);
+  const currentEpoch = useAppSelector(state => state.app.currentEpoch);
+  const loadingNotes = useAppSelector(state => state.lake.loadingNotes);
+  const lockNotes = useAppSelector(state => state.lake.lockNotes);
+  const terms = useAppSelector(state => state.lake.terms);
+  const pearlPrice = useAppSelector(state => state.app.pearlPrice);
   const termsMap = useMemo(() => {
     return new Map(
       terms

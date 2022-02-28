@@ -22,9 +22,12 @@ export { abi as ClamTokenMigrator } from './ClamTokenMigrator.json';
 
 export { abi as OtterNonStableBondDepository } from './OtterNonStableBondDepository.json';
 
+export { abi as OtterPAWBondStakeDepository } from './OtterPAWBondStakeDepository.json';
+
 export { abi as AggregatorV3InterfaceABI } from './AggregatorV3InterfaceABI.json';
 
 export { abi as OtterPAW } from './tokens/OtterPAW.json';
+export { abi as ERC721 } from './tokens/ERC721.json';
 
 export { abi as PearlNote } from './PearlNote.json';
 export { abi as OtterLake } from './OtterLake.json';

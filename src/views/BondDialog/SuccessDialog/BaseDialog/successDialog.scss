@@ -1,0 +1,154 @@
+@import 'styles/_colors.scss';
+@import 'styles/_mixins.scss';
+
+#success-dialog {
+  z-index: 100 !important;
+
+  .success-title {
+    font-size: 24px;
+    font-weight: 700;
+  }
+
+  .success-subtitle {
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 0;
+  }
+
+  .bond-logo {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+  }
+
+  .bond-nft-title {
+    margin-top: 10px;
+  }
+
+  .helper-text {
+    margin-top: 10px;
+
+    span {
+      font-size: 14px;
+      font-weight: 500;
+    }
+  }
+
+  .divider {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .bond-detail {
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      margin: 10px 0;
+    }
+  }
+
+  .otterstood-btn {
+    max-width: auto;
+    margin: auto;
+  }
+
+  .bond-nft-row {
+    padding: 16px 20px 16px 0;
+  }
+
+  .bond-balance-title {
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .bond-balance-value {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .selection-area {
+    display: flex;
+    align-items: center;
+
+    .selection-image {
+      width: 48px;
+      height: 48px;
+      margin: 0 10px 0 16px;
+      @include otter-images;
+      @include background-image-setting($size: cover);
+    }
+
+    .selection-discount {
+      font-size: 14px;
+      font-weight: 700;
+      color: $clam-pink;
+      margin-top: 4px;
+    }
+
+    .selection-name {
+      word-break: break-all;
+      white-space: normal;
+    }
+  }
+
+  .highlight-text {
+    color: $clam-pink;
+  }
+
+  .dialog {
+    padding: 20px;
+  }
+}
+
+@media screen and (min-width: 598px) {
+  #success-dialog {
+    .success-title {
+      font-size: 36px;
+    }
+
+    .success-subtitle {
+      font-size: 24px;
+      margin: 0;
+    }
+
+    .bond-logo {
+      margin: 40px 0;
+    }
+
+    .bond-detail {
+      margin-bottom: 40px;
+    }
+
+    .divider {
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+
+    .otterstood-btn {
+      max-width: 314px;
+    }
+
+    .selection-area {
+      .selection-image {
+        width: 60px;
+        height: 60px;
+      }
+
+      .selection-discount {
+        font-size: 16px;
+        margin-top: 8px;
+      }
+    }
+
+    .dialog {
+      padding: 40px;
+    }
+  }
+}

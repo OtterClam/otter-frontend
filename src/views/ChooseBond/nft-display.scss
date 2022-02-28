@@ -1,0 +1,21 @@
+@import 'styles/_colors.scss';
+@import 'styles/_mixins.scss';
+
+.bond-card-nft-row {
+  font-weight: 500;
+  align-self: flex-end;
+  word-break: break-all;
+  white-space: normal;
+  font-size: 14px;
+
+  .nft-image {
+    width: 30px;
+    height: 30px;
+    border-radius: 4px;
+    margin-right: 8px;
+    border: 2px solid white;
+
+    @include otter-images; // NOTE: nft image class settings, see src/styles/_mixins.scss
+    @include background-image-setting($size: cover); // NOTE: nft image bg settings, see src/styles/_mixins.scss
+  }
+}

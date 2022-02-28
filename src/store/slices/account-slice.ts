@@ -1,11 +1,11 @@
 import { JsonRpcProvider } from '@ethersproject/providers';
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
-import { BigNumber, ethers } from 'ethers';
+import { ethers } from 'ethers';
 import _ from 'lodash';
 import { ClamTokenContract, MAIContract, PearlTokenContract, StakedClamContract } from 'src/abi';
 import { BondKey, getAddresses, getBond } from 'src/constants';
 import { contractForBond, contractForReserve, setAll } from 'src/helpers';
-
+import { listMyNFT } from '../actions/nft-action';
 interface IState {
   [key: string]: any;
 }
@@ -28,6 +28,7 @@ interface IUserBondDetails {
   interestDue?: number;
   bondMaturationTime?: number;
   pendingPayout?: number;
+  // nftApproved?: boolean;
 }
 
 export interface IAccount {
@@ -123,25 +124,27 @@ export const calculateUserBondDetails = createAsyncThunk(
     bondKey,
     networkID,
     provider,
-  }: CalculateUserBondDetailsActionPayload): Promise<IUserBondDetails> => {
+  }: // nftAddress,
+  CalculateUserBondDetailsActionPayload): Promise<IUserBondDetails> => {
     if (!address) return {};
 
     const addresses = getAddresses(networkID);
     const bond = getBond(bondKey, networkID);
     const bondContract = contractForBond(bondKey, networkID, provider);
+    // const nftContract = new ethers.Contract(nftAddress, ERC721, provider);
     const reserveContract = contractForReserve(bondKey, networkID, provider);
     const sCLAM = new ethers.Contract(addresses.sCLAM_ADDRESS, StakedClamContract, provider);
 
-    let interestDue, pendingPayout, bondMaturationTime;
-
     const bondDetails = await bondContract.bondInfo(address);
-    interestDue = (bond.autostake ? await sCLAM.balanceForGons(bondDetails.gonsPayout) : bondDetails.payout) / 1e9;
-    bondMaturationTime = +bondDetails.vesting + +bondDetails.lastTimestamp;
-    pendingPayout = await bondContract.pendingPayoutFor(address);
+    const interestDue =
+      (bond.autostake ? await sCLAM.balanceForGons(bondDetails.gonsPayout) : bondDetails.payout) / 1e9;
+    const bondMaturationTime = +bondDetails.vesting + +bondDetails.lastTimestamp;
+    const pendingPayout = await bondContract.pendingPayoutFor(address);
 
     const allowance = await reserveContract.allowance(address, bond.address);
     const rawBalance = (await reserveContract.balanceOf(address)).toString();
     const balance = ethers.utils.formatEther(rawBalance);
+    // const nftApproved = await nftContract.isApprovedForAll(address, bond.address);
 
     return {
       bond: bondKey,
@@ -211,7 +214,22 @@ const accountSlice = createSlice({
       .addCase(calculateUserBondDetails.rejected, (state, { error }) => {
         state.loading = false;
         console.log(error);
+      })
+      .addCase(listMyNFT.fulfilled, (state, { payload }) => {
+        state.nfts = payload;
+        state.loading = false;
+      })
+      .addCase(listMyNFT.rejected, (state, { error }) => {
+        state.loading = false;
+        console.log(error);
+      })
+      .addCase(listMyNFT.pending, state => {
+        state.loading = true;
       });
+    // .addCase(bondAsset.fulfilled, (state, { payload }) => {
+    //   if (!payload) return;
+    //   state[payload.bondKey].interestDue = payload.interestDue;
+    // });
   },
 });
 

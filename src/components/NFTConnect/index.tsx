@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react';
 import { useTranslation, Trans, useSSR } from 'react-i18next';
 import * as ActionButton from 'src/components/Button/ActionButton';
 import './connect.scss';
-import { useAppSelector, useAppDispatch, useWeb3Context } from 'src/hooks';
+import { useWeb3Context } from 'src/hooks';
+import { useAppSelector, useAppDispatch } from 'src/store/hook';
 
 export default function NFTConnect() {
   const { t } = useTranslation();

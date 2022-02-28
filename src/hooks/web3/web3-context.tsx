@@ -6,7 +6,7 @@ import { DEFAULT_NETWORK, Networks, RPCURL } from '../../constants';
 import SnackbarUtils from '../../store/snackbarUtils';
 
 type onChainProvider = {
-  connect: () => Promise<Web3Provider>;
+  connect: () => Promise<Web3Provider | undefined>;
   disconnect: () => void;
   provider: JsonRpcProvider;
   readOnlyProvider: JsonRpcProvider;
@@ -240,7 +240,6 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
       switchToPolygonMainnet,
     ],
   );
-  //@ts-ignore
   return <Web3Context.Provider value={{ onChainProvider }}>{children}</Web3Context.Provider>;
 };
 export const IsValidChain = (chainID: number): boolean => {

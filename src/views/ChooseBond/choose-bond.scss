@@ -1,205 +1,118 @@
 @import 'styles/_colors.scss';
-#choose-bond-view {
-  overflow-y: hidden !important;
-  // display: flex;
-  // align-items: center;
-  max-width: unset;
-  padding: 0 20px 0 30px;
-  justify-content: center;
-  flex-direction: column;
-  overflow: hidden;
+@import 'styles/_mixins.scss';
 
-  .MuiGrid-container {
-    flex-wrap: unset !important;
-  }
-  .MuiPaper-root {
+#choose-bond-view {
+  padding: 0px 80px 20px 80px;
+
+  .bond-paper {
     background-color: unset;
   }
-  .ohm-card .bond-hero h4 {
-    // font-weight: 600 !important;
+  .bond-card-header {
+    margin-bottom: 20px;
 
-    .MuiSkeleton-root {
-      margin: auto;
+    .bond-title {
+      font-weight: 600;
+      font-size: 24px;
+      margin-bottom: 20px;
+
+      .bond-title-icon {
+        vertical-align: middle;
+      }
     }
   }
-  .ohm-logo-bg {
-    margin-left: 0;
-    border-radius: 20px;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    height: 40px;
-    width: 40px;
+
+  .bond-hero-section {
+    margin-bottom: 30px;
+
+    .bond-hero-card {
+      padding: 20px;
+      border-radius: 10px;
+
+      .bond-hero-title {
+        font-size: 16px;
+        font-weight: 700;
+      }
+
+      .bond-hero-value {
+        font-size: 24px;
+        font-weight: 800;
+      }
+    }
   }
 
-  .bond-data-card {
-    margin: auto !important;
-    .bond-pair {
-      display: flex !important;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 15px;
-      .MuiBox-root {
-        margin-right: 20px;
-      }
-      .bond-name {
-        svg {
-          margin-left: 5px;
-          vertical-align: middle;
-          font-size: 15px;
+  .bond-row-container {
+    overflow: auto;
+
+    .bond-title-row {
+      padding: 0px 32px;
+      min-width: 1100px;
+      .bond-row-title {
+        text-align: right;
+        font-size: 16px;
+        font-weight: 700;
+        padding: 10px;
+
+        &.first-col {
+          text-align: left;
         }
       }
     }
-    .data-row {
-      margin-bottom: 13px;
 
-      .bond-price {
+    .bond-row {
+      min-width: 1100px;
+      border-radius: 10px;
+      padding: 30px;
+      margin-bottom: 20px;
+      border: 2px solid #ffffff;
+      transition: 0.3s;
+      &:hover {
+        border: 2px solid #ccd4e0;
+        box-shadow: 0px 4px 20px 0px #e9f0f3;
+        cursor: pointer;
+      }
+
+      .bond-row-logo,
+      .bond-row-value {
         display: flex;
-        align-items: flex-end;
         flex-direction: column;
+        justify-content: center;
+        .chip--status {
+          align-self: flex-end;
+        }
+      }
 
-        svg {
-          margin-right: 5px;
+      .bond-row-value {
+        text-align: right;
+        padding: 0px 10px;
+        &.first-col {
+          text-align: left;
+        }
+        a {
+          transition: 0.25s;
+          &:hover {
+            text-decoration: underline;
+            text-decoration-color: $otter-blue;
+          }
+        }
+      }
+
+      .bond-price-text {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin-bottom: 4px;
+        .currency-icon {
+          display: inline-block;
+          margin-right: 4px;
         }
       }
     }
-    .bond-link {
-      margin-top: 10px;
-      text-align: center;
-      a {
-        width: 96%;
-      }
-    }
   }
 
-  .currency-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 15px;
-    margin-right: 8px;
-  }
-
-  .MuiTable-root {
-    margin: 10px 0px;
-  }
-
-  .MuiTableRow-head {
-    display: inline-flex;
-    justify-content: space-between;
-    width: 100%;
-    text-align: center;
-    margin: auto;
-  }
-
-  .MuiTableCell-root {
-    min-width: 120px;
-    padding: 12px;
-
-    text-align: center;
-    p {
-      align-items: center;
-      font-size: 16px;
-      // justify-content: space-evenly;
-      white-space: nowrap;
-      img {
-        margin-right: 3px;
-      }
-    }
-  }
-  .extra-wide {
-    width: 180px;
-  }
-
-  .MuiTableBody-root .MuiTableRow-root .MuiTableCell-alignLeft {
-    justify-content: space-between;
-    div.ohm-pairs {
-      width: 33%;
-      vertical-align: middle !important;
-      align-items: center !important;
-      justify-content: center !important;
-      margin-bottom: 0 !important;
-      .ohm-pairs div.bond-name p,
-      .ohm-pairs svg {
-        align-self: center !important;
-        line-height: 100% !important;
-        font-weight: bold !important;
-        margin-bottom: 0em !important;
-        padding: 0 !important;
-        font-family: inherit;
-        vertical-align: text-top !important;
-      }
-      .ohm-logo-bg {
-        margin-left: 0;
-        border-radius: 20px;
-        height: 40px;
-        width: 40px;
-      }
-    }
-    div.bond-name {
-      width: 60%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      text-align: center;
-      align-items: flex-start;
-      p {
-        margin-bottom: unset !important;
-        line-height: 140% !important;
-      }
-      svg {
-        margin-left: 3px !important;
-        font-size: 1.2em !important;
-      }
-    }
-    .bond-name-cell {
-      p {
-        font-size: 1.2em !important;
-      }
-      display: flex;
-    }
-  }
-}
-
-.bond-title {
-  font-weight: 600;
-  font-size: 24px;
-  margin-bottom: 5px;
-  display: flex;
-  align-items: center;
-
-  &-span {
-    display: flex;
-    align-items: center;
-    margin-bottom: 5px;
-    margin-left: 2px;
-    margin-right: 2px;
-  }
-}
-
-.bond-hero {
-  border-radius: 10px;
-  // display: inline-flex;
-  grid-column-gap: 5% !important;
-  width: 100%;
-
-  .bond-hero-block {
-    margin: auto;
-    width: 100%;
-    // background-color: red;
-    padding: 10px 0 10px 20px;
-    margin-top: 10px;
-  }
-
-  .MuiGrid-root {
-    border-radius: 10px;
-  }
-  .bond-hero-title {
-    font-weight: 700;
-    font-size: 18px;
-
-    // line-height: 24px;
-    text-align: left;
+  // common css
+  .bond-name-label {
+    width: fit-content;
+    margin-top: 4px;
   }
 
   .bond-hero-value {
@@ -230,129 +143,63 @@
   }
 }
 
-.MuiTableCell-head {
-  .bond-table-title {
-    font-weight: 700;
-    font-size: 18px;
-    line-height: 17px;
-    text-align: center;
-    margin-left: auto;
-    margin-right: 0;
-  }
-}
-
-.bond-name-title {
-  display: inline-flex;
-  flex-wrap: normal;
-  align-items: center;
-  text-align: center;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 24px;
-}
-
-.bond-name-label {
-  margin-bottom: 5px;
-}
-
-.bond-name-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.bond-lp-add-liquidity {
-  // color: $otter-blue !important;
-  font-size: 14px;
-  font-weight: 600;
-}
-.bond-lp-add-liquidity:hover {
-  text-decoration: underline;
-}
-
-.bond-table-actions {
-  display: inline-flex;
-  flex-wrap: normal;
-  align-items: center;
-  font-weight: 600;
-  text-align: center;
-  line-height: 24px;
-
-  .bond-table-action-button {
-    display: block;
-    margin-bottom: 8px;
-  }
-}
-
-.bond-table-container {
-  // margin-left: -18px;
-  // margin-right: -18px;
-  width: 100%;
-  align-items: center;
-  justify-content: center;
-  margin: auto;
-  tr {
-    padding: 20px;
-  }
-}
-
-.bond-table-btn {
-  // background: rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
-  padding: 6px 35.5px;
-  text-align: center;
-
-  p {
-    font-style: normal;
-    font-weight: 600;
-    font-size: 16px;
-  }
-
-  &__redeem {
-    border: 2px solid $otter-blue;
-  }
-}
-@media screen and (max-width: 733px) {
+@media screen and (max-width: 1400px) {
   #choose-bond-view {
-    .MuiGrid-container {
-      flex-wrap: wrap !important;
-    }
-    .bond-hero-title {
-      font-size: 14px !important;
-    }
-
-    .bond-hero-value {
-      font-size: 16px !important;
-    }
-    .bond-table-btn {
-      font-size: 14px !important;
-    }
-    .extra-wide {
-      width: unset;
-    }
-    .bond-hero-block {
-      margin-bottom: 10px;
-    }
+    padding: 0px 30px 20px 30px;
   }
 }
-// @media screen and (max-width: 417px) {
-//   #choose-bond-view {
-//     .MuiGrid-container {
-//       flex-wrap: wrap !important;
-//     }
-//     .bond-hero-title {
-//       font-size: 14px !important;
-//     }
 
-//     .bond-hero-value {
-//       font-size: 16px !important;
-//     }
-//   }
-// }
-.ohm-card-container {
-  width: 100%;
-  .MuiGrid-item {
-    margin-bottom: 20px;
-    border-radius: 10px;
+@media screen and (max-width: 960px) {
+  #choose-bond-view {
+    padding: 0px 20px 20px 20px;
+
+    .bond-hero-section {
+      margin-bottom: 10px;
+
+      .bond-hero-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100%;
+        padding: 10px 20px;
+
+        .bond-hero-title {
+          font-size: 14px;
+          text-align: center;
+        }
+
+        .bond-hero-value {
+          font-size: 20px;
+          text-align: center;
+        }
+      }
+    }
+
+    .bond-card-container {
+      font-size: 14px;
+
+      .bond-card {
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+
+        .bond-avatar-row {
+          margin-bottom: 20px;
+        }
+
+        .bond-card-value {
+          text-align: right;
+        }
+
+        .vesting-time-text {
+          font-weight: 400;
+          margin-top: -12px;
+        }
+
+        .bond-card-btn-area {
+          margin-top: 20px;
+        }
+      }
+    }
   }
 }

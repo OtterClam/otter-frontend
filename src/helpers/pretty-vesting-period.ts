@@ -12,7 +12,7 @@ export const prettyVestingPeriod = (t: any, currentBlockTime: number, vestingTim
   return prettifySeconds(t, seconds);
 };
 
-export const prettyShortVestingPeriod = (t: any, currentBlockTime: number, vestingTime: number) => {
+export const prettyShortVestingPeriod = (t: any, currentBlockTime: number, vestingTime: number): string => {
   if (vestingTime === 0) {
     return '';
   }

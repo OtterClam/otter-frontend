@@ -1,0 +1,108 @@
+@import 'styles/_colors.scss';
+@import 'styles/_mixins.scss';
+
+#bond-nft-discount {
+  .bond-nft-row {
+    display: flex;
+    justify-content: space-between;
+    background-color: #fff;
+    padding: 20px 24px;
+    border-radius: 5px;
+
+    .description {
+      color: $dark-gray100;
+    }
+
+    .select-button {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0px 20px 20px;
+      border-radius: 5px;
+      transition: 0.3s;
+
+      .select-text {
+        color: $otter-blue;
+        margin-right: 10px;
+      }
+
+      .arrow-icon {
+        fill: transparent;
+        stroke: $otter-dark;
+      }
+
+      &:hover {
+        cursor: pointer;
+        background-color: $light-gray100;
+      }
+
+      &.disabled {
+        cursor: not-allowed;
+        background-color: #fff;
+
+        .select-text {
+          color: $light-gray300;
+        }
+
+        .arrow-icon {
+          fill: transparent;
+          stroke: $light-gray300;
+        }
+      }
+    }
+
+    .selection-area {
+      display: flex;
+      align-items: center;
+
+      .delete-icon {
+        cursor: pointer;
+        fill: $dark-gray200;
+        transition: 0.3s;
+        &:hover {
+          fill: $dark-gray300;
+        }
+      }
+
+      .selection-image {
+        width: 60px;
+        margin: 0 10px 0 16px;
+      }
+
+      .selection-text {
+        display: flex;
+        .selection-discount {
+          color: $clam-pink;
+          margin-left: 10px;
+        }
+      }
+    }
+    .icon {
+      vertical-align: middle;
+    }
+  }
+}
+
+@media screen and (max-width: 598px) {
+  #bond-nft-discount {
+    .bond-nft-row {
+      padding: 0px 0px 0px 12px;
+      font-size: 14px;
+
+      .selection-area {
+        .selection-image {
+          width: 40px;
+          height: 40px;
+          margin: 0 10px 0 8px;
+        }
+
+        .selection-text {
+          flex-direction: column;
+          .selection-discount {
+            margin-left: 0;
+          }
+        }
+      }
+    }
+  }
+}

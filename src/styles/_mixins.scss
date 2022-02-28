@@ -1,0 +1,40 @@
+@mixin background-image-setting($color: #f7f9fb, $position: center, $repeat: no-repeat, $size: contain) {
+  background-color: $color;
+  background-position: $position;
+  background-repeat: $repeat;
+  background-size: $size;
+}
+
+@mixin otter-images {
+  &.SAFE {
+    background-image: url('/components/NFTCards/images/nft1.jpg');
+  }
+  &.FURRY {
+    background-image: url('/components/NFTCards/images/nft2.jpg');
+  }
+  &.STONE {
+    background-image: url('/components/NFTCards/images/nft3.jpg');
+  }
+  &.DIAMOND {
+    background-image: url('/components/NFTCards/images/nft4.jpg');
+  }
+  &.SAFE14,
+  &.SAFE28,
+  &.SAFE90,
+  &.SAFE180,
+  &.SAFE_NOTE {
+    background-image: url('/assets/images/safe-hand-note.jpg');
+  }
+  &.FURRY28,
+  &.FURRY_NOTE {
+    background-image: url('/assets/images/furry-hand-note.jpg');
+  }
+  &.STONE90,
+  &.STONE_NOTE {
+    background-image: url('/assets/images/stone-hand-note.jpg');
+  }
+  &.DIAMOND180,
+  &.DIAMOND_NOTE {
+    background-image: url('/assets/images/diamond-hand-note.jpg');
+  }
+}

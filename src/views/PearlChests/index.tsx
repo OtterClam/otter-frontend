@@ -1,6 +1,7 @@
-import { Paper, Tab, Tabs, TabsActions, Typography, Zoom } from '@material-ui/core';
+import { Link, Paper, Tab, Tabs, TabsActions, Typography, Zoom } from '@material-ui/core';
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import CustomButton from 'src/components/Button/CustomButton';
 import PearlChestsLockup from 'src/components/PearlChestsLockup';
@@ -8,11 +9,10 @@ import PearlChestsRedeem from 'src/components/PearlChestsRedeem';
 import RebaseTimer from 'src/components/RebaseTimer/RebaseTimer';
 import { getTokenImage } from 'src/helpers';
 import { useWeb3Context } from 'src/hooks';
-import { loadPearlAllowance, loadTermsDetails } from 'src/store/slices/otter-lake-slice';
+import { CheckNetworkStatus } from 'src/hooks/web3/web3-context';
+import { loadPearlAllowance } from 'src/store/slices/otter-lake-slice';
 import chestOpenImage from './images/chest-open.png';
 import './styles.scss';
-import { useDispatch, useSelector } from 'react-redux';
-import { CheckNetworkStatus } from 'src/hooks/web3/web3-context';
 
 enum ChestTab {
   LockUp = 'lockup',
@@ -59,13 +59,12 @@ export default function PearlChests() {
               </Typography>
 
               <div className="pearl-chests__read-more-wrapper">
-                <CustomButton
-                  className="pearl-chests__read-more"
-                  type="outline"
+                <Link
                   href="https://otterclam.medium.com/introducing-pearl-chests-and-pearl-notes-70a61748963f"
-                  text={t('pearlChests.readMore')}
                   target="_blank"
-                />
+                >
+                  <CustomButton display="inline-flex" type="outline" text={t('pearlChests.readMore')} />
+                </Link>
               </div>
             </div>
             <div className="pearl-chests__main-right">

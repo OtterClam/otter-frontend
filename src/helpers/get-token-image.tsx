@@ -1,3 +1,4 @@
+import { CSSProperties } from 'react';
 import { SvgIcon } from '@material-ui/core';
 import { ReactComponent as CLAM } from '../assets/tokens/CLAM.svg';
 import { ReactComponent as StakedClam } from '../assets/tokens/sCLAM.svg';
@@ -7,32 +8,32 @@ import { ReactComponent as WMATIC } from '../assets/tokens/WMATIC.svg';
 import { ReactComponent as PEARL } from '../assets/tokens/PEARL.svg';
 
 export function getMAITokenImage(size: number = 32) {
-  const style = { height: size, width: size };
+  const style: CSSProperties = { height: size, width: size, verticalAlign: 'middle' };
   return <SvgIcon component={MAI} viewBox="0 0 32 32" style={style} />;
 }
 
 export function getCLAMTokenImage(size: number = 32) {
-  const style = { height: size, width: size };
+  const style: CSSProperties = { height: size, width: size, verticalAlign: 'middle' };
   return <SvgIcon component={CLAM} viewBox="0 0 32 32" style={style} />;
 }
 
 export function getStakedCLAMTokenImage(size: number = 32) {
-  const style = { height: size, width: size };
+  const style: CSSProperties = { height: size, width: size, verticalAlign: 'middle' };
   return <SvgIcon component={StakedClam} viewBox="0 0 32 32" style={style} />;
 }
 
 export function getPEARLTokenImage(size: number = 32) {
-  const style = { height: size, width: size };
+  const style: CSSProperties = { height: size, width: size, verticalAlign: 'middle' };
   return <SvgIcon component={PEARL} viewBox="0 0 100 100" style={style} />;
 }
 
 export function getFRAXTokenImage(size: number = 32) {
-  const style = { height: size, width: size };
+  const style: CSSProperties = { height: size, width: size, verticalAlign: 'middle' };
   return <SvgIcon component={FRAX} viewBox="0 0 32 32" style={style} />;
 }
 
 export function getWMATICTokenImage(size: number = 32) {
-  const style = { height: size, width: size };
+  const style: CSSProperties = { height: size, width: size, verticalAlign: 'middle' };
   return <SvgIcon component={WMATIC} viewBox="0 0 32 32" style={style} />;
 }
 
