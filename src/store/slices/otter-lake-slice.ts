@@ -1,14 +1,15 @@
-import groupBy from 'lodash/groupBy';
 import { JsonRpcProvider } from '@ethersproject/providers';
+import { formatEther } from '@ethersproject/units';
 import { createAction, createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
 import { constants, ethers } from 'ethers';
-import { PearlNote, OtterLake, PearlTokenContract } from '../../abi';
+import groupBy from 'lodash/groupBy';
+import { OtterLake, PearlNote, PearlTokenContract } from '../../abi';
 import { getAddresses } from '../../constants';
 import { setAll } from '../../helpers';
-import { fetchPendingTxns, clearPendingTxn } from './pending-txns-slice';
-import { formatEther } from '@ethersproject/units';
-import axios from 'axios';
+import SnackbarUtils from '../../store/snackbarUtils';
 import { ThunkOptions } from '../types';
+import { clearPendingTxn, fetchPendingTxns } from './pending-txns-slice';
 
 export interface ITerm {
   note: INote;
@@ -44,6 +45,7 @@ export interface ILockNote {
 
 export interface IOtterLakeSliceState {
   loading: boolean;
+  loadingNotes: boolean;
   terms: ITerm[];
   lockNotes: ILockNote[];
   selectedTerm?: ITerm;
@@ -52,6 +54,7 @@ export interface IOtterLakeSliceState {
 
 const initialState: IOtterLakeSliceState = {
   loading: true,
+  loadingNotes: true,
   terms: [],
   lockNotes: [],
   selectedTerm: undefined,
@@ -268,7 +271,7 @@ export const approveSpending = createAsyncThunk(
       await tx.wait();
       await dispatch(updateAllowance(constants.MaxInt256.toString()));
     } catch (error: any) {
-      alert((error as Error).message);
+      SnackbarUtils.error((error as Error).message);
     } finally {
       if (tx) {
         dispatch(clearPendingTxn(tx.hash));
@@ -296,7 +299,7 @@ export const claimReward = createAsyncThunk<void, IClaimRewardDetails, ThunkOpti
       await tx.wait();
       dispatch(loadLockedNotes({ address, chainID, provider }));
     } catch (err) {
-      alert((err as Error).message);
+      SnackbarUtils.error((err as Error).message);
     } finally {
       if (tx) {
         dispatch(clearPendingTxn(tx.hash));
@@ -324,7 +327,7 @@ export const redeem = createAsyncThunk<void, IRedeemDetails, ThunkOptions>(
       await tx.wait();
       dispatch(loadLockedNotes({ address, chainID, provider }));
     } catch (err) {
-      alert((err as Error).message);
+      SnackbarUtils.error((err as Error).message);
     } finally {
       if (tx) {
         dispatch(clearPendingTxn(tx.hash));
@@ -368,8 +371,14 @@ export const lock = createAsyncThunk<LockActionResult | undefined, ILockNoteDeta
       const result = await tx.wait();
       lockedEvent = result.events.find((event: any) => event.event === 'Locked');
       dispatch(loadLockedNotes({ address, chainID, provider }));
-    } catch (err) {
-      alert((err as Error).message);
+    } catch (error: any) {
+      if (error.code === -32603) {
+        SnackbarUtils.warning('errors.lockBalance', true);
+      } else if (error.code === 'INVALID_ARGUMENT') {
+        SnackbarUtils.warning('bonds.purchase.invalidValue', true);
+      } else {
+        SnackbarUtils.error(error.message);
+      }
       return;
     } finally {
       if (tx) {
@@ -411,7 +420,7 @@ export const extendLock = createAsyncThunk<LockActionResult | undefined, IExtend
       lockedEvent = result.events.find((event: any) => event.event === 'Locked');
       dispatch(loadLockedNotes({ address, chainID, provider }));
     } catch (err) {
-      alert((err as Error).message);
+      SnackbarUtils.error((err as Error).message);
     } finally {
       if (tx) {
         dispatch(clearPendingTxn(tx.hash));
@@ -456,8 +465,14 @@ export const claimAndLock = createAsyncThunk<LockActionResult | undefined, IClai
       const result = await tx.wait();
       lockedEvent = result.events.find((event: any) => event.event === 'Locked');
       dispatch(loadLockedNotes({ address, chainID, provider }));
-    } catch (err) {
-      alert((err as Error).message);
+    } catch (error: any) {
+      if (error.code === -32603) {
+        SnackbarUtils.warning('errors.wrapBalance', true);
+      } else if (error.code === 'INVALID_ARGUMENT') {
+        SnackbarUtils.warning('bonds.purchase.invalidValue', true);
+      } else {
+        SnackbarUtils.error(error.message);
+      }
     } finally {
       if (tx) {
         dispatch(clearPendingTxn(tx.hash));
@@ -501,10 +516,15 @@ const otterLakeSlice = createSlice({
       .addCase(updateAllowance, (state, action) => {
         state.allowance = action.payload;
       })
+      .addCase(loadLockedNotes.pending, (state, action) => {
+        state.loadingNotes = true;
+      })
       .addCase(loadLockedNotes.fulfilled, (state, action) => {
         setAll(state, action.payload);
+        state.loadingNotes = false;
       })
       .addCase(loadLockedNotes.rejected, (state, { error }) => {
+        state.loadingNotes = false;
         console.log(error);
       });
   },

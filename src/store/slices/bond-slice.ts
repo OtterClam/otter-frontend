@@ -1,7 +1,7 @@
-import { createSlice, createSelector } from '@reduxjs/toolkit';
-import { calcBondDetails, batchGetBondDetails } from '../actions/bond-action';
-import { approveNFT, listLockedNFT, LockedNFT } from '../actions/nft-action';
+import { createSelector, createSlice } from '@reduxjs/toolkit';
 import { BondKey } from '../../constants';
+import { batchGetBondDetails, calcBondDetails } from '../actions/bond-action';
+import { approveNFT, listLockedNFT, LockedNFT } from '../actions/nft-action';
 
 export interface BondDetails {
   bond: BondKey;

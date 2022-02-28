@@ -1,27 +1,28 @@
-import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
+import { Hidden, ThemeProvider, useMediaQuery } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
+import { CheckNetworkStatus } from 'src/hooks/web3/web3-context';
+import { batchListBondNFTDiscounts, listMyNFT } from 'src/store/actions/nft-action';
 import { useAppSelector } from 'src/store/hook';
-import { useAddress, useWeb3Context } from '../hooks';
-
-import './style.scss';
-import { Hidden, useMediaQuery } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-
+import { dark as darkTheme } from 'src/themes/app';
+import { NFT } from 'src/views';
 import Calculator from 'src/views/Calculator';
 import Dashboard from 'src/views/Dashboard/TreasuryDashboard';
 import Migrate from 'src/views/Migrate';
 import PearlChests from 'src/views/PearlChests';
 import TopBar from '../components/Header';
-import Loading from '../components/Loader';
+import LoadingScreen from '../components/LoadingScreen';
 import Sidebar from '../components/Sidebar';
 import NavDrawer from '../components/Sidebar/NavDrawer';
-
 import { BondKeys, zeroAddress } from '../constants';
+import { useWeb3Context } from '../hooks';
 import { batchGetBondDetails } from '../store/actions/bond-action';
-import { listMyNFT, batchListBondNFTDiscounts } from 'src/store/actions/nft-action';
 import { calculateUserBondDetails, loadAccountDetails } from '../store/slices/account-slice';
 import { loadAppDetails } from '../store/slices/app-slice';
+import { loadTermsDetails } from '../store/slices/otter-lake-slice';
+import SnackbarUtils from '../store/snackbarUtils';
 import { ChooseBond, Stake, Wrap } from '../views';
 import NotFound from '../views/404/NotFound';
 import './style.scss';
@@ -70,16 +71,8 @@ function App() {
   const isSmallerScreen = useMediaQuery('(max-width: 960px)');
   const isSmallScreen = useMediaQuery('(max-width: 600px)');
 
-  const {
-    address: walletAddress,
-    chainID,
-    provider,
-    connected,
-    readOnlyProvider,
-    connect,
-    hasCachedProvider,
-  } = useWeb3Context();
-  const address = useAddress();
+  const { address, connect, provider, readOnlyProvider, hasCachedProvider, chainID, connected, checkNetworkStatus } =
+    useWeb3Context();
 
   const [walletChecked, setWalletChecked] = useState(false);
 
@@ -91,10 +84,9 @@ function App() {
     let loadProvider = readOnlyProvider;
 
     if (whichDetails === 'app') {
-      loadApp(loadProvider);
-      // loadTerms(loadProvider);
+      await loadApp(loadProvider);
+      loadChests(loadProvider);
     }
-
     if (whichDetails === 'account' && address && connected) {
       loadAccount(loadProvider);
       if (isAppLoaded) return;
@@ -127,10 +119,17 @@ function App() {
     [connected],
   );
 
+  const loadChests = useCallback(
+    provider => {
+      dispatch(loadTermsDetails({ chainID, provider }));
+    },
+    [connected],
+  );
+
   const loadAccount = useCallback(
     loadProvider => {
       dispatch(loadAccountDetails({ networkID: chainID, address, provider: loadProvider }));
-      dispatch(listMyNFT({ provider: loadProvider, wallet: walletAddress, networkID: chainID }));
+      // dispatch(listMyNFT({ provider: loadProvider, wallet: address, networkID: chainID }));
     },
     [connected, address],
   );
@@ -161,6 +160,12 @@ function App() {
     }
   }, [connected]);
 
+  useEffect(() => {
+    if (checkNetworkStatus === CheckNetworkStatus.WRONG_CHAIN) {
+      SnackbarUtils.error('errors.wrongChain', true);
+    }
+  }, [checkNetworkStatus]);
+
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -173,10 +178,13 @@ function App() {
     if (isSidebarExpanded) handleSidebarClose();
   }, [location]);
 
-  if (isAppLoading || isBondLoading) return <Loading />;
-
   return (
-    <>
+    <Switch>
+      <Route exact path="/nft">
+        <ThemeProvider theme={darkTheme}>
+          <NFT />
+        </ThemeProvider>
+      </Route>
       <div className={`app ${isSmallerScreen && 'tablet'} ${isSmallScreen && 'mobile'}`}>
         <TopBar drawe={!isSmallerScreen} handleDrawerToggle={handleDrawerToggle} />
         <nav className={classes.drawer}>
@@ -224,9 +232,10 @@ function App() {
 
             <Route component={NotFound} />
           </Switch>
+          <LoadingScreen show={isAppLoading} />
         </div>
       </div>
-    </>
+    </Switch>
   );
 }
 

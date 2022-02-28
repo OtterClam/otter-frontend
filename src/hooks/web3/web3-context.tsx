@@ -3,6 +3,7 @@ import Web3Modal from 'web3modal';
 import { StaticJsonRpcProvider, JsonRpcProvider, Web3Provider } from '@ethersproject/providers';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { DEFAULT_NETWORK, Networks, RPCURL } from '../../constants';
+import SnackbarUtils from '../../store/snackbarUtils';
 
 type onChainProvider = {
   connect: () => Promise<Web3Provider | undefined>;
@@ -14,12 +15,20 @@ type onChainProvider = {
   web3Modal: Web3Modal;
   chainID: number;
   web3?: any;
+  checkNetworkStatus: CheckNetworkStatus;
   hasCachedProvider: () => boolean;
+  switchToPolygonMainnet: () => Promise<boolean>;
 };
 
 export type Web3ContextData = {
   onChainProvider: onChainProvider;
 } | null;
+
+export enum CheckNetworkStatus {
+  OK = 'OK',
+  WRONG_CHAIN = 'WRONG_CHAIN',
+  FAILURE = 'FAILURE',
+}
 
 const Web3Context = React.createContext<Web3ContextData>(null);
 
@@ -50,6 +59,7 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
   const [uri, setUri] = useState(rpcUrl);
   const [provider, setProvider] = useState<JsonRpcProvider>(new StaticJsonRpcProvider(uri));
   const readOnlyProvider = useMemo(() => new StaticJsonRpcProvider((RPCURL as any)[chainID]), [chainID]);
+  const [checkNetworkStatus, setCheckNetworkStatus] = useState<CheckNetworkStatus>(CheckNetworkStatus.OK);
 
   const [web3Modal] = useState<Web3Modal>(
     new Web3Modal({
@@ -72,6 +82,59 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
     return true;
   };
 
+  const switchToPolygonMainnet = useCallback(async (): Promise<boolean> => {
+    try {
+      await window.ethereum.request({
+        // await web3Modal.({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: '0x89' }],
+      });
+    } catch (e: any) {
+      //wallet currently does not have Polygon network,
+      //ask to add it for them
+      if (e.code === 4902) {
+        try {
+          await window.ethereum.request({
+            method: 'wallet_addEthereumChain',
+            //https://docs.polygon.technology/docs/develop/metamask/config-polygon-on-metamask/
+            params: [
+              {
+                chainId: '0x89',
+                chainName: 'Polygon Mainnet',
+                nativeCurrency: {
+                  name: 'MATIC',
+                  symbol: 'MATIC',
+                  decimals: 18,
+                },
+                blockExplorerUrls: ['https://polygonscan.com/'],
+                rpcUrls: ['https://polygon-rpc.com/'],
+              },
+            ],
+          });
+        } catch (addError) {
+          if (e.code == 4001) {
+            SnackbarUtils.error('error.userReject', true);
+          } else {
+            SnackbarUtils.error(e.message);
+          }
+          console.error(addError);
+          return false;
+        }
+      }
+      // User rejected the request.
+      else if (e.code == 4001) {
+        SnackbarUtils.error('error.userReject', true);
+      }
+      //failed to switch network, unknown error
+      else {
+        SnackbarUtils.error(e.message);
+      }
+      return false;
+    }
+
+    return true;
+  }, []);
+
   const _initListeners = useCallback(
     (rawProvider: JsonRpcProvider) => {
       if (!rawProvider.on) {
@@ -90,18 +153,11 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
         window.location.reload();
       });
     },
-    [provider],
+    [provider, checkNetworkStatus],
   );
 
-  const _checkNetwork = (otherChainID: number): Boolean => {
-    if (
-      Number(otherChainID) !== Networks.POLYGON_MAINNET &&
-      Number(otherChainID) !== Networks.POLYGON_MUMBAI &&
-      Number(otherChainID) !== Networks.OTTER_FORK &&
-      Number(otherChainID) !== Networks.HARDHAT
-    ) {
-      alert('Please switch your wallet to Polygon network to use OtterClam!');
-    }
+  const _checkNetwork = (otherChainID: number): CheckNetworkStatus => {
+    var status = CheckNetworkStatus.OK;
 
     if (chainID !== otherChainID) {
       console.warn('You are switching networks: ', otherChainID);
@@ -109,11 +165,18 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
       if (rpcUrl) {
         setChainID(otherChainID);
         setUri(rpcUrl);
-        return true;
+        status = CheckNetworkStatus.OK;
+      } else {
+        status = CheckNetworkStatus.FAILURE;
       }
-      return false;
     }
-    return true;
+
+    if (!IsValidChain(otherChainID)) {
+      status = CheckNetworkStatus.WRONG_CHAIN;
+    }
+
+    setCheckNetworkStatus(status);
+    return status;
   };
 
   const connect = useCallback(async () => {
@@ -127,7 +190,7 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
     const connectedAddress = await connectedProvider.getSigner().getAddress();
 
     const validNetwork = _checkNetwork(chainId);
-    if (!validNetwork) {
+    if (validNetwork !== CheckNetworkStatus.OK) {
       console.error('Wrong network, please switch to Polygon Mainnet');
       return;
     }
@@ -160,8 +223,30 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
       chainID,
       web3Modal,
       readOnlyProvider,
+      checkNetworkStatus,
+      switchToPolygonMainnet,
     }),
-    [connect, disconnect, hasCachedProvider, provider, connected, address, chainID, web3Modal, readOnlyProvider],
+    [
+      connect,
+      disconnect,
+      hasCachedProvider,
+      provider,
+      connected,
+      address,
+      chainID,
+      web3Modal,
+      readOnlyProvider,
+      checkNetworkStatus,
+      switchToPolygonMainnet,
+    ],
   );
   return <Web3Context.Provider value={{ onChainProvider }}>{children}</Web3Context.Provider>;
+};
+export const IsValidChain = (chainID: number): boolean => {
+  return (
+    Number(chainID) === Networks.POLYGON_MAINNET ||
+    Number(chainID) === Networks.POLYGON_MUMBAI ||
+    Number(chainID) === Networks.OTTER_FORK ||
+    Number(chainID) === Networks.HARDHAT
+  );
 };

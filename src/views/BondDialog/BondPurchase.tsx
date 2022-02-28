@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { AccountBond, Bonding, BondKey, getBond, zeroAddress } from 'src/constants';
 import { useAppDispatch } from 'src/store/hook';
+import SnackbarUtils from 'src/store/snackbarUtils';
 import { tabletMediaQuery } from 'src/themes/mediaQuery';
 import ActionButton from '../../components/Button/ActionButton';
 import { prettifySeconds, shorten, trim } from '../../helpers';
@@ -108,13 +109,11 @@ function BondPurchase({
 
   const onBond = useCallback(async () => {
     if (quantity === '') {
-      return alert(t('bonds.purchase.noValue'));
+      return SnackbarUtils.warning('bonds.purchase.noValue', true);
       //@ts-ignore
-    }
-    if (isNaN(+quantity)) {
-      return alert(t('bonds.purchase.invalidValue'));
-    }
-    if (interestDue > 0 || pendingPayout > 0) {
+    } else if (isNaN(quantity)) {
+      return SnackbarUtils.warning('bonds.purchase.invalidValue', true);
+    } else if (interestDue > 0 || pendingPayout > 0) {
       const shouldProceed = window.confirm(
         bond.autostake ? t('bonds.purchase.resetVestingAutostake') : t('bonds.purchase.resetVesting'),
       );

@@ -12,6 +12,7 @@ import { useTranslation, Trans } from 'react-i18next';
 import BondRedeemDialog from './BondRedeemDialog';
 import CustomButton from 'src/components/Button/CustomButton';
 import ActionButton from '../../components/Button/ActionButton';
+import SnackbarUtils from '../../store/snackbarUtils';
 
 interface IBondRedeem {
   bondKey: BondKey;
@@ -93,7 +94,7 @@ function BondRedeem({ bondKey }: IBondRedeem) {
                 fontSize="14px"
                 onClick={() => {
                   if (bond.autostake && !fullVested) {
-                    window.alert(t('bonds.redeem.fullyVestedPopup'));
+                    SnackbarUtils.warning('bonds.redeem.fullyVestedPopup', true);
                     return;
                   }
                 }}

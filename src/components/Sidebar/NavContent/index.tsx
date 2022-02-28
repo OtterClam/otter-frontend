@@ -213,7 +213,6 @@ function NavContent() {
                     <IconDefaultPearlChest color={currentMainColor} />
                   )}
                   <p>{t('common.pearlChests')}</p>
-                  <div className="dapp-menu-item__new">NEW</div>
                 </div>
               </Link>
 
@@ -256,14 +255,15 @@ function NavContent() {
                 </div>
               </div>
               <Link
-                href={'https://www.otterclam.finance/#/nft'}
+                href={'https://www.otterclam.finance/otto'}
                 target="_blank"
                 rel="noreferrer"
                 className="button-dapp-menu"
               >
                 <div className="dapp-menu-item">
                   <IconDefaultNFT color={currentMainColor} />
-                  <p>NFT</p>
+                  <p>Otto</p>
+                  <div className="dapp-menu-item__new">NEW</div>
                 </div>
               </Link>
 
@@ -343,7 +343,7 @@ function NavContent() {
           </Grid>
           <div className="dapp-menu-bottom">
             <SocialIcons color="gray" size={24} />
-            <p className="dapp-menu-bottom__rights">© 2021 OtterClam All Rights Reserved</p>
+            <p className="dapp-menu-bottom__rights">© 2022 OtterClam All Rights Reserved</p>
             <div className="dapp-menu-bottom__audit">
               <AuditedMark />
             </div>

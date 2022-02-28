@@ -13,6 +13,7 @@ export enum ConnectButtonStatus {
   Connected = 'connected',
   InProgress = 'inProgress',
   NotConnected = 'notConnected',
+  WrongChain = 'wrongChain',
 }
 
 interface ConnectButtonProps {
@@ -21,7 +22,7 @@ interface ConnectButtonProps {
 const ConnectButton = ({ status }: ConnectButtonProps) => {
   const isMobile = useMediaQuery(mobileMediaQuery);
   const { t } = useTranslation();
-  const { connect, disconnect } = useWeb3Context();
+  const { connect, disconnect, switchToPolygonMainnet } = useWeb3Context();
   if (status === ConnectButtonStatus.Connected) {
     if (isMobile)
       return (
@@ -36,6 +37,11 @@ const ConnectButton = ({ status }: ConnectButtonProps) => {
         onClick={disconnect}
       />
     );
+  }
+  if (status === ConnectButtonStatus.WrongChain) {
+    // TODO: to be translate - components.connect
+    if (isMobile) return <CustomButton text="Switch Chain" onClick={switchToPolygonMainnet} />;
+    return <CustomButton text={t('common.switchChain')} onClick={switchToPolygonMainnet} />;
   }
   if (status === ConnectButtonStatus.NotConnected) {
     // TODO: to be translate - components.connect

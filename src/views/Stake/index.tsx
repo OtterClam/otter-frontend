@@ -1,5 +1,6 @@
 import {
   Box,
+  Divider,
   FormControl,
   Grid,
   InputAdornment,
@@ -10,24 +11,28 @@ import {
   Tab,
   Tabs,
   TabsActions,
-  Divider,
+  Typography,
   Zoom,
 } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
+import _ from 'lodash';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import InfoTooltip from 'src/components/InfoTooltip/InfoTooltip.jsx';
 import ActionButton from '../../components/Button/ActionButton';
 import RebaseTimer from '../../components/RebaseTimer/RebaseTimer';
 import TabPanel from '../../components/TabPanel';
 import { trim } from '../../helpers';
-import { useWeb3Context, useBonds } from '../../hooks';
+import { useBonds, useWeb3Context } from '../../hooks';
 import { IPendingTxn } from '../../store/slices/pending-txns-slice';
-import InfoTooltip from 'src/components/InfoTooltip/InfoTooltip.jsx';
 import { changeApproval, changeStake, claimWarmup } from '../../store/slices/stake-thunk';
 import { IReduxState } from '../../store/slices/state.interface';
 import './stake.scss';
 import StakeDialog from './StakeDialog';
+import IconPearlChest from 'src/assets/icons/icon_pearl_chest_3.png';
+import { CheckNetworkStatus } from 'src/hooks/web3/web3-context';
+import SnackbarUtils from '../../store/snackbarUtils';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -53,6 +58,10 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+const percentFormatter = new Intl.NumberFormat('en-US', {
+  style: 'percent',
+});
+
 function a11yProps(index: number) {
   return {
     id: `simple-tab-${index}`,
@@ -64,7 +73,7 @@ function Stake() {
   const { t } = useTranslation();
   const styles = useStyles();
   const dispatch = useDispatch();
-  const { provider, address, connect, chainID } = useWeb3Context();
+  const { provider, address, connect, chainID, checkNetworkStatus, switchToPolygonMainnet } = useWeb3Context();
   const tabsActions = useRef<TabsActions>(null);
 
   const [view, setView] = useState(0);
@@ -88,6 +97,7 @@ function Stake() {
   const stakingAPY = useSelector<IReduxState, number>(state => state.app.stakingAPY);
   const stakingTVL = useSelector<IReduxState, number>(state => state.app.stakingTVL);
   const pendingTransactions = useSelector<IReduxState, IPendingTxn[]>(state => state.pendingTransactions);
+  const chestAPY = useSelector<IReduxState, number>(state => _.max(state.lake.terms.map(p => p.apy)) || 0);
 
   const pearlBalance = useSelector<IReduxState, string>(state => state.account.balances?.pearl);
 
@@ -115,8 +125,7 @@ function Stake() {
     // eslint-disable-next-line no-restricted-globals
     //@ts-ignore
     if (isNaN(quantity) || quantity === 0 || quantity === '') {
-      // eslint-disable-next-line no-alert
-      alert('Please enter a value!');
+      SnackbarUtils.warning('errors.enterValue', true);
     } else {
       setAction(action);
       let stakeTx: any = await dispatch(
@@ -194,13 +203,18 @@ function Stake() {
                     <div className="stake-apy">
                       <p className="single-stake-subtitle">{t('common.apy')}</p>
                       <Box component="p" color="text.secondary" className="single-stake-subtitle-value">
-                        {stakingAPY ? (
-                          new Intl.NumberFormat('en-US', {
-                            style: 'percent',
-                          }).format(stakingAPY)
-                        ) : (
-                          <Skeleton width="150px" />
-                        )}
+                        {stakingAPY ? percentFormatter.format(stakingAPY) : <Skeleton width="150px" />}
+                      </Box>
+                      <Box
+                        component="p"
+                        color="text.secondary"
+                        className="single-stake-chest-value"
+                        bgcolor="mode.lightGray200"
+                      >
+                        <img src={IconPearlChest} />
+                        <Typography color="textPrimary">{t('stake.chestAPY')}</Typography>
+                        {chestAPY ? percentFormatter.format(chestAPY) : <Skeleton width="60px" />}
+                        <InfoTooltip message={t('stake.chestAPYInfo')} />
                       </Box>
                     </div>
                   </Grid>
@@ -239,8 +253,16 @@ function Stake() {
               {!address ? (
                 <div className="stake-wallet-notification">
                   <div className="wallet-menu" id="wallet-menu">
-                    <Box bgcolor="otter.otterBlue" className="app-otter-button" onClick={connect}>
-                      <p>{t('common.connectWallet')}</p>
+                    <Box
+                      bgcolor="otter.otterBlue"
+                      className="app-otter-button"
+                      onClick={checkNetworkStatus === CheckNetworkStatus.WRONG_CHAIN ? switchToPolygonMainnet : connect}
+                    >
+                      <p>
+                        {checkNetworkStatus === CheckNetworkStatus.WRONG_CHAIN
+                          ? t('common.switchChain')
+                          : t('common.connectWallet')}
+                      </p>
                     </Box>
                   </div>
                   <p className="desc-text">{t('stake.connectWalletDescription')}</p>

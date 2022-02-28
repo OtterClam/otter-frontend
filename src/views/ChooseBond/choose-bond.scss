@@ -1,7 +1,6 @@
 @import 'styles/_colors.scss';
 @import 'styles/_mixins.scss';
 
-
 #choose-bond-view {
   padding: 0px 80px 20px 80px;
 
@@ -72,7 +71,8 @@
         cursor: pointer;
       }
 
-      .bond-row-logo, .bond-row-value {
+      .bond-row-logo,
+      .bond-row-value {
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -190,7 +190,7 @@
         .bond-card-value {
           text-align: right;
         }
-        
+
         .vesting-time-text {
           font-weight: 400;
           margin-top: -12px;

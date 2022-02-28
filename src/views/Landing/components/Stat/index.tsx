@@ -15,7 +15,7 @@ function Stat() {
 query {
   protocolMetrics(first: 1, orderBy: timestamp, orderDirection: desc) {
     treasuryMarketValue
-    currentAPY
+    diamondHandAPY
     totalValueLocked
   }
 }`).then(r => {
@@ -24,7 +24,7 @@ query {
       try {
         const latestMetrics = (r as any).data.protocolMetrics[0];
         setTreasuryBalance(latestMetrics.treasuryMarketValue);
-        setStakingAPY(latestMetrics.currentAPY);
+        setStakingAPY(latestMetrics.diamondHandAPY);
         setTvl(latestMetrics.totalValueLocked);
       } catch {}
     });
@@ -70,7 +70,7 @@ query {
         </Grid>
         <Grid item xs={12} sm={4} md={4} lg={4}>
           <div className="landing-footer-item-wrap">
-            <p className="landing-footer-item-title">{t('common.currentApy')}</p>
+            <p className="landing-footer-item-title">{t('common.chestAPY')}</p>
             <p className="landing-footer-item-value">
               {stakingAPY ? (
                 <>{new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(Number(stakingAPY))}%</>

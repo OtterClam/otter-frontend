@@ -6,7 +6,6 @@ import { ClamTokenContract, MAIContract, PearlTokenContract, StakedClamContract 
 import { BondKey, getAddresses, getBond } from 'src/constants';
 import { contractForBond, contractForReserve, setAll } from 'src/helpers';
 import { listMyNFT } from '../actions/nft-action';
-import { bondAsset } from '../actions/bond-action';
 interface IState {
   [key: string]: any;
 }
@@ -226,11 +225,11 @@ const accountSlice = createSlice({
       })
       .addCase(listMyNFT.pending, state => {
         state.loading = true;
-      })
-      .addCase(bondAsset.fulfilled, (state, { payload }) => {
-        if (!payload) return;
-        state[payload.bondKey].interestDue = payload.interestDue;
       });
+    // .addCase(bondAsset.fulfilled, (state, { payload }) => {
+    //   if (!payload) return;
+    //   state[payload.bondKey].interestDue = payload.interestDue;
+    // });
   },
 });
 

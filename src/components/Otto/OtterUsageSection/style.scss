@@ -1,0 +1,58 @@
+.otto-usage {
+  &__cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-column-gap: 30px;
+  }
+}
+
+.otto-usage-card {
+  &__container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 40px;
+    border-radius: 10px;
+  }
+  &__title {
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    line-height: 30px;
+    margin: 0;
+    margin-bottom: 15px;
+  }
+  &__image {
+    width: 100%;
+  }
+  &__content {
+    font-weight: 400;
+    text-align: center;
+    line-height: 22px;
+    margin-bottom: 15px;
+  }
+}
+
+@media screen and (max-width: 960px) {
+  .otto-usage {
+    &__cards {
+      grid-template-columns: repeat(2, 1fr);
+      grid-column-gap: 20px;
+      grid-row-gap: 20px;
+    }
+  }
+}
+
+@media screen and (max-width: 598px) {
+  .otto-usage {
+    &__cards {
+      grid-template-columns: auto;
+      grid-column-gap: 0;
+    }
+  }
+  .otto-usage-card {
+    &__container {
+      padding: 20px;
+    }
+  }
+}

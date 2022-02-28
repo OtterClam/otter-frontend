@@ -1,7 +1,5 @@
 import apollo from '../../lib/apolloClient';
-import { useTranslation } from 'react-i18next';
 
-// TODO: add paramaterization
 export const treasuryDataQuery = `
 query {
   protocolMetrics(first: 100, orderBy: timestamp, orderDirection: desc) {
@@ -13,20 +11,18 @@ query {
     clamPrice
     marketCap
     totalValueLocked
-    treasuryRiskFreeValue
     treasuryMarketValue
     nextEpochRebase
     nextDistributedClam
-    treasuryMaiRiskFreeValue
     treasuryMaiMarketValue
     treasuryFraxMarketValue
-    treasuryFraxRiskFreeValue
     treasuryWmaticMarketValue
-    currentAPY
-    runway10k
-    runway50k
-    runway100k
-    runwayCurrent
+    treasuryMaiUsdcRiskFreeValue
+    treasuryMaiUsdcQiInvestmentRiskFreeValue
+    treasuryQiMarketValue
+    treasuryDquickMarketValue
+    treasuryQiWmaticMarketValue
+    treasuryQiWmaticQiInvestmentMarketValue
     treasuryClamMaiPOL
   }
 }
@@ -40,33 +36,6 @@ export const bulletpoints = {
       right: 20,
       top: -12,
       background: 'linear-gradient(180deg, #FFACA1 -10%, #FFACA1 100%)',
-    },
-  ],
-  coin: [
-    {
-      right: 15,
-      top: -12,
-      background: 'linear-gradient(180deg, #DB3737 -10%, #EA9276 100%)',
-    },
-    {
-      right: 25,
-      top: -12,
-      background: 'linear-gradient(180deg, #8f5ae8 -10%, #98B3E9 100%)',
-    },
-    {
-      right: 29,
-      top: -12,
-      background: 'linear-gradient(180deg, #2891F9 0%, rgba(40, 145, 249, 0.5) 100%)',
-    },
-    {
-      right: 29,
-      top: -12,
-      background: 'linear-gradient(180deg, #4C8C2A -10%, #8BFF4D 100%)',
-    },
-    {
-      right: 29,
-      top: -12,
-      background: 'linear-gradient(180deg, #c9184a -10%, #ff758f 100%)',
     },
   ],
   rfv: [
@@ -85,6 +54,11 @@ export const bulletpoints = {
       top: -12,
       background: 'linear-gradient(180deg, #c9184a -10%, #ff758f 100%)',
     },
+    {
+      right: 29,
+      top: -12,
+      background: 'linear-gradient(180deg, #5CBD6B 19.01%, rgba(92, 189, 107, 0.5) 100%)',
+    },
   ],
   holder: [
     {
@@ -98,6 +72,26 @@ export const bulletpoints = {
       right: 20,
       top: -12,
       background: '#1D2654',
+    },
+    {
+      right: 20,
+      top: -12,
+      background: '#000000',
+    },
+    {
+      right: 20,
+      top: -12,
+      background: '#2EC608',
+    },
+    {
+      right: 20,
+      top: -12,
+      background: '#49A1F2',
+    },
+    {
+      right: 20,
+      top: -12,
+      background: '#c9184a',
     },
   ],
   runway: [

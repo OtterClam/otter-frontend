@@ -1,4 +1,4 @@
-import { Paper, Tab, Tabs, TabsActions, Typography, useMediaQuery, Zoom, Link } from '@material-ui/core';
+import { Link, Paper, Tab, Tabs, TabsActions, Typography, Zoom } from '@material-ui/core';
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
@@ -9,8 +9,8 @@ import PearlChestsRedeem from 'src/components/PearlChestsRedeem';
 import RebaseTimer from 'src/components/RebaseTimer/RebaseTimer';
 import { getTokenImage } from 'src/helpers';
 import { useWeb3Context } from 'src/hooks';
-import { loadPearlAllowance, loadTermsDetails } from 'src/store/slices/otter-lake-slice';
-import { mobileMediaQuery } from 'src/themes/mediaQuery';
+import { CheckNetworkStatus } from 'src/hooks/web3/web3-context';
+import { loadPearlAllowance } from 'src/store/slices/otter-lake-slice';
 import chestOpenImage from './images/chest-open.png';
 import './styles.scss';
 
@@ -23,12 +23,16 @@ export default function PearlChests() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { tabValue, tabsActions, handleTabValueChangeEvent } = useTabs();
-  const { address, connect, connected, chainID, provider, readOnlyProvider } = useWeb3Context();
-  const isMobile = useMediaQuery(mobileMediaQuery);
-
-  useEffect(() => {
-    dispatch(loadTermsDetails({ chainID, provider: readOnlyProvider }));
-  }, [readOnlyProvider]);
+  const {
+    address,
+    connect,
+    connected,
+    chainID,
+    provider,
+    readOnlyProvider,
+    checkNetworkStatus,
+    switchToPolygonMainnet,
+  } = useWeb3Context();
   useEffect(() => {
     if (connected) {
       dispatch(loadPearlAllowance({ address, chainID, provider }));
@@ -82,11 +86,13 @@ export default function PearlChests() {
           {tabValue === ChestTab.Redeem && !address && (
             <div className="pearl-chests__connect">
               <CustomButton
-                display="inline-flex"
-                text={t('common.connectWallet')}
-                marginBottom="20px"
-                bgcolor="otter.otterBlue"
-                onClick={connect}
+                className="pearl-chests__connect-btn"
+                text={
+                  checkNetworkStatus === CheckNetworkStatus.WRONG_CHAIN
+                    ? t('common.switchChain')
+                    : t('common.connectWallet')
+                }
+                onClick={checkNetworkStatus === CheckNetworkStatus.WRONG_CHAIN ? switchToPolygonMainnet : connect}
               />
               <Typography variant="caption" component="p" className="pearl-chests__connect-msg">
                 {t('pearlChests.redeem.connect')}
@@ -109,7 +115,7 @@ function useTabs() {
   const [tabValue, setTabValue] = useState(query.get('tab') ?? ChestTab.LockUp);
   const tabsActions = useRef<TabsActions>(null);
 
-  const handleTabValueChangeEvent = useCallback((e: ChangeEvent<{}>, newValue: ChestTab) => {
+  const handleTabValueChangeEvent = useCallback(async (e: ChangeEvent<{}>, newValue: ChestTab) => {
     setTabValue(newValue);
   }, []);
 
