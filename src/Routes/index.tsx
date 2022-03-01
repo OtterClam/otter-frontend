@@ -1,5 +1,4 @@
 import App from './App';
-import Landing from './Landing';
 import IDO from './IDO';
 import { HashRouter } from 'react-router-dom';
 import { light as lightTheme } from '../themes';
@@ -9,10 +8,6 @@ import { PropsWithChildren } from 'react';
 import { SnackbarKey, SnackbarProvider, useSnackbar } from 'notistack';
 import { SnackbarUtilsConfigurator } from '../store/snackbarUtils';
 import { Close as IconClose } from '@material-ui/icons';
-
-const isApp = (): boolean => {
-  return window.location.host.includes('app');
-};
 
 const isIDO = (): boolean => {
   return window.location.host.includes('ido');
@@ -33,15 +28,10 @@ function SnackbarCloseButton({ snackbarKey }: { snackbarKey: SnackbarKey }) {
 }
 
 function Root() {
-  let Content = Landing;
-  let defaultTheme: Theme | undefined = lightTheme;
-  let ThemeProvider = DefaultThemeProvider;
+  let Content = App;
+  let ThemeProvider = AppThemeProvider;
 
-  if (isApp()) {
-    Content = App;
-    defaultTheme = undefined;
-    ThemeProvider = AppThemeProvider;
-  } else if (isIDO()) {
+  if (isIDO()) {
     Content = IDO;
   }
 

@@ -163,9 +163,11 @@ function LockupOption({
         <img src={PearlChestImages[index]} />
         <div>
           <p className="lockup-option__tvl__title">{t('pearlChests.lockUp.lockedPearl')}</p>
-          <Typography color="textSecondary">
-            <p className="lockup-option__tvl__value">{formatCurrency(term.pearlBalance * pearlPrice)}</p>
-          </Typography>
+          <p className="lockup-option__tvl__value">
+            <Typography component={'span'} color="textSecondary">
+              {formatCurrency(term.pearlBalance * pearlPrice)}
+            </Typography>
+          </p>
         </div>
       </Box>
 
