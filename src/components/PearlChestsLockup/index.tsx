@@ -171,6 +171,7 @@ function LockupOption({
 
       <ActionButton
         className="lockup-option__select-btn"
+        height={68}
         pendingTransactions={pendingTransactions}
         type="select_lockup_option"
         start={t(
