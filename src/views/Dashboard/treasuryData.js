@@ -23,6 +23,7 @@ query {
     treasuryDquickMarketValue
     treasuryQiWmaticMarketValue
     treasuryQiWmaticQiInvestmentMarketValue
+    treasuryDaiRiskFreeValue
     treasuryClamMaiPOL
   }
 }

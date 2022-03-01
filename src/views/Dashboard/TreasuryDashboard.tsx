@@ -14,35 +14,59 @@ import './treasury-dashboard.scss';
 import { bulletpoints, itemType, treasuryDataQuery } from './treasuryData.js';
 
 const numberFormatter = Intl.NumberFormat('en', { maximumFractionDigits: 0 });
-
-const dataKeys = {
-  marketValues: [
-    'treasuryMarketValue',
-    'treasuryMaiMarketValue',
-    'treasuryFraxMarketValue',
-    'treasuryWmaticMarketValue',
-    'treasuryMaiUsdcQiInvestmentRiskFreeValue',
-    'treasuryQiMarketValue',
-    'treasuryDquickMarketValue',
-    'treasuryQiWmaticQiInvestmentMarketValue',
-  ],
-};
-const stopColors = {
-  marketValues: [
-    ['#FFFFFF', 'rgba(219, 55, 55, 0.5)'],
-    ['#EE4B4E', 'rgba(219, 55, 55, 0.5)'],
-    ['#8F5AE8', 'rgba(143, 90, 232, 0.5)'],
-    ['#2891F9', 'rgba(40, 145, 249, 0.5)'],
-    ['#5CBD6B', 'rgba(92, 189, 107, 0.5)'],
-    ['#F4D258', 'rgba(244, 210, 88, 0.5)'],
-    ['#5C80B6', 'rgba(92, 128, 182, 0.5)'],
-    ['#F4D258', 'rgba(244, 210, 88, 0.5)'],
-  ],
-};
+const marketValues = [
+  {
+    label: 'Total',
+    dataKey: 'treasuryMarketValue',
+    stopColor: ['#FFFFFF', 'rgba(219, 55, 55, 0.5)'],
+  },
+  {
+    label: 'MAI',
+    dataKey: 'treasuryMaiMarketValue',
+    stopColor: ['#EE4B4E', 'rgba(219, 55, 55, 0.5)'],
+  },
+  {
+    label: 'FRAX',
+    dataKey: 'treasuryFraxMarketValue',
+    stopColor: ['#8F5AE8', 'rgba(143, 90, 232, 0.5)'],
+  },
+  {
+    label: 'MATIC',
+    dataKey: 'treasuryWmaticMarketValue',
+    stopColor: ['#2891F9', 'rgba(40, 145, 249, 0.5)'],
+  },
+  {
+    label: 'MAI/USDC(QiDAO)',
+    dataKey: 'treasuryMaiUsdcQiInvestmentRiskFreeValue',
+    stopColor: ['#5CBD6B', 'rgba(92, 189, 107, 0.5)'],
+  },
+  {
+    label: 'Qi',
+    dataKey: 'treasuryQiMarketValue',
+    stopColor: ['#F4D258', 'rgba(244, 210, 88, 0.5)'],
+  },
+  {
+    label: 'dQUICK',
+    dataKey: 'treasuryDquickMarketValue',
+    stopColor: ['#5C80B6', 'rgba(92, 128, 182, 0.5)'],
+  },
+  {
+    label: 'Qi/MATIC',
+    dataKey: 'treasuryQiWmaticQiInvestmentMarketValue',
+    stopColor: ['#F4D258', 'rgba(244, 210, 88, 0.5)'],
+  },
+  {
+    label: 'DAI',
+    dataKey: 'treasuryDaiRiskFreeValue',
+    stopColor: ['#F4D258', 'rgba(244, 210, 88, 0.5)'],
+  },
+];
 const tooltipColors = {
-  marketValues: stopColors.marketValues.map(([color1, color2]) => ({
-    background: `linear-gradient(180deg, ${color1} 19%, ${color2} 100%)`,
-  })),
+  marketValues: marketValues
+    .map(p => p.stopColor)
+    .map(([color1, color2]) => ({
+      background: `linear-gradient(180deg, ${color1} 19%, ${color2} 100%)`,
+    })),
 };
 
 function TreasuryDashboard() {
@@ -51,7 +75,6 @@ function TreasuryDashboard() {
   const tooltipItems = useMemo(
     () => ({
       tvl: [t('dashboard.tooltipItems.tvl')],
-      marketValues: ['Total', 'MAI', 'FRAX', 'MATIC', 'MAI/USDC(QiDAO)', 'Qi', 'dQUICK', 'Qi/MATIC'],
       rfv: ['MAI', 'FRAX', 'MAI/USDC(QiDAO)'],
       holder: ['CLAMies'],
       apy: [t('common.180Chest'), t('common.90Chest'), t('common.28Chest'), t('common.14Chest'), t('common.staking')],
@@ -83,7 +106,6 @@ function TreasuryDashboard() {
   const [data, setData] = useState<any>(null);
   const [staked, setStaked] = useState(null);
   const [backingPerClam, setBackingPerClam] = useState<number | null>(null);
-  const theme = useTheme();
   const smallerScreen = useMediaQuery('(max-width: 650px)');
   const verySmallScreen = useMediaQuery('(max-width: 379px)');
 
@@ -210,22 +232,13 @@ function TreasuryDashboard() {
                   <Chart
                     type="stack"
                     data={data}
-                    dataKey={[
-                      'treasuryMarketValue',
-                      'treasuryMaiMarketValue',
-                      'treasuryFraxMarketValue',
-                      'treasuryWmaticMarketValue',
-                      'treasuryMaiUsdcQiInvestmentRiskFreeValue',
-                      'treasuryQiMarketValue',
-                      'treasuryDquickMarketValue',
-                      'treasuryQiWmaticQiInvestmentMarketValue',
-                    ]}
-                    stopColor={stopColors.marketValues}
+                    dataKey={marketValues.map(p => p.dataKey)}
+                    stopColor={marketValues.map(p => p.stopColor)}
                     headerText={t('dashboard.marketValue')}
                     // @ts-ignore
                     headerSubText={`${data && formatCurrency(data[0].treasuryMarketValue)}`}
                     bulletpointColors={tooltipColors.marketValues}
-                    itemNames={tooltipItems.marketValues}
+                    itemNames={marketValues.map(p => p.label)}
                     itemType={itemType.dollar}
                     infoTooltipMessage={tooltipInfoMessages.mvt}
                     // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
