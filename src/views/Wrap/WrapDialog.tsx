@@ -1,6 +1,5 @@
 import { Modal, Paper, SvgIcon, IconButton, makeStyles, Grid } from '@material-ui/core';
 import { ReactComponent as XIcon } from '../../assets/icons/icon_close.svg';
-import { getTokenImage } from '../../helpers';
 import WrapGif from './sClam_to_Pearl.gif';
 import UnwrapGif from './Pearl_to_sClam.gif';
 

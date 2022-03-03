@@ -26,7 +26,7 @@ import TabPanel from '../../components/TabPanel';
 import { trim } from '../../helpers';
 import { useBonds, useWeb3Context } from '../../hooks';
 import { IPendingTxn } from '../../store/slices/pending-txns-slice';
-import { changeApproval, changeStake, claimWarmup } from '../../store/slices/stake-thunk';
+import { approveStake, changeApproval, changeStake, stakeToPearl } from '../../store/slices/stake-thunk';
 import { IReduxState } from '../../store/slices/state.interface';
 import './stake.scss';
 import StakeDialog from './StakeDialog';
@@ -78,9 +78,8 @@ function Stake() {
 
   const [view, setView] = useState(0);
   const [quantity, setQuantity] = useState<string>('');
-
   const [open, setOpen] = useState(false);
-  const [action, setAction] = useState<string>('');
+  const [action, setAction] = useState<string>('stake');
 
   const isAppLoading = useSelector<IReduxState, boolean>(state => state.app.loading);
   const currentIndex = useSelector<IReduxState, string>(state => {
@@ -91,8 +90,7 @@ function Stake() {
   const sClamBalance = useSelector<IReduxState, string>(state => state.account.balances?.sClam);
   const stakeAllowance = useSelector<IReduxState, number>(state => state.account.staking?.clamStake);
   const unstakeAllowance = useSelector<IReduxState, number>(state => state.account.staking?.sClamUnstake);
-  const warmupBalance = useSelector<IReduxState, string>(state => state.account.staking?.warmup);
-  const canClaimWarmup = useSelector<IReduxState, boolean>(state => state.account.staking?.canClaimWarmup);
+  const unstakePearlAllowance = useSelector<IReduxState, number>(state => state.account.staking?.pearlUnstake);
   const stakingRebase = useSelector<IReduxState, number>(state => state.app.stakingRebase);
   const stakingAPY = useSelector<IReduxState, number>(state => state.app.stakingAPY);
   const stakingTVL = useSelector<IReduxState, number>(state => state.app.stakingTVL);
@@ -121,6 +119,22 @@ function Stake() {
     await dispatch(changeApproval({ address, token, provider, networkID: chainID }));
   };
 
+  const onApproveStake = useCallback(async () => {
+    await dispatch(approveStake({ address, provider, chainID }));
+  }, [address, chainID, dispatch, provider]);
+
+  const onStake = async () => {
+    if (isNaN(Number(quantity)) || Number(quantity) === 0 || quantity === '') {
+      SnackbarUtils.warning('errors.enterValue', true);
+    } else {
+      setAction('stake');
+      let stakeTx: any = await dispatch(stakeToPearl({ address, value: String(quantity), provider, chainID }));
+      if (stakeTx.payload == true) {
+        handleOpenDialog();
+      }
+    }
+  };
+
   const onChangeStake = async (action: string) => {
     // eslint-disable-next-line no-restricted-globals
     //@ts-ignore
@@ -137,17 +151,14 @@ function Stake() {
     }
   };
 
-  const onClaimWarmup = async () => {
-    await dispatch(claimWarmup({ address, provider, networkID: chainID }));
-  };
-
   const hasAllowance = useCallback(
     token => {
       if (token === 'CLAM') return stakeAllowance > 0;
       if (token === 'sCLAM') return unstakeAllowance > 0;
+      if (token === 'PEARL') return unstakePearlAllowance > 0;
       return 0;
     },
-    [stakeAllowance, unstakeAllowance],
+    [stakeAllowance, unstakeAllowance, unstakePearlAllowance],
   );
 
   const changeView = (event: any, newView: number) => {
@@ -170,10 +181,7 @@ function Stake() {
   const trimmedTotalBalance = trim(Number(totalBalance), 4);
 
   const stakingRebasePercentage = trim(stakingRebase * 100, 4);
-  const nextRewardValue = trim(
-    (Number(stakingRebasePercentage) / 100) * (Number(trimmedTotalBalance) + Number(warmupBalance)),
-    4,
-  );
+  const nextRewardValue = trim((Number(stakingRebasePercentage) / 100) * Number(trimmedTotalBalance), 4);
   const trimmedSClamBalance = trim(Number(sClamBalance), 4);
 
   useEffect(() => {
@@ -312,7 +320,7 @@ function Stake() {
                               type="staking"
                               start="Stake"
                               progress="Staking..."
-                              processTx={() => onChangeStake('stake')}
+                              processTx={onStake}
                             ></ActionButton>
                           ) : (
                             <ActionButton
@@ -320,16 +328,7 @@ function Stake() {
                               type="approve_staking"
                               start="Approve"
                               progress="Approving..."
-                              processTx={() => onSeekApproval('CLAM')}
-                            ></ActionButton>
-                          )}
-                          {canClaimWarmup && (
-                            <ActionButton
-                              pendingTransactions={pendingTransactions}
-                              type="claimWarmup"
-                              start="Claim Warmup"
-                              progress="Claiming..."
-                              processTx={() => onClaimWarmup()}
+                              processTx={onApproveStake}
                             ></ActionButton>
                           )}
                         </div>
@@ -357,11 +356,12 @@ function Stake() {
                     </Box>
                     <StakeDialog
                       open={open}
+                      index={Number(currentIndex)}
                       handleClose={handleCloseDialog}
                       stakingRebasePercentage={stakingRebasePercentage}
-                      quantity={trim(Number(quantity), 4)}
-                      balance={trim(Number(clamBalance), 4)}
-                      stakeBalance={new Intl.NumberFormat('en-US').format(Number(trimmedSClamBalance))}
+                      quantity={quantity}
+                      balance={trim(clamBalance, 4)}
+                      stakeBalance={trimmedTotalBalance}
                       nextRewardValue={nextRewardValue}
                       action={action}
                     />
@@ -373,15 +373,6 @@ function Stake() {
                   </Box>
 
                   <div className={`stake-user-data`}>
-                    {Number(warmupBalance) > 0 && (
-                      <div className="data-row">
-                        <p className="data-row-name-warmup">{t('stake.balanceInWarmup')}</p>
-                        <p className="data-row-value">
-                          {isAppLoading ? <Skeleton width="80px" /> : <>{trim(Number(warmupBalance), 4)} CLAM</>}
-                        </p>
-                      </div>
-                    )}
-
                     <div className="data-row">
                       <p className="data-row-name">{t('common.yourBalance')}</p>
                       <p className="data-row-value">
@@ -395,37 +386,27 @@ function Stake() {
                       </div>
 
                       <p className="data-row-value">
-                        {isAppLoading ? (
-                          <Skeleton width="80px" />
-                        ) : (
-                          <>{new Intl.NumberFormat('en-US').format(Number(trimmedTotalBalance))} sCLAM</>
-                        )}
+                        {isAppLoading ? <Skeleton width="80px" /> : <>{trimmedTotalBalance} CLAM</>}
                       </p>
                     </div>
-                    <div className="data-row">
-                      <div className="data-row-name-small">
-                        sCLAM {t('common.balance')}
-                        <InfoTooltip message={t('stake.infoTooltips.sClamBalance')} />
+                    {Number(sClamBalance) > 0 && (
+                      <div className="data-row">
+                        <div className="data-row-name-small">
+                          sCLAM {t('common.balance')}
+                          <InfoTooltip message={t('stake.infoTooltips.sClamBalance')} />
+                        </div>
+                        <p className="data-row-value-small">
+                          {isAppLoading ? <Skeleton width="80px" /> : <>{trimmedSClamBalance} sCLAM</>}
+                        </p>
                       </div>
-                      <p className="data-row-value-small">
-                        {isAppLoading ? (
-                          <Skeleton width="80px" />
-                        ) : (
-                          <>{new Intl.NumberFormat('en-US').format(Number(trimmedSClamBalance))} sCLAM</>
-                        )}
-                      </p>
-                    </div>
+                    )}
                     <div className="data-row">
                       <div className="data-row-name-small">
-                        sCLAM Bonded
+                        CLAM Bonded
                         <InfoTooltip message={t('stake.infoTooltips.sClamBonded')} />
                       </div>
                       <p className="data-row-value-small">
-                        {isAppLoading ? (
-                          <Skeleton width="80px" />
-                        ) : (
-                          <>{new Intl.NumberFormat('en-US').format(Number(trim(totalBondedBalance, 4)))} sCLAM</>
-                        )}
+                        {isAppLoading ? <Skeleton width="80px" /> : <>{trim(totalBondedBalance, 4)} CLAM</>}
                       </p>
                     </div>
                     <div className="data-row">
@@ -448,7 +429,7 @@ function Stake() {
                         <InfoTooltip message={t('stake.infoTooltips.nextReward')} />
                       </div>
                       <p className="data-row-value">
-                        {isAppLoading ? <Skeleton width="80px" /> : <>{nextRewardValue} sCLAM</>}
+                        {isAppLoading ? <Skeleton width="80px" /> : <>{nextRewardValue} CLAM</>}
                       </p>
                     </div>
 

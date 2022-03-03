@@ -1,6 +1,12 @@
 import { BigNumber, ethers } from 'ethers';
 import { getAddresses } from '../../constants';
-import { StakingHelperContract, ClamTokenContract, StakedClamContract, StakingContract } from '../../abi';
+import {
+  StakingHelperContract,
+  OtterStakingPearlHelper,
+  ClamTokenContract,
+  StakedClamContract,
+  StakingContract,
+} from '../../abi';
 import { clearPendingTxn, fetchPendingTxns, getStakingTypeText } from './pending-txns-slice';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchAccountSuccess, getBalances } from './account-slice';
@@ -84,6 +90,55 @@ export const changeApproval = createAsyncThunk(
         }),
       );
     }
+  },
+);
+
+interface IApproveStakePayload {
+  provider: JsonRpcProvider;
+  address: string;
+  chainID: number;
+}
+
+export const approveStake = createAsyncThunk(
+  'stake/approveStake',
+  async ({ provider, address, chainID }: IApproveStakePayload, { dispatch }) => {
+    if (!provider) {
+      SnackbarUtils.warning('errors.connectWallet', true);
+      return;
+    }
+    const addresses = getAddresses(chainID);
+    const signer = provider.getSigner();
+    const clamContract = new ethers.Contract(addresses.CLAM_ADDRESS, ClamTokenContract, signer);
+
+    let approveTx;
+    let allowance: number;
+
+    try {
+      const approvedPromise: Promise<BigNumber> = new Promise(resolve => {
+        const event = clamContract.filters.Approval(address, addresses.STAKING_HELPER_ADDRESS);
+        clamContract.once(event, (owner: string, allowance: BigNumber) => {
+          resolve(allowance);
+        });
+      });
+      approveTx = await clamContract.approve(addresses.STAKING_PEARL_HELPER_ADDRESS, ethers.constants.MaxUint256);
+
+      dispatch(fetchPendingTxns({ txnHash: approveTx.hash, text: 'Approve Staking', type: 'approve_staking' }));
+      allowance = +(await approvedPromise);
+    } catch (error: any) {
+      SnackbarUtils.error(error.message);
+      return;
+    } finally {
+      if (approveTx) {
+        dispatch(clearPendingTxn(approveTx.hash));
+      }
+    }
+    return dispatch(
+      fetchAccountSuccess({
+        staking: {
+          clamStake: allowance,
+        },
+      }),
+    );
   },
 );
 
@@ -177,5 +232,89 @@ export const claimWarmup = createAsyncThunk(
     }
     dispatch(getBalances({ address, networkID, provider }));
     return;
+  },
+);
+
+export interface IStakeToPearlPayload {
+  value: string;
+  provider: JsonRpcProvider;
+  address: string;
+  chainID: number;
+}
+
+export const stakeToPearl = createAsyncThunk(
+  'stake/stakeToPearl',
+  async ({ value, provider, address, chainID }: IStakeToPearlPayload, { dispatch }) => {
+    if (!provider) {
+      SnackbarUtils.warning('errors.connectWallet', true);
+      return;
+    }
+    const addresses = getAddresses(chainID);
+    const signer = provider.getSigner();
+    const stakingHelper = new ethers.Contract(addresses.STAKING_PEARL_HELPER_ADDRESS, OtterStakingPearlHelper, signer);
+    let tx;
+    try {
+      const number = ethers.utils.parseUnits(value, 9);
+      tx = await stakingHelper.stake(number);
+      const pendingTxnType = 'staking';
+      dispatch(fetchPendingTxns({ txnHash: tx.hash, text: 'Staking', type: pendingTxnType }));
+      await tx.wait();
+    } catch (error: any) {
+      if (error.code === -32603) {
+        //&& error.message.indexOf('ds-math-sub-underflow') >= 0
+        SnackbarUtils.warning('errors.stakeBalance', true);
+      } else if (error.code === 'INVALID_ARGUMENT') {
+        SnackbarUtils.warning('bonds.purchase.invalidValue', true);
+      } else {
+        SnackbarUtils.error(error.message);
+      }
+      return;
+    } finally {
+      if (tx) {
+        dispatch(clearPendingTxn(tx.hash));
+      }
+    }
+    dispatch(getBalances({ address, networkID: chainID, provider }));
+    if (tx) {
+      return true;
+    }
+  },
+);
+
+export const unstakeFromPearl = createAsyncThunk(
+  'stake/unstakeFromPearl',
+  async ({ value, provider, address, chainID }: IStakeToPearlPayload, { dispatch }) => {
+    if (!provider) {
+      SnackbarUtils.warning('errors.connectWallet', true);
+      return;
+    }
+    const addresses = getAddresses(chainID);
+    const signer = provider.getSigner();
+    const stakingHelper = new ethers.Contract(addresses.STAKING_PEARL_HELPER_ADDRESS, OtterStakingPearlHelper, signer);
+
+    let stakeTx;
+    try {
+      stakeTx = await stakingHelper.unstake(ethers.utils.parseUnits(value, 'gwei'));
+      dispatch(fetchPendingTxns({ txnHash: stakeTx.hash, text: 'Unstaking', type: 'unstaking' }));
+      await stakeTx.wait();
+    } catch (error: any) {
+      if (error.code === -32603) {
+        //&& error.message.indexOf('ds-math-sub-underflow') >= 0
+        SnackbarUtils.warning('errors.stakeBalance', true);
+      } else if (error.code === 'INVALID_ARGUMENT') {
+        SnackbarUtils.warning('bonds.purchase.invalidValue', true);
+      } else {
+        SnackbarUtils.error(error.message);
+      }
+      return;
+    } finally {
+      if (stakeTx) {
+        dispatch(clearPendingTxn(stakeTx.hash));
+      }
+    }
+    dispatch(getBalances({ address, networkID: chainID, provider }));
+    if (stakeTx) {
+      return true;
+    }
   },
 );

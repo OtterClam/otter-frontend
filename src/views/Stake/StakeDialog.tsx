@@ -1,8 +1,9 @@
 import { Modal, Paper, SvgIcon, IconButton, makeStyles, Grid } from '@material-ui/core';
 import { ReactComponent as XIcon } from '../../assets/icons/icon_close.svg';
-import { getTokenImage } from '../../helpers';
-import StakeGif from './stake.gif';
+import { getTokenImage, trim } from '../../helpers';
 import { useTranslation } from 'react-i18next';
+import WrapGif from './sClam_to_Pearl.gif';
+import UnwrapGif from './Pearl_to_sClam.gif';
 
 import './stakeDialog.scss';
 
@@ -32,6 +33,7 @@ const useStyles = makeStyles(theme => ({
 
 interface StakeDialogProps {
   open: boolean;
+  index: number;
   handleClose: () => void;
   quantity: string;
   stakingRebasePercentage: any;
@@ -43,6 +45,7 @@ interface StakeDialogProps {
 
 function StakeDialog({
   open,
+  index,
   handleClose,
   quantity,
   stakingRebasePercentage,
@@ -73,13 +76,13 @@ function StakeDialog({
               <span>{action === `stake` ? t('stake.stakeSuccessful') : t('stake.unstakeSuccessful')} </span>
             </div>
             <div className="logo-wrapper">
-              {action === `stake` ? <img src={StakeGif} style={{ width: 200, height: 200 }} /> : getTokenImage('clam')}
+              {action === `stake` ? <img src={WrapGif} style={{ width: 200, height: 200 }} /> : getTokenImage('clam')}
             </div>
             <div className="amt-msg">
               {action === `stake` ? (
                 <div className="rcv">
                   {t('bonds.purchase.youWillGet')}
-                  <span className="quantity">{quantity}</span> sCLAM!
+                  <span className="quantity">{trim(Number(quantity) / index, 4)}</span> PEARL!
                 </div>
               ) : (
                 <div className="rcv">
@@ -100,13 +103,13 @@ function StakeDialog({
                     <div>{t('stake.stakedBalance')}</div>
                   </Grid>
                   <Grid item xs={6} md={6} className="dtl-value">
-                    <div>{stakeBalance} sCLAM</div>
+                    <div>{trim(Number(stakeBalance) / index, 4)} PEARL</div>
                   </Grid>
                   <Grid item xs={6} md={6}>
                     <div>{t('stake.nextRewardAmount')}</div>
                   </Grid>
                   <Grid item xs={6} md={6} className="dtl-value">
-                    <div>{nextRewardValue} sCLAM</div>
+                    <div>{nextRewardValue} CLAM</div>
                   </Grid>
                   <Grid item xs={6} md={6}>
                     <div>{t('stake.nextRewardYield')}</div>

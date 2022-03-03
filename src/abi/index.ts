@@ -31,3 +31,4 @@ export { abi as ERC721 } from './tokens/ERC721.json';
 
 export { abi as PearlNote } from './PearlNote.json';
 export { abi as OtterLake } from './OtterLake.json';
+export { abi as OtterStakingPearlHelper } from './OtterStakingPearlHelper.json';
