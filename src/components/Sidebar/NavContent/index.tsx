@@ -179,23 +179,6 @@ function NavContent() {
                   <p>{t('common.stake')}</p>
                 </div>
               </Link>
-
-              <Link
-                component={NavLink}
-                id="wrap-nav"
-                to="/wrap"
-                isActive={(match: any, location: any) => {
-                  return checkPage(location, 'wrap');
-                }}
-                activeClassName="active"
-                className="button-dapp-menu"
-              >
-                <div className="dapp-menu-item">
-                  {checkPage(location, 'wrap') ? <IconActiveWrap /> : <IconDefaultWrap color={currentMainColor} />}
-                  <p>{t('common.wrap')}</p>
-                </div>
-              </Link>
-
               <Link
                 component={NavLink}
                 id="pearl-chests-nav"
@@ -213,6 +196,21 @@ function NavContent() {
                     <IconDefaultPearlChest color={currentMainColor} />
                   )}
                   <p>{t('common.pearlChests')}</p>
+                </div>
+              </Link>
+              <Link
+                component={NavLink}
+                id="wrap-nav"
+                to="/wrap"
+                isActive={(match: any, location: any) => {
+                  return checkPage(location, 'wrap');
+                }}
+                activeClassName="active"
+                className="button-dapp-menu"
+              >
+                <div className="dapp-menu-item">
+                  {checkPage(location, 'wrap') ? <IconActiveWrap /> : <IconDefaultWrap color={currentMainColor} />}
+                  <p>{t('common.wrap')}</p>
                 </div>
               </Link>
 

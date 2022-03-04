@@ -255,7 +255,15 @@ function NoteCard({
               start={t('pearlChests.addPearl')}
               progress="Processing..."
               processTx={() => addPearlToNote(term, lockNote)}
-              wrapper={({ onClick, text }) => <CustomButton className="note__action" text={text} onClick={onClick} />}
+              wrapper={({ onClick, text }) => (
+                <CustomButton
+                  className="note__action"
+                  text={text}
+                  onClick={onClick}
+                  bgcolor="otter.otterBlue"
+                  color="white"
+                />
+              )}
             />
             {lockNote.reward > 0 && (
               <ActionButton
@@ -264,7 +272,15 @@ function NoteCard({
                 start={t('pearlChests.claimRewardAndRelock', { amount: numberFormatter.format(lockNote.reward) })}
                 progress="Processing..."
                 processTx={claimAndLock}
-                wrapper={({ onClick, text }) => <CustomButton className="note__action" text={text} onClick={onClick} />}
+                wrapper={({ onClick, text }) => (
+                  <CustomButton
+                    className="note__action"
+                    text={text}
+                    onClick={onClick}
+                    bgcolor="otter.otterBlue"
+                    color="white"
+                  />
+                )}
               />
             )}
             <ActionButton
