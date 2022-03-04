@@ -150,7 +150,7 @@ export const loadTermsDetails = createAsyncThunk(
       const fallbackTerm = groupedTerms[key].find(term => Number(term.minLockAmount) === 0);
       const nextReward = ((term.boostPoint + (fallbackTerm?.boostPoint ?? 0)) / totalBoostPoint) * totalNextReward;
       const rewardRate = nextReward / (term.pearlBalance + (fallbackTerm?.pearlBalance ?? 0));
-      term.apy = (1 + (rewardRate + stakingRebase)) ** 1095;
+      term.apy = (1 + (rewardRate + stakingRebase)) ** 1095 - 1;
       term.rewardRate = rewardRate;
       if (fallbackTerm) {
         fallbackTerm.apy = term.apy;
