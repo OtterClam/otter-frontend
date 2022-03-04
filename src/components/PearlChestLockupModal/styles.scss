@@ -1,6 +1,11 @@
 @import '../../styles/colors';
 
 .lockup-modal {
+  &__input-container {
+    display: flex;
+    gap: 20px;
+  }
+
   &__not-qualified {
     position: absolute;
     display: flex;
@@ -11,7 +16,7 @@
     width: 100%;
     height: 100%;
     color: #fff;
-    background: rgba(0, 0, 0, .5);
+    background: rgba(0, 0, 0, 0.5);
   }
 
   &__summary {
@@ -19,7 +24,8 @@
     border-radius: 20px !important;
   }
 
-  &__summary-label, &__summary-period {
+  &__summary-label,
+  &__summary-period {
     font-size: 16px !important;
     line-height: 24px !important;
   }
@@ -171,7 +177,8 @@
     display: flex;
   }
 
-  &__account-detail-label, &__account-detail-value {
+  &__account-detail-label,
+  &__account-detail-value {
     flex: 1 50%;
     font-size: 16px !important;
     line-height: 24px !important;
@@ -203,7 +210,8 @@
       grid-gap: 10px;
     }
 
-    &__card-title, &__card-discount {
+    &__card-title,
+    &__card-discount {
       font-size: 14px !important;
       line-height: 21px !important;
     }

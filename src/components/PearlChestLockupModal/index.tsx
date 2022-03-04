@@ -1,5 +1,6 @@
 import { parseEther } from '@ethersproject/units';
 import {
+  Box,
   Divider,
   FormControl,
   InputAdornment,
@@ -14,7 +15,7 @@ import {
 import addDays from 'date-fns/addDays';
 import formatDate from 'date-fns/format';
 import { BigNumber } from 'ethers';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import Modal from 'src/components/Modal';
@@ -79,12 +80,12 @@ export default function PearlChestLockupModal({
   const noteAddress = useFallback ? term?.fallbackTerm!.noteAddress : term?.noteAddress;
   const nextRewardValue = pearlFormatter.format(Number(amount) * (term?.rewardRate ?? 0));
 
-  const lockup = useCallback(async () => {
+  const lockup = async () => {
     const result: any = await dispatch(lockAction({ chainID, provider, address, noteAddress: noteAddress!, amount }));
     if (result.payload) {
       onSuccess(result.payload);
     }
-  }, [noteAddress, amount, onSuccess]);
+  };
 
   const approve = async () => await dispatch(approveSpending({ chainID, provider }));
 
@@ -122,7 +123,7 @@ export default function PearlChestLockupModal({
             Enter PEARL amount
           </Typography>
 
-          <div className={styles.input + ' input-container'}>
+          <div className={styles.input + ' lockup-modal__input-container'}>
             <FormControl className="ohm-input" variant="outlined" color="primary" fullWidth>
               <InputLabel htmlFor="outlined-adornment-amount"></InputLabel>
               <OutlinedInput
@@ -148,25 +149,27 @@ export default function PearlChestLockupModal({
                 }
               />
             </FormControl>
-            {BigNumber.from(allowance).gt(parseEther(amount || '0')) ? (
-              <ActionButton
-                className="lockup-modal__action-btn"
-                pendingTransactions={pendingTransactions}
-                type={'lock_' + noteAddress}
-                start="Lock Up"
-                progress="Processing..."
-                processTx={lockup}
-              />
-            ) : (
-              <ActionButton
-                className="lockup-modal__action-btn"
-                pendingTransactions={pendingTransactions}
-                type="lake-approve_pearl"
-                start="Approve"
-                progress="Processing..."
-                processTx={approve}
-              />
-            )}
+            <Box flex={1}>
+              {BigNumber.from(allowance).gt(parseEther(amount || '0')) ? (
+                <ActionButton
+                  className="lockup-modal__action-btn"
+                  pendingTransactions={pendingTransactions}
+                  type={'lock_' + noteAddress}
+                  start="Lock Up"
+                  progress="Processing..."
+                  processTx={lockup}
+                />
+              ) : (
+                <ActionButton
+                  className="lockup-modal__action-btn"
+                  pendingTransactions={pendingTransactions}
+                  type="lake-approve_pearl"
+                  start="Approve"
+                  progress="Processing..."
+                  processTx={approve}
+                />
+              )}
+            </Box>
           </div>
 
           <Typography variant="caption" className="lockup-modal__approve-caption">

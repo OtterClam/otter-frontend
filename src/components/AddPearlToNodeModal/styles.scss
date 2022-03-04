@@ -1,6 +1,11 @@
 @import '../../styles/colors';
 
 .add-pearl-modal {
+  &__input-container {
+    display: flex;
+    gap: 20px;
+  }
+
   &__not-qualified {
     position: absolute;
     display: flex;

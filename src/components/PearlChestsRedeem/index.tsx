@@ -178,7 +178,7 @@ function NoteCard({
     // { label: 'pearlChests.apy', value: numberFormatter.format(term.apy) + '%' },
   ];
 
-  const redeem = useCallback(() => {
+  const redeem = () => {
     dispatch(
       redeemAction({
         address,
@@ -188,9 +188,9 @@ function NoteCard({
         tokenId: lockNote.tokenId,
       }),
     );
-  }, [lockNote, address]);
+  };
 
-  const claimReward = useCallback(() => {
+  const claimReward = () => {
     dispatch(
       claimRewardAction({
         chainID,
@@ -200,8 +200,8 @@ function NoteCard({
         address,
       }),
     );
-  }, [lockNote, address]);
-  const claimAndLock = useCallback(() => {
+  };
+  const claimAndLock = () => {
     dispatch(
       claimAndLockAction({
         chainID,
@@ -211,7 +211,7 @@ function NoteCard({
         address,
       }),
     );
-  }, [lockNote, address]);
+  };
 
   return (
     <div className="note">
