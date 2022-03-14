@@ -22,7 +22,7 @@ import { batchGetBondDetails } from '../store/actions/bond-action';
 import { calculateUserBondDetails, loadAccountDetails } from '../store/slices/account-slice';
 import { loadAppDetails } from '../store/slices/app-slice';
 import { loadTermsDetails } from '../store/slices/otter-lake-slice';
-import SnackbarUtils from '../store/snackbarUtils';
+import SnackbarUtils from '../lib/snackbarUtils';
 import { ChooseBond, Stake, Wrap } from '../views';
 import NotFound from '../views/404/NotFound';
 import './style.scss';

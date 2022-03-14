@@ -7,7 +7,7 @@ import groupBy from 'lodash/groupBy';
 import { OtterLake, PearlNote, PearlTokenContract } from '../../abi';
 import { getAddresses } from '../../constants';
 import { setAll } from '../../helpers';
-import SnackbarUtils from '../../store/snackbarUtils';
+import SnackbarUtils from '../../lib/snackbarUtils';
 import { ThunkOptions } from '../types';
 import { clearPendingTxn, fetchPendingTxns } from './pending-txns-slice';
 

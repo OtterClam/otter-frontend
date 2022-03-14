@@ -3,7 +3,7 @@ import Web3Modal from 'web3modal';
 import { StaticJsonRpcProvider, JsonRpcProvider, Web3Provider } from '@ethersproject/providers';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { DEFAULT_NETWORK, Networks, RPCURL } from '../../constants';
-import SnackbarUtils from '../../store/snackbarUtils';
+import SnackbarUtils from '../../lib/snackbarUtils';
 
 type onChainProvider = {
   connect: () => Promise<Web3Provider | undefined>;

@@ -31,7 +31,7 @@ import { approveWrapping, changeWrap } from 'src/store/slices/wrap-thunk';
 import { CheckNetworkStatus } from 'src/hooks/web3/web3-context';
 import './wrap.scss';
 import WrapDialog from './WrapDialog';
-import SnackbarUtils from '../../store/snackbarUtils';
+import SnackbarUtils from '../../lib/snackbarUtils';
 
 const useStyles = makeStyles(theme => ({
   root: {

@@ -32,7 +32,7 @@ import './stake.scss';
 import StakeDialog from './StakeDialog';
 import IconPearlChest from 'src/assets/icons/icon_pearl_chest_3.png';
 import { CheckNetworkStatus } from 'src/hooks/web3/web3-context';
-import SnackbarUtils from '../../store/snackbarUtils';
+import SnackbarUtils from '../../lib/snackbarUtils';
 
 const useStyles = makeStyles(theme => ({
   root: {

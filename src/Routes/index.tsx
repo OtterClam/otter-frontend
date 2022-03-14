@@ -3,12 +3,17 @@ import { Close as IconClose } from '@material-ui/icons';
 import { SnackbarKey, SnackbarProvider, useSnackbar } from 'notistack';
 import { HashRouter } from 'react-router-dom';
 import { AppThemeProvider } from 'src/helpers/app-theme-context';
-import { SnackbarUtilsConfigurator } from '../store/snackbarUtils';
+import { SnackbarUtilsConfigurator } from '../lib/snackbarUtils';
 import App from './App';
 import IDO from './IDO';
+import Otto from './Otto';
 
 const isIDO = (): boolean => {
   return window.location.host.includes('ido');
+};
+
+const isOtto = (): boolean => {
+  return window.location.host.includes('otto');
 };
 
 function SnackbarCloseButton({ snackbarKey }: { snackbarKey: SnackbarKey }) {
@@ -22,11 +27,15 @@ function SnackbarCloseButton({ snackbarKey }: { snackbarKey: SnackbarKey }) {
 }
 
 function Root() {
-  let Content = App;
+  let Page = App;
   let ThemeProvider = AppThemeProvider;
 
   if (isIDO()) {
-    Content = IDO;
+    Page = IDO;
+  }
+
+  if (isOtto()) {
+    Page = Otto;
   }
 
   return (
@@ -39,7 +48,7 @@ function Root() {
           action={snackbarKey => <SnackbarCloseButton snackbarKey={snackbarKey} />}
         >
           <SnackbarUtilsConfigurator />
-          <Content />
+          <Page />
         </SnackbarProvider>
       </ThemeProvider>
     </HashRouter>
