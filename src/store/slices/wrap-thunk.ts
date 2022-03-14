@@ -5,7 +5,7 @@ import { PearlTokenContract, StakedClamContract } from 'src/abi';
 import { getAddresses } from 'src/constants';
 import { fetchAccountSuccess, wrap, unwrap } from './account-slice';
 import { clearPendingTxn, fetchPendingTxns, getWrappingTypeText } from './pending-txns-slice';
-import SnackbarUtils from '../../store/snackbarUtils';
+import SnackbarUtils from '../../lib/snackbarUtils';
 
 interface ApproveWrappingProps {
   provider: JsonRpcProvider;

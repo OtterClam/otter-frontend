@@ -11,7 +11,7 @@ import { clearPendingTxn, fetchPendingTxns, getStakingTypeText } from './pending
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchAccountSuccess, getBalances } from './account-slice';
 import { JsonRpcProvider } from '@ethersproject/providers';
-import SnackbarUtils from '../../store/snackbarUtils';
+import SnackbarUtils from '../../lib/snackbarUtils';
 interface IChangeApproval {
   token: string;
   provider: JsonRpcProvider;

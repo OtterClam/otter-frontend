@@ -8,7 +8,7 @@ import { getAddresses } from '../../constants';
 import { fetchAccountSuccess } from './account-slice';
 import { loadAppDetails } from './app-slice';
 import { clearPendingTxn, fetchPendingTxns, getStakingTypeText } from './pending-txns-slice';
-import SnackbarUtils from '../../store/snackbarUtils';
+import SnackbarUtils from '../../lib/snackbarUtils';
 
 interface IChangeApproval {
   provider: JsonRpcProvider;

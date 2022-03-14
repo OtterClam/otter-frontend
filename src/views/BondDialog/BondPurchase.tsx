@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { AccountBond, Bonding, BondKey, getBond, zeroAddress } from 'src/constants';
 import { useAppDispatch } from 'src/store/hook';
-import SnackbarUtils from 'src/store/snackbarUtils';
+import SnackbarUtils from 'src/lib/snackbarUtils';
 import { tabletMediaQuery } from 'src/themes/mediaQuery';
 import ActionButton from '../../components/Button/ActionButton';
 import { prettifySeconds, shorten, trim } from '../../helpers';

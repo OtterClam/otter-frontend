@@ -12,7 +12,7 @@ import { useTranslation, Trans } from 'react-i18next';
 import BondRedeemDialog from './BondRedeemDialog';
 import CustomButton from 'src/components/Button/CustomButton';
 import ActionButton from '../../components/Button/ActionButton';
-import SnackbarUtils from '../../store/snackbarUtils';
+import SnackbarUtils from '../../lib/snackbarUtils';
 
 interface IBondRedeem {
   bondKey: BondKey;
