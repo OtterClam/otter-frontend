@@ -1,8 +1,8 @@
 import { getAddresses } from '.';
 
-export type BondKey = 'frax2' | 'frax_clam' | 'mai44' | 'matic' | 'matic_clam' | 'mai_clam44';
-export const ReserveKeys: BondKey[] = ['mai44', 'frax2'];
-export const BondKeys: BondKey[] = ['mai44', 'frax2', 'frax_clam', 'matic', 'matic_clam', 'mai_clam44'];
+export type BondKey = 'mai44' | 'matic' | 'matic_clam' | 'mai_clam44';
+export const ReserveKeys: BondKey[] = ['mai44'];
+export const BondKeys: BondKey[] = ['mai44', 'mai_clam44', 'matic', 'matic_clam'];
 
 export enum BondAction {
   Bond = 'bond',
@@ -84,33 +84,6 @@ export function listBonds(chainId: number): BondMap {
       autostake: true,
       stable: false,
       oracle: '0xAB594600376Ec9fD91F8e885dADF0CE036862dE0',
-      supportNFT: false,
-    },
-    frax2: {
-      key: 'frax2',
-      name: 'FRAX (4,4)',
-      address: '0x9e1430EB3b56e8953a342BFBBdD2DDC3b6E84d9D',
-      reserve: '0x45c32fa6df82ead1e2ef74d17b76547eddfaff89',
-      reserveUnit: 'FRAX',
-      type: 'token',
-      dexUrl: 'https://app.sushi.com/swap?outputCurrency=0x45c32fA6DF82ead1e2EF74d17b76547EDdFaFF89',
-      deprecated: true,
-      autostake: true,
-      stable: true,
-      supportNFT: false,
-    },
-    frax_clam: {
-      key: 'frax_clam',
-      name: 'FRAX-CLAM (4,4)',
-      address: '0xd99c8aF24c5E7fd6E292b1682Ec0f0cB3535e002',
-      reserve: '0x1f847e05afaf47ec54626928d0e6c235663e938f',
-      reserveUnit: 'LP',
-      type: 'lp',
-      dexUrl:
-        'https://app.sushi.com/add/0x45c32fA6DF82ead1e2EF74d17b76547EDdFaFF89/0xC250e9987A032ACAC293d838726C511E6E1C029d',
-      deprecated: true,
-      autostake: true,
-      stable: true,
       supportNFT: false,
     },
     mai44: {
