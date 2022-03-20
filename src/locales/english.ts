@@ -106,7 +106,7 @@ const English = {
       recipient: 'Recipient',
       purchased: 'Purchased',
       bondPrice: 'Bond Price',
-      deprecated: 'Deprecated',
+      deprecated: 'Sold out',
       bondDiscount: 'discount!',
       myBond: 'My Bond',
       fullyVested: 'Fully Vested',

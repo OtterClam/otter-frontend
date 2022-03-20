@@ -2,7 +2,7 @@ import { getAddresses } from '.';
 
 export type BondKey = 'frax2' | 'frax_clam' | 'mai44' | 'matic' | 'matic_clam' | 'mai_clam44';
 export const ReserveKeys: BondKey[] = ['mai44', 'frax2'];
-export const BondKeys: BondKey[] = ['frax2', 'frax_clam', 'matic', 'matic_clam', 'mai44', 'mai_clam44'];
+export const BondKeys: BondKey[] = ['mai44', 'frax2', 'frax_clam', 'matic', 'matic_clam', 'mai_clam44'];
 
 export enum BondAction {
   Bond = 'bond',
@@ -121,7 +121,7 @@ export function listBonds(chainId: number): BondMap {
       reserveUnit: 'MAI',
       type: 'token',
       dexUrl: `https://quickswap.exchange/#/swap?outputCurrency=${MAI_ADDRESS}`,
-      deprecated: true,
+      deprecated: false,
       autostake: true,
       stable: true,
       supportNFT: false,

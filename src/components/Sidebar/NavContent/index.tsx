@@ -214,7 +214,7 @@ function NavContent() {
                 </div>
               </Link>
 
-              {/* <Link
+              <Link
                 component={NavLink}
                 id="bond-nav"
                 to="/bonds"
@@ -251,13 +251,8 @@ function NavContent() {
                     ))}
                   </div>
                 </div>
-              </div> */}
-              <Link
-                href={'https://www.otterclam.finance/otto'}
-                target="_blank"
-                rel="noreferrer"
-                className="button-dapp-menu"
-              >
+              </div>
+              <Link href="https://ottopia.app" target="_blank" rel="noreferrer" className="button-dapp-menu">
                 <div className="dapp-menu-item">
                   <IconDefaultNFT color={currentMainColor} />
                   <p>Otto</p>

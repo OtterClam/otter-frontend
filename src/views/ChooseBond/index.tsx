@@ -66,15 +66,11 @@ query {
   const bondKeyMatch = matches ? matches[2] : '';
   const bondKey = checkBondKey(bondKeyMatch) ? bondKeyMatch : undefined;
   const defaultBond = bondKey ? getBond(bondKey, chainID) : undefined;
+  console.log('bond key: ' + bondKey);
 
   const [selectedBond, setSelectedBond] = useState<Bond | undefined>(defaultBond);
   const [nftDialogOpen, setNftDialogOpen] = useState(false);
   const [nftSelection, setNftSelection] = useState<NFTDiscountOption | undefined>(undefined);
-
-  useEffect(() => {
-    setSelectedBond(defaultBond);
-  }, [bondKey]);
-
   const canSelect = useAppSelector(state => state.account.nfts)?.length > 0;
   const [successDialogOpen, setSuccessDialogOpen] = useState(false);
 
@@ -89,6 +85,10 @@ query {
   }, [redeemedBond, bondKey]);
   const selectedAccountBond = useAppSelector(state => state.account?.[selectedBondKey]);
   const selectedBonding = useAppSelector(state => state.bonding?.[selectedBondKey]);
+
+  useEffect(() => {
+    setSelectedBond(defaultBond);
+  }, [bondKey]);
 
   return (
     <div id="choose-bond-view">
@@ -185,7 +185,7 @@ query {
           setSuccessDialogOpen={setSuccessDialogOpen}
         />
       )}
-      {selectedBond && getBond(bondKey!, chainID).supportNFT && (
+      {/* {selectedBond && getBond(bondKey!, chainID).supportNFT && (
         <>
           <BondNTFDiscountDialog
             open={nftDialogOpen}
@@ -208,7 +208,7 @@ query {
             setNftSelection(undefined);
           }}
         />
-      )}
+      )} */}
       {/** TODO: connect selected redeemed data */}
       {redeemedBond && selectedAccountBond && (
         <RedeemSuccessDialog

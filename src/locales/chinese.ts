@@ -89,7 +89,7 @@ const Chinese = {
       recipient: '接收者',
       purchased: '已購買',
       bondPrice: '債券價格',
-      deprecated: '棄用',
+      deprecated: '售完',
       bondDiscount: '折扣！',
       myBond: '我的債券',
       fullyVested: '期滿',

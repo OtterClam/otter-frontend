@@ -32,7 +32,7 @@ export function BondCard({ bondKey, setRedeemedBond, setNftRedeemed, setRedeemed
   const { bondPrice, bondDiscount, purchased, marketPrice, lockedNFTs } = useAppSelector(
     state => state.bonding[bondKey] || {},
   );
-  const nftDiscounts = useAppSelector<BondNFTDiscount[]>(state => state.nft.bondNftDiscounts.data[bond.key]);
+  // const nftDiscounts = useAppSelector<BondNFTDiscount[]>(state => state.nft.bondNftDiscounts.data[bond.key]);
   const isBondLoading = useAppSelector(state => !state.bonding[bondKey]?.bondPrice ?? true);
   const fiveDayRate = useAppSelector(state => state.app.fiveDayRate);
   const priceDiff = (Number(marketPrice) ?? 0) - (bondPrice ?? 0);
@@ -57,22 +57,22 @@ export function BondCard({ bondKey, setRedeemedBond, setNftRedeemed, setRedeemed
   const handleMaiClamRedeem = async (e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
 
-    const mapDiscounts = nftDiscounts.reduce<Record<string, BondNFTDiscount>>((acc, cur) => {
-      acc[cur.address] = cur;
-      return acc;
-    }, {});
-    const selections = lockedNFTs.map(
-      (e: LockedNFT): NFTDiscountOption => ({
-        id: e.id,
-        address: e.address,
-        type: mapDiscounts[e.address].name.includes('Note') ? 'note' : 'nft',
-        key: mapDiscounts[e.address].key,
-        name: mapDiscounts[e.address].name,
-        discount: mapDiscounts[e.address].discount,
-        endDate: mapDiscounts[e.address].endDate,
-      }),
-    );
-    console.log(`${bond.key} ${JSON.stringify(selections)}`);
+    // const mapDiscounts = nftDiscounts.reduce<Record<string, BondNFTDiscount>>((acc, cur) => {
+    //   acc[cur.address] = cur;
+    //   return acc;
+    // }, {});
+    // const selections = lockedNFTs.map(
+    //   (e: LockedNFT): NFTDiscountOption => ({
+    //     id: e.id,
+    //     address: e.address,
+    //     type: mapDiscounts[e.address].name.includes('Note') ? 'note' : 'nft',
+    //     key: mapDiscounts[e.address].key,
+    //     name: mapDiscounts[e.address].name,
+    //     discount: mapDiscounts[e.address].discount,
+    //     endDate: mapDiscounts[e.address].endDate,
+    //   }),
+    // );
+    // console.log(`${bond.key} ${JSON.stringify(selections)}`);
     const redeemed = await dispatch(redeemBond({ address, bondKey, networkID: chainID, provider, autostake: true }));
     if (redeemed.payload) {
       dispatch(listMyNFT({ wallet: address, networkID: chainID, provider }));
@@ -84,7 +84,7 @@ export function BondCard({ bondKey, setRedeemedBond, setNftRedeemed, setRedeemed
           provider: provider,
         }),
       );
-      setNftRedeemed(selections);
+      // setNftRedeemed(selections);
       setRedeemedBond(bond);
       setRedeemedAmount(myBalance);
       setSelection(undefined);

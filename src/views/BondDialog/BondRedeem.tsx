@@ -112,17 +112,6 @@ function BondRedeem({ bondKey }: IBondRedeem) {
               />
             </Grid>
           )}
-          {!bond.deprecated && (
-            <Grid item xs={6}>
-              <ActionButton
-                pendingTransactions={pendingTransactions}
-                type={'redeem_bond_' + bondKey + '_autostake'}
-                start="Claim and Autostake"
-                progress="Claiming..."
-                processTx={() => onRedeem(true)}
-              />
-            </Grid>
-          )}
         </Grid>
       </Box>
       <BondRedeemDialog
