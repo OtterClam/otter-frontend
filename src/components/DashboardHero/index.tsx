@@ -1,35 +1,25 @@
 import { Carousel } from 'react-responsive-carousel';
-import Ad1 from './ad-01.jpg';
 import Ad3 from './ad-03.jpg';
 import Ad4 from './ad-04.jpg';
-import Ad5 from './ad-05.gif';
-import Ad6 from './ad-06.gif';
-import AMA from './ama.jpg';
 import Ad0211 from './ad-0211.jpg';
+import Ad0320 from './ad-0320.jpg';
+import Ad0319 from './ad-0319.jpg';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import './styles.scss';
 
 export default function DashboardHero() {
   const ads = [
     {
+      image: Ad0320,
+      link: 'https://ottopia.app',
+    },
+    {
       image: Ad0211,
-      link: 'https://www.otterclam.finance',
+      link: 'https://www.otterclam.finance/',
     },
     {
-      image: Ad5,
-      link: 'https://www.otterclam.finance/#/otto',
-    },
-    {
-      image: AMA,
-      link: 'https://www.youtube.com/watch?v=sJ3DqFW409E',
-    },
-    {
-      image: Ad6,
-      link: 'https://twitter.com/otterclam/status/1489186327048294400?s=21',
-    },
-    {
-      image: Ad1,
-      link: '/#/pearl-chests',
+      image: Ad0319,
+      link: 'https://www.youtube.com/watch?v=b-sXdS24XS4',
     },
     {
       image: Ad3,
