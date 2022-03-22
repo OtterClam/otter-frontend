@@ -26,6 +26,7 @@ query {
     treasuryDaiRiskFreeValue
     treasuryClamMaiPOL
     treasuryOtterClamQiMarketValue
+    treasuryTetuQiMarketValue
   }
 }
 `;

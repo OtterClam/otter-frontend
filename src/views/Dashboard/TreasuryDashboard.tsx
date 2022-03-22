@@ -65,6 +65,11 @@ const marketValues = [
     dataKey: 'treasuryDaiRiskFreeValue',
     stopColor: ['#F4D258', 'rgba(244, 210, 88, 0.5)'],
   },
+  {
+    label: 'TetuQi',
+    dataKey: 'treasuryTetuQiMarketValue',
+    stopColor: ['#CC48E1', '#EA94FF'],
+  },
 ];
 const tooltipColors = {
   marketValues: marketValues
