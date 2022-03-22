@@ -51,11 +51,6 @@ const marketValues = [
     stopColor: ['#F4D258', 'rgba(244, 210, 88, 0.5)'],
   },
   {
-    label: 'dQUICK',
-    dataKey: 'treasuryDquickMarketValue',
-    stopColor: ['#5C80B6', 'rgba(92, 128, 182, 0.5)'],
-  },
-  {
     label: 'Qi/MATIC',
     dataKey: 'treasuryQiWmaticQiInvestmentMarketValue',
     stopColor: ['#F4D258', 'rgba(244, 210, 88, 0.5)'],

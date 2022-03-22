@@ -20,7 +20,6 @@ query {
     treasuryMaiUsdcRiskFreeValue
     treasuryMaiUsdcQiInvestmentRiskFreeValue
     treasuryQiMarketValue
-    treasuryDquickMarketValue
     treasuryQiWmaticMarketValue
     treasuryQiWmaticQiInvestmentMarketValue
     treasuryDaiRiskFreeValue
