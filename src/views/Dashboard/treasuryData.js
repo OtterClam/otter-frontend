@@ -22,7 +22,6 @@ query {
     treasuryQiMarketValue
     treasuryQiWmaticMarketValue
     treasuryQiWmaticQiInvestmentMarketValue
-    treasuryDaiRiskFreeValue
     treasuryClamMaiPOL
     treasuryOtterClamQiMarketValue
     treasuryTetuQiMarketValue
