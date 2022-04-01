@@ -40,46 +40,52 @@ const renderTooltipItems = (
   isStaked = false,
   isPOL = false,
 ) => {
-  return isStaked ? (
-    <Box>
-      <Box className="item" display="flex" justifyContent="space-between">
-        <Typography variant="body2">
-          <span className="tooltip-bulletpoint" style={bulletpointColors[0]}></span>
-          {t('components.staked')}
-        </Typography>
-        <Typography>{`${trim(payload[0].value, 2)}%`}</Typography>
+  if (isStaked)
+    return (
+      <Box>
+        <Box className="item" display="flex" justifyContent="space-between">
+          <Typography variant="body2">
+            <span className="tooltip-bulletpoint" style={bulletpointColors[0]}></span>
+            {t('components.staked')}
+          </Typography>
+          <Typography>{`${trim(payload[0].value, 2)}%`}</Typography>
+        </Box>
+        <Box className="item" display="flex" justifyContent="space-between">
+          <Typography variant="body2">
+            <span className="tooltip-bulletpoint" style={bulletpointColors[1]}></span>
+            {t('components.notStaked')}
+          </Typography>
+          <Typography>{`${trim(100 - payload[0].value, 2)}%`}</Typography>
+        </Box>
+        <Box>{renderDate(i18n, 0, payload, payload[0])}</Box>
       </Box>
-      <Box className="item" display="flex" justifyContent="space-between">
-        <Typography variant="body2">
-          <span className="tooltip-bulletpoint" style={bulletpointColors[1]}></span>
-          {t('components.notStaked')}
-        </Typography>
-        <Typography>{`${trim(100 - payload[0].value, 2)}%`}</Typography>
+    );
+
+  if (isPOL)
+    return (
+      <Box>
+        <Box className="item" display="flex" justifyContent="space-between">
+          <Typography variant="body2">
+            <span className="tooltip-bulletpoint" style={bulletpointColors[0]}></span>
+            {itemNames[0]}
+          </Typography>
+          <Typography>{`${trim(payload[0].value, 2)}%`}</Typography>
+        </Box>
+        <Box className="item" display="flex" justifyContent="space-between">
+          <Typography variant="body2">
+            <span className="tooltip-bulletpoint" style={bulletpointColors[1]}></span>
+            {itemNames[1]}
+          </Typography>
+          <Typography>{`${(100 - payload[0].value).toFixed(2)}%`}</Typography>
+        </Box>
+        <Box>{renderDate(i18n, 0, payload, payload[0])}</Box>
       </Box>
-      <Box>{renderDate(i18n, 0, payload, payload[0])}</Box>
-    </Box>
-  ) : isPOL ? (
-    <Box>
-      <Box className="item" display="flex" justifyContent="space-between">
-        <Typography variant="body2">
-          <span className="tooltip-bulletpoint" style={bulletpointColors[0]}></span>
-          {itemNames[0]}
-        </Typography>
-        <Typography>{`${trim(payload[0].value, 2)}%`}</Typography>
-      </Box>
-      <Box className="item" display="flex" justifyContent="space-between">
-        <Typography variant="body2">
-          <span className="tooltip-bulletpoint" style={bulletpointColors[1]}></span>
-          {itemNames[1]}
-        </Typography>
-        <Typography>{`${(100 - payload[0].value).toFixed(2)}%`}</Typography>
-      </Box>
-      <Box>{renderDate(i18n, 0, payload, payload[0])}</Box>
-    </Box>
-  ) : (
-    payload.map((item, index) => {
-      return (
-        <Box key={index}>
+    );
+
+  return payload.map((item, index) => {
+    return (
+      <Box key={index}>
+        {item.value > 0 && (
           <Box className="item" display="flex">
             <Box display="flex" justifyContent="space-between">
               <Typography variant="body2" className={item.name}>
@@ -89,11 +95,11 @@ const renderTooltipItems = (
             </Box>
             {renderItem(i18n, itemType, item)}
           </Box>
-          <Box>{renderDate(i18n, index, payload, item)}</Box>
-        </Box>
-      );
-    })
-  );
+        )}
+        <Box>{renderDate(i18n, index, payload, item)}</Box>
+      </Box>
+    );
+  });
 };
 
 function CustomTooltip({ active, payload, bulletpointColors, itemNames, itemType, isStaked, isPOL }) {
