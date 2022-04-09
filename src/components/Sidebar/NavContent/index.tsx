@@ -135,7 +135,7 @@ function NavContent() {
               <AppTitle />
               {address && (
                 <div className="dapp-account">
-                  <Davatar size={20} address={address} style={{ marginRight: 6 }} generatedAvatarType="jazzicon" />
+                  <Davatar size={20} address={address} generatedAvatarType="jazzicon" />
                   <div>{ensName || shorten(address)}</div>
                 </div>
               )}
