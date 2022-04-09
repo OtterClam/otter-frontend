@@ -12,6 +12,7 @@ export { abi as MAIContract } from './tokens/MAIContract.json';
 export { abi as BondingCalcContract } from './BondingCalcContract.json';
 export { abi as StakingContract } from './StakingContract.json';
 export { abi as StakingHelperContract } from './StakingHelperContract.json';
+export { abi as OtterStakingPearlHelper } from './OtterStakingPearlHelper.json';
 export { abi as TreasuryContract } from './TreasuryContract.json';
 
 export { abi as IDOContract } from './OtterClamIDO.json';
@@ -31,4 +32,4 @@ export { abi as ERC721 } from './tokens/ERC721.json';
 
 export { abi as PearlNote } from './PearlNote.json';
 export { abi as OtterLake } from './OtterLake.json';
-export { abi as OtterStakingPearlHelper } from './OtterStakingPearlHelper.json';
+export { abi as OtterLakeHelper } from './OtterLakeHelper.json';

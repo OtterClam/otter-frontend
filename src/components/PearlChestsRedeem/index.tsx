@@ -12,6 +12,7 @@ import getNoteImage from 'src/helpers/get-note-image';
 import { useWeb3Context } from 'src/hooks';
 import { useAppSelector } from 'src/store/hook';
 import {
+  claimAll as claimAllAction,
   claimAndLock as claimAndLockAction,
   claimReward as claimRewardAction,
   ILockNote,
@@ -47,6 +48,7 @@ export interface Note {
 }
 
 export default function PearlChestsRedeem() {
+  const { t } = useTranslation();
   const [relockResult, setRelockResult] = useState<any>();
   const [selectedTerm, setSelectedTerm] = useState<ITerm | null>(null);
   const [selectedLockNote, setSelectedLock] = useState<ILockNote | null>(null);
@@ -57,6 +59,9 @@ export default function PearlChestsRedeem() {
   const lockNotes = useAppSelector(state => state.lake.lockNotes);
   const terms = useAppSelector(state => state.lake.terms);
   const pearlPrice = useAppSelector(state => state.app.pearlPrice);
+  const pendingTransactions = useReduxSelector<IReduxState, IPendingTxn[]>(state => {
+    return state.pendingTransactions;
+  });
   const termsMap = useMemo(() => {
     return new Map(
       terms
@@ -83,6 +88,10 @@ export default function PearlChestsRedeem() {
     [relockResult],
   );
 
+  const claimAll = () => {
+    dispatch(claimAllAction({ chainID, provider, address }));
+  };
+
   useEffect(() => {
     if (connected && terms.length > 0) {
       dispatch(loadLockedNotes({ address, chainID, provider }));
@@ -95,6 +104,18 @@ export default function PearlChestsRedeem() {
 
   return (
     <Paper className="ohm-card">
+      <div className="note__actions">
+        <ActionButton
+          pendingTransactions={pendingTransactions}
+          type={'claim-all-reward'}
+          start={t('pearlChests.claimAll')}
+          progress="Processing..."
+          processTx={claimAll}
+          wrapper={({ onClick, text }) => (
+            <CustomButton marginBottom="12px" text={text} onClick={onClick} bgcolor="otter.otterBlue" color="white" />
+          )}
+        />
+      </div>
       {lockNotes.map((lockNote, i) => {
         const term = termsMap.get(lockNote.noteAddress)!;
         return (

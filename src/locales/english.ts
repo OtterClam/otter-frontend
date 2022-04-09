@@ -280,6 +280,7 @@ const English = {
       addPearl: 'Add PEARL',
       claimRewardAndRelock: 'Claim & Relock ({{amount}} PEARL)',
       claimReward: 'Claim Reward',
+      claimAll: 'Claim All Rewards',
       redeemAll: 'Redeem All',
       claimAllAndRelock: 'Claim all & Relock',
       lockUpModal: {

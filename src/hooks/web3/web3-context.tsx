@@ -171,7 +171,7 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
       }
     }
 
-    if (!IsValidChain(otherChainID)) {
+    if (!isValidChain(otherChainID)) {
       status = CheckNetworkStatus.WRONG_CHAIN;
     }
 
@@ -242,7 +242,7 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
   );
   return <Web3Context.Provider value={{ onChainProvider }}>{children}</Web3Context.Provider>;
 };
-export const IsValidChain = (chainID: number): boolean => {
+export const isValidChain = (chainID: number): boolean => {
   return (
     Number(chainID) === Networks.POLYGON_MAINNET ||
     Number(chainID) === Networks.POLYGON_MUMBAI ||

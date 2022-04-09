@@ -4,7 +4,7 @@ import { createAction, createAsyncThunk, createSelector, createSlice } from '@re
 import axios from 'axios';
 import { constants, ethers } from 'ethers';
 import groupBy from 'lodash/groupBy';
-import { OtterLake, PearlNote, PearlTokenContract } from '../../abi';
+import { OtterLake, OtterLakeHelper, PearlNote, PearlTokenContract } from '../../abi';
 import { getAddresses } from '../../constants';
 import { setAll } from '../../helpers';
 import SnackbarUtils from '../../lib/snackbarUtils';
@@ -332,6 +332,45 @@ export const redeem = createAsyncThunk<void, IRedeemDetails, ThunkOptions>(
       if (tx) {
         dispatch(clearPendingTxn(tx.hash));
       }
+    }
+  },
+);
+
+interface IClaimAllPayload {
+  chainID: number;
+  address: string;
+  provider: JsonRpcProvider;
+}
+
+export const claimAll = createAsyncThunk<void, IClaimAllPayload, ThunkOptions>(
+  'otterLake/claimReward',
+  async ({ chainID, provider, address }, { dispatch, getState }) => {
+    const addresses = getAddresses(chainID);
+    try {
+      dispatch(
+        fetchPendingTxns({
+          txnHash: address,
+          text: 'Claiming...',
+          type: 'claim-all-reward',
+        }),
+      );
+      const lockedNotes = getState().lake.lockNotes;
+      for (const note of lockedNotes) {
+        const noteContract = new ethers.Contract(note.noteAddress, PearlNote, provider.getSigner());
+        const isApproved = await noteContract.isApprovedForAll(address, addresses.OTTER_LAKE_HELPER);
+        if (!isApproved) {
+          const tx = await noteContract.setApprovalForAll(addresses.OTTER_LAKE_HELPER, true);
+          await tx.wait();
+        }
+      }
+      const lakeHelper = new ethers.Contract(addresses.OTTER_LAKE_HELPER, OtterLakeHelper, provider.getSigner());
+      const tx = await lakeHelper.claimAll();
+      await tx.wait();
+      dispatch(loadLockedNotes({ address, chainID, provider }));
+    } catch (err) {
+      SnackbarUtils.error((err as Error).message);
+    } finally {
+      dispatch(clearPendingTxn(address));
     }
   },
 );
