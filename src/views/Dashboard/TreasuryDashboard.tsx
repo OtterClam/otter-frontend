@@ -21,7 +21,7 @@ const marketValues = [
     stopColor: ['#FFFFFF', 'rgba(219, 55, 55, 0.5)'],
   },
   {
-    label: 'MAI',
+    label: 'CLAM-MAI LP',
     dataKey: 'treasuryMaiMarketValue',
     stopColor: ['#EE4B4E', 'rgba(219, 55, 55, 0.5)'],
   },
@@ -299,30 +299,6 @@ function TreasuryDashboard() {
                 }
               </Paper>
             </Grid>
-            {/* <Grid item lg={6} md={6} sm={12} xs={12}>
-              <Paper className="ohm-card">
-                {
-                  // @ts-ignore
-                  <Chart
-                    type="area"
-                    data={data}
-                    dataKey={['treasuryClamMaiPOL']}
-                    stopColor={[['rgba(128, 204, 131, 1)', 'rgba(128, 204, 131, 0.5)']]}
-                    headerText={t('dashboard.pol') + ' CLAM-MAI'}
-                    // @ts-ignore
-                    headerSubText={`${data && trim(data[0].treasuryClamMaiPOL, 2)}% `}
-                    dataFormat="percent"
-                    bulletpointColors={bulletpoints.pol}
-                    itemNames={tooltipItems.pol}
-                    itemType={itemType.percentage}
-                    infoTooltipMessage={tooltipInfoMessages.pol}
-                    domain={[98, 'auto']}
-                    isPOL={true}
-                    // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
-                  />
-                }
-              </Paper>
-            </Grid> */}
             <Grid item lg={6} md={6} sm={12} xs={12}>
               <Paper className="ohm-card ohm-chart-card">
                 {
