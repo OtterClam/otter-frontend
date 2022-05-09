@@ -31,7 +31,26 @@ query {
 }
 `;
 
-export const treasuryData = () => apollo(treasuryDataQuery).then(r => r.data.protocolMetrics);
+export const treasuryRevenueQuery = `
+query {
+  treasuryRevenues(first: 100, orderBy: timestamp, orderDirection: desc) {
+    id
+    timestamp
+    qiLockerHarvestAmount
+    qiLockerHarvestMarketValue
+    qiDaoInvestmentHarvestAmount
+    qiDaoInvestmentHarvestMarketValue
+    totalRevenueClamAmount
+    totalRevenueMarketValue
+    buybackClamAmount
+    buybackMarketValue
+  }
+}
+`;
+
+export const treasuryRevenue = () => apollo(treasuryDataQuery).then(r => r?.data.treasuryRevenues);
+
+export const treasuryData = () => apollo(treasuryDataQuery).then(r => r?.data.protocolMetrics);
 
 export const bulletpoints = {
   tvl: [

@@ -11,7 +11,7 @@ import Chart from '../../components/Chart/Chart.jsx';
 import { formatCurrency, getTokenImage, trim } from '../../helpers';
 import apollo from '../../lib/apolloClient';
 import './treasury-dashboard.scss';
-import { bulletpoints, itemType, treasuryDataQuery } from './treasuryData.js';
+import { bulletpoints, itemType, treasuryDataQuery, treasuryRevenueQuery } from './treasuryData';
 
 const numberFormatter = Intl.NumberFormat('en', { maximumFractionDigits: 0 });
 const marketValues = [
@@ -119,6 +119,7 @@ function TreasuryDashboard() {
     [t],
   );
   const [data, setData] = useState<any>(null);
+  const [revenue, setRevenue] = useState<any>(null);
   const [staked, setStaked] = useState(null);
   const [backingPerClam, setBackingPerClam] = useState<number | null>(null);
   const smallerScreen = useMediaQuery('(max-width: 650px)');
@@ -180,6 +181,18 @@ function TreasuryDashboard() {
       // @ts-ignore
       const latestMetrics = (r as any).data.protocolMetrics[0];
       setBackingPerClam(latestMetrics.treasuryMarketValue / latestMetrics.clamCirculatingSupply);
+    });
+  }, []);
+
+  useEffect(() => {
+    apollo(treasuryRevenueQuery).then(r => {
+      const revenues = r?.data.treasuryRevenues.map((entry: any) =>
+        // @ts-ignore
+        Object.entries(entry).reduce((obj, [key, value]) => ((obj[key] = parseFloat(value)), obj), {}),
+      );
+      // .filter((pm: any) => pm.treasuryMarketValue > 0);
+      setRevenue(revenues);
+      console.log(revenues);
     });
   }, []);
 
@@ -263,6 +276,30 @@ function TreasuryDashboard() {
             </Grid>
 
             <Grid item lg={6} md={6} sm={12} xs={12}>
+              <Paper className="ohm-card ohm-chart-card">
+                {
+                  // @ts-ignore
+                  <Chart
+                    type="bar"
+                    data={revenue}
+                    dataKey={['totalRevenueMarketValue']}
+                    stroke={[['rgba(128, 204, 131, 1)', 'rgba(128, 204, 131, 0.5)']]}
+                    headerText={'Treasury Revenue'}
+                    // @ts-ignore
+                    headerSubText={`$${revenue && trim(revenue[0].totalRevenueMarketValue, 2)} `}
+                    // dataFormat="percent"
+                    bulletpointColors={bulletpoints.pol}
+                    itemNames={tooltipItems.pol}
+                    itemType={itemType.dollar}
+                    infoTooltipMessage={'Blah'}
+                    // domain={[98, 'auto']}
+                    // isPOL={true}
+                    // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
+                  />
+                }
+              </Paper>
+            </Grid>
+            {/* <Grid item lg={6} md={6} sm={12} xs={12}>
               <Paper className="ohm-card">
                 {
                   // @ts-ignore
@@ -285,9 +322,9 @@ function TreasuryDashboard() {
                   />
                 }
               </Paper>
-            </Grid>
+            </Grid> */}
             <Grid item lg={6} md={6} sm={12} xs={12}>
-              <Paper className="ohm-card">
+              <Paper className="ohm-card ohm-chart-card">
                 {
                   // @ts-ignore
                   <Chart

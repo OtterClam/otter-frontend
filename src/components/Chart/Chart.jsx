@@ -301,6 +301,7 @@ const renderBarChart = (
       dataKey="timestamp"
       interval={30}
       axisLine={false}
+      tick={xAxisTickProps}
       tickCount={tickCount}
       tickLine={false}
       reversed={true}
@@ -310,16 +311,17 @@ const renderBarChart = (
     <YAxis
       axisLine={false}
       tickLine={false}
+      tick={yAxisTickProps}
       tickCount={isExpanded ? expandedTickCount : tickCount}
-      width={33}
+      width={40}
       domain={[0, 'auto']}
       allowDataOverflow={false}
-      tickFormatter={number => (number !== 0 ? number : '')}
+      tickFormatter={number => (number !== 0 ? `$${number}` : '')}
     />
     <Tooltip
       content={<CustomTooltip bulletpointColors={bulletpointColors} itemNames={itemNames} itemType={itemType} />}
     />
-    <Bar dataKey={dataKey[0]} fill={stroke[0]} />
+    <Bar dataKey={dataKey[0]} fill={stroke} />
     {renderExpandedChartStroke(isExpanded, expandedGraphStrokeColor)}
   </BarChart>
 );
