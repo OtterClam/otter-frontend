@@ -90,7 +90,7 @@ const renderTooltipItems = (
             <Box display="flex" justifyContent="space-between">
               <Typography variant="body2" className={item.name}>
                 <span className={`tooltip-bulletpoint ${item.name}`} style={bulletpointColors[index]}></span>
-                {`${itemNames[index]}`}
+                {`${itemNames[index]}:`}&nbsp;
               </Typography>
             </Box>
             {renderItem(i18n, itemType, item)}

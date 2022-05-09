@@ -91,7 +91,6 @@ function TreasuryDashboard() {
     () => ({
       tvl: [t('dashboard.tooltipItems.tvl')],
       rfv: ['MAI', 'FRAX', 'MAI/USDC(QiDAO)'],
-      holder: ['CLAMies'],
       apy: [t('common.180Chest'), t('common.90Chest'), t('common.28Chest'), t('common.14Chest'), t('common.staking')],
       runway: [
         t('dashboard.tooltipItems.current'),
@@ -120,7 +119,7 @@ function TreasuryDashboard() {
   );
   const [data, setData] = useState<any>(null);
   const [revenue, setRevenue] = useState<any>(null);
-  const [staked, setStaked] = useState(null);
+  const [staked, setStaked] = useState<any>(null);
   const [backingPerClam, setBackingPerClam] = useState<number | null>(null);
   const smallerScreen = useMediaQuery('(max-width: 650px)');
   const verySmallScreen = useMediaQuery('(max-width: 379px)');
@@ -132,21 +131,25 @@ function TreasuryDashboard() {
   const pearlPrice = useSelector<IReduxState, number>(state => state.app.pearlPrice);
   const currentIndex = useSelector<IReduxState, string>(state => state.app.currentIndex);
 
-  const displayData = [
-    {
-      title: t('dashboard.marketCap'),
-      value: marketCap ? formatCurrency(marketCap, 0) : null,
-    },
+  const displayDataOne = [
     {
       title: t('common.clamPrice'),
       value: marketPrice ? formatCurrency(marketPrice, 2) : null,
       image: getTokenImage('clam'),
     },
     {
+      title: t('common.currentIndex'),
+      value: currentIndex ? trim(currentIndex, 2) + ' sCLAM' : null,
+      info: tooltipInfoMessages.currentIndex,
+    },
+    {
       title: t('common.pearlPrice'),
       value: pearlPrice ? formatCurrency(pearlPrice, 2) : null,
       image: getTokenImage('pearl'),
     },
+  ];
+
+  const displayDataTwo = [
     {
       title: t('dashboard.circulatingSupply'),
       value: circSupply ? `${numberFormatter.format(circSupply)} / ${numberFormatter.format(totalSupply!)}` : null,
@@ -156,9 +159,9 @@ function TreasuryDashboard() {
       value: backingPerClam ? formatCurrency(backingPerClam, 2) : null,
     },
     {
-      title: t('common.currentIndex'),
-      value: currentIndex ? trim(currentIndex, 2) + ' sCLAM' : null,
-      info: tooltipInfoMessages.currentIndex,
+      title: t('dashboard.clamStaked'),
+      value: staked ? trim(staked?.[0].staked, 2) + '%' : null,
+      info: tooltipInfoMessages.staked,
     },
   ];
 
@@ -192,7 +195,6 @@ function TreasuryDashboard() {
       );
       // .filter((pm: any) => pm.treasuryMarketValue > 0);
       setRevenue(revenues);
-      console.log(revenues);
     });
   }, []);
 
@@ -211,7 +213,7 @@ function TreasuryDashboard() {
         <Box className="hero-metrics">
           <Paper className="hero-metrics__paper">
             <Box display="flex" flexWrap="wrap" justifyContent="space-between" alignItems="center">
-              {displayData.map(({ title, value, info, image }, i) => (
+              {displayDataOne.map(({ title, value, info, image }, i) => (
                 <Box key={i} bgcolor="mode.white" className="metric-container">
                   <Box className="metric">
                     <Typography variant="h6" color="secondary">
@@ -275,6 +277,26 @@ function TreasuryDashboard() {
               </Paper>
             </Grid>
 
+            <Box className="hero-metrics">
+              <Paper className="hero-metrics__paper">
+                <Box display="flex" flexWrap="wrap" justifyContent="space-between" alignItems="center">
+                  {displayDataTwo.map(({ title, value, info }, i) => (
+                    <Box key={i} bgcolor="mode.white" className="metric-container">
+                      <Box className="metric">
+                        <Typography variant="h6" color="secondary">
+                          {title}
+                          {info && <InfoTooltip message={info} />}
+                        </Typography>
+                        <Typography variant="h4" color="textPrimary">
+                          {value ? value : <Skeleton width="100px" />}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  ))}
+                </Box>
+              </Paper>
+            </Box>
+
             <Grid item lg={6} md={6} sm={12} xs={12}>
               <Paper className="ohm-card ohm-chart-card">
                 {
@@ -289,12 +311,9 @@ function TreasuryDashboard() {
                     headerSubText={`$${revenue && trim(revenue[0].totalRevenueMarketValue, 2)} `}
                     // dataFormat="percent"
                     bulletpointColors={bulletpoints.pol}
-                    itemNames={tooltipItems.pol}
+                    itemNames={['Treasury Revenue']}
                     itemType={itemType.dollar}
                     infoTooltipMessage={'Blah'}
-                    // domain={[98, 'auto']}
-                    // isPOL={true}
-                    // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
                   />
                 }
               </Paper>
@@ -304,22 +323,45 @@ function TreasuryDashboard() {
                 {
                   // @ts-ignore
                   <Chart
-                    type="area"
-                    data={staked}
-                    dataKey={['staked']}
-                    stopColor={[['rgba(255, 220, 119, 1)', 'rgba(255, 220, 119, 0.5)']]}
+                    type="line"
+                    data={data}
+                    dataKey={['clamCirculatingSupply']}
+                    color={[['rgba(128, 204, 131, 1)', 'rgba(255, 220, 119, 0.5)']]}
+                    headerText={t('dashboard.clamStaked')}
+                    dataFormat="percent"
+                    // @ts-ignore
+                    headerSubText={`${data && trim(data[0].clamCirculatingSupply, 0)}`}
+                    bulletpointColors={bulletpoints.staked}
+                    itemNames={['Circulating CLAM']}
+                    itemType={''}
+                    infoTooltipMessage={'bl'}
+                    // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
+                  />
+                }
+              </Paper>
+            </Grid>
+            {/* <Grid item lg={6} md={6} sm={12} xs={12}>
+              <Paper className="ohm-card ohm-chart-card">
+                {
+                  // @ts-ignore
+                  <Chart
+                    type="bar"
+                    data={revenue}
+                    dataKey={['buybackMarketValue']}
+                    stroke={[['rgba(255, 220, 119, 1)', 'rgba(255, 220, 119, 0.5)']]}
                     headerText={t('dashboard.clamStaked')}
                     dataFormat="percent"
                     // @ts-ignore
                     headerSubText={`${staked && trim(staked[0].staked, 2)}% `}
                     isStaked={true}
                     bulletpointColors={bulletpoints.staked}
-                    infoTooltipMessage={tooltipInfoMessages.staked}
+                    itemNames={'Treasury Revenue'}
+                    infoTooltipMessage={'bl'}
                     // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
                   />
                 }
               </Paper>
-            </Grid>
+            </Grid> */}
           </Grid>
         </Zoom>
       </Container>
