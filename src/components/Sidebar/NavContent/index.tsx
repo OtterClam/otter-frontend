@@ -255,7 +255,7 @@ function NavContent() {
               <Link href="https://ottopia.app" target="_blank" rel="noreferrer" className="button-dapp-menu">
                 <div className="dapp-menu-item">
                   <IconDefaultNFT color={currentMainColor} />
-                  <p>Otto</p>
+                  <p>Ottopia</p>
                   <div className="dapp-menu-item__new">NEW</div>
                 </div>
               </Link>
