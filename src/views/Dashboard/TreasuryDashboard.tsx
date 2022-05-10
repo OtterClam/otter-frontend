@@ -306,14 +306,14 @@ function TreasuryDashboard() {
                     data={revenue}
                     dataKey={['totalRevenueMarketValue']}
                     stroke={[['rgba(128, 204, 131, 1)', 'rgba(128, 204, 131, 0.5)']]}
-                    headerText={'Treasury Revenue'}
+                    headerText={t('common.treasuryRevenue')}
                     // @ts-ignore
                     headerSubText={`$${revenue && trim(revenue[0].totalRevenueMarketValue, 2)} `}
                     // dataFormat="percent"
                     bulletpointColors={bulletpoints.pol}
-                    itemNames={['Treasury Revenue']}
+                    itemNames={[t('common.treasuryRevenue')]}
                     itemType={itemType.dollar}
-                    infoTooltipMessage={'Blah'}
+                    infoTooltipMessage={t('dashboard.tooltipInfoMessages.treasuryRevenue')}
                   />
                 }
               </Paper>
@@ -327,14 +327,14 @@ function TreasuryDashboard() {
                     data={data}
                     dataKey={['clamCirculatingSupply']}
                     color={[['rgba(128, 204, 131, 1)', 'rgba(255, 220, 119, 0.5)']]}
-                    headerText={t('dashboard.clamStaked')}
+                    headerText={'CLAM ' + t('dashboard.circulatingSupply')}
                     dataFormat="percent"
                     // @ts-ignore
                     headerSubText={`${data && trim(data[0].clamCirculatingSupply, 0)}`}
                     bulletpointColors={bulletpoints.staked}
                     itemNames={['Circulating CLAM']}
                     itemType={''}
-                    infoTooltipMessage={'bl'}
+                    infoTooltipMessage={t('dashboard.tooltipInfoMessages.circulatingSupply')}
                     // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
                   />
                 }

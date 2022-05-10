@@ -37,6 +37,7 @@ const English = {
       chestAPY: 'Pearl Chest MAX APY',
       dashboard: 'Dashboard',
       calculator: 'Calculator',
+      treasuryRevenue: 'Treasury Revenue',
       helpTranslate: 'Help us Translate',
       '180Chest': '180-Day Chest',
       '90Chest': '90-Day Chest',
@@ -97,6 +98,8 @@ const English = {
           'Runway, is the number of days sCLAM emissions can be sustained at a given rate. Lower APY = longer runway',
         currentIndex:
           'The current index tracks the amount of sCLAM accumulated since the beginning of staking. Basically, how much sCLAM one would have if they staked and held a single CLAM from day 1.',
+        treasuryRevenue: 'Daily income harvested from treasury investments.',
+        circulatingSupply: 'The current number of CLAM tokens in circulation.',
       },
     },
     // src\views\Bond
