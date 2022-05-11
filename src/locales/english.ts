@@ -74,6 +74,7 @@ const English = {
       otterKingdom: 'Welcome to Otter Kingdom',
       decentralized: 'The Decentralized Reserve Memecoin',
       clamStaked: 'CLAM Staked',
+      circulatingClam: 'Circulating CLAM',
       apyOverTime: 'APY over time',
       runway: 'Runway available',
       totalValueDeposited: 'Total Value Deposited',

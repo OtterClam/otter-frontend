@@ -27,6 +27,7 @@ query {
     treasuryClamMaiPOL
     treasuryOtterClamQiMarketValue
     treasuryTetuQiMarketValue
+    totalBurnedClam
   }
 }
 `;

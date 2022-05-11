@@ -120,6 +120,7 @@ function TreasuryDashboard() {
   const [data, setData] = useState<any>(null);
   const [revenue, setRevenue] = useState<any>(null);
   const [staked, setStaked] = useState<any>(null);
+  const [burned, setBurned] = useState<number | null>(null);
   const [backingPerClam, setBackingPerClam] = useState<number | null>(null);
   const smallerScreen = useMediaQuery('(max-width: 650px)');
   const verySmallScreen = useMediaQuery('(max-width: 379px)');
@@ -151,10 +152,6 @@ function TreasuryDashboard() {
 
   const displayDataTwo = [
     {
-      title: t('dashboard.circulatingSupply'),
-      value: circSupply ? `${numberFormatter.format(circSupply)} / ${numberFormatter.format(totalSupply!)}` : null,
-    },
-    {
       title: t('dashboard.backingPerClam'),
       value: backingPerClam ? formatCurrency(backingPerClam, 2) : null,
     },
@@ -162,6 +159,11 @@ function TreasuryDashboard() {
       title: t('dashboard.clamStaked'),
       value: staked ? trim(staked?.[0].staked, 2) + '%' : null,
       info: tooltipInfoMessages.staked,
+    },
+    {
+      title: 'Burned CLAM',
+      value: burned,
+      // value: circSupply ? `${numberFormatter.format(circSupply)} / ${numberFormatter.format(totalSupply!)}` : null,
     },
   ];
 
@@ -184,6 +186,7 @@ function TreasuryDashboard() {
       // @ts-ignore
       const latestMetrics = (r as any).data.protocolMetrics[0];
       setBackingPerClam(latestMetrics.treasuryMarketValue / latestMetrics.clamCirculatingSupply);
+      setBurned(latestMetrics.totalBurnedClam);
     });
   }, []);
 
@@ -276,27 +279,31 @@ function TreasuryDashboard() {
                 }
               </Paper>
             </Grid>
+          </Grid>
+        </Zoom>
 
-            <Box className="hero-metrics">
-              <Paper className="hero-metrics__paper">
-                <Box display="flex" flexWrap="wrap" justifyContent="space-between" alignItems="center">
-                  {displayDataTwo.map(({ title, value, info }, i) => (
-                    <Box key={i} bgcolor="mode.white" className="metric-container">
-                      <Box className="metric">
-                        <Typography variant="h6" color="secondary">
-                          {title}
-                          {info && <InfoTooltip message={info} />}
-                        </Typography>
-                        <Typography variant="h4" color="textPrimary">
-                          {value ? value : <Skeleton width="100px" />}
-                        </Typography>
-                      </Box>
-                    </Box>
-                  ))}
+        <Box className="hero-metrics">
+          <Paper className="hero-metrics__paper">
+            <Box display="flex" flexWrap="wrap" justifyContent="space-between" alignItems="center">
+              {displayDataTwo.map(({ title, value, info }, i) => (
+                <Box key={i} bgcolor="mode.white" className="metric-container">
+                  <Box className="metric">
+                    <Typography variant="h6" color="secondary">
+                      {title}
+                      {info && <InfoTooltip message={info} />}
+                    </Typography>
+                    <Typography variant="h4" color="textPrimary">
+                      {value ? value : <Skeleton width="100px" />}
+                    </Typography>
+                  </Box>
                 </Box>
-              </Paper>
+              ))}
             </Box>
+          </Paper>
+        </Box>
 
+        <Zoom in={true}>
+          <Grid container spacing={2} className="data-grid">
             <Grid item lg={6} md={6} sm={12} xs={12}>
               <Paper className="ohm-card ohm-chart-card">
                 {
@@ -323,16 +330,17 @@ function TreasuryDashboard() {
                 {
                   // @ts-ignore
                   <Chart
-                    type="line"
+                    type="area"
                     data={data}
                     dataKey={['clamCirculatingSupply']}
-                    color={[['rgba(128, 204, 131, 1)', 'rgba(255, 220, 119, 0.5)']]}
+                    stopColor={[['rgba(128, 204, 131, 1)', 'rgba(255, 220, 119, 0.5)']]}
+                    color={[['rgba(255, 220, 119, 1)', 'rgba(255, 220, 119, 0.5)']]} //stroke
                     headerText={'CLAM ' + t('dashboard.circulatingSupply')}
-                    dataFormat="percent"
+                    dataFormat="raw"
                     // @ts-ignore
                     headerSubText={`${data && trim(data[0].clamCirculatingSupply, 0)}`}
                     bulletpointColors={bulletpoints.staked}
-                    itemNames={['Circulating CLAM']}
+                    itemNames={[t('dashboard.circulatingClam')]}
                     itemType={''}
                     infoTooltipMessage={t('dashboard.tooltipInfoMessages.circulatingSupply')}
                     // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
@@ -340,28 +348,6 @@ function TreasuryDashboard() {
                 }
               </Paper>
             </Grid>
-            {/* <Grid item lg={6} md={6} sm={12} xs={12}>
-              <Paper className="ohm-card ohm-chart-card">
-                {
-                  // @ts-ignore
-                  <Chart
-                    type="bar"
-                    data={revenue}
-                    dataKey={['buybackMarketValue']}
-                    stroke={[['rgba(255, 220, 119, 1)', 'rgba(255, 220, 119, 0.5)']]}
-                    headerText={t('dashboard.clamStaked')}
-                    dataFormat="percent"
-                    // @ts-ignore
-                    headerSubText={`${staked && trim(staked[0].staked, 2)}% `}
-                    isStaked={true}
-                    bulletpointColors={bulletpoints.staked}
-                    itemNames={'Treasury Revenue'}
-                    infoTooltipMessage={'bl'}
-                    // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
-                  />
-                }
-              </Paper>
-            </Grid> */}
           </Grid>
         </Zoom>
       </Container>
