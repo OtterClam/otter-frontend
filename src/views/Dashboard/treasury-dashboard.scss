@@ -83,7 +83,8 @@
     }
   }
   .data-grid {
-    overflow: hidden;
+    position: relative;
+    z-index: 5;
   }
 }
 

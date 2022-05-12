@@ -162,7 +162,7 @@ function TreasuryDashboard() {
     },
     {
       title: 'Burned CLAM',
-      value: burned,
+      value: burned ? numberFormatter.format(burned) : null,
       // value: circSupply ? `${numberFormatter.format(circSupply)} / ${numberFormatter.format(totalSupply!)}` : null,
     },
   ];
@@ -234,53 +234,51 @@ function TreasuryDashboard() {
           </Paper>
         </Box>
 
-        <Zoom in={true}>
-          <Grid container spacing={2} className="data-grid">
-            <Grid item lg={6} md={6} sm={12} xs={12}>
-              <Paper className="ohm-card ohm-chart-card">
-                {
+        <Grid container spacing={2} className="data-grid">
+          <Grid item lg={6} md={6} sm={12} xs={12}>
+            <Paper className="ohm-card ohm-chart-card">
+              {
+                // @ts-ignore
+                <Chart
+                  type="area"
+                  data={data}
+                  dataKey={['totalValueLocked']}
+                  stopColor={[['#FFACA1', 'rgba(255, 172, 161, 0.5)']]}
+                  headerText={t('dashboard.totalValueDeposited')}
                   // @ts-ignore
-                  <Chart
-                    type="area"
-                    data={data}
-                    dataKey={['totalValueLocked']}
-                    stopColor={[['#FFACA1', 'rgba(255, 172, 161, 0.5)']]}
-                    headerText={t('dashboard.totalValueDeposited')}
-                    // @ts-ignore
-                    headerSubText={`${data && formatCurrency(data[0].totalValueLocked)}`}
-                    bulletpointColors={bulletpoints.tvl}
-                    itemNames={tooltipItems.tvl}
-                    itemType={itemType.dollar}
-                    infoTooltipMessage={tooltipInfoMessages.tvl}
-                    // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
-                  />
-                }
-              </Paper>
-            </Grid>
-
-            <Grid item lg={6} md={6} sm={12} xs={12}>
-              <Paper className="ohm-card ohm-chart-card">
-                {
-                  // @ts-ignore
-                  <Chart
-                    type="stack"
-                    data={data}
-                    dataKey={marketValues.map(p => p.dataKey)}
-                    stopColor={marketValues.map(p => p.stopColor)}
-                    headerText={t('dashboard.marketValue')}
-                    // @ts-ignore
-                    headerSubText={`${data && formatCurrency(data[0].treasuryMarketValue)}`}
-                    bulletpointColors={tooltipColors.marketValues}
-                    itemNames={marketValues.map(p => p.label)}
-                    itemType={itemType.dollar}
-                    infoTooltipMessage={tooltipInfoMessages.mvt}
-                    // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
-                  />
-                }
-              </Paper>
-            </Grid>
+                  headerSubText={`${data && formatCurrency(data[0].totalValueLocked)}`}
+                  bulletpointColors={bulletpoints.tvl}
+                  itemNames={tooltipItems.tvl}
+                  itemType={itemType.dollar}
+                  infoTooltipMessage={tooltipInfoMessages.tvl}
+                  // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
+                />
+              }
+            </Paper>
           </Grid>
-        </Zoom>
+
+          <Grid item lg={6} md={6} sm={12} xs={12} className="clearfix">
+            <Paper className="ohm-card ohm-chart-card">
+              {
+                // @ts-ignore
+                <Chart
+                  type="stack"
+                  data={data}
+                  dataKey={marketValues.map(p => p.dataKey)}
+                  stopColor={marketValues.map(p => p.stopColor)}
+                  headerText={t('dashboard.marketValue')}
+                  // @ts-ignore
+                  headerSubText={`${data && formatCurrency(data[0].treasuryMarketValue)}`}
+                  bulletpointColors={tooltipColors.marketValues}
+                  itemNames={marketValues.map(p => p.label)}
+                  itemType={itemType.dollar}
+                  infoTooltipMessage={tooltipInfoMessages.mvt}
+                  // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
+                />
+              }
+            </Paper>
+          </Grid>
+        </Grid>
 
         <Box className="hero-metrics">
           <Paper className="hero-metrics__paper">
