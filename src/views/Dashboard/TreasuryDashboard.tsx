@@ -14,7 +14,7 @@ import './treasury-dashboard.scss';
 import { bulletpoints, itemType, treasuryDataQuery, treasuryRevenueQuery } from './treasuryData';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 
-const numberFormatter = Intl.NumberFormat('en', { maximumFractionDigits: 0 });
+const intFormatter = Intl.NumberFormat('en', { maximumFractionDigits: 0 });
 const marketValues = [
   {
     label: 'Total',
@@ -133,10 +133,10 @@ function TreasuryDashboard() {
   const pearlPrice = useSelector<IReduxState, number>(state => state.app.pearlPrice);
   const currentIndex = useSelector<IReduxState, string>(state => state.app.currentIndex);
 
-  const [clamUsd, setClamUsd] = useState(false);
+  const [valueInCLAM, setValueInCLAM] = useState(false);
 
-  const toggleClamUsd = () => {
-    setClamUsd(!clamUsd);
+  const valueInCLAMToggle = () => {
+    setValueInCLAM(!valueInCLAM);
   };
 
   const displayDataOne = [
@@ -169,7 +169,7 @@ function TreasuryDashboard() {
     },
     {
       title: 'Burned CLAM',
-      value: burned ? numberFormatter.format(burned) : null,
+      value: burned ? Intl.NumberFormat('en', { maximumFractionDigits: 1 }).format(burned) : null,
     },
   ];
 
@@ -179,13 +179,13 @@ function TreasuryDashboard() {
       value: `${data && trim(data[0].treasuryClamMaiPOL, 2)}% `,
     },
     {
-      title: t('dashboard.clamStaked'),
-      value: staked ? trim(staked?.[0].staked, 2) + '%' : null,
-      info: tooltipInfoMessages.staked,
+      title: t('dashboard.totalValueDeposited'),
+      value: data ? formatCurrency(data?.[0].totalValueLocked) : null,
+      info: tooltipInfoMessages.tvl,
     },
     {
       title: 'Burned CLAM',
-      value: burned ? numberFormatter.format(burned) : null,
+      value: burned ? intFormatter.format(burned) : null,
     },
   ];
 
@@ -262,28 +262,6 @@ function TreasuryDashboard() {
               {
                 // @ts-ignore
                 <Chart
-                  type="area"
-                  data={data}
-                  dataKey={['totalValueLocked']}
-                  stopColor={[['#FFACA1', 'rgba(255, 172, 161, 0.5)']]}
-                  headerText={t('dashboard.totalValueDeposited')}
-                  // @ts-ignore
-                  headerSubText={`${data && formatCurrency(data[0].totalValueLocked)}`}
-                  bulletpointColors={bulletpoints.tvl}
-                  itemNames={tooltipItems.tvl}
-                  itemType={itemType.dollar}
-                  infoTooltipMessage={tooltipInfoMessages.tvl}
-                  // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
-                />
-              }
-            </Paper>
-          </Grid>
-
-          <Grid item lg={6} md={6} sm={12} xs={12}>
-            <Paper className="ohm-card ohm-chart-card">
-              {
-                // @ts-ignore
-                <Chart
                   type="stack"
                   data={data}
                   dataKey={marketValues.map(p => p.dataKey)}
@@ -296,6 +274,47 @@ function TreasuryDashboard() {
                   itemType={itemType.dollar}
                   infoTooltipMessage={tooltipInfoMessages.mvt}
                   // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
+                />
+              }
+            </Paper>
+          </Grid>
+
+          <Grid item lg={6} md={6} sm={12} xs={12}>
+            <Paper className="ohm-card ohm-chart-card">
+              <ToggleButtonGroup
+                size="small"
+                value={valueInCLAM}
+                exclusive
+                onChange={valueInCLAMToggle}
+                aria-label="CLAM/USD"
+                className="toggle-button-group"
+              >
+                <ToggleButton value={false} aria-label="CLAM" className="toggle-button">
+                  {'CLAM'}
+                </ToggleButton>
+                <ToggleButton value={true} aria-label="USD">
+                  {'USD'}
+                </ToggleButton>
+              </ToggleButtonGroup>
+              {
+                // @ts-ignore
+                <Chart
+                  type="bar"
+                  data={revenue}
+                  dataKey={valueInCLAM ? ['totalRevenueMarketValue'] : ['totalRevenueClamAmount']}
+                  stroke={[['rgba(128, 204, 131, 1)', 'rgba(128, 204, 131, 0.5)']]}
+                  headerText={t('common.treasuryRevenue')}
+                  // @ts-ignore
+                  headerSubText={
+                    valueInCLAM
+                      ? `$${revenue && trim(revenue[0].totalRevenueMarketValue, 2)}`
+                      : `$${revenue && trim(revenue[0].totalRevenueClamAmount, 1)} `
+                  }
+                  // dataFormat="percent"
+                  bulletpointColors={bulletpoints.pol}
+                  itemNames={[t('common.treasuryRevenue')]}
+                  itemType={valueInCLAM ? itemType.dollar : ' CLAM'}
+                  infoTooltipMessage={t('dashboard.tooltipInfoMessages.treasuryRevenue')}
                 />
               }
             </Paper>
@@ -327,9 +346,9 @@ function TreasuryDashboard() {
             <Paper className="ohm-card ohm-chart-card">
               <ToggleButtonGroup
                 size="small"
-                value={clamUsd}
+                value={valueInCLAM}
                 exclusive
-                onChange={toggleClamUsd}
+                onChange={valueInCLAMToggle}
                 aria-label="CLAM/USD"
                 className="toggle-button-group"
               >
@@ -340,49 +359,12 @@ function TreasuryDashboard() {
                   {'USD'}
                 </ToggleButton>
               </ToggleButtonGroup>
-              {clamUsd ? (
-                // @ts-ignore
-                <Chart
-                  type="bar"
-                  data={revenue}
-                  dataKey={['totalRevenueMarketValue']}
-                  stroke={[['rgba(128, 204, 131, 1)', 'rgba(128, 204, 131, 0.5)']]}
-                  headerText={t('common.treasuryRevenue')}
-                  // @ts-ignore
-                  headerSubText={`$${revenue && trim(revenue[0].totalRevenueMarketValue, 2)} `}
-                  // dataFormat="percent"
-                  bulletpointColors={bulletpoints.pol}
-                  itemNames={[t('common.treasuryRevenue')]}
-                  itemType={itemType.dollar}
-                  infoTooltipMessage={t('dashboard.tooltipInfoMessages.treasuryRevenue')}
-                />
-              ) : (
-                // @ts-ignore
-                <Chart
-                  type="bar"
-                  data={revenue}
-                  dataKey={['totalRevenueClamAmount']}
-                  stroke={[['rgba(128, 204, 131, 1)', 'rgba(128, 204, 131, 0.5)']]}
-                  headerText={t('common.treasuryRevenue')}
-                  // @ts-ignore
-                  headerSubText={`$${revenue && trim(revenue[0].totalRevenueMarketValue, 2)} `}
-                  // dataFormat="percent"
-                  bulletpointColors={bulletpoints.pol}
-                  itemNames={[t('common.treasuryRevenue')]}
-                  itemType={itemType.dollar}
-                  infoTooltipMessage={t('dashboard.tooltipInfoMessages.treasuryRevenue')}
-                />
-              )}
-            </Paper>
-          </Grid>
-          <Grid item lg={6} md={6} sm={12} xs={12}>
-            <Paper className="ohm-card ohm-chart-card">
               {
                 // @ts-ignore
                 <Chart
                   type="area"
                   data={data}
-                  dataKey={['clamCirculatingSupply']}
+                  dataKey={valueInCLAM ? ['marketCap'] : ['clamCirculatingSupply']}
                   stopColor={[['rgba(128, 204, 131, 1)', 'rgba(255, 220, 119, 0.5)']]}
                   color={[['rgba(255, 220, 119, 1)', 'rgba(255, 220, 119, 0.5)']]} //stroke
                   headerText={'CLAM ' + t('dashboard.circulatingSupply')}
@@ -390,12 +372,51 @@ function TreasuryDashboard() {
                   // @ts-ignore
                   headerSubText={`${
                     data && circSupply
-                      ? `${numberFormatter.format(circSupply)} / ${numberFormatter.format(totalSupply!)}`
+                      ? `${intFormatter.format(circSupply)} / ${intFormatter.format(totalSupply!)}`
                       : ''
                   }`}
                   bulletpointColors={bulletpoints.staked}
                   itemNames={[t('dashboard.circulatingClam')]}
-                  itemType={''}
+                  itemType={valueInCLAM ? '' : itemType.dollar}
+                  infoTooltipMessage={t('dashboard.tooltipInfoMessages.circulatingSupply')}
+                  // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
+                />
+              }
+            </Paper>
+          </Grid>
+
+          <Grid item lg={6} md={6} sm={12} xs={12}>
+            <Paper className="ohm-card ohm-chart-card">
+              <ToggleButtonGroup
+                size="small"
+                value={valueInCLAM}
+                exclusive
+                onChange={valueInCLAMToggle}
+                aria-label="CLAM/USD"
+                className="toggle-button-group"
+              >
+                <ToggleButton value={false} aria-label="CLAM" className="toggle-button">
+                  {'CLAM'}
+                </ToggleButton>
+                <ToggleButton value={true} aria-label="USD">
+                  {'USD'}
+                </ToggleButton>
+              </ToggleButtonGroup>
+              {
+                // @ts-ignore
+                <Chart
+                  type="area"
+                  data={revenue}
+                  dataKey={valueInCLAM ? ['cumulativeBuybackMarketValue'] : ['cumulativeBuybackClamAmount']}
+                  stopColor={[['rgba(128, 204, 131, 1)', 'rgba(255, 220, 119, 0.5)']]}
+                  color={[['rgba(255, 220, 119, 1)', 'rgba(255, 220, 119, 0.5)']]} //stroke
+                  headerText={'CLAM ' + t('dashboard.circulatingSupply')}
+                  dataFormat="raw"
+                  // @ts-ignore
+                  headerSubText={`${valueInCLAM ? 'BuybackUSD' : 'BuybackCLAM'}`}
+                  bulletpointColors={bulletpoints.staked}
+                  itemNames={[t('dashboard.circulatingClam')]}
+                  itemType={valueInCLAM ? '' : itemType.dollar}
                   infoTooltipMessage={t('dashboard.tooltipInfoMessages.circulatingSupply')}
                   // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
                 />
@@ -421,35 +442,6 @@ function TreasuryDashboard() {
               </Box>
             </Paper>
           </Box>
-
-          <Grid item lg={6} md={6} sm={12} xs={12}>
-            <Paper className="ohm-card ohm-chart-card">
-              {
-                // @ts-ignore
-                <Chart
-                  type="area"
-                  data={revenue}
-                  dataKey={['cumulativeBuybackClamAmount']}
-                  stopColor={[['rgba(128, 204, 131, 1)', 'rgba(255, 220, 119, 0.5)']]}
-                  color={[['rgba(255, 220, 119, 1)', 'rgba(255, 220, 119, 0.5)']]} //stroke
-                  headerText={'CLAM ' + t('dashboard.circulatingSupply')}
-                  dataFormat="raw"
-                  // @ts-ignore
-                  headerSubText={`${
-                    data && circSupply
-                      ? `${numberFormatter.format(circSupply)} / ${numberFormatter.format(totalSupply!)}`
-                      : ''
-                  }`}
-                  bulletpointColors={bulletpoints.staked}
-                  itemNames={[t('dashboard.circulatingClam')]}
-                  itemType={''}
-                  infoTooltipMessage={t('dashboard.tooltipInfoMessages.circulatingSupply')}
-                  usdClamButton={true}
-                  // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
-                />
-              }
-            </Paper>
-          </Grid>
         </Grid>
       </Container>
     </div>

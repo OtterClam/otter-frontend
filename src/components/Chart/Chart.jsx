@@ -16,7 +16,6 @@ import {
   CartesianGrid,
   Tooltip,
 } from 'recharts';
-import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import { Typography, Box, SvgIcon, CircularProgress } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import { trim } from '../../helpers';
@@ -353,12 +352,6 @@ function Chart({
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const [clamUsd, setClamUsd] = useState(false);
-
-  const toggleClamUsd = () => {
-    setClamUsd(!clamUsd);
-  };
-
   const handleOpen = () => {
     setOpen(true);
   };
@@ -500,24 +493,13 @@ function Chart({
             <Typography variant="h4" color="secondary" style={{ fontWeight: 500 }}>
               {type !== 'multi' && 'Today'}
             </Typography>
-            {/* {usdClamButton ? (
-              <ToggleButtonGroup
-                value={clamUsd}
-                exclusive
-                onChange={toggleClamUsd}
-                aria-label="CLAM/USD"
-                className="toggle-button-group"
-              >
-                <ToggleButton value={false} aria-label="CLAM">
-                  {'CLAM'}
-                </ToggleButton>
-                <ToggleButton value={true} aria-label="USD">
-                  {'USD'}
-                </ToggleButton>
+            {usdClamButton ? (
+              <ToggleButtonGroup value={usdClam} exclusive onChange={handleAlignment} aria-label="text alignment">
+                {' '}
               </ToggleButtonGroup>
             ) : (
               <></>
-            )} */}
+            )}
           </Box>
         )}
       </div>

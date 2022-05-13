@@ -46,6 +46,7 @@ query {
     buybackClamAmount
     buybackMarketValue
     cumulativeBuybackClamAmount
+    cumulativeBuybackMarketValue
   }
 }
 `;
