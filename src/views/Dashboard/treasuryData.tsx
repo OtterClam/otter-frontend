@@ -45,6 +45,7 @@ query {
     totalRevenueMarketValue
     buybackClamAmount
     buybackMarketValue
+    cumulativeBuybackClamAmount
   }
 }
 `;

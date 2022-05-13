@@ -12,6 +12,7 @@ import { formatCurrency, getTokenImage, trim } from '../../helpers';
 import apollo from '../../lib/apolloClient';
 import './treasury-dashboard.scss';
 import { bulletpoints, itemType, treasuryDataQuery, treasuryRevenueQuery } from './treasuryData';
+import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 
 const numberFormatter = Intl.NumberFormat('en', { maximumFractionDigits: 0 });
 const marketValues = [
@@ -132,6 +133,12 @@ function TreasuryDashboard() {
   const pearlPrice = useSelector<IReduxState, number>(state => state.app.pearlPrice);
   const currentIndex = useSelector<IReduxState, string>(state => state.app.currentIndex);
 
+  const [clamUsd, setClamUsd] = useState(false);
+
+  const toggleClamUsd = () => {
+    setClamUsd(!clamUsd);
+  };
+
   const displayDataOne = [
     {
       title: t('common.clamPrice'),
@@ -163,7 +170,22 @@ function TreasuryDashboard() {
     {
       title: 'Burned CLAM',
       value: burned ? numberFormatter.format(burned) : null,
-      // value: circSupply ? `${numberFormatter.format(circSupply)} / ${numberFormatter.format(totalSupply!)}` : null,
+    },
+  ];
+
+  const displayDataThree = [
+    {
+      title: t('dashboard.pol') + ' CLAM-MAI',
+      value: `${data && trim(data[0].treasuryClamMaiPOL, 2)}% `,
+    },
+    {
+      title: t('dashboard.clamStaked'),
+      value: staked ? trim(staked?.[0].staked, 2) + '%' : null,
+      info: tooltipInfoMessages.staked,
+    },
+    {
+      title: 'Burned CLAM',
+      value: burned ? numberFormatter.format(burned) : null,
     },
   ];
 
@@ -257,7 +279,7 @@ function TreasuryDashboard() {
             </Paper>
           </Grid>
 
-          <Grid item lg={6} md={6} sm={12} xs={12} className="clearfix">
+          <Grid item lg={6} md={6} sm={12} xs={12}>
             <Paper className="ohm-card ohm-chart-card">
               {
                 // @ts-ignore
@@ -300,54 +322,135 @@ function TreasuryDashboard() {
           </Paper>
         </Box>
 
-        <Zoom in={true}>
-          <Grid container spacing={2} className="data-grid">
-            <Grid item lg={6} md={6} sm={12} xs={12}>
-              <Paper className="ohm-card ohm-chart-card">
-                {
+        <Grid container spacing={2} className="data-grid">
+          <Grid item lg={6} md={6} sm={12} xs={12}>
+            <Paper className="ohm-card ohm-chart-card">
+              <ToggleButtonGroup
+                size="small"
+                value={clamUsd}
+                exclusive
+                onChange={toggleClamUsd}
+                aria-label="CLAM/USD"
+                className="toggle-button-group"
+              >
+                <ToggleButton value={false} aria-label="CLAM" className="toggle-button">
+                  {'CLAM'}
+                </ToggleButton>
+                <ToggleButton value={true} aria-label="USD">
+                  {'USD'}
+                </ToggleButton>
+              </ToggleButtonGroup>
+              {clamUsd ? (
+                // @ts-ignore
+                <Chart
+                  type="bar"
+                  data={revenue}
+                  dataKey={['totalRevenueMarketValue']}
+                  stroke={[['rgba(128, 204, 131, 1)', 'rgba(128, 204, 131, 0.5)']]}
+                  headerText={t('common.treasuryRevenue')}
                   // @ts-ignore
-                  <Chart
-                    type="bar"
-                    data={revenue}
-                    dataKey={['totalRevenueMarketValue']}
-                    stroke={[['rgba(128, 204, 131, 1)', 'rgba(128, 204, 131, 0.5)']]}
-                    headerText={t('common.treasuryRevenue')}
-                    // @ts-ignore
-                    headerSubText={`$${revenue && trim(revenue[0].totalRevenueMarketValue, 2)} `}
-                    // dataFormat="percent"
-                    bulletpointColors={bulletpoints.pol}
-                    itemNames={[t('common.treasuryRevenue')]}
-                    itemType={itemType.dollar}
-                    infoTooltipMessage={t('dashboard.tooltipInfoMessages.treasuryRevenue')}
-                  />
-                }
-              </Paper>
-            </Grid>
-            <Grid item lg={6} md={6} sm={12} xs={12}>
-              <Paper className="ohm-card ohm-chart-card">
-                {
+                  headerSubText={`$${revenue && trim(revenue[0].totalRevenueMarketValue, 2)} `}
+                  // dataFormat="percent"
+                  bulletpointColors={bulletpoints.pol}
+                  itemNames={[t('common.treasuryRevenue')]}
+                  itemType={itemType.dollar}
+                  infoTooltipMessage={t('dashboard.tooltipInfoMessages.treasuryRevenue')}
+                />
+              ) : (
+                // @ts-ignore
+                <Chart
+                  type="bar"
+                  data={revenue}
+                  dataKey={['totalRevenueClamAmount']}
+                  stroke={[['rgba(128, 204, 131, 1)', 'rgba(128, 204, 131, 0.5)']]}
+                  headerText={t('common.treasuryRevenue')}
                   // @ts-ignore
-                  <Chart
-                    type="area"
-                    data={data}
-                    dataKey={['clamCirculatingSupply']}
-                    stopColor={[['rgba(128, 204, 131, 1)', 'rgba(255, 220, 119, 0.5)']]}
-                    color={[['rgba(255, 220, 119, 1)', 'rgba(255, 220, 119, 0.5)']]} //stroke
-                    headerText={'CLAM ' + t('dashboard.circulatingSupply')}
-                    dataFormat="raw"
-                    // @ts-ignore
-                    headerSubText={`${data && trim(data[0].clamCirculatingSupply, 0)}`}
-                    bulletpointColors={bulletpoints.staked}
-                    itemNames={[t('dashboard.circulatingClam')]}
-                    itemType={''}
-                    infoTooltipMessage={t('dashboard.tooltipInfoMessages.circulatingSupply')}
-                    // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
-                  />
-                }
-              </Paper>
-            </Grid>
+                  headerSubText={`$${revenue && trim(revenue[0].totalRevenueMarketValue, 2)} `}
+                  // dataFormat="percent"
+                  bulletpointColors={bulletpoints.pol}
+                  itemNames={[t('common.treasuryRevenue')]}
+                  itemType={itemType.dollar}
+                  infoTooltipMessage={t('dashboard.tooltipInfoMessages.treasuryRevenue')}
+                />
+              )}
+            </Paper>
           </Grid>
-        </Zoom>
+          <Grid item lg={6} md={6} sm={12} xs={12}>
+            <Paper className="ohm-card ohm-chart-card">
+              {
+                // @ts-ignore
+                <Chart
+                  type="area"
+                  data={data}
+                  dataKey={['clamCirculatingSupply']}
+                  stopColor={[['rgba(128, 204, 131, 1)', 'rgba(255, 220, 119, 0.5)']]}
+                  color={[['rgba(255, 220, 119, 1)', 'rgba(255, 220, 119, 0.5)']]} //stroke
+                  headerText={'CLAM ' + t('dashboard.circulatingSupply')}
+                  dataFormat="raw"
+                  // @ts-ignore
+                  headerSubText={`${
+                    data && circSupply
+                      ? `${numberFormatter.format(circSupply)} / ${numberFormatter.format(totalSupply!)}`
+                      : ''
+                  }`}
+                  bulletpointColors={bulletpoints.staked}
+                  itemNames={[t('dashboard.circulatingClam')]}
+                  itemType={''}
+                  infoTooltipMessage={t('dashboard.tooltipInfoMessages.circulatingSupply')}
+                  // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
+                />
+              }
+            </Paper>
+          </Grid>
+          <Box className="hero-metrics">
+            <Paper className="hero-metrics__paper">
+              <Box display="flex" flexWrap="wrap" justifyContent="space-between" alignItems="center">
+                {displayDataThree.map(({ title, value, info }, i) => (
+                  <Box key={i} bgcolor="mode.white" className="metric-container">
+                    <Box className="metric">
+                      <Typography variant="h6" color="secondary">
+                        {title}
+                        {info && <InfoTooltip message={info} />}
+                      </Typography>
+                      <Typography variant="h4" color="textPrimary">
+                        {value ? value : <Skeleton width="100px" />}
+                      </Typography>
+                    </Box>
+                  </Box>
+                ))}
+              </Box>
+            </Paper>
+          </Box>
+
+          <Grid item lg={6} md={6} sm={12} xs={12}>
+            <Paper className="ohm-card ohm-chart-card">
+              {
+                // @ts-ignore
+                <Chart
+                  type="area"
+                  data={revenue}
+                  dataKey={['cumulativeBuybackClamAmount']}
+                  stopColor={[['rgba(128, 204, 131, 1)', 'rgba(255, 220, 119, 0.5)']]}
+                  color={[['rgba(255, 220, 119, 1)', 'rgba(255, 220, 119, 0.5)']]} //stroke
+                  headerText={'CLAM ' + t('dashboard.circulatingSupply')}
+                  dataFormat="raw"
+                  // @ts-ignore
+                  headerSubText={`${
+                    data && circSupply
+                      ? `${numberFormatter.format(circSupply)} / ${numberFormatter.format(totalSupply!)}`
+                      : ''
+                  }`}
+                  bulletpointColors={bulletpoints.staked}
+                  itemNames={[t('dashboard.circulatingClam')]}
+                  itemType={''}
+                  infoTooltipMessage={t('dashboard.tooltipInfoMessages.circulatingSupply')}
+                  usdClamButton={true}
+                  // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
+                />
+              }
+            </Paper>
+          </Grid>
+        </Grid>
       </Container>
     </div>
   );

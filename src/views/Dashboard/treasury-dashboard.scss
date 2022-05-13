@@ -31,6 +31,13 @@
         min-width: 300px;
       }
       height: 355px;
+      .toggle-button-group {
+        height: 3rem;
+        position: absolute;
+        margin-left: 60%;
+        .toggle-button {
+        }
+      }
     }
   }
 
