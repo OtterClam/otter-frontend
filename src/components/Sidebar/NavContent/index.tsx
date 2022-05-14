@@ -260,12 +260,7 @@ function NavContent() {
                 </div>
               </Link>
 
-              <Link
-                href={'https://quickswap.exchange/#/swap?outputCurrency=' + CLAM_ADDRESS}
-                target="_blank"
-                rel="noreferrer"
-                className="button-dapp-menu"
-              >
+              <Link href="" target="_blank" rel="noreferrer" className="button-dapp-menu">
                 <div className="dapp-menu-item">
                   <IconDefaultBuyClam />
                   <p>{t('common.buyThing')}CLAM</p>
