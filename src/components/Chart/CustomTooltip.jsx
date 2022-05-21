@@ -32,16 +32,7 @@ const renderItem = (i18n, type, item) => {
   );
 };
 
-const renderTooltipItems = (
-  t,
-  i18n,
-  payload,
-  bulletpointColors,
-  itemNames,
-  itemType,
-  isStaked = false,
-  isPOL = false,
-) => {
+const renderTooltipItems = (t, i18n, payload, bulletpointColors, itemNames, itemType) => {
   return payload.map((item, index) => {
     return (
       <Box key={index}>
@@ -62,12 +53,12 @@ const renderTooltipItems = (
   });
 };
 
-function CustomTooltip({ active, payload, bulletpointColors, itemNames, itemType, isStaked, isPOL }) {
+function CustomTooltip({ active, payload, bulletpointColors, itemNames, itemType }) {
   const { t, i18n } = useTranslation();
   if (active && payload && payload.length) {
     return (
       <Paper className={`ohm-card tooltip-container`}>
-        {renderTooltipItems(t, i18n, payload, bulletpointColors, itemNames, itemType, isStaked, isPOL)}
+        {renderTooltipItems(t, i18n, payload, bulletpointColors, itemNames, itemType)}
       </Paper>
     );
   }

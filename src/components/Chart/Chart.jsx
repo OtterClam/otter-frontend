@@ -63,10 +63,8 @@ const renderAreaChart = (
   bulletpointColors,
   itemNames,
   itemType,
-  isStaked,
   isExpanded,
   expandedGraphStrokeColor,
-  isPOL,
   domain,
 ) => (
   <AreaChart data={data}>
@@ -100,15 +98,7 @@ const renderAreaChart = (
       allowDataOverflow={false}
     />
     <Tooltip
-      content={
-        <CustomTooltip
-          bulletpointColors={bulletpointColors}
-          itemNames={itemNames}
-          itemType={itemType}
-          isStaked={isStaked}
-          isPOL={isPOL}
-        />
-      }
+      content={<CustomTooltip bulletpointColors={bulletpointColors} itemNames={itemNames} itemType={itemType} />}
     />
     <Area dataKey={dataKey[0]} stroke="none" fill={`url(#color-${dataKey[0]})`} fillOpacity={1} />
     {renderExpandedChartStroke(isExpanded, expandedGraphStrokeColor)}
@@ -342,10 +332,8 @@ function Chart({
   bulletpointColors,
   itemNames,
   itemType,
-  isStaked,
   infoTooltipMessage,
   expandedGraphStrokeColor,
-  isPOL,
   isTreasuryRevenue,
   domain,
 }) {
@@ -386,10 +374,8 @@ function Chart({
         bulletpointColors,
         itemNames,
         itemType,
-        isStaked,
         isExpanded,
         expandedGraphStrokeColor,
-        isPOL,
         domain,
       );
     if (type === 'stack')
