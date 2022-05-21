@@ -32,6 +32,18 @@ const formatCurrency = c => {
   }).format(c);
 };
 
+const ytickFormatter = (number, dataFormat) => {
+  if (number !== 0) {
+    if (dataFormat === 'percent') {
+      return `${trim(parseFloat(number), 2)}%`;
+    } else if (dataFormat === 'k') return `${formatCurrency(parseFloat(number) / 1000)}k`;
+    else if (dataFormat == 'kClam') return `${trim(parseFloat(number) / 1000, 2)}k`;
+    else if (dataFormat == 'm') return `${formatCurrency(parseFloat(number) / 1000000)}M`;
+    else return number;
+  }
+  return '';
+};
+
 const tickCount = 3;
 const expandedTickCount = 5;
 
@@ -56,7 +68,6 @@ const renderAreaChart = (
   expandedGraphStrokeColor,
   isPOL,
   domain,
-  usdClamButton,
 ) => (
   <AreaChart data={data}>
     <defs>
@@ -82,13 +93,7 @@ const renderAreaChart = (
       tickLine={false}
       tick={yAxisTickProps}
       width={33}
-      tickFormatter={number =>
-        number !== 0
-          ? dataFormat !== 'percent'
-            ? `${formatCurrency(parseFloat(number) / 1000000)}M`
-            : `${trim(parseFloat(number), 0)}%`
-          : ''
-      }
+      tickFormatter={num => ytickFormatter(num, dataFormat)}
       domain={domain}
       dx={3}
       connectNulls={true}
@@ -148,15 +153,7 @@ const renderStackedAreaChart = (
       tickLine={false}
       width={33}
       tick={yAxisTickProps}
-      tickFormatter={number => {
-        if (number !== 0) {
-          if (dataFormat === 'percent') {
-            return `${trim(parseFloat(number), 2)}%`;
-          } else if (dataFormat === 'k') return `${formatCurrency(parseFloat(number) / 1000)}k`;
-          else return `${formatCurrency(parseFloat(number) / 1000000)}M`;
-        }
-        return '';
-      }}
+      tickFormatter={num => ytickFormatter(num, dataFormat)}
       domain={[0, 'auto']}
       connectNulls={true}
       allowDataOverflow={false}
@@ -168,7 +165,7 @@ const renderStackedAreaChart = (
     {dataKey.map((key, i) => {
       //Don't fill area for Total (avoid double-counting)
       if (key === 'treasuryMarketValue') {
-        return <Area key={i} dataKey={key} />;
+        return <Area key={i} dataKey={key} stackId="0" />;
       }
       return (
         <Area
@@ -220,9 +217,7 @@ const renderLineChart = (
       tickLine={false}
       width={32}
       scale={scale}
-      tickFormatter={number =>
-        number !== 0 ? (dataFormat !== 'percent' ? `${number}` : `${trim(parseFloat(number) / 1000, 0)}k`) : ''
-      }
+      tickFormatter={num => ytickFormatter(num, dataFormat)}
       domain={domain}
       connectNulls={true}
       allowDataOverflow={false}
@@ -269,9 +264,7 @@ const renderMultiLineChart = (
       tick={yAxisTickProps}
       tickLine={false}
       width={33}
-      tickFormatter={number =>
-        number !== 0 ? (dataFormat !== 'percent' ? `${number}` : `${trim(parseFloat(number) / 1000, 0)}k`) : ''
-      }
+      tickFormatter={num => ytickFormatter(num, dataFormat)}
       domain={[0, 'auto']}
       connectNulls={true}
       allowDataOverflow={false}
@@ -297,6 +290,7 @@ const renderBarChart = (
   itemType,
   isExpanded,
   expandedGraphStrokeColor,
+  isTreasuryRevenue,
 ) => (
   <BarChart data={data}>
     <XAxis
@@ -316,14 +310,20 @@ const renderBarChart = (
       tick={yAxisTickProps}
       tickCount={isExpanded ? expandedTickCount : tickCount}
       width={40}
-      domain={[0, 'auto']}
-      allowDataOverflow={false}
-      tickFormatter={number => (number !== 0 ? `$${number}` : '')}
+      domain={[0, dataMax => dataMax / 3]}
+      allowDataOverflow={true}
+      tickFormatter={num => ytickFormatter(num, dataFormat)}
     />
     <Tooltip
       content={<CustomTooltip bulletpointColors={bulletpointColors} itemNames={itemNames} itemType={itemType} />}
     />
-    <Bar dataKey={dataKey[0]} fill={stroke} />
+    {dataKey.map((key, i) => {
+      //Don't fill area for Total (avoid double-counting)
+      if (key === 'totalRevenueMarketValue' || key === 'totalRevenueClamAmount') {
+        return <Bar key={i} dataKey={key} stackId="-1" fillOpacity={0} />;
+      }
+      return <Bar key={i} dataKey={key} stroke={stroke[i]} fillOpacity={1} stackId="1" />;
+    })}
     {renderExpandedChartStroke(isExpanded, expandedGraphStrokeColor)}
   </BarChart>
 );
@@ -346,8 +346,8 @@ function Chart({
   infoTooltipMessage,
   expandedGraphStrokeColor,
   isPOL,
+  isTreasuryRevenue,
   domain,
-  usdClamButton,
 }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -391,7 +391,6 @@ function Chart({
         expandedGraphStrokeColor,
         isPOL,
         domain,
-        usdClamButton,
       );
     if (type === 'stack')
       return renderStackedAreaChart(
@@ -431,6 +430,7 @@ function Chart({
         itemType,
         isExpanded,
         expandedGraphStrokeColor,
+        isTreasuryRevenue,
       );
   };
 
@@ -493,13 +493,6 @@ function Chart({
             <Typography variant="h4" color="secondary" style={{ fontWeight: 500 }}>
               {type !== 'multi' && 'Today'}
             </Typography>
-            {usdClamButton ? (
-              <ToggleButtonGroup value={usdClam} exclusive onChange={handleAlignment} aria-label="text alignment">
-                {' '}
-              </ToggleButtonGroup>
-            ) : (
-              <></>
-            )}
           </Box>
         )}
       </div>

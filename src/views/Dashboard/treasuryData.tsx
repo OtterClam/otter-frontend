@@ -28,6 +28,7 @@ query {
     treasuryOtterClamQiMarketValue
     treasuryTetuQiMarketValue
     totalBurnedClam
+    totalBurnedClamMarketValue
   }
 }
 `;
@@ -41,6 +42,10 @@ query {
     qiLockerHarvestMarketValue
     qiDaoInvestmentHarvestAmount
     qiDaoInvestmentHarvestMarketValue
+    ottopiaClamAmount
+    ottopiaMarketValue
+    yieldClamAmount
+    yieldMarketValue
     totalRevenueClamAmount
     totalRevenueMarketValue
     buybackClamAmount
@@ -187,6 +192,19 @@ export const bulletpoints = {
       top: -12,
       background: 'rgba(219, 242, 170, 1)',
       border: '1px solid rgba(118, 130, 153, 1)',
+    },
+  ],
+  revenue: [
+    {},
+    {
+      right: 15,
+      top: -12,
+      background: 'linear-gradient(180deg, #FFACA1 -10%, #FFACA1 100%)',
+    },
+    {
+      right: 25,
+      top: -12,
+      background: 'linear-gradient(180deg, rgba(56, 223, 63, 1) -10%, rgba(182, 233, 152, 1) 100%)',
     },
   ],
 };

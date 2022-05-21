@@ -26,7 +26,9 @@ const renderItem = (i18n, type, item) => {
       i18n,
     )}`}</Typography>
   ) : (
-    <Typography variant="body2">{`${Math.round(item.value).toLocaleString(i18n)}${type}`}</Typography>
+    <Typography variant="body2" className={item.name}>{`${Math.round(item.value).toLocaleString(
+      i18n,
+    )}${type}`}</Typography>
   );
 };
 
@@ -40,48 +42,6 @@ const renderTooltipItems = (
   isStaked = false,
   isPOL = false,
 ) => {
-  if (isStaked)
-    return (
-      <Box>
-        <Box className="item" display="flex" justifyContent="space-between">
-          <Typography variant="body2">
-            <span className="tooltip-bulletpoint" style={bulletpointColors[0]}></span>
-            {t('components.staked')}
-          </Typography>
-          <Typography>{`${trim(payload[0].value, 2)}%`}</Typography>
-        </Box>
-        <Box className="item" display="flex" justifyContent="space-between">
-          <Typography variant="body2">
-            <span className="tooltip-bulletpoint" style={bulletpointColors[1]}></span>
-            {t('components.notStaked')}
-          </Typography>
-          <Typography>{`${trim(100 - payload[0].value, 2)}%`}</Typography>
-        </Box>
-        <Box>{renderDate(i18n, 0, payload, payload[0])}</Box>
-      </Box>
-    );
-
-  if (isPOL)
-    return (
-      <Box>
-        <Box className="item" display="flex" justifyContent="space-between">
-          <Typography variant="body2">
-            <span className="tooltip-bulletpoint" style={bulletpointColors[0]}></span>
-            {itemNames[0]}
-          </Typography>
-          <Typography>{`${trim(payload[0].value, 2)}%`}</Typography>
-        </Box>
-        <Box className="item" display="flex" justifyContent="space-between">
-          <Typography variant="body2">
-            <span className="tooltip-bulletpoint" style={bulletpointColors[1]}></span>
-            {itemNames[1]}
-          </Typography>
-          <Typography>{`${(100 - payload[0].value).toFixed(2)}%`}</Typography>
-        </Box>
-        <Box>{renderDate(i18n, 0, payload, payload[0])}</Box>
-      </Box>
-    );
-
   return payload.map((item, index) => {
     return (
       <Box key={index}>
