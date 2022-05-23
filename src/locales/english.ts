@@ -105,7 +105,7 @@ const English = {
         treasuryRevenue:
           'Daily income harvested from treasury investments. This does not reflect changes in the market value of treasury assets, only new liquid tokens entering the treasury.',
         circulatingSupply:
-          'The current number of CLAM tokens in circulation. The difference between the total and circulating supply is the amount of CLAM held by the DAO wallet.',
+          'The current number of CLAM tokens in circulation. The difference between the total and circulating supply is the amount of CLAM held by the DAO wallet and Ottopia reward pool.',
         marketCap: 'Number of circulating CLAM multiplied by market price.',
         burned: 'Amount of CLAM permanently burned and removed from the supply.',
         clamToday:
