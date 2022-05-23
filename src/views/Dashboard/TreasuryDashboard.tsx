@@ -452,26 +452,26 @@ function TreasuryDashboard() {
               }
             </Paper>
           </Grid>
-          <Box className="hero-metrics">
-            <Paper className="hero-metrics__paper">
-              <Box display="flex" flexWrap="wrap" justifyContent="space-between" alignItems="center">
-                {displayDataThree.map(({ title, value, info }, i) => (
-                  <Box key={i} bgcolor="mode.white" className="metric-container">
-                    <Box className="metric">
-                      <Typography variant="h6" color="secondary">
-                        {title}
-                        {info && <InfoTooltip message={info} />}
-                      </Typography>
-                      <Typography variant="h4" color="textPrimary">
-                        {value ? value : <Skeleton width="100px" />}
-                      </Typography>
-                    </Box>
-                  </Box>
-                ))}
-              </Box>
-            </Paper>
-          </Box>
         </Grid>
+        <Box className="hero-metrics">
+          <Paper className="hero-metrics__paper">
+            <Box display="flex" flexWrap="wrap" justifyContent="space-between" alignItems="center">
+              {displayDataThree.map(({ title, value, info }, i) => (
+                <Box key={i} bgcolor="mode.white" className="metric-container">
+                  <Box className="metric">
+                    <Typography variant="h6" color="secondary">
+                      {title}
+                      {info && <InfoTooltip message={info} />}
+                    </Typography>
+                    <Typography variant="h4" color="textPrimary">
+                      {value ? value : <Skeleton width="100px" />}
+                    </Typography>
+                  </Box>
+                </Box>
+              ))}
+            </Box>
+          </Paper>
+        </Box>
       </Container>
     </div>
   );
