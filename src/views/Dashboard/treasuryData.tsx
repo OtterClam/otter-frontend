@@ -196,15 +196,16 @@ export const bulletpoints = {
   ],
   revenue: [
     {},
-    {
-      right: 15,
-      top: -12,
-      background: 'linear-gradient(180deg, #FFACA1 -10%, #FFACA1 100%)',
-    },
+
     {
       right: 25,
       top: -12,
       background: 'linear-gradient(180deg, rgba(56, 223, 63, 1) -10%, rgba(182, 233, 152, 1) 100%)',
+    },
+    {
+      right: 15,
+      top: -12,
+      background: 'linear-gradient(180deg, #FFACA1 -10%, #FFACA1 100%)',
     },
   ],
 };

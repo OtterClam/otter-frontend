@@ -280,7 +280,6 @@ const renderBarChart = (
   itemType,
   isExpanded,
   expandedGraphStrokeColor,
-  isTreasuryRevenue,
 ) => (
   <BarChart data={data}>
     <XAxis
@@ -312,7 +311,7 @@ const renderBarChart = (
       if (key === 'totalRevenueMarketValue' || key === 'totalRevenueClamAmount') {
         return <Bar key={i} dataKey={key} stackId="-1" fillOpacity={0} />;
       }
-      return <Bar key={i} dataKey={key} stroke={stroke[i]} fillOpacity={1} stackId="1" />;
+      return <Bar key={i} dataKey={key} stroke={stroke[i]} fill={stroke[i]} fillOpacity={1} stackId="1" />;
     })}
     {renderExpandedChartStroke(isExpanded, expandedGraphStrokeColor)}
   </BarChart>
@@ -334,7 +333,6 @@ function Chart({
   itemType,
   infoTooltipMessage,
   expandedGraphStrokeColor,
-  isTreasuryRevenue,
   domain,
 }) {
   const [open, setOpen] = useState(false);
@@ -416,7 +414,6 @@ function Chart({
         itemType,
         isExpanded,
         expandedGraphStrokeColor,
-        isTreasuryRevenue,
       );
   };
 

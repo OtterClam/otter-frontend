@@ -1,5 +1,5 @@
 import { Box, Container, Grid, Paper, Typography, useMediaQuery, Zoom } from '@material-ui/core';
-import { useTheme } from '@material-ui/core/styles';
+import { useTheme, makeStyles } from '@material-ui/core/styles';
 import { Skeleton } from '@material-ui/lab';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -84,6 +84,13 @@ const tooltipColors = {
       background: `linear-gradient(180deg, ${color1} 19%, ${color2} 100%)`,
     })),
 };
+const useStyles = makeStyles(theme => ({
+  btngrp: {
+    '&': {
+      backgroundColor: theme.palette.mode.lightGray300,
+    },
+  },
+}));
 
 function TreasuryDashboard() {
   const { t } = useTranslation();
@@ -138,6 +145,8 @@ function TreasuryDashboard() {
   const currentIndex = useSelector<IReduxState, string>(state => state.app.currentIndex);
 
   const [valueInUSD, setValueInCLAM] = useState(false);
+
+  const styles = useStyles();
 
   const valueInUSDToggle = () => {
     setValueInCLAM(!valueInUSD);
@@ -267,7 +276,7 @@ function TreasuryDashboard() {
         </Box>
 
         <Grid container spacing={2} className="data-grid">
-          <Grid item lg={6} md={6} sm={12} xs={12}>
+          <Grid item lg={6} md={6} sm={12} xs={12} className="ontop">
             <Paper className="ohm-card ohm-chart-card">
               {
                 // @ts-ignore
@@ -298,7 +307,7 @@ function TreasuryDashboard() {
                 exclusive
                 onChange={valueInUSDToggle}
                 aria-label="CLAM/USD"
-                className="toggle-button-group"
+                className={'toggle-button-group ' + styles.btngrp}
               >
                 <ToggleButton value={false} aria-label="CLAM" className="toggle-button left">
                   {'CLAM'}
@@ -314,13 +323,13 @@ function TreasuryDashboard() {
                   data={revenue}
                   dataKey={
                     valueInUSD
-                      ? ['totalRevenueMarketValue', 'ottopiaMarketValue', 'yieldMarketValue']
-                      : ['totalRevenueClamAmount', 'ottopiaClamAmount', 'yieldClamAmount']
+                      ? ['totalRevenueMarketValue', 'yieldMarketValue', 'ottopiaMarketValue']
+                      : ['totalRevenueClamAmount', 'yieldClamAmount', 'ottopiaClamAmount']
                   }
                   stroke={[
                     [],
-                    ['rgba(255, 172, 161, 1)', 'rgba(255, 172, 161, 1)'],
                     ['rgba(128, 204, 131, 1)', 'rgba(128, 204, 131, 0.5)'],
+                    ['rgba(255, 172, 161, 1)', 'rgba(255, 172, 161, 1)'],
                   ]}
                   headerText={t('common.treasuryRevenue')}
                   // @ts-ignore
@@ -331,17 +340,14 @@ function TreasuryDashboard() {
                   }
                   dataFormat={valueInUSD ? 'k' : 'kClam'}
                   bulletpointColors={bulletpoints.revenue}
-                  itemNames={['Total', 'Ottopia', 'Investments']}
+                  itemNames={['Total', 'Investments', 'Ottopia']}
                   itemType={valueInUSD ? itemType.dollar : ' CLAM'}
                   infoTooltipMessage={t('dashboard.tooltipInfoMessages.treasuryRevenue')}
-                  isTreasuryRevenue={true}
                 />
               }
             </Paper>
           </Grid>
-        </Grid>
 
-        <Grid container spacing={2} className="data-grid">
           <Grid item lg={6} md={6} sm={12} xs={12}>
             <Paper className="ohm-card ohm-chart-card">
               <ToggleButtonGroup
@@ -350,7 +356,7 @@ function TreasuryDashboard() {
                 exclusive
                 onChange={valueInUSDToggle}
                 aria-label="CLAM/USD"
-                className="toggle-button-group"
+                className={'toggle-button-group ' + styles.btngrp}
               >
                 <ToggleButton value={false} aria-label="CLAM" className="toggle-button left">
                   {'CLAM'}
@@ -396,7 +402,7 @@ function TreasuryDashboard() {
                 exclusive
                 onChange={valueInUSDToggle}
                 aria-label="CLAM/USD"
-                className="toggle-button-group"
+                className={'toggle-button-group ' + styles.btngrp}
               >
                 <ToggleButton value={false} aria-label="CLAM" className="toggle-button left">
                   {'CLAM'}

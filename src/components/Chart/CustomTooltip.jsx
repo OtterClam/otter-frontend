@@ -57,7 +57,7 @@ function CustomTooltip({ active, payload, bulletpointColors, itemNames, itemType
   const { t, i18n } = useTranslation();
   if (active && payload && payload.length) {
     return (
-      <Paper className={`ohm-card tooltip-container`}>
+      <Paper className={`ohm-card tooltip-container`} id="info-tooltip">
         {renderTooltipItems(t, i18n, payload, bulletpointColors, itemNames, itemType)}
       </Paper>
     );
