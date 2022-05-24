@@ -111,6 +111,7 @@ const English = {
         clamToday:
           'Total amount of CLAM which has been distributed today. This is divided proportionally between all stakers and Pearl Chest holders.',
         backing: 'Market Value of Treasury Assets divided by the circulating supply of CLAM.',
+        buybacks: 'CLAM bought on the open market using Treasury Assets.',
       },
     },
     // src\views\Bond

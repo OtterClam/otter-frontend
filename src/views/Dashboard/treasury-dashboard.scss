@@ -35,10 +35,23 @@
       }
       height: 355px;
       .toggle-button-group {
-        height: 3rem;
+        height: 2rem;
         position: absolute;
-        margin-left: 60%;
-        margin-top: 3%;
+        margin-left: 65%;
+        margin-top: 5%;
+        background: $light-gray200;
+        border-radius: 0.5rem;
+        .toggle-button {
+          border-radius: 0.5rem;
+          height: 1.4rem;
+          margin-top: 4.5%;
+        }
+        .toggle-button.left {
+          margin-right: 0;
+        }
+        .toggle-button.right {
+          margin-left: 0;
+        }
       }
     }
   }
@@ -108,8 +121,8 @@
       // flex-wrap: wrap;
     }
     div.metric-container {
-      width: 100% !important;
-      margin: 15px 0 !important;
+      width: 160px !important;
+      margin: 15px 15px !important;
       min-width: unset !important;
       text-align: center !important;
       align-items: center !important;
@@ -120,8 +133,8 @@
 
 .mobile {
   div.metric-container {
-    width: 100% !important;
-    margin: 15px 0 !important;
+    width: 160px !important;
+    margin: 15px 5px !important;
     min-width: unset !important;
     text-align: left !important;
     align-items: center !important;

@@ -159,9 +159,6 @@ function TreasuryDashboard() {
       value: pearlPrice ? formatCurrency(pearlPrice, 2) : null,
       image: getTokenImage('pearl'),
     },
-  ];
-
-  const displayDataTwo = [
     {
       title: t('dashboard.backingPerClam'),
       value: backingPerClam ? formatCurrency(backingPerClam, 2) : null,
@@ -180,17 +177,18 @@ function TreasuryDashboard() {
     },
   ];
 
-  const displayDataThree = [
+  const displayDataTwo = [
     {
       title: t('dashboard.burned') + ' CLAM',
-      value: valueInUSD ? formatCurrency(burnedMarketValue!, 2) : intFormatter.format(burnedClam!),
+      value: `${intFormatter.format(burnedClam!)} (${formatCurrency(burnedMarketValue!, 2)})`,
       info: tooltipInfoMessages.burned,
     },
     {
       title: t('dashboard.clamToday'),
-      value: valueInUSD
-        ? formatCurrency((data?.[0].totalSupply - data?.[1].totalSupply) * data?.[0].clamPrice, 2)
-        : intFormatter.format(data?.[0].totalSupply - data?.[1].totalSupply),
+      value: `${intFormatter.format(data?.[0].totalSupply - data?.[1].totalSupply)} (${formatCurrency(
+        (data?.[0].totalSupply - data?.[1].totalSupply) * data?.[0].clamPrice,
+        2,
+      )})`,
       info: tooltipInfoMessages.clamToday,
     },
     {
@@ -302,10 +300,10 @@ function TreasuryDashboard() {
                 aria-label="CLAM/USD"
                 className="toggle-button-group"
               >
-                <ToggleButton value={false} aria-label="CLAM" className="toggle-button">
+                <ToggleButton value={false} aria-label="CLAM" className="toggle-button left">
                   {'CLAM'}
                 </ToggleButton>
-                <ToggleButton value={true} aria-label="USD">
+                <ToggleButton value={true} aria-label="USD" className="toggle-button right">
                   {'USD'}
                 </ToggleButton>
               </ToggleButtonGroup>
@@ -343,26 +341,6 @@ function TreasuryDashboard() {
           </Grid>
         </Grid>
 
-        <Box className="hero-metrics">
-          <Paper className="hero-metrics__paper">
-            <Box display="flex" flexWrap="wrap" justifyContent="space-between" alignItems="center">
-              {displayDataTwo.map(({ title, value, info }, i) => (
-                <Box key={i} bgcolor="mode.white" className="metric-container">
-                  <Box className="metric">
-                    <Typography variant="h6" color="secondary">
-                      {title}
-                      {info && <InfoTooltip message={info} />}
-                    </Typography>
-                    <Typography variant="h4" color="textPrimary">
-                      {value ? value : <Skeleton width="100px" />}
-                    </Typography>
-                  </Box>
-                </Box>
-              ))}
-            </Box>
-          </Paper>
-        </Box>
-
         <Grid container spacing={2} className="data-grid">
           <Grid item lg={6} md={6} sm={12} xs={12}>
             <Paper className="ohm-card ohm-chart-card">
@@ -374,10 +352,10 @@ function TreasuryDashboard() {
                 aria-label="CLAM/USD"
                 className="toggle-button-group"
               >
-                <ToggleButton value={false} aria-label="CLAM" className="toggle-button">
+                <ToggleButton value={false} aria-label="CLAM" className="toggle-button left">
                   {'CLAM'}
                 </ToggleButton>
-                <ToggleButton value={true} aria-label="USD">
+                <ToggleButton value={true} aria-label="USD" className="toggle-button right">
                   {'USD'}
                 </ToggleButton>
               </ToggleButtonGroup>
@@ -420,10 +398,10 @@ function TreasuryDashboard() {
                 aria-label="CLAM/USD"
                 className="toggle-button-group"
               >
-                <ToggleButton value={false} aria-label="CLAM" className="toggle-button">
+                <ToggleButton value={false} aria-label="CLAM" className="toggle-button left">
                   {'CLAM'}
                 </ToggleButton>
-                <ToggleButton value={true} aria-label="USD">
+                <ToggleButton value={true} aria-label="USD" className="toggle-button right">
                   {'USD'}
                 </ToggleButton>
               </ToggleButtonGroup>
@@ -446,7 +424,7 @@ function TreasuryDashboard() {
                   bulletpointColors={bulletpoints.staked}
                   itemNames={['Total Buybacks']}
                   itemType={valueInUSD ? itemType.dollar : ' CLAM'}
-                  infoTooltipMessage={t('dashboard.tooltipInfoMessages.circulatingSupply')}
+                  infoTooltipMessage={t('dashboard.tooltipInfoMessages.buybacks')}
                   // expandedGraphStrokeColor={theme.palette.graphStrokeColor}
                 />
               }
@@ -456,7 +434,7 @@ function TreasuryDashboard() {
         <Box className="hero-metrics">
           <Paper className="hero-metrics__paper">
             <Box display="flex" flexWrap="wrap" justifyContent="space-between" alignItems="center">
-              {displayDataThree.map(({ title, value, info }, i) => (
+              {displayDataTwo.map(({ title, value, info }, i) => (
                 <Box key={i} bgcolor="mode.white" className="metric-container">
                   <Box className="metric">
                     <Typography variant="h6" color="secondary">
