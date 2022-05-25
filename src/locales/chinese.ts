@@ -62,6 +62,9 @@ const Chinese = {
       marketValue: '金庫資產市值',
       riskFree: '金庫無風險收益值',
       pol: '協議自有流動性（POL）',
+      buybacks: '回購',
+      burned: '燒毀',
+      clamToday: 'CLAM 今天分發',
       tooltipItems: {
         tvl: '總計存額',
         current: '當前',
@@ -80,6 +83,12 @@ const Chinese = {
           '生命週期（Runway）是 sCLAM 的發行能維持在一定比率的天數。越低的年度百分比收益率（APY） ，越長的生命週期（Runway）。',
         currentIndex:
           '當前指數從開始質押的時候開始追蹤 sCLAM 累積的數量。基本上就是一個人在一天當中可以擁有多少 sCLAM，如果他們質押或是持有單一顆 CLAM',
+        treasuryRevenue: '每日國庫的投資收入，這不反應國庫的總淨資產價值變化，只顯示新增的收入部分。',
+        circulatingSupply: '流通中的 CLAM ，差額主要為 DAO 錢包和 Ottopia 獎勵池。',
+        marketCap: '流通的 CLAM 乘以市價',
+        burned: '由國庫回購並且燒毀的 CLAM 數量。',
+        clamToday: '今天總共分配的 CLAM 數量，按照質押與鎖倉的比例分配給質押者與珍珠寶盒的持有者。',
+        backing: '國庫淨資產總值除以流通的 CLAM 數量。',
       },
     },
     // src\views\Bond

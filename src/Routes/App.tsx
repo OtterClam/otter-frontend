@@ -9,7 +9,7 @@ import { useAppSelector } from 'src/store/hook';
 import { dark as darkTheme } from 'src/themes/app';
 import { NFT } from 'src/views';
 import Calculator from 'src/views/Calculator';
-import Dashboard from 'src/views/Dashboard/TreasuryDashboard';
+import TreasuryDashboard from 'src/views/Dashboard/TreasuryDashboard';
 import Migrate from 'src/views/Migrate';
 import PearlChests from 'src/views/PearlChests';
 import TopBar from '../components/Header';
@@ -203,7 +203,7 @@ function App() {
             </Route>
 
             <Route path="/dashboard">
-              <Dashboard />
+              <TreasuryDashboard />
             </Route>
 
             <Route path="/stake">

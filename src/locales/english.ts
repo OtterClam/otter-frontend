@@ -37,6 +37,7 @@ const English = {
       chestAPY: 'Pearl Chest MAX APY',
       dashboard: 'Dashboard',
       calculator: 'Calculator',
+      treasuryRevenue: 'Treasury Revenue',
       helpTranslate: 'Help us Translate',
       '180Chest': '180-Day Chest',
       '90Chest': '90-Day Chest',
@@ -67,12 +68,16 @@ const English = {
     // src\views\Dashboard
     dashboard: {
       marketCap: 'Market Cap',
+      buybacks: 'Buybacks',
+      burned: 'Burned',
+      clamToday: 'CLAM Distributed Today',
       stakingRatio: 'Staking Ratio',
       circulatingSupply: 'Circulating Supply',
       backingPerClam: 'Backing per CLAM',
       otterKingdom: 'Welcome to Otter Kingdom',
       decentralized: 'The Decentralized Reserve Memecoin',
       clamStaked: 'CLAM Staked',
+      circulatingClam: 'Circulating CLAM',
       apyOverTime: 'APY over time',
       runway: 'Runway available',
       totalValueDeposited: 'Total Value Deposited',
@@ -89,7 +94,7 @@ const English = {
         tvl: 'Total Value Deposited, is the dollar amount of all CLAM staked in the protocol. This metric is often used as growth or health indicator in DeFi projects.',
         mvt: 'Market Value of Treasury Assets, is the sum of the value (in dollars) of all assets held by the treasury.',
         rfv: 'Risk Free Value, is the amount of funds the treasury guarantees to use for backing CLAM.',
-        pol: 'Protocol Owned Liquidity, is the amount of LP the treasury owns and controls. The more POL the better for the protocol and its users.',
+        pol: 'Protocol Owned Liquidity, is the percentage of LP the treasury owns and controls.',
         holder: 'Holders, represents the total number of otters (sCLAM holders)',
         staked: 'CLAM Staked, is the ratio of sCLAM to CLAM (staked vs unstaked)',
         apy: 'Annual Percentage Yield, is the normalized representation of an interest rate, based on a compounding period over one year. Note that APYs provided are rather ballpark level indicators and not so much precise future results.',
@@ -97,6 +102,16 @@ const English = {
           'Runway, is the number of days sCLAM emissions can be sustained at a given rate. Lower APY = longer runway',
         currentIndex:
           'The current index tracks the amount of sCLAM accumulated since the beginning of staking. Basically, how much sCLAM one would have if they staked and held a single CLAM from day 1.',
+        treasuryRevenue:
+          'Daily income harvested from treasury investments. This does not reflect changes in the market value of treasury assets, only new liquid tokens entering the treasury.',
+        circulatingSupply:
+          'The current number of CLAM tokens in circulation. The difference between the total and circulating supply is the amount of CLAM held by the DAO wallet and Ottopia reward pool.',
+        marketCap: 'Number of circulating CLAM multiplied by market price.',
+        burned: 'Amount of CLAM permanently burned and removed from the supply.',
+        clamToday:
+          'Total amount of CLAM which has been distributed today. This is divided proportionally between all stakers and Pearl Chest holders.',
+        backing: 'Market Value of Treasury Assets divided by the circulating supply of CLAM.',
+        buybacks: 'CLAM bought on the open market using Treasury Assets.',
       },
     },
     // src\views\Bond

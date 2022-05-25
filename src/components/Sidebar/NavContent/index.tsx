@@ -230,27 +230,33 @@ function NavContent() {
                 </div>
               </Link>
 
-              <div className="dapp-menu-data discounts">
-                <div className="bond-discounts">
-                  <div className="bond-discounts-group">
-                    <div className="bond-discounts-group-title bond">
-                      <span>{t('components.name')}</span>
-                      <span className="bond-pair-roi">{t('common.roi')}</span>
+              <div>
+                {activeBonds.some(bond => bond.discount > 0 && !bond.deprecated) ? (
+                  <div className="dapp-menu-data discounts">
+                    <div className="bond-discounts">
+                      <div className="bond-discounts-group">
+                        <div className="bond-discounts-group-title bond">
+                          <span>{t('components.name')}</span>
+                          <span className="bond-pair-roi">{t('common.roi')}</span>
+                        </div>
+                        {activeBonds.map((bond, i) => (
+                          <Link component={NavLink} to={`/bonds/${bond.value}`} key={i} className={'bond'}>
+                            {bond.discount == NaN ? (
+                              <Skeleton variant="text" width={'150px'} />
+                            ) : (
+                              <p>
+                                {bond.name}
+                                <BondROI bond={bond} />
+                              </p>
+                            )}
+                          </Link>
+                        ))}
+                      </div>
                     </div>
-                    {activeBonds.map((bond, i) => (
-                      <Link component={NavLink} to={`/bonds/${bond.value}`} key={i} className={'bond'}>
-                        {bond.discount == NaN ? (
-                          <Skeleton variant="text" width={'150px'} />
-                        ) : (
-                          <p>
-                            {bond.name}
-                            <BondROI bond={bond} />
-                          </p>
-                        )}
-                      </Link>
-                    ))}
                   </div>
-                </div>
+                ) : (
+                  <></>
+                )}
               </div>
               <Link href="https://ottopia.app" target="_blank" rel="noreferrer" className="button-dapp-menu">
                 <div className="dapp-menu-item">

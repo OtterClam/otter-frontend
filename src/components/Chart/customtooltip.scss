@@ -18,12 +18,28 @@
   .tooltip-bulletpoint.treasuryMarketValue {
     display: none;
   }
+  .tooltip-bulletpoint.totalRevenueMarketValue {
+    display: none;
+  }
+  .tooltip-bulletpoint.totalRevenueClamAmount {
+    display: none;
+  }
 
   .tooltip-date {
     margin-top: 13px;
   }
 }
 .treasuryMarketValue {
+  font-size: 1em !important;
+  height: 1.5em;
+}
+
+.totalRevenueMarketValue {
+  font-size: 1em !important;
+  height: 1.5em;
+}
+
+.totalRevenueClamAmount {
   font-size: 1em !important;
   height: 1.5em;
 }

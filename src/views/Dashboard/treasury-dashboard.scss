@@ -27,10 +27,17 @@
     }
     &.ohm-chart-card {
       .chart-card-header {
-        padding: 0px 20px !important;
         min-width: 300px;
       }
       height: 355px;
+      .toggle-button-group {
+        height: 2rem;
+        position: absolute;
+        margin-right: 5%;
+        right: 0;
+        margin-top: 5%;
+        border-radius: 0.5rem;
+      }
     }
   }
 
@@ -63,9 +70,9 @@
         border-radius: 10px;
         padding: 20px;
         height: 100px;
-        margin: 15px 0px;
+        margin: 20px 0 0 0;
         min-width: 120px;
-        width: 30%;
+        width: calc(100% / 3 - 15px);
       }
 
       div.metric {
@@ -83,7 +90,11 @@
     }
   }
   .data-grid {
-    overflow: hidden;
+    position: relative;
+    z-index: unset;
+    .ontop {
+      z-index: 5;
+    }
   }
 }
 
@@ -98,24 +109,34 @@
       // flex-wrap: wrap;
     }
     div.metric-container {
-      width: 100% !important;
-      margin: 15px 0 !important;
+      width: 160px !important;
+      margin: 15px 15px !important;
       min-width: unset !important;
       text-align: center !important;
       align-items: center !important;
       justify-content: center !important;
     }
   }
+
+  .data-grid {
+    padding: 0 1%;
+  }
 }
 
 .mobile {
   div.metric-container {
-    width: 100% !important;
-    margin: 15px 0 !important;
+    width: calc(100% / 2 - 10px) !important;
+    margin: 10px 0 0 0 !important;
     min-width: unset !important;
     text-align: left !important;
     align-items: center !important;
     justify-content: space-between !important;
+    .MuiTypography-h6 {
+      line-height: unset;
+    }
+  }
+  .data-grid {
+    padding: 0 1%;
   }
 }
 
