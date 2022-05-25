@@ -13,6 +13,8 @@ import apollo from '../../lib/apolloClient';
 import './treasury-dashboard.scss';
 import { bulletpoints, itemType, treasuryDataQuery, treasuryRevenueQuery } from './treasuryData';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
+import { useContext } from 'react';
+import { AppThemeContext } from 'src/helpers/app-theme-context';
 
 const intFormatter = Intl.NumberFormat('en', { maximumFractionDigits: 0 });
 const marketValues = [
@@ -84,10 +86,25 @@ const tooltipColors = {
       background: `linear-gradient(180deg, ${color1} 19%, ${color2} 100%)`,
     })),
 };
+
 const useStyles = makeStyles(theme => ({
   btngrp: {
     '&': {
       backgroundColor: theme.palette.mode.lightGray300,
+    },
+  },
+
+  btn: {
+    '&': {
+      borderRadius: '0.3rem !important',
+      height: '1.4rem',
+      marginTop: '4%',
+      color: theme.palette.primary.main,
+    },
+    '&.Mui-selected': {
+      color: theme.palette.primary.main,
+      backgroundColor:
+        useContext(AppThemeContext).name == 'light' ? theme.palette.mode.white : theme.palette.secondary.light,
     },
   },
 }));
@@ -309,10 +326,10 @@ function TreasuryDashboard() {
                 aria-label="CLAM/USD"
                 className={'toggle-button-group ' + styles.btngrp}
               >
-                <ToggleButton value={false} aria-label="CLAM" className="toggle-button left">
+                <ToggleButton value={false} aria-label="CLAM" className={styles.btn}>
                   {'CLAM'}
                 </ToggleButton>
-                <ToggleButton value={true} aria-label="USD" className="toggle-button right">
+                <ToggleButton value={true} aria-label="USD" className={styles.btn}>
                   {'USD'}
                 </ToggleButton>
               </ToggleButtonGroup>
@@ -358,10 +375,10 @@ function TreasuryDashboard() {
                 aria-label="CLAM/USD"
                 className={'toggle-button-group ' + styles.btngrp}
               >
-                <ToggleButton value={false} aria-label="CLAM" className="toggle-button left">
+                <ToggleButton value={false} aria-label="CLAM" className={styles.btn}>
                   {'CLAM'}
                 </ToggleButton>
-                <ToggleButton value={true} aria-label="USD" className="toggle-button right">
+                <ToggleButton value={true} aria-label="USD" className={styles.btn}>
                   {'USD'}
                 </ToggleButton>
               </ToggleButtonGroup>
@@ -404,10 +421,10 @@ function TreasuryDashboard() {
                 aria-label="CLAM/USD"
                 className={'toggle-button-group ' + styles.btngrp}
               >
-                <ToggleButton value={false} aria-label="CLAM" className="toggle-button left">
+                <ToggleButton value={false} aria-label="CLAM" className={styles.btn}>
                   {'CLAM'}
                 </ToggleButton>
-                <ToggleButton value={true} aria-label="USD" className="toggle-button right">
+                <ToggleButton value={true} aria-label="USD" className={styles.btn}>
                   {'USD'}
                 </ToggleButton>
               </ToggleButtonGroup>

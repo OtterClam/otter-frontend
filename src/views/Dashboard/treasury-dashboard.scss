@@ -1,4 +1,5 @@
 @import 'styles/_colors.scss';
+
 #treasury-dashboard-view {
   overflow-y: hidden;
   overflow-x: hidden;
@@ -26,7 +27,6 @@
     }
     &.ohm-chart-card {
       .chart-card-header {
-        padding: 0px 20px !important;
         min-width: 300px;
       }
       height: 355px;
@@ -37,17 +37,6 @@
         right: 0;
         margin-top: 5%;
         border-radius: 0.5rem;
-        .toggle-button {
-          border-radius: 0.5rem;
-          height: 1.4rem;
-          margin-top: 4.5%;
-        }
-        .toggle-button.left {
-          margin-right: 0;
-        }
-        .toggle-button.right {
-          margin-left: 0;
-        }
       }
     }
   }
@@ -81,9 +70,9 @@
         border-radius: 10px;
         padding: 20px;
         height: 100px;
-        margin: 15px 0px;
+        margin: 20px 0 0 0;
         min-width: 120px;
-        width: 30%;
+        width: calc(100% / 3 - 15px);
       }
 
       div.metric {
@@ -136,8 +125,8 @@
 
 .mobile {
   div.metric-container {
-    width: 160px !important;
-    margin: 15px 5px !important;
+    width: calc(100% / 2 - 10px) !important;
+    margin: 10px 0 0 0 !important;
     min-width: unset !important;
     text-align: left !important;
     align-items: center !important;
