@@ -1,6 +1,6 @@
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import Ad0319 from './ad-0319.jpg';
+import Ad0526 from './ad-0526.jpg';
 import Ad0509 from './ad-0509.jpg';
 import Ad0510 from './ad-0510.jpg';
 import Ad0511 from './ad-0511.jpg';
@@ -17,8 +17,8 @@ export default function DashboardHero() {
       link: 'https://ottopia.app/store',
     },
     {
-      image: Ad0319,
-      link: 'https://www.youtube.com/watch?v=9wA-6A2ONnA',
+      image: Ad0526,
+      link: 'https://www.youtube.com/watch?v=ztkYjsmNqjY',
     },
     {
       image: Ad0511,
