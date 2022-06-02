@@ -24,12 +24,12 @@ const marketValues = [
     stopColor: ['#FFFFFF', 'rgba(219, 55, 55, 0.5)'],
   },
   {
-    label: 'CLAM-MAI (Quickswap)',
+    label: 'CLAM/MAI (Quick)',
     dataKey: 'treasuryMaiMarketValue',
     stopColor: ['#EE4B4E', 'rgba(219, 55, 55, 0.5)'],
   },
   {
-    label: 'CLAM-MAI (Dystopia)',
+    label: 'CLAM/MAI (Dystopia)',
     dataKey: 'treasuryDystopiaPairMaiClamMarketValue',
     stopColor: ['#EE4B4E', 'rgba(219, 55, 55, 0.5)'],
   },
@@ -92,6 +92,26 @@ const marketValues = [
     label: 'veDYST',
     dataKey: 'treasuryVeDystMarketValue',
     stopColor: ['rgba(8, 95, 142, 1)', 'rgba(8, 95, 142, 0.5)'],
+  },
+  {
+    label: 'CLAM/USD+ (Dystopia)',
+    dataKey: 'treasuryDystopiaPairUSDPLUSClamMarketValue',
+    stopColor: ['rgba(182, 233, 152, 1)', 'rgba(182, 233, 152, 0.5)'],
+  },
+  {
+    label: 'MATIC/DYST (Dystopia)',
+    dataKey: 'treasuryDystopiaPairwMaticDystMarketValue',
+    stopColor: ['rgba(182, 233, 152, 1)', 'rgba(182, 233, 152, 0.5)'],
+  },
+  {
+    label: 'MAI/USDC (Dystopia)',
+    dataKey: 'treasuryDystopiaPairMaiUsdcMarketValue',
+    stopColor: ['rgba(182, 233, 152, 1)', 'rgba(182, 233, 152, 0.5)'],
+  },
+  {
+    label: 'FRAX/USDC (Dystopia)',
+    dataKey: 'treasuryDystopiaPairFraxUsdcMarketValue',
+    stopColor: ['rgba(182, 233, 152, 1)', 'rgba(182, 233, 152, 0.5)'],
   },
 ];
 
