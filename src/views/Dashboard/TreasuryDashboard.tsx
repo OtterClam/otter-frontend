@@ -114,15 +114,6 @@ const marketValues = [
     stopColor: ['rgba(182, 233, 152, 1)', 'rgba(182, 233, 152, 0.5)'],
   },
 ];
-
-// treasuryVeDystMarketValue;
-// treasuryDystMarketValue;
-// treasuryDystopiaPairMaiClamMarketValue;
-// treasuryDystopiaPairUSDPLUSClamMarketValue;
-// treasuryDystopiaPairwMaticDystMarketValue;
-// treasuryDystopiaPairMaiUsdcMarketValue;
-// treasuryDystopiaPairFraxUsdcMarketValue;
-
 const tooltipColors = {
   marketValues: marketValues
     .map(p => p.stopColor)
