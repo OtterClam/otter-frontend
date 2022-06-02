@@ -24,8 +24,13 @@ const marketValues = [
     stopColor: ['#FFFFFF', 'rgba(219, 55, 55, 0.5)'],
   },
   {
-    label: 'CLAM-MAI LP',
+    label: 'CLAM-MAI (Quickswap)',
     dataKey: 'treasuryMaiMarketValue',
+    stopColor: ['#EE4B4E', 'rgba(219, 55, 55, 0.5)'],
+  },
+  {
+    label: 'CLAM-MAI (Dystopia)',
+    dataKey: 'treasuryDystopiaPairMaiClamMarketValue',
     stopColor: ['#EE4B4E', 'rgba(219, 55, 55, 0.5)'],
   },
   {
@@ -39,7 +44,7 @@ const marketValues = [
     stopColor: ['#2891F9', 'rgba(40, 145, 249, 0.5)'],
   },
   {
-    label: 'MAI/USDC(QiDAO)',
+    label: 'MAI/USDC (QiDAO)',
     dataKey: 'treasuryMaiUsdcQiInvestmentRiskFreeValue',
     stopColor: ['#5CBD6B', 'rgba(92, 189, 107, 0.5)'],
   },
@@ -78,7 +83,26 @@ const marketValues = [
     dataKey: 'treasuryTetuQiMarketValue',
     stopColor: ['#CC48E1', '#EA94FF'],
   },
+  {
+    label: 'DYST',
+    dataKey: 'treasuryDystMarketValue',
+    stopColor: ['rgba(8, 95, 142, 1)', 'rgba(8, 95, 142, 0.5)'],
+  },
+  {
+    label: 'veDYST',
+    dataKey: 'treasuryVeDystMarketValue',
+    stopColor: ['rgba(8, 95, 142, 1)', 'rgba(8, 95, 142, 0.5)'],
+  },
 ];
+
+// treasuryVeDystMarketValue;
+// treasuryDystMarketValue;
+// treasuryDystopiaPairMaiClamMarketValue;
+// treasuryDystopiaPairUSDPLUSClamMarketValue;
+// treasuryDystopiaPairwMaticDystMarketValue;
+// treasuryDystopiaPairMaiUsdcMarketValue;
+// treasuryDystopiaPairFraxUsdcMarketValue;
+
 const tooltipColors = {
   marketValues: marketValues
     .map(p => p.stopColor)
@@ -340,13 +364,14 @@ function TreasuryDashboard() {
                   data={revenue}
                   dataKey={
                     valueInUSD
-                      ? ['totalRevenueMarketValue', 'yieldMarketValue', 'ottopiaMarketValue']
-                      : ['totalRevenueClamAmount', 'yieldClamAmount', 'ottopiaClamAmount']
+                      ? ['totalRevenueMarketValue', 'qiMarketValue', 'ottopiaMarketValue', 'dystMarketValue']
+                      : ['totalRevenueClamAmount', 'qiClamAmount', 'ottopiaClamAmount', 'dystClamAmount']
                   }
                   stroke={[
                     [],
-                    ['rgba(128, 204, 131, 1)', 'rgba(128, 204, 131, 0.5)'],
-                    ['rgba(255, 172, 161, 1)', 'rgba(255, 172, 161, 1)'],
+                    ['rgba(244, 210, 88, 1)', 'rgba(244, 210, 88, 0.5)'], //qi
+                    ['rgba(255, 172, 161, 1)', 'rgba(255, 172, 161, 0.5)'], //clam
+                    ['rgba(8, 95, 142, 1)', 'rgba(8, 95, 142, 0.5)'], //dyst
                   ]}
                   headerText={t('common.treasuryRevenue')}
                   // @ts-ignore
@@ -357,7 +382,7 @@ function TreasuryDashboard() {
                   }
                   dataFormat={valueInUSD ? 'k' : 'kClam'}
                   bulletpointColors={bulletpoints.revenue}
-                  itemNames={['Total', 'Investments', 'Ottopia']}
+                  itemNames={['Total', 'Qi', 'CLAM', 'DYST']}
                   itemType={valueInUSD ? itemType.dollar : ' CLAM'}
                   infoTooltipMessage={t('dashboard.tooltipInfoMessages.treasuryRevenue')}
                 />

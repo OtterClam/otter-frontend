@@ -91,9 +91,9 @@
   }
   .data-grid {
     position: relative;
-    z-index: unset;
+    z-index: 0;
     .ontop {
-      z-index: 5;
+      z-index: 1;
     }
   }
 }
