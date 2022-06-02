@@ -38,10 +38,6 @@ query {
   treasuryRevenues(first: 100, orderBy: timestamp, orderDirection: desc) {
     id
     timestamp
-    qiLockerHarvestAmount
-    qiLockerHarvestMarketValue
-    qiDaoInvestmentHarvestAmount
-    qiDaoInvestmentHarvestMarketValue
     ottopiaClamAmount
     ottopiaMarketValue
     yieldClamAmount
