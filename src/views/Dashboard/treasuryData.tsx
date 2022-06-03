@@ -27,6 +27,13 @@ query {
     treasuryClamMaiPOL
     treasuryOtterClamQiMarketValue
     treasuryTetuQiMarketValue
+    treasuryVeDystMarketValue
+    treasuryDystMarketValue
+    treasuryDystopiaPairMaiClamMarketValue
+    treasuryDystopiaPairUSDPLUSClamMarketValue
+    treasuryDystopiaPairwMaticDystMarketValue
+    treasuryDystopiaPairMaiUsdcMarketValue
+    treasuryDystopiaPairFraxUsdcMarketValue
     totalBurnedClam
     totalBurnedClamMarketValue
   }
@@ -48,6 +55,10 @@ query {
     buybackMarketValue
     cumulativeBuybackClamAmount
     cumulativeBuybackMarketValue
+    qiClamAmount
+    qiMarketValue
+    dystClamAmount
+    dystMarketValue
   }
 }
 `;
@@ -192,16 +203,21 @@ export const bulletpoints = {
   ],
   revenue: [
     {},
-
     {
-      right: 25,
+      right: 15,
       top: -12,
-      background: 'linear-gradient(180deg, rgba(56, 223, 63, 1) -10%, rgba(182, 233, 152, 1) 100%)',
+      // background: 'linear-gradient(180deg, rgba(56, 223, 63, 1) -10%, rgba(182, 233, 152, 1) 100%)',
+      background: 'linear-gradient(180deg,rgba(244, 210, 88, 1) -10%, rgba(244, 210, 88, 0.5) 100%)',
     },
     {
       right: 15,
       top: -12,
-      background: 'linear-gradient(180deg, #FFACA1 -10%, #FFACA1 100%)',
+      background: 'linear-gradient(180deg, rgba(255, 172, 161, 1) -10%, rgba(255, 172, 161, 0.5) 100%)',
+    },
+    {
+      right: 15,
+      top: -12,
+      background: 'linear-gradient(180deg,  rgba(8, 95, 142, 1) -10%, rgba(8, 95, 142, 0.5) 100%)',
     },
   ],
 };
