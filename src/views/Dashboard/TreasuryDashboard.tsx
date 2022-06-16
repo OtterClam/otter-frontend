@@ -94,6 +94,21 @@ const marketValues = [
     stopColor: ['rgba(8, 95, 142, 1)', 'rgba(8, 95, 142, 0.5)'],
   },
   {
+    label: 'PEN',
+    dataKey: 'treasuryPenMarketValue',
+    stopColor: ['rgba(108, 111, 227, 1)', 'rgba(252, 236, 255, 0.8)'],
+  },
+  {
+    label: 'vlPEN',
+    dataKey: 'treasuryVlPenMarketValue',
+    stopColor: ['rgba(108, 111, 227, 1)', 'rgba(252, 236, 255, 0.8)'],
+  },
+  {
+    label: 'penDYST',
+    dataKey: 'treasuryPenDystMarketValue',
+    stopColor: ['rgba(108, 111, 227, 1)', 'rgba(8, 95, 142, 0.5)'],
+  },
+  {
     label: 'CLAM/USD+ (Dystopia)',
     dataKey: 'treasuryDystopiaPairUSDPLUSClamMarketValue',
     stopColor: ['rgba(182, 233, 152, 1)', 'rgba(182, 233, 152, 0.5)'],
@@ -150,7 +165,6 @@ function TreasuryDashboard() {
   const tooltipItems = useMemo(
     () => ({
       tvl: [t('dashboard.tooltipItems.tvl')],
-      rfv: ['MAI', 'FRAX', 'MAI/USDC(QiDAO)'],
       apy: [t('common.180Chest'), t('common.90Chest'), t('common.28Chest'), t('common.14Chest'), t('common.staking')],
       runway: [
         t('dashboard.tooltipItems.current'),
@@ -167,7 +181,6 @@ function TreasuryDashboard() {
     () => ({
       tvl: t('dashboard.tooltipInfoMessages.tvl'),
       mvt: t('dashboard.tooltipInfoMessages.mvt'),
-      rfv: t('dashboard.tooltipInfoMessages.rfv'),
       pol: t('dashboard.tooltipInfoMessages.pol'),
       holder: t('dashboard.tooltipInfoMessages.holder'),
       staked: t('dashboard.tooltipInfoMessages.staked'),
@@ -191,7 +204,6 @@ function TreasuryDashboard() {
 
   const circSupply = useSelector<IReduxState, number>(state => state.app.circSupply);
   const totalSupply = useSelector<IReduxState, number>(state => state.app.totalSupply);
-  const marketCap = useSelector<IReduxState, number>(state => state.app.marketCap);
   const marketPrice = useSelector<IReduxState, number>(state => state.app.marketPrice);
   const pearlPrice = useSelector<IReduxState, number>(state => state.app.pearlPrice);
   const currentIndex = useSelector<IReduxState, string>(state => state.app.currentIndex);
@@ -264,10 +276,15 @@ function TreasuryDashboard() {
       const metrics = r?.data.protocolMetrics
         .map((entry: any) =>
           // @ts-ignore
-          Object.entries(entry).reduce((obj, [key, value]) => ((obj[key] = parseFloat(value)), obj), {}),
+          Object.entries(entry).reduce((obj: any, [key, value]: [string, string]) => {
+            if (key == 'nextEpochRebase') return (obj[key] = parseFloat(value)), obj;
+            return (obj[key] = parseFloat(value) > 10 ? parseFloat(value) : 0), obj;
+          }, {}),
         )
         .filter((pm: any) => pm.treasuryMarketValue > 0);
+
       setData(metrics);
+      console.log(metrics);
       const staked = r?.data.protocolMetrics
         .map((entry: any) => ({
           staked: (parseFloat(entry.sClamCirculatingSupply) / parseFloat(entry.clamCirculatingSupply)) * 100,
@@ -375,14 +392,27 @@ function TreasuryDashboard() {
                   data={revenue}
                   dataKey={
                     valueInUSD
-                      ? ['totalRevenueMarketValue', 'qiMarketValue', 'ottopiaMarketValue', 'dystMarketValue']
-                      : ['totalRevenueClamAmount', 'qiClamAmount', 'ottopiaClamAmount', 'dystClamAmount']
+                      ? [
+                          'totalRevenueMarketValue',
+                          'qiMarketValue',
+                          'ottopiaMarketValue',
+                          'dystMarketValue',
+                          'penMarketValue',
+                        ]
+                      : [
+                          'totalRevenueClamAmount',
+                          'qiClamAmount',
+                          'ottopiaClamAmount',
+                          'dystClamAmount',
+                          'penClamAmount',
+                        ]
                   }
                   stroke={[
                     [],
                     ['rgba(244, 210, 88, 1)', 'rgba(244, 210, 88, 0.5)'], //qi
                     ['rgba(255, 172, 161, 1)', 'rgba(255, 172, 161, 0.5)'], //clam
-                    ['rgba(8, 95, 142, 1)', 'rgba(8, 95, 142, 0.5)'], //dyst
+                    ['rgba(8, 95, 142, 0.6)', 'rgba(8, 95, 142, 0.3)'], //dyst
+                    ['rgba(128, 131, 235, 0.8)', 'rgba(252, 236, 255, 0.5)'], //pen
                   ]}
                   headerText={t('common.treasuryRevenue')}
                   // @ts-ignore
@@ -393,7 +423,7 @@ function TreasuryDashboard() {
                   }
                   dataFormat={valueInUSD ? 'k' : 'kClam'}
                   bulletpointColors={bulletpoints.revenue}
-                  itemNames={['Total', 'Qi', 'CLAM', 'DYST']}
+                  itemNames={['Total', 'Qi', 'CLAM', 'DYST', 'PEN']}
                   itemType={valueInUSD ? itemType.dollar : ' CLAM'}
                   infoTooltipMessage={t('dashboard.tooltipInfoMessages.treasuryRevenue')}
                 />
