@@ -29,7 +29,7 @@ const marketValues = [
     stopColor: ['#EE4B4E', 'rgba(219, 55, 55, 0.5)'],
   },
   {
-    label: 'CLAM/MAI (Dystopia)',
+    label: 'CLAM/MAI (Penrose)',
     dataKey: 'treasuryDystopiaPairMaiClamMarketValue',
     stopColor: ['#EE4B4E', 'rgba(219, 55, 55, 0.5)'],
   },
@@ -109,22 +109,22 @@ const marketValues = [
     stopColor: ['rgba(108, 111, 227, 1)', 'rgba(8, 95, 142, 0.5)'],
   },
   {
-    label: 'CLAM/USD+ (Dystopia)',
+    label: 'CLAM/USD+ (Penrose)',
     dataKey: 'treasuryDystopiaPairUSDPLUSClamMarketValue',
     stopColor: ['rgba(182, 233, 152, 1)', 'rgba(182, 233, 152, 0.5)'],
   },
   {
-    label: 'MATIC/DYST (Dystopia)',
+    label: 'MATIC/DYST (Penrose)',
     dataKey: 'treasuryDystopiaPairwMaticDystMarketValue',
     stopColor: ['rgba(182, 233, 152, 1)', 'rgba(182, 233, 152, 0.5)'],
   },
   {
-    label: 'MAI/USDC (Dystopia)',
+    label: 'MAI/USDC (Penrose)',
     dataKey: 'treasuryDystopiaPairMaiUsdcMarketValue',
     stopColor: ['rgba(182, 233, 152, 1)', 'rgba(182, 233, 152, 0.5)'],
   },
   {
-    label: 'FRAX/USDC (Dystopia)',
+    label: 'FRAX/USDC (Penrose)',
     dataKey: 'treasuryDystopiaPairFraxUsdcMarketValue',
     stopColor: ['rgba(182, 233, 152, 1)', 'rgba(182, 233, 152, 0.5)'],
   },
@@ -275,9 +275,10 @@ function TreasuryDashboard() {
     apollo(treasuryDataQuery).then(r => {
       const metrics = r?.data.protocolMetrics
         .map((entry: any) =>
+          //Manually filter out any asset values below $10
           // @ts-ignore
           Object.entries(entry).reduce((obj: any, [key, value]: [string, string]) => {
-            if (key == 'nextEpochRebase') return (obj[key] = parseFloat(value)), obj;
+            if (key == 'nextEpochRebase' || key == 'clamPrice') return (obj[key] = parseFloat(value)), obj;
             return (obj[key] = parseFloat(value) > 10 ? parseFloat(value) : 0), obj;
           }, {}),
         )
