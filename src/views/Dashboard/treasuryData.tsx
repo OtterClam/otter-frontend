@@ -34,6 +34,9 @@ query {
     treasuryDystopiaPairwMaticDystMarketValue
     treasuryDystopiaPairMaiUsdcMarketValue
     treasuryDystopiaPairFraxUsdcMarketValue
+    treasuryVlPenMarketValue
+    treasuryPenDystMarketValue
+    treasuryPenMarketValue
     totalBurnedClam
     totalBurnedClamMarketValue
   }
@@ -59,6 +62,8 @@ query {
     qiMarketValue
     dystClamAmount
     dystMarketValue
+    penClamAmount
+    penMarketValue
   }
 }
 `;
@@ -218,6 +223,11 @@ export const bulletpoints = {
       right: 15,
       top: -12,
       background: 'linear-gradient(180deg,  rgba(8, 95, 142, 1) -10%, rgba(8, 95, 142, 0.5) 100%)',
+    },
+    {
+      right: 15,
+      top: -12,
+      background: 'linear-gradient(180deg,  rgba(108, 111, 227, 1) -10%, rgba(252, 236, 255, 1) 100%)',
     },
   ],
 };
