@@ -252,7 +252,7 @@ const English = {
       notStaked: 'Not staked',
       disconnect: 'Disconnect',
       buy: 'BUY',
-      buyOnQuickswap: 'Buy On Quickswap',
+      buyOnQuickswap: 'Buy',
       buyPearl: 'Buy PEARL',
       addTokenToWallet: 'ADD TOKEN TO WALLET',
       toNextHarvest: 'to Next Harvest',

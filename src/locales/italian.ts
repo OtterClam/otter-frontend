@@ -204,7 +204,7 @@ const Italian = {
       notStaked: 'Non in Staking',
       disconnect: 'Disconnetti',
       buy: 'COMPRA',
-      buyOnQuickswap: 'Compra su Quickswap',
+      buyOnQuickswap: 'Compra',
       addTokenToWallet: 'AGGIUNGI IL TOKEN AL WALLET',
       toNextHarvest: 'al prossimo Harvest', //TODO
       harvesting: 'Harvesting', //TODO

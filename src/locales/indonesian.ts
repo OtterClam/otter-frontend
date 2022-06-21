@@ -186,7 +186,7 @@ const BahasaIndonesia = {
       notStaked: 'Non-staking',
       disconnect: 'Putuskan',
       buy: 'BELI',
-      buyOnQuickswap: 'Beli di Quickswap',
+      buyOnQuickswap: 'Beli',
       addTokenToWallet: 'TAMBAHKAN TOKEN KE WALLET',
       toNextHarvest: 'Menuju Panen Selanjutnya',
       harvesting: 'Memanen',

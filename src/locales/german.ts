@@ -203,7 +203,7 @@ const German = {
       notStaked: 'Nicht staked',
       disconnect: 'Verbindung trennen',
       buy: 'KAUFEN',
-      buyOnQuickswap: 'Erwirbbar auf Quickswap',
+      buyOnQuickswap: 'Erwirbbar',
       addTokenToWallet: 'TOKEN ZUM WALLET HINZUFÜGEN',
       toNextHarvest: 'zur nächsten Ernte',
       harvesting: 'Ernten',

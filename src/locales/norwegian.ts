@@ -185,7 +185,7 @@ const Norwegian = {
       notStaked: 'Ikke staket',
       disconnect: 'Koble av',
       buy: 'KJØP',
-      buyOnQuickswap: 'Kjøp på Quickswap',
+      buyOnQuickswap: 'Kjøp',
       addTokenToWallet: 'LEGG TIL TOKEN I DIN WALLET',
       toNextHarvest: 'til neste justering',
       harvesting: 'Justering',

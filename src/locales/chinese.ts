@@ -212,7 +212,7 @@ const Chinese = {
       notStaked: '沒有質押',
       disconnect: '取消連結',
       buy: '購買',
-      buyOnQuickswap: '到 Quickswap 購買',
+      buyOnQuickswap: '購買',
       buyPearl: '購買珍珠',
       addTokenToWallet: '把 Token 加入錢包',
       toNextHarvest: '到下一次收成',

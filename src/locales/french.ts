@@ -186,7 +186,7 @@ const French = {
       notStaked: 'Non staké',
       disconnect: 'Déconnexion',
       buy: 'ACHAT',
-      buyOnQuickswap: 'Achetez sur Quickswap',
+      buyOnQuickswap: 'Achetez',
       addTokenToWallet: 'AJOUTER LE JETON À VOTRE PORTEFEUILLE',
       toNextHarvest: "jusqu'à la prochaine récolte",
       harvesting: 'En cours de récolte',

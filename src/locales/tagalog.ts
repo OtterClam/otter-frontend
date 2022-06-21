@@ -186,7 +186,7 @@ const Tagalog = {
       notStaked: 'Hindi staked',
       disconnect: 'Idiskonekta',
       buy: 'Bili',
-      buyOnQuickswap: 'Bumili sa Quickswap',
+      buyOnQuickswap: 'Bumili',
       addTokenToWallet: 'Idagdag ang Token sa Pitaka',
       toNextHarvest: 'Sa Susunod na Ani',
       harvesting: 'Inaani',
