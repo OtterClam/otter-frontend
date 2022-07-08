@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { NavLink, useLocation } from 'react-router-dom';
 import AuditedMark from 'src/components/AuditedMark';
 import SocialIcons from 'src/components/SocialIcons';
-import { DEFAULT_NETWORK, getAddresses } from 'src/constants';
+import { BuyClamLink, DEFAULT_NETWORK, getAddresses } from 'src/constants';
 import { AppThemeContext } from 'src/helpers/app-theme-context';
 import useENS from 'src/hooks/useENS';
 import { IReduxState } from 'src/store/slices/state.interface';
@@ -266,12 +266,7 @@ function NavContent() {
                 </div>
               </Link>
 
-              <Link
-                href={'https://quickswap.exchange/#/swap?outputCurrency=' + CLAM_ADDRESS}
-                target="_blank"
-                rel="noreferrer"
-                className="button-dapp-menu"
-              >
+              <Link href={BuyClamLink} target="_blank" rel="noreferrer" className="button-dapp-menu">
                 <div className="dapp-menu-item">
                   <IconDefaultBuyClam />
                   <p>{t('common.buyThing')}CLAM</p>
