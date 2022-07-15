@@ -211,7 +211,7 @@ function Stake() {
                     <div className="stake-apy">
                       <p className="single-stake-subtitle">{t('common.apy')}</p>
                       <Box component="p" color="text.secondary" className="single-stake-subtitle-value">
-                        {stakingAPY ? percentFormatter.format(stakingAPY) : <Skeleton width="150px" />}
+                        {stakingAPY !== undefined ? percentFormatter.format(stakingAPY) : <Skeleton width="150px" />}
                       </Box>
                       <Box
                         component="p"
