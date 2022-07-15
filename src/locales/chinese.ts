@@ -1,6 +1,8 @@
 const Chinese = {
   translation: {
     common: {
+      warning:
+        'app.otterclam.finance 的 CLAM 及 PEARL 質押系統將於 {{time}} 關閉，屆時質押於此的 token 將不會再獲得任何收益。請領出您在此質押的 CLAM/PEARL 並重新質押到我們的新網頁 ',
       //Only change the text on the right in quote marks!
       language: '語言',
       bond: '債券',

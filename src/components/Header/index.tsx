@@ -7,6 +7,7 @@ import ConnectMenu from './ConnectMenu';
 import './topbar.scss';
 
 import { tabletMediaQuery } from 'src/themes/mediaQuery';
+import Warning from '../Warning';
 
 const drawerWidth = 280;
 const transitionDuration = 969;
@@ -53,6 +54,7 @@ function Header({ handleDrawerToggle, drawe }: IHeader) {
   return (
     <div className={`${classes.topBar} ${!drawe && classes.topBarShift}`}>
       <div style={{ width: '100%' }}>
+        <Warning />
         <AppBar position="sticky" className={classes.appBar} elevation={0}>
           <Toolbar className={classes.toolBar}>
             {isTablet && (
