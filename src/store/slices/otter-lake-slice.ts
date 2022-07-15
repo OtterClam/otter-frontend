@@ -23,6 +23,7 @@ export interface ITerm {
   apy: number;
   rewardRate: number;
   fallbackTerm?: ITerm;
+  unlockedAll: boolean;
 }
 
 export interface INote {
@@ -116,10 +117,11 @@ export const loadTermsDetails = createAsyncThunk(
           const termAddress = await otterLakeContract.termAddresses(i);
           const term = await otterLakeContract.terms(termAddress);
           const noteContract = new ethers.Contract(term.note, PearlNote, provider);
-          const [name, symbol, pearlBalance] = await Promise.all([
+          const [name, symbol, pearlBalance, unlockedAll] = await Promise.all([
             noteContract.name(),
             noteContract.symbol(),
             Number(formatEther(await pearlContract.balanceOf(term.note))),
+            noteContract.unlockedAll(),
           ]);
           const boostPoint = (pearlBalance * term.multiplier) / 100;
           totalBoostPoint += boostPoint;
@@ -133,6 +135,7 @@ export const loadTermsDetails = createAsyncThunk(
             boostPoint,
             apy: 0,
             rewardRate: 0,
+            unlockedAll,
             note: {
               name,
               symbol,

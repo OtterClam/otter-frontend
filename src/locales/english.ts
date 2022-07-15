@@ -1,6 +1,8 @@
 const English = {
   translation: {
     common: {
+      warning:
+        'The current staking and locking system for CLAM and PEARL tokens at app.otterclam.finance will officially shut down at {{time}}. Please withdraw your staked CLAM/PEARL and stake in our new Treasury website: ',
       //Only change the text on the right in quote marks!
       language: 'Language',
       bond: 'Bond',

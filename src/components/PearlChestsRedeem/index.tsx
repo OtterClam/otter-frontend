@@ -130,7 +130,7 @@ export default function PearlChestsRedeem() {
               marketValue: (Number(lockNote.amount) + lockNote.nextReward) * pearlPrice,
               lockupPeriod: term.lockPeriod,
               dueDate: addHours(Date.UTC(2021, 10, 3, 0, 0, 0), lockNote.endEpoch * 8),
-              locked: currentEpoch < lockNote.endEpoch,
+              locked: !term.unlockedAll && currentEpoch < lockNote.endEpoch,
             }}
           />
         );
